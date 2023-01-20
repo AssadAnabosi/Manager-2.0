@@ -35,3 +35,19 @@ export const createLog = async (req, res, next) => {
         next(error);
     }
 };
+
+// @desc    Get a log
+export const getLog = async (req, res, next) => {
+    try {
+        const log = await Log.findById(req.params.id);
+        if (!log)
+            return next(new ResponseError("Log not found", 404));
+        return res.status(200).json({
+            success: true,
+            data: log
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+};
