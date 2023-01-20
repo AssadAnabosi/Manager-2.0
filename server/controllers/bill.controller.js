@@ -59,3 +59,15 @@ export const updateBill = async (req, res, next) => {
         next(error);
     }
 };
+
+// @desc    Delete a bill
+export const deleteBill = async (req, res, next) => {
+    try {
+        const bill = await Bill.findByIdAndDelete(req.params.id);
+        if (!bill)
+            return next(new ResponseError("Bill not found", 404));
+        return res.sendStatus(204);
+    } catch (error) {
+        next(error);
+    }
+}
