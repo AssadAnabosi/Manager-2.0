@@ -6,6 +6,7 @@ dotenv.config({
 import express from "express";
 
 import connectDB from "./config/db.config.js";
+import APIRoutes from "./api.js";
 
 // @desc    Connect to DB
 connectDB();
@@ -19,6 +20,8 @@ app.use("/healthcheck", (req, res) => {
     return res.sendStatus(200);
 });
 
+// desc: Serving API routes
+app.use("/api", APIRoutes);
 
 // @desc    Start Server
 const PORT = process.env.PORT || 5000;
