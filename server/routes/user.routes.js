@@ -27,4 +27,9 @@ router.route("/:id/reset-password")
     // @access  Private (Admin)
     .put(isAdmin, controller.resetPassword);
 
+router.route("/:id/update-access-level")
+    // @route   PUT api/users/:id/update-access-level
+    // @access  Private (Admin)
+    .put(isAdmin, controller.updateAccessLevel);
+
 export default router;
