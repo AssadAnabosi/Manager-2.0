@@ -3,7 +3,7 @@ const router = Router();
 
 import * as controller from "../controllers/auth.controller.js";
 
-import { isAuth } from "../middleware/auth.middleware.js";
+import { isAuth, hasLevel3Access } from "../middleware/auth.middleware.js";
 
 // @desc    Register Route
 router.route("/register")
@@ -14,5 +14,8 @@ router.route("/login")
 // @desc    Change Password Route  
 router.route("/change-password")
     .post(isAuth, controller.changePassword)
+// @desc    Check Username Route
+router.route("/check-username/")
+    .post(isAuth, hasLevel3Access, controller.checkUsername)
 
 export default router;
