@@ -85,3 +85,22 @@ const generateToken = (user, statusCode, res) => {
             token
         });
 }
+
+// @desc    Check the availability of a username
+export const checkUsername = async (req, res, next) => {
+    const { username } = req.body;
+    try {
+        const
+            user = await User.findOne
+                ({ username }),
+            isAvailable = user ? false : true;
+        return res
+            .status(200)
+            .json({
+                success: true,
+                data: isAvailable
+            });
+    } catch (error) {
+        next(error);
+    }
+}
