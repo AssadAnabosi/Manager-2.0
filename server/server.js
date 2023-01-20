@@ -5,6 +5,11 @@ dotenv.config({
 
 import express from "express";
 
+import connectDB from "./config/db.config.js";
+
+// @desc    Connect to DB
+connectDB();
+
 const app = express();
 app.use(express.json());
 
@@ -22,6 +27,6 @@ const server = app.listen(PORT, () => {
 })
 
 process.on("unhandledRejection", (err, promise) => {
-    console.log(`Logged Error: ${err}`);
+    console.log(`Logged Error: \n${err}`);
     server.close(() => process.exit(1));
 });
