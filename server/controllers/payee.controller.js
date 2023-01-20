@@ -60,3 +60,16 @@ export const updatePayee = async (req, res, next) => {
         next(error);
     }
 }
+
+// @desc    Delete a payee
+export const deletePayee = async (req, res, next) => {
+    try {
+        const payee = await Payee.findById(req.params.id);
+        if (!payee)
+            return next(new ResponseError("Payee not found", 404));
+        await Payee.findByIdAndDelete(req.params.id);
+        return res.sendStatus(204);
+    } catch (error) {
+        next(error);
+    }
+}
