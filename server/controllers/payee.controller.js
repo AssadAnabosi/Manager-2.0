@@ -1,4 +1,5 @@
 import Payee from "../models/Payee.model.js";
+import ResponseError from "../utils/ResponseError.js";
 
 // @desc    Get all payees
 export const getPayees = async (req, res, next) => {
@@ -8,6 +9,22 @@ export const getPayees = async (req, res, next) => {
             success: true,
             data: payees,
         });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// @desc    Create a payee
+export const createPayee = async (req, res, next) => {
+    const { name, email, phoneNumber, extraNotes } = req.body;
+    if (!name) {
+        return next(new ResponseError("Please provide a name", 400));
+    }
+    try {
+        await Payee.create({
+            name, email, phoneNumber, extraNotes
+        });
+        return res.sendStatus(201);
     } catch (error) {
         next(error);
     }
