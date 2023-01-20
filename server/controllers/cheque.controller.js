@@ -35,3 +35,19 @@ export const createCheque = async (req, res, next) => {
         next(error);
     }
 };
+
+// @desc    Get a Cheque
+export const getCheque = async (req, res, next) => {
+    try {
+        const cheque = await Cheque.findById(req.params.id)
+            .populate("payee", "name");
+        if (!cheque)
+            return next(new ResponseError("Cheque not found", 404));
+        return res.status(200).json({
+            success: true,
+            data: cheque,
+        });
+    } catch (error) {
+        next(error);
+    }
+};

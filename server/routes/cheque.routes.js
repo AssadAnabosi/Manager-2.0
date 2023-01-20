@@ -13,4 +13,9 @@ router.route("/")
     // @access  Private (Level 3)
     .post(hasLevel3Access, controller.createCheque);
 
+router.route("/:id")
+    // @route   GET api/cheques/:id
+    // @access  Private (Level 2)
+    .get(controller.getCheque)
+
 export default router;
