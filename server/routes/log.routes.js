@@ -20,5 +20,8 @@ router.route("/:id")
     // @route   PUT api/logs/:id
     // @access  Private (Level 3)
     .put(hasLevel3Access, controller.updateLog)
+    // @route   DELETE api/logs/:id
+    // @access  Private (Level 3)
+    .delete(hasLevel3Access, controller.deleteLog);
 
 export default router;

@@ -69,3 +69,15 @@ export const updateLog = async (req, res, next) => {
         next(error);
     }
 };
+
+// @desc    Delete a log
+export const deleteLog = async (req, res, next) => {
+    try {
+        const log = await Log.findByIdAndDelete(req.params.id);
+        if (!log)
+            return next(new ResponseError("Log not found", 404));
+        return res.sendStatus(204);
+    } catch (error) {
+        next(error);
+    }
+};
