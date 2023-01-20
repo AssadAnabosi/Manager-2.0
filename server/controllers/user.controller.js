@@ -4,7 +4,7 @@ import ResponseError from "../utils/ResponseError.js";
 // @desc    Get all users
 export const getUsers = async (req, res, next) => {
     try {
-        const users = await User.find();
+        const users = await User.find().select("-logs");
         return res.status(200).json({
             success: true,
             data: users,
@@ -33,7 +33,7 @@ export const getUser = async (req, res, next) => {
 // @desc    Update a user
 export const updateUser = async (req, res, next) => {
     try {
-        if (req.body.password || req.body.accessLevel)
+        if (req.body.password || req.body.accessLevel || req.logs)
             return next(new ResponseError("You are not authorized to update this field", 401));
         const user = await User.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
