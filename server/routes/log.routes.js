@@ -17,5 +17,8 @@ router.route("/:id")
     // @route   GET api/logs/:id
     // @access  Private (Level 2)
     .get(controller.getLog)
+    // @route   PUT api/logs/:id
+    // @access  Private (Level 3)
+    .put(hasLevel3Access, controller.updateLog)
 
 export default router;

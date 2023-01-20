@@ -51,3 +51,21 @@ export const getLog = async (req, res, next) => {
         next(error);
     }
 };
+
+// @desc    Update a log
+export const updateLog = async (req, res, next) => {
+    if (req.body.worker || req.body.date) {
+        return next(new ResponseError("You can't change the date or worker", 400));
+    }
+    try {
+        const log = await Log.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        });
+        if (!log)
+            return next(new ResponseError("Log not found", 404));
+        return res.sendStatus(204);
+    } catch (error) {
+        next(error);
+    }
+};
