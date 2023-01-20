@@ -18,5 +18,8 @@ router.route("/:id")
     // @route   PUT api/users/:id
     // @access  Private (Level 3)
     .put(hasLevel3Access, controller.updateUser)
+    // @route   DELETE api/users/:id
+    // @access  Private (Level 3)
+    .delete(hasLevel3Access, controller.deleteUser);
 
 export default router;
