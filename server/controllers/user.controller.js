@@ -47,3 +47,17 @@ export const updateUser = async (req, res, next) => {
     }
 }
 
+// @desc    Delete a user
+export const deleteUser = async (req, res, next) => {
+    try {
+        if (req.params.id === req.user.id) {
+            return next(new ResponseError("You are not authorized to delete your own account", 401));
+        }
+        const user = await User.findByIdAndDelete(req.params.id);
+        if (!user)
+            return next(new ResponseError("User not found", 404));
+        return res.sendStatus(204);
+    } catch (error) {
+        next(error);
+    }
+}
