@@ -45,3 +45,18 @@ export const getPayee = async (req, res, next) => {
         next(error);
     }
 };
+
+// @desc    Update a payee
+export const updatePayee = async (req, res, next) => {
+    try {
+        const payee = await Payee.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        });
+        if (!payee)
+            return next(new ResponseError("Payee not found", 404));
+        return res.sendStatus(204);
+    } catch (error) {
+        next(error);
+    }
+}
