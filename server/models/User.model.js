@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
+import Log from "./Log.model.js";
 
 const UserSchema = new mongoose.Schema({
     firstName: {
@@ -41,12 +42,18 @@ const UserSchema = new mongoose.Schema({
         // "User", "Spectator", "Supervisor", or "Administrator
         default: "User",
     },
+    logs: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Log",
+        },
+    ],
 });
+
 // @desc    Create a virtual field "fullName" that combines the first and last name
 UserSchema.virtual("fullName").get(function () {
     return `${this.firstName} ${this.lastName}`;
 });
-
 
 // @desc    Hash the password and capitalize the first letter of the first and last name before saving the user
 UserSchema.pre("save", async function (next) {
@@ -75,7 +82,6 @@ UserSchema.set("toJSON", {
     },
 });
 
-
 // @desc    Check if password matches hashed password
 UserSchema.methods.matchPassword = async function (password) {
     return await bcrypt.compare(password, this.password);
@@ -88,6 +94,12 @@ UserSchema.methods.getSignedToken = function () {
     });
 }
 
+// @desc   Delete all logs associated with the user when the user is deleted
+UserSchema.post("findOneAndDelete", async function (user) {
+    if (user.logs.length) {
+        await Log.deleteMany({ _id: { $in: user.logs } });
+    }
+});
 
 const User = mongoose.model("User", UserSchema);
 
