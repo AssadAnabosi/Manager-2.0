@@ -46,6 +46,34 @@ export const login = async (req, res, next) => {
         next(error);
     }
 }
+
+// @desc    Change Password
+export const changePassword = async (req, res, next) => {
+    const { currentPassword, newPassword } = req.body;
+    //  @desc   Validate user input
+    if (!currentPassword || !newPassword) {
+        return next(new ResponseError("Please provide current and new passwords", 400));
+    }
+    try {
+        const user = await User.findById(req.user.id).select("+password");
+        const isMatch = await user.matchPassword(currentPassword);
+        //  @desc   Wrong Password
+        if (!isMatch) {
+            return next(new ResponseError("Wrong password", 401));
+        }
+        //  @desc   Valid User
+        user.password = newPassword;
+        await user.save();
+        return res.status(200).json({
+            success: true,
+            message: "Password changed successfully",
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+
 // @desc   Token Generator
 const generateToken = (user, statusCode, res) => {
     const token = user.getSignedToken();
