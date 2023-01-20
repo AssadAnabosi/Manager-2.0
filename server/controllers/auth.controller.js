@@ -73,19 +73,6 @@ export const changePassword = async (req, res, next) => {
     }
 }
 
-
-// @desc   Token Generator
-const generateToken = (user, statusCode, res) => {
-    const token = user.getSignedToken();
-    return res
-        .status(statusCode)
-        .json({
-            success: true,
-            message: "User logged in successfully",
-            token
-        });
-}
-
 // @desc    Check the availability of a username
 export const checkUsername = async (req, res, next) => {
     const { username } = req.body;
@@ -103,4 +90,29 @@ export const checkUsername = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+}
+
+// @desc    Get current logged in user
+export const getMe = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user.id);
+        return res.status(200).json({
+            success: true,
+            data: user
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+// @desc   Token Generator
+const generateToken = (user, statusCode, res) => {
+    const token = user.getSignedToken();
+    return res
+        .status(statusCode)
+        .json({
+            success: true,
+            message: "User logged in successfully",
+            token
+        });
 }
