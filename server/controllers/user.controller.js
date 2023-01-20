@@ -30,3 +30,20 @@ export const getUser = async (req, res, next) => {
     }
 };
 
+// @desc    Update a user
+export const updateUser = async (req, res, next) => {
+    try {
+        if (req.body.password || req.body.accessLevel)
+            return next(new ResponseError("You are not authorized to update this field", 401));
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        });
+        if (!user)
+            return next(new ResponseError("User not found", 404));
+        return res.sendStatus(204);
+    } catch (error) {
+        next(error);
+    }
+}
+
