@@ -1,7 +1,13 @@
 import express from "express";
 const router = express.Router();
 
-// @desc: Undefined routes
+// @desc    Routes Import
+import authRoutes from "./routes/auth.routes.js";
+
+// @desc    Routes
+router.use("/auth", authRoutes);
+
+// @desc    Undefined routes
 router.route("*")
     .all((req, res) => {
         return res.status(404).json({
