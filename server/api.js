@@ -4,13 +4,15 @@ const router = express.Router();
 // @desc    Routes Import
 import authRoutes from "./routes/auth.routes.js";
 import usersRoutes from "./routes/user.routes.js";
+import billsRoutes from "./routes/bill.routes.js";
 
 // @desc    Middleware Import
-import { isAuth } from "./middleware/auth.middleware.js";
+import { hasLevel2Access, isAuth } from "./middleware/auth.middleware.js";
 
 // @desc    Routes
 router.use("/auth", authRoutes);
 router.use("/users", isAuth, usersRoutes);
+router.use("/bills", isAuth, hasLevel2Access, billsRoutes);
 
 // @desc    Undefined routes
 router.route("*")
