@@ -11,4 +11,9 @@ import { hasLevel2Access } from "../middleware/auth.middleware.js";
 router.route("/")
     .get(hasLevel2Access, controller.getUsers);
 
+router.route("/:id")
+    // @route   GET api/users/:id
+    // @access  Private (Level 2)
+    .get(hasLevel2Access, controller.getUser)
+
 export default router;
