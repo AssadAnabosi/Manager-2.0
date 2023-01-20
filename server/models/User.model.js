@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
 
 const UserSchema = new mongoose.Schema({
@@ -79,6 +80,14 @@ UserSchema.set("toJSON", {
 UserSchema.methods.matchPassword = async function (password) {
     return await bcrypt.compare(password, this.password);
 }
+
+// @desc    Generate a signed token
+UserSchema.methods.getSignedToken = function () {
+    return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRE,
+    });
+}
+
 
 const User = mongoose.model("User", UserSchema);
 

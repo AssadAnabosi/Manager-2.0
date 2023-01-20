@@ -20,3 +20,40 @@ export const register = async (req, res, next) => {
         next(error);
     }
 }
+
+// @desc    Login a user
+export const login = async (req, res, next) => {
+    const { username, password } = req.body;
+    //  @desc   Validate user input
+    if (!username || !password) {
+        return next(new ResponseError("Please provide an email and password", 400));
+    }
+    try {
+        const user = await User.findOne({ username }).select("+password");
+        // @desc    Invalid Username
+        if (!user) {
+            return next(new ResponseError("Invalid Credentials", 401));
+        }
+        // @desc    Password Check
+        const isMatch = await user.matchPassword(password);
+        //  @desc   Wrong Password
+        if (!isMatch) {
+            return next(new ResponseError("Invalid Credentials", 401));
+        }
+        //  @desc   Valid User
+        return generateToken(user, 200, res);
+    } catch (error) {
+        next(error);
+    }
+}
+// @desc   Token Generator
+const generateToken = (user, statusCode, res) => {
+    const token = user.getSignedToken();
+    return res
+        .status(statusCode)
+        .json({
+            success: true,
+            message: "User logged in successfully",
+            token
+        });
+}
