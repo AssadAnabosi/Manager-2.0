@@ -14,4 +14,9 @@ router.route("/")
     // @access  Private (Level 3)
     .post(hasLevel3Access, controller.createPayee);
 
+router.route("/:id")
+    // @route   GET api/payees/:id
+    // @access  Private (Level 2)
+    .get(controller.getPayee)
+
 export default router;

@@ -29,3 +29,19 @@ export const createPayee = async (req, res, next) => {
         next(error);
     }
 };
+
+// @desc    Get a payee
+export const getPayee = async (req, res, next) => {
+    try {
+        const payee = await Payee.findById(req.params.id);
+        if (!payee)
+            return next(new ResponseError("Payee not found", 404));
+        return res.status(200).json({
+            success: true,
+            data: payee
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+};
