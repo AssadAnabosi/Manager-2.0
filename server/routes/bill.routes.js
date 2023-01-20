@@ -13,5 +13,9 @@ router.route("/")
     // @access  Private (Level 3)
     .post(hasLevel3Access, controller.createBill);
 
+router.route("/:id")
+    // @route   GET api/bills/:id
+    // @access  Private (Level 2)
+    .get(controller.getBill)
 
 export default router;

@@ -29,3 +29,18 @@ export const createBill = async (req, res, next) => {
         next(error);
     }
 };
+
+// @desc    Get a bill
+export const getBill = async (req, res, next) => {
+    try {
+        const bill = await Bill.findById(req.params.id);
+        if (!bill)
+            return next(new ResponseError("Bill not found", 404));
+        return res.status(200).json({
+            success: true,
+            data: bill
+        });
+    } catch (error) {
+        next(error);
+    }
+};
