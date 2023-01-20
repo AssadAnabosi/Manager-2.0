@@ -7,6 +7,7 @@ import express from "express";
 
 import connectDB from "./config/db.config.js";
 import APIRoutes from "./api.js";
+import errorHandler from "./middleware/error.middleware.js";
 
 // @desc    Connect to DB
 connectDB();
@@ -20,8 +21,12 @@ app.use("/healthcheck", (req, res) => {
     return res.sendStatus(200);
 });
 
-// desc: Serving API routes
+// @desc    Serving API routes
 app.use("/api", APIRoutes);
+
+// @desc    Error Handler
+// @warn    Must be the last middleware
+app.use(errorHandler);
 
 // @desc    Start Server
 const PORT = process.env.PORT || 5000;
