@@ -61,3 +61,17 @@ export const deleteUser = async (req, res, next) => {
         next(error);
     }
 }
+
+// @desc    Reset a user's password
+export const resetPassword = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user)
+            return next(new ResponseError("User not found", 404));
+        user.password = req.body.password;
+        await user.save();
+        return res.sendStatus(204);
+    } catch (error) {
+        next(error);
+    }
+}

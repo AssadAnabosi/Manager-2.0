@@ -3,7 +3,7 @@ const router = Router();
 
 import * as controller from "../controllers/user.controller.js";
 
-import { hasLevel2Access, hasLevel3Access } from "../middleware/auth.middleware.js";
+import { hasLevel2Access, hasLevel3Access, isAdmin } from "../middleware/auth.middleware.js";
 
 // @route   GET api/users/
 // @desc    Get all users
@@ -21,5 +21,10 @@ router.route("/:id")
     // @route   DELETE api/users/:id
     // @access  Private (Level 3)
     .delete(hasLevel3Access, controller.deleteUser);
+
+router.route("/:id/reset-password")
+    // @route   PUT api/users/:id/reset-password
+    // @access  Private (Admin)
+    .put(isAdmin, controller.resetPassword);
 
 export default router;
