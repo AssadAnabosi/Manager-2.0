@@ -75,3 +75,21 @@ export const resetPassword = async (req, res, next) => {
         next(error);
     }
 }
+
+// @desc    Update a user's access level
+export const updateAccessLevel = async (req, res, next) => {
+    const accessLevels = ["User", "Spectator", "Moderator", "Administrator"];
+    const accessLevel = req.body.accessLevel;
+    if (!accessLevels.includes(accessLevel))
+        return next(new ResponseError("Invalid access level", 400));
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user)
+            return next(new ResponseError("User not found", 404));
+        user.accessLevel = accessLevel;
+        await user.save();
+        return res.sendStatus(204);
+    } catch (error) {
+        next(error);
+    }
+}
