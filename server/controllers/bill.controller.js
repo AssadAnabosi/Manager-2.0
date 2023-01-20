@@ -13,3 +13,19 @@ export const getBills = async (req, res, next) => {
         next(error);
     }
 };
+
+// @desc    Create a bill
+export const createBill = async (req, res, next) => {
+    const { date, value, description, extraNotes } = req.body;
+    if (!date || !value || !description) {
+        return next(new ResponseError("Please provide date, value, and description", 400));
+    }
+    try {
+        await Bill.create({
+            date, value, description, extraNotes
+        });
+        return res.sendStatus(201);
+    } catch (error) {
+        next(error);
+    }
+};
