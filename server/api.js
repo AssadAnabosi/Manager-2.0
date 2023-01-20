@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 
 // @desc    Routes Import
-import authRoutes from "./auth.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 
 // @desc    Routes
 router.use("/auth", authRoutes);
