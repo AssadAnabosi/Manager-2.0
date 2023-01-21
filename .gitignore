@@ -1,0 +1,9 @@
+notes.md
+
+#ignore node_modules in all subdirectories
+server/node_modules
+client/node_modules
+
+#ignore .env files
+server/config.env
+server/.env
