@@ -4,7 +4,7 @@ import ResponseError from "../utils/ResponseError.js";
 // @desc    Get all payees
 export const getPayees = async (req, res, next) => {
     try {
-        const payees = await Payee.find();
+        const payees = await Payee.find().select("-cheques");
         return res.status(200).json({
             success: true,
             data: payees,
@@ -48,6 +48,8 @@ export const getPayee = async (req, res, next) => {
 
 // @desc    Update a payee
 export const updatePayee = async (req, res, next) => {
+    if (req.body.cheques)
+        return next(new ResponseError("Cannot update payee's cheques", 400));
     try {
         const payee = await Payee.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
