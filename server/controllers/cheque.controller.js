@@ -68,3 +68,15 @@ export const updateCheque = async (req, res, next) => {
         next(error);
     }
 };
+
+// @desc    Delete a Cheque
+export const deleteCheque = async (req, res, next) => {
+    try {
+        const cheque = await Cheque.findByIdAndDelete(req.params.id);
+        if (!cheque)
+            return next(new ResponseError("Cheque not found", 404));
+        return res.sendStatus(204);
+    } catch (error) {
+        next(error);
+    }
+};
