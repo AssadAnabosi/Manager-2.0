@@ -5,7 +5,7 @@ import ResponseError from '../utils/ResponseError.js';
 // @desc    Get all logs
 export const getLogs = async (req, res, next) => {
     try {
-        const logs = await Log.find();
+        const logs = await Log.find().populate("worker", "firstName lastName");
         return res.status(200).json({
             success: true,
             data: logs,
@@ -39,7 +39,7 @@ export const createLog = async (req, res, next) => {
 // @desc    Get a log
 export const getLog = async (req, res, next) => {
     try {
-        const log = await Log.findById(req.params.id);
+        const log = await Log.findById(req.params.id).populate("worker", "firstName lastName");
         if (!log)
             return next(new ResponseError("Log not found", 404));
         return res.status(200).json({
