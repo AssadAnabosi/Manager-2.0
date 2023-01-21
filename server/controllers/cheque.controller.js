@@ -51,3 +51,20 @@ export const getCheque = async (req, res, next) => {
         next(error);
     }
 };
+
+// @desc    Update a Cheque
+export const updateCheque = async (req, res, next) => {
+    if (req.body.serial)
+        return next(new ResponseError("You can't change the Serial Number", 400));
+    try {
+        const cheque = await Cheque.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        });
+        if (!cheque)
+            return next(new ResponseError("Cheque not found", 404));
+        return res.sendStatus(204);
+    } catch (error) {
+        next(error);
+    }
+};

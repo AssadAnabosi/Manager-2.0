@@ -17,5 +17,8 @@ router.route("/:id")
     // @route   GET api/cheques/:id
     // @access  Private (Level 2)
     .get(controller.getCheque)
+    // @route   PUT api/cheques/:id
+    // @access  Private (Level 3)
+    .put(hasLevel3Access, controller.updateCheque)
 
 export default router;
