@@ -1,0 +1,1147 @@
+{
+	"info": {
+		"_postman_id": "66011b98-f4b6-414e-a779-4aac1edbbc95",
+		"name": "Manager-API 2.0",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21434547"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Assad\",\r\n    \"lastName\": \"Anabosi\",\r\n    \"username\" : \"aanabos2\",\r\n    \"email\": \"assad.anbo2si@icloud.com\",\r\n    \"phoneNumber\": \"+970569628435\",\r\n    \"password\": \"01234567890\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/auth/register",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "assad.anab",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Only Administrtors can access this route"
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Save token as variable\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.collectionVariables.set(\"token\", jsonData.token);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"aanabosi\",\r\n    \"password\": \"01234567890\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/auth/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check-username",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"aanabosi1\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/auth/check-username",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"check-username"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "assad.anab",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change-password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currentPassword\": \"01234567890\",\r\n    \"newPassword\": \"012345678901\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/auth/change-password",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"change-password"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "assad.anab",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Only Administrtors can access this route"
+					},
+					"response": []
+				},
+				{
+					"name": "getCurrentUser",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/auth/me",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/users",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User By ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/users/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63cb0de1baa242df2113eb86"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User By ID",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Ahmad\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/users/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63cafb9d169be261378a2797"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User By ID",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/users/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63cafb9d169be261378a2797"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset-password",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\" : \"123\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/users/:id/reset-password",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								":id",
+								"reset-password"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-access-level",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"accessLevel\" : \"Spectator\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/users/:id/update-access-level",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								":id",
+								"update-access-level"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63cb0de1baa242df2113eb86"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bills",
+			"item": [
+				{
+					"name": "Create Bill",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"date\": \"2023-01-17T01:34:17.692Z\",\r\n    \"value\": \"500\",\r\n    \"description\": \"Sample Bill\",\r\n    \"extraNotes\": \"\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/bills",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"bills"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Bills",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/bills",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"bills"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bill By ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/bills/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"bills",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63cb13acad57f6d229d99532"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Bill By ID",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"extraNotes\": \"from ATM\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/bills/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"bills",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63cb13acad57f6d229d99532"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Bill By ID",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/bills/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"bills",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63cb13acad57f6d229d99532"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Logs",
+			"item": [
+				{
+					"name": "Create Log",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"date\": \"2023-02-18T01:34:17.692Z\",\r\n    \"startingTime\": \"08:30\",\r\n    \"finishingTime\": \"14:30\",\r\n    \"payment\": \"0\",\r\n    \"extraNotes\": \"Baqa Al-Gharbia\",\r\n    \"worker\": \"63cb0de1baa242df2113eb86\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/logs",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"logs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Logs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/logs",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"logs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Log By ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/logs/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63cb29b061c9298f1c9dd42d"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Log By ID",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"payment\": \"400\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/logs/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63cb1be0828c101c84a67138"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Log By ID",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/logs/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63cb1be0828c101c84a67138"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payees",
+			"item": [
+				{
+					"name": "Create Payee",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Sample Payee 3\",\r\n    \"email\": \"sample3@payee.co\",\r\n    \"phoneNumber\": \"+970000000000\",\r\n    \"extraNotes\": \"*****, West Bank\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/payees",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"payees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Payees",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/payees",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"payees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Payee By ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/payees/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"payees",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63cb29012263ee1855104cfb"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Payee By ID",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Sample Payee 1\",\r\n    \"extraNotes\": \"Jenin, West Bank\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/payees/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"payees",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63cb22932fd91ac2f97db550"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Payee By ID",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/payees/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"payees",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63cb22932fd91ac2f97db550"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cheques",
+			"item": [
+				{
+					"name": "Create Cheque",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"serial\": \"521\",\r\n    \"dueDate\": \"2023-01-28T01:34:17.692Z\",\r\n    \"value\": \"2300\",\r\n    \"payee\": \"63cb29012263ee1855104cfb\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/cheques",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"cheques"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Cheques",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/cheques",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"cheques"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Cheque By ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/cheques/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"cheques",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63cb290e2263ee1855104d01"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Cheque By ID",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"isCanceled\": \"true\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/cheques/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"cheques",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63cb290e2263ee1855104d01"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Cheque By ID",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/cheques/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"cheques",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63cb290e2263ee1855104d01"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "healthcheck",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/healthcheck",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"healthcheck"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "baseURL",
+			"value": "http://127.0.0.1:5000"
+		}
+	]
+}
