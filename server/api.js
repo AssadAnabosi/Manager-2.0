@@ -7,6 +7,7 @@ import usersRoutes from "./routes/user.routes.js";
 import logsRoutes from "./routes/log.routes.js";
 import billsRoutes from "./routes/bill.routes.js";
 import payeesRoutes from "./routes/payee.routes.js";
+import chequesRoutes from "./routes/cheque.routes.js";
 
 // @desc    Middleware Import
 import { hasLevel2Access, isAuth } from "./middleware/auth.middleware.js";
@@ -17,6 +18,7 @@ router.use("/users", isAuth, usersRoutes);
 router.use("/logs", isAuth, hasLevel2Access, logsRoutes);
 router.use("/bills", isAuth, hasLevel2Access, billsRoutes);
 router.use("/payees", isAuth, hasLevel2Access, payeesRoutes);
+router.use("/cheques", isAuth, hasLevel2Access, chequesRoutes);
 
 // @desc    Undefined routes
 router.route("*")
