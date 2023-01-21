@@ -20,5 +20,8 @@ router.route("/:id")
     // @route   PUT api/cheques/:id
     // @access  Private (Level 3)
     .put(hasLevel3Access, controller.updateCheque)
+    // @route   DELETE api/cheques/:id
+    // @access  Private (Level 3)
+    .delete(hasLevel3Access, controller.deleteCheque);
 
 export default router;
