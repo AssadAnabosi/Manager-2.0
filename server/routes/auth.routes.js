@@ -7,7 +7,7 @@ import { isAuth, hasLevel3Access } from "../middleware/auth.middleware.js";
 
 // @desc    Register Route
 router.route("/register")
-    .post(controller.register)
+    .post(isAuth, hasLevel3Access, controller.register)
 // @desc    Login Route
 router.route("/login")
     .post(controller.login)
