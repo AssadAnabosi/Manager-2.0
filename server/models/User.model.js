@@ -96,9 +96,7 @@ UserSchema.methods.getSignedToken = function () {
 
 // @desc   Delete all logs associated with the user when the user is deleted
 UserSchema.post("findOneAndDelete", async function (user) {
-    if (user.logs.length) {
-        await Log.deleteMany({ _id: { $in: user.logs } });
-    }
+    await Log.deleteMany({ worker: user._id });
 });
 
 const User = mongoose.model("User", UserSchema);
