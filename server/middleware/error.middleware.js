@@ -22,7 +22,7 @@ const errorHandler = (err, req, res, next) => {
                 message = `${capitalizeFirstLetter(Object.keys(err.keyPattern)[0])} already exists`;
                 break;
         }
-        error = new ResponseError(message, 400);
+        error = new ResponseError(message, 409);
     }
 
     if (err.name === "ValidationError") {
