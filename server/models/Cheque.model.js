@@ -45,17 +45,12 @@ ChequeSchema.pre("save", async function (next) {
 
 // @desc    Add the cheque to the payee's cheques array when the cheque is created
 ChequeSchema.post("save", async function (cheque) {
-    const payee = await Payee.findById(cheque.payee);
-    payee.cheques.push(cheque._id);
-    await payee.save();
+    await Payee.updateOne({ _id: cheque.payee }, { $push: { cheques: cheque._id } });
 });
 
 // @desc   Remove the cheque from the payee's cheques array when the cheque is deleted
 ChequeSchema.post("findOneAndDelete", async function (cheque) {
-    const payee = await Payee.findById(cheque.payee);
-    if (!payee) return;
-    payee.cheques = payee.cheques.filter(chequeId => chequeId.toString() !== cheque._id.toString());
-    await payee.save();
+    await Payee.updateOne({ _id: cheque.payee }, { $pull: { cheques: cheque._id } });
 });
 
 
