@@ -11,12 +11,6 @@ router.route("/register")
 // @desc    Login Route
 router.route("/login")
     .post(controller.login)
-// @desc    Change Password Route  
-router.route("/change-password")
-    .post(isAuth, controller.changePassword)
-// @desc    Check Username Route
-router.route("/check-username/")
-    .post(isAuth, hasLevel3Access, controller.checkUsername)
 // @desc    Retrieve current authenticated user
 router.route("/me")
     .get(isAuth, controller.getMe)
