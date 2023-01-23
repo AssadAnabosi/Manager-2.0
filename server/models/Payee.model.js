@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Cheque from "./Cheque.model.js";
 
 const PayeeSchema = new mongoose.Schema({
     name: {
@@ -28,12 +29,7 @@ const PayeeSchema = new mongoose.Schema({
 
 // @desc   set isDeleted property to true and set the payee's cheques' payee property to null in the associated cheques
 PayeeSchema.post("findOneAndDelete", async function (payee) {
-    if (payee.cheques.length === 0) return;
-    payee.cheques.forEach(async (chequeId) => {
-        const cheque = await Cheque
-            .findByIdAndUpdate(chequeId, { payee: null, isDeleted: true }, { new: true, runValidators: true });
-        await cheque.save();
-    });
+    await Cheque.updateMany({ payee: payee._id }, { payee: null, isDeleted: true });
 });
 
 const Payee = mongoose.model("Payee", PayeeSchema);
