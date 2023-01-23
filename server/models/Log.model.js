@@ -59,17 +59,12 @@ LogSchema.set("toJSON", {
 
 // @desc    Add the log to the worker's logs array when the log is created
 LogSchema.post("save", async function (log) {
-    const worker = await User.findById(log.worker);
-    worker.logs.push(log._id);
-    await worker.save();
+    await User.updateOne({ _id: log.worker }, { $push: { logs: log._id } });
 });
 
 // @desc    Remove the log from the worker's logs array when the log is deleted
 LogSchema.post("findOneAndDelete", async function (log) {
-    const worker = await User.findById(log.worker);
-    if (!worker) return;
-    worker.logs = worker.logs.filter(logId => logId.toString() !== log._id.toString());
-    await worker.save();
+    await User.updateOne({ _id: log.worker }, { $pull: { logs: log._id } });
 });
 
 
