@@ -35,3 +35,22 @@ export const chequesQuery = (search, startDate, endDate) => {
         },
     ];
 };
+
+export const chequesValueSum = (_id) => {
+    return [
+        {
+            $match:
+            {
+                _id: { "$in": _id },
+                "isCancelled": false,
+            }
+        },
+        {
+            $group:
+            {
+                _id: null,
+                total: { $sum: "$value" }
+            }
+        },
+    ];
+};
