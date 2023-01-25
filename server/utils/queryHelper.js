@@ -14,13 +14,13 @@ export const logsQuery = (search, startDate, endDate) => {
         },
         {
             $addFields: {
-                "worker": { $concat: ["$worker.firstName", " ", "$worker.lastName"] }
+                "worker.name": { $concat: ["$worker.firstName", " ", "$worker.lastName"] }
             }
         },
         {
             $match: {
                 "date": { $gte: startDate, $lte: endDate },
-                "worker": { $regex: search, $options: "i" },
+                "worker.name": { $regex: search, $options: "i" },
             }
         },
         {
@@ -33,7 +33,8 @@ export const logsQuery = (search, startDate, endDate) => {
                 OTV: 1,
                 payment: 1,
                 extraNotes: 1,
-                worker: 1
+                "worker._id": 1,
+                "worker.name": 1
             }
         }
     ];
@@ -92,7 +93,7 @@ export const logQuery = (id) => {
         },
         {
             $addFields: {
-                "worker": { $concat: ["$worker.firstName", " ", "$worker.lastName"] }
+                "worker.fullName": { $concat: ["$worker.firstName", " ", "$worker.lastName"] }
             }
         },
         {
@@ -105,7 +106,8 @@ export const logQuery = (id) => {
                 OTV: 1,
                 payment: 1,
                 extraNotes: 1,
-                worker: 1
+                "worker._id": 1,
+                "worker.fullName": 1
             }
         }
     ];
