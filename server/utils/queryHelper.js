@@ -144,7 +144,17 @@ export const chequesQuery = (search, startDate, endDate) => {
             }
         },
         {
-            $project: { _id: 1, serial: 1, dueDate: 1, value: 1, description: 1, "payee.name": 1, "payee._id": 1, isCancelled: 1, isDeleted: 1 }
+            $project: {
+                _id: 1,
+                serial: 1,
+                dueDate: 1,
+                value: 1,
+                description: 1,
+                "payee.name": 1,
+                "payee._id": 1,
+                isCancelled: 1,
+                isDeleted: 1
+            }
         },
     ];
 };
@@ -165,5 +175,39 @@ export const chequesValueSum = (_id) => {
                 total: { $sum: "$value" }
             }
         },
+    ];
+};
+
+export const chequeQuery = (id) => {
+    return [
+        {
+            $match: {
+                _id: mongoose.Types.ObjectId(id)
+            }
+        },
+        {
+            $lookup: {
+                from: "payees",
+                localField: "payee",
+                foreignField: "_id",
+                as: "payee"
+            }
+        },
+        {
+            $unwind: '$payee'
+        },
+        {
+            $project: {
+                _id: 1,
+                serial: 1,
+                dueDate: 1,
+                value: 1,
+                description: 1,
+                "payee.name": 1,
+                "payee._id": 1,
+                isCancelled: 1,
+                isDeleted: 1
+            }
+        }
     ];
 };

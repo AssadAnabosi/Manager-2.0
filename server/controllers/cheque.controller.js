@@ -13,7 +13,7 @@ export const getCheques = async (req, res, next) => {
             .sort({ dueDate: 1, serial: 1 });
 
         const _id = cheques.map(({ _id }) => _id)
-        
+
         let ValueSum = await Cheque.aggregate(queryHelper.chequesValueSum(_id));
         if (ValueSum.length < 1)
             ValueSum = [{ total: 0 }];
@@ -53,8 +53,7 @@ export const createCheque = async (req, res, next) => {
 // @desc    Get a Cheque
 export const getCheque = async (req, res, next) => {
     try {
-        const cheque = await Cheque.findById(req.params.id)
-            .populate("payee", "name");
+        const cheque = await Cheque.aggregate(queryHelper.chequeQuery(req.params.id));
         if (!cheque)
             return next(new ResponseError("Cheque not found", 404));
         return res.status(200).json({
