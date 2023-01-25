@@ -39,7 +39,7 @@ const UserSchema = new mongoose.Schema({
     },
     accessLevel: {
         type: String,
-        // "User", "Spectator", "Supervisor", or "Administrator
+        enum: ["User", "Spectator", "Supervisor", "Administrator"],
         default: "User",
     },
     logs: [
