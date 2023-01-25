@@ -1,12 +1,16 @@
 import Cheque from "../models/Cheque.model.js";
 import Payee from "../models/Payee.model.js";
 import ResponseError from "../utils/responseError.js";
+import ReqQueryHelper from "../utils/ReqQueryHelper.js";
+import * as queryHelper from "../utils/queryHelper.js";
 
 // @desc    Get all Cheques
 export const getCheques = async (req, res, next) => {
+    const { startDate, endDate, search } = ReqQueryHelper(req.query);
     try {
-        const cheques = await Cheque.find()
-            .populate("payee", "name");
+        const cheques = await Cheque
+            .aggregate(queryHelper.chequesQuery(search, startDate, endDate))
+            .sort({ dueDate: 1, serial: 1 });
         return res.status(200).json({
             success: true,
             data: cheques,
