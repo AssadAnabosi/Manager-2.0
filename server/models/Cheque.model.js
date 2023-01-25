@@ -24,7 +24,7 @@ const ChequeSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Payee",
     },
-    isCanceled: {
+    isCancelled: {
         type: Boolean,
         default: false
     },
