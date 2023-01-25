@@ -12,11 +12,17 @@ const LogSchema = new mongoose.Schema({
     },
     startingTime: {
         type: String,
-        required: false
+        required: false,
+        default: "00:00"
     },
     finishingTime: {
         type: String,
-        required: false
+        required: false,
+        default: "00:00"
+    },
+    OTV: {
+        type: Number,
+        default: 0,
     },
     payment: {
         type: Number,
@@ -35,27 +41,42 @@ const LogSchema = new mongoose.Schema({
 });
 
 // @desc    Date and worker must be a composite unique value
-LogSchema.index({ date: 1, worker: 1 }, { unique: true });
+LogSchema.index({ date: -1, worker: 1 }, { unique: true });
 
-// @desc   Virtual property that calculates the OTV
-LogSchema.virtual("OTV").get(function () {
-    const log = this;
-    const startingTime = log.startingTime.split(":");
-    const finishingTime = log.finishingTime.split(":");
-    const hours = parseInt(finishingTime[0]) - parseInt(startingTime[0]);
-    const minutes = parseInt(finishingTime[1]) - parseInt(startingTime[1]);
-    return hours + minutes - 8;
+// @desc set startingTime and finishingTime to 00:00 if isAbsence is true
+LogSchema.pre("save", async function (next) {
+    const { isAbsence } = this;
+    if (isAbsence) {
+        this.startingTime = "00:00";
+        this.finishingTime = "00:00";
+        this.OTV = 0;
+    } else {
+        const { startingTime, finishingTime } = this;
+        const [startingHour, startingMinute] = startingTime.split(":");
+        const [finishingHour, finishingMinute] = finishingTime.split(":");
+        const OTV = (finishingHour - startingHour) + ((finishingMinute - startingMinute) / 60) - 8;
+        this.OTV = OTV;
+    }
+    next();
 });
 
 
-LogSchema.set("toJSON", {
-    // @desc    send the virtual field "OTV" in the response of a find query
-    virtuals: true,
-    // @desc    remove the id from the response
-    transform: function (doc, ret) {
-        delete ret.id;
-    },
+// @desc    set startingTime and finishingTime to 00:00 if isAbsence is true
+LogSchema.pre("findOneAndUpdate", async function (next) {
+    let { isAbsence, startingTime, finishingTime } = this._update;
+    if (isAbsence) {
+        this._update.startingTime = "00:00";
+        this._update.finishingTime = "00:00";
+        this._update.OTV = 0;
+    } else if (startingTime && finishingTime) {
+        const [startingHour, startingMinute] = startingTime.split(":");
+        const [finishingHour, finishingMinute] = finishingTime.split(":");
+        const OTV = (finishingHour - startingHour) + ((finishingMinute - startingMinute) / 60) - 8;
+        this._update.OTV = OTV;
+    }
+    next();
 });
+
 
 // @desc    Add the log to the worker's logs array when the log is created
 LogSchema.post("save", async function (log) {
