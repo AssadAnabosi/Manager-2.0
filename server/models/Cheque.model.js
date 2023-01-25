@@ -35,6 +35,8 @@ const ChequeSchema = new mongoose.Schema({
 
 });
 
+ChequeSchema.index({ dueDate: 1, serial: 1 });
+
 // @desc    Set the isDeleted property to false if the payee is while it's true
 ChequeSchema.pre("save", async function (next) {
     if (this.isModified("payee") && this.isDeleted) {
