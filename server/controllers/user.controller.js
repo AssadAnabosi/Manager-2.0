@@ -35,7 +35,7 @@ export const getUser = async (req, res, next) => {
 // @desc    Update a user
 export const updateUser = async (req, res, next) => {
     if (req.body.password || req.body.accessLevel || req.logs || req.body.active)
-        return next(new ResponseError("You are not authorized to update this field", 401));
+        return next(new ResponseError("You are not authorized to update this field", 400));
     try {
         const user = await User.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
@@ -54,7 +54,7 @@ export const updateUser = async (req, res, next) => {
 export const deleteUser = async (req, res, next) => {
     try {
         if (req.params.id === req.user.id) {
-            return next(new ResponseError("You are not authorized to delete your own account", 401));
+            return next(new ResponseError("You are not authorized to delete your own account", 400));
         }
 
         const user = await User.findByIdAndDelete(req.params.id);
@@ -82,7 +82,7 @@ export const changePassword = async (req, res, next) => {
 
         const isMatch = await user.matchPassword(currentPassword);
         if (!isMatch) {
-            return next(new ResponseError("Wrong current password", 401));
+            return next(new ResponseError("Wrong current password", 400));
         }
 
         user.password = newPassword;
