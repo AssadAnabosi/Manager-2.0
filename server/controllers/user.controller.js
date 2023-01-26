@@ -3,8 +3,15 @@ import ResponseError from "../utils/ResponseError.js";
 
 // @desc    Get all users
 export const getUsers = async (req, res, next) => {
+    const search = req.query.search || "";
+
     try {
-        const users = await User.find().select("-logs");
+        const users = await User.find({
+            $or: [
+                { firstName: { $regex: search, $options: "i" } },
+                { lastName: { $regex: search, $options: "i" } },
+            ],
+        }).select("-logs");
 
         return res.status(200).json({
             success: true,
