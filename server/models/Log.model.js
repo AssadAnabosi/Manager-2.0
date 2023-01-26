@@ -6,7 +6,7 @@ const LogSchema = new mongoose.Schema({
         type: Date,
         required: [true, "Please provide a date"]
     },
-    isAbsence: {
+    isAbsent: {
         type: Boolean,
         default: false
     },
@@ -43,10 +43,10 @@ const LogSchema = new mongoose.Schema({
 // @desc    Date and worker must be a composite unique value
 LogSchema.index({ date: -1, worker: 1 }, { unique: true });
 
-// @desc    set startingTime and finishingTime to 00:00 if isAbsence is true
+// @desc    set startingTime and finishingTime to 00:00 if isAbsent is true
 LogSchema.pre("save", async function (next) {
-    const { isAbsence } = this;
-    if (isAbsence) {
+    const { isAbsent } = this;
+    if (isAbsent) {
         this.startingTime = "00:00";
         this.finishingTime = "00:00";
         this.OTV = 0;
@@ -61,10 +61,10 @@ LogSchema.pre("save", async function (next) {
 });
 
 
-// @desc    set startingTime and finishingTime to 00:00 if isAbsence is true
+// @desc    set startingTime and finishingTime to 00:00 if isAbsent is true
 LogSchema.pre("findOneAndUpdate", async function (next) {
-    let { isAbsence, startingTime, finishingTime } = this._update;
-    if (isAbsence) {
+    let { isAbsent, startingTime, finishingTime } = this._update;
+    if (isAbsent) {
         this._update.startingTime = "00:00";
         this._update.finishingTime = "00:00";
         this._update.OTV = 0;
