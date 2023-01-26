@@ -79,6 +79,7 @@ UserSchema.set("toJSON", {
         delete ret.firstName;
         delete ret.lastName;
         delete ret.id;
+        delete ret.__v;
     },
 });
 
