@@ -22,24 +22,30 @@ router.route("/:id")
     // @access  Private (Level 3)
     .delete(hasLevel3Access, controller.deleteUser);
 
-router.route("/change-password")
-    //  @route POST api/users/change-password
-    //  @access Private (Auth)
-    .post(isAuth, controller.changePassword)
-
 router.route("/check-username/")
     //  @route POST api/users/check-username
     //  @access Private (Level 3)
     .post(isAuth, hasLevel3Access, controller.checkUsername)
+
+
+router.route("/change-password")
+    //  @route PUT api/users/change-password
+    //  @access Private (Auth)
+    .put(isAuth, controller.changePassword)
 
 router.route("/:id/reset-password")
     // @route   PUT api/users/:id/reset-password
     // @access  Private (Admin)
     .put(isAdmin, controller.resetPassword);
 
-router.route("/:id/update-access-level")
+router.route("/:id/access-level")
     // @route   PUT api/users/:id/update-access-level
     // @access  Private (Admin)
     .put(isAdmin, controller.updateAccessLevel);
+
+router.route("/:id/active-status")
+    // @route   PUT api/users/:id/activation
+    // @access  Private (Admin)
+    .put(isAdmin, controller.setActiveStatus);
 
 export default router;

@@ -138,3 +138,21 @@ export const updateAccessLevel = async (req, res, next) => {
         next(error);
     }
 }
+
+// @desc    set a user's active status
+export const setActiveStatus = async (req, res, next) => {
+    try {
+        const { active } = req.body;
+        if (active === null || active === undefined)
+            return next(new ResponseError("Please provide active status", 400));
+        const user = await User.findByIdAndUpdate(req.params.id, { active }, {
+            new: true,
+            runValidators: true
+        });
+        if (!user)
+            return next(new ResponseError("User not found", 404));
+        return res.sendStatus(204);
+    } catch (error) {
+        next(error);
+    }
+}
