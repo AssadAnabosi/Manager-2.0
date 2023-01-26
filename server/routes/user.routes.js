@@ -10,14 +10,15 @@ import { isAuth, hasLevel2Access, hasLevel3Access, isAdmin } from "../middleware
 router.route("/")
     .get(hasLevel2Access, controller.getUsers);
 
+router.post("/check-username/", isAuth, hasLevel3Access, controller.checkUsername);
+
+router.put("/change-password", isAuth, controller.changePassword);
+
 router.route("/:id")
     .get(hasLevel2Access, controller.getUser)
     .put(hasLevel3Access, controller.updateUser)
     .delete(hasLevel3Access, controller.deleteUser);
 
-router.post("/check-username/", isAuth, hasLevel3Access, controller.checkUsername);
-
-router.put("/change-password", isAuth, controller.changePassword);
 
 router.put("/:id/reset-password", isAdmin, controller.resetPassword);
 
