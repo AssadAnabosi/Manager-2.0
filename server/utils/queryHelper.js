@@ -28,7 +28,7 @@ export const logsQuery = (search, startDate, endDate) => {
             $project: {
                 _id: 1,
                 date: 1,
-                isAbsence: 1,
+                isAbsent: 1,
                 startingTime: 1,
                 finishingTime: 1,
                 OTV: 1,
@@ -61,7 +61,7 @@ export const logsAttendanceSums = (_id) => {
     return [{
         $match: {
             _id: { "$in": _id },
-            isAbsence: false
+            isAbsent: false
         }
     },
     {
@@ -101,7 +101,7 @@ export const logQuery = (id) => {
             $project: {
                 _id: 1,
                 date: 1,
-                isAbsence: 1,
+                isAbsent: 1,
                 startingTime: 1,
                 finishingTime: 1,
                 OTV: 1,

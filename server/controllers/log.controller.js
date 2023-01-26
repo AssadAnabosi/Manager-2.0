@@ -51,12 +51,12 @@ export const getLogs = async (req, res, next) => {
 
 // @desc    Create a log
 export const createLog = async (req, res, next) => {
-    const { date, isAbsence, startingTime, finishingTime, payment, extraNotes } = req.body;
+    const { date, isAbsent, startingTime, finishingTime, payment, extraNotes } = req.body;
 
     if (!date || !req.body.worker)
         return next(new ResponseError("Please provide a date and workerId", 400));
 
-    if ((isAbsence === undefined || isAbsence === null) && (!startingTime || !finishingTime)) {
+    if ((isAbsent === undefined || isAbsent === null) && (!startingTime || !finishingTime)) {
         return next(new ResponseError("Please provide a starting time and finishing time", 400));
     }
 
@@ -66,7 +66,7 @@ export const createLog = async (req, res, next) => {
             return next(new ResponseError("Worker not found", 404));
 
         const log = new Log({
-            worker: req.body.worker, date, isAbsence, startingTime, finishingTime, payment, extraNotes
+            worker: req.body.worker, date, isAbsent, startingTime, finishingTime, payment, extraNotes
         });
         await log.save();
 
@@ -95,12 +95,12 @@ export const getLog = async (req, res, next) => {
 
 // @desc    Update a log
 export const updateLog = async (req, res, next) => {
-    const { worker, date, isAbsence, startingTime, finishingTime } = req.body;
+    const { worker, date, isAbsent, startingTime, finishingTime } = req.body;
     if (worker || date) {
         return next(new ResponseError("You can't change the date or worker", 400));
     }
 
-    if ((isAbsence === undefined || isAbsence === null) && (!startingTime || !finishingTime)) {
+    if ((isAbsent === undefined || isAbsent === null) && (!startingTime || !finishingTime)) {
         return next(new ResponseError("Please provide a starting time and finishing time", 400));
     }
 
