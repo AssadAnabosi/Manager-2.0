@@ -3,16 +3,24 @@ import Worker from "../models/User.model.js";
 import ResponseError from '../utils/ResponseError.js';
 import ReqQueryHelper from "../utils/ReqQueryHelper.js";
 import * as queryHelper from "../utils/queryHelper.js";
+import { Types } from 'mongoose';
+const { ObjectId } = Types;
 
 // @desc    Get all logs
 export const getLogs = async (req, res, next) => {
     const { startDate, endDate, search } = ReqQueryHelper(req.query);
     try {
+        const filter = queryHelper.logsQuery(search, startDate, endDate);
+        // @desc    Filter logs by user if request is from Level 1 user
+        if (req.user.accessLevel === "User") {
+            filter.unshift({ $match: { worker: ObjectId(req.user.id) } });
+        }
+
         const logs = await Log
-            .aggregate(queryHelper.logsQuery(search, startDate, endDate))
+            .aggregate(filter)
             .sort({ date: -1 });
 
-        const _id = logs.map(({ _id }) => _id)
+        const _id = logs.map(({ _id }) => _id);
 
         let paymentSums = await Log.aggregate(queryHelper.logsPaymentsSum(_id));
         if (paymentSums.length < 1)
