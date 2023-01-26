@@ -49,7 +49,7 @@ This app is built upon the need for a database for my family's own workshop, so 
 | PUT    | /api/users/:id                    |
 | DELETE | /api/users/:id                    |
 | POST   | /api/users/check-username         |
-| POST   | /api/users/change-password        |
+| PUT    | /api/users/change-password        |
 | PUT    | /api/users/reset-password         |
 | PUT    | /api/users/access-level           |
 | PUT    | /api/users/active-status          |
