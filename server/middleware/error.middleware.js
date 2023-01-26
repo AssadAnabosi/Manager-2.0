@@ -1,5 +1,6 @@
 import ResponseError from "../utils/responseError.js";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
+
 const errorHandler = (err, req, res, next) => {
     let error = { ...err };
 
@@ -19,10 +20,10 @@ const errorHandler = (err, req, res, next) => {
                 message = "Username is already taken";
                 break;
             default:
-                message = `${capitalizeFirstLetter(Object.keys(err.keyPattern)[0])} already exists`;
+                message = `${capitalizeFirstLetter(Object.keys(err.keyPattern)[0])} is already exists`;
                 break;
         }
-        error = new ResponseError(message, 400);
+        error = new ResponseError(message, 409);
     }
 
     if (err.name === "ValidationError") {
