@@ -50,7 +50,7 @@ export const login = async (req, res, next) => {
 // @desc    Get current logged in user
 export const getMe = async (req, res, next) => {
     try {
-        const user = await User.findById(req.user.id);
+        const user = await User.findById(req.user.id).select("-logs");
         return res.status(200).json({
             success: true,
             data: user

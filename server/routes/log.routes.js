@@ -3,7 +3,7 @@ const router = Router();
 
 import * as controller from "../controllers/log.controller.js";
 
-import { hasLevel3Access } from "../middleware/auth.middleware.js";
+import { hasLevel2Access, hasLevel3Access } from "../middleware/auth.middleware.js";
 
 router.route("/")
     // @route   GET api/logs/
@@ -16,7 +16,7 @@ router.route("/")
 router.route("/:id")
     // @route   GET api/logs/:id
     // @access  Private (Level 2)
-    .get(controller.getLog)
+    .get(hasLevel2Access, controller.getLog)
     // @route   PUT api/logs/:id
     // @access  Private (Level 3)
     .put(hasLevel3Access, controller.updateLog)

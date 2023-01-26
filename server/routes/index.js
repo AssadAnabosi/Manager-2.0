@@ -15,7 +15,7 @@ import { hasLevel2Access, isAuth } from "../middleware/auth.middleware.js";
 // @desc    Routes
 router.use("/auth", authRoutes);
 router.use("/users", isAuth, usersRoutes);
-router.use("/logs", isAuth, hasLevel2Access, logsRoutes);
+router.use("/logs", isAuth, logsRoutes);
 router.use("/bills", isAuth, hasLevel2Access, billsRoutes);
 router.use("/payees", isAuth, hasLevel2Access, payeesRoutes);
 router.use("/cheques", isAuth, hasLevel2Access, chequesRoutes);
