@@ -9,7 +9,7 @@ This app is built upon the need for a database for my family's own workshop, so 
 * **AccessLevels**: are the different levels of access that a **Worker** can have, the higher the level the more actions they can perform.
     1. **User**: can only view his own logs and change his password.
     2. **Spectator**: can view all the bills, workers, logs, payees and cheques, but can't edit anything besides his own password.
-    3. **Moderator**: can do what a **Spectator** can do, and can add new records, but with restricted deletion and editing abilities, where he can't DELETE a worker, or update a worker's access level, change the activation status a worker account, or reset a worker's password.
+    3. **Moderator**: can do what a **Spectator** can do, and can add new records, but with restricted deletion and editing abilities, where he can't delete a worker, or update a worker's access level, change the activation status a worker account, or reset a worker's account password.
     4. **Administrator**: Highest level of access can do anything.
 * When a worker gets deleted, all the logs that are associated with that worker are also deleted.
 * When a payee gets deleted, all the cheques that are associated with that payee are marked as isDeleted = true, and their payee is set to null.
