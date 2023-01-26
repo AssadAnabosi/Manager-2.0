@@ -42,6 +42,10 @@ const UserSchema = new mongoose.Schema({
         enum: ["User", "Spectator", "Supervisor", "Administrator"],
         default: "User",
     },
+    active: {
+        type: Boolean,
+        default: true,
+    },
     logs: [
         {
             type: mongoose.Schema.Types.ObjectId,

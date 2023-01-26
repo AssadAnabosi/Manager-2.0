@@ -34,6 +34,10 @@ export const login = async (req, res, next) => {
         if (!user) {
             return next(new ResponseError("Invalid Credentials", 401));
         }
+        
+        if (!user.active) {
+            return next(new ResponseError("Your account has been deactivated", 403));
+        }
         // @desc    Password Check
         const isMatch = await user.matchPassword(password);
         //  @desc   Wrong Password
