@@ -2,15 +2,15 @@ import express from "express";
 const router = express.Router();
 
 // @desc    Routes Import
-import authRoutes from "./routes/auth.routes.js";
-import usersRoutes from "./routes/user.routes.js";
-import logsRoutes from "./routes/log.routes.js";
-import billsRoutes from "./routes/bill.routes.js";
-import payeesRoutes from "./routes/payee.routes.js";
-import chequesRoutes from "./routes/cheque.routes.js";
+import authRoutes from "./auth.routes.js";
+import usersRoutes from "./user.routes.js";
+import logsRoutes from "./log.routes.js";
+import billsRoutes from "./bill.routes.js";
+import payeesRoutes from "./payee.routes.js";
+import chequesRoutes from "./cheque.routes.js";
 
 // @desc    Middleware Import
-import { hasLevel2Access, isAuth } from "./middleware/auth.middleware.js";
+import { hasLevel2Access, isAuth } from "../middleware/auth.middleware.js";
 
 // @desc    Routes
 router.use("/auth", authRoutes);
