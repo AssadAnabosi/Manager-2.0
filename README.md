@@ -63,6 +63,7 @@ This app is built upon the need for a database for my family's own workshop, so 
 | GET    | /api/logs/:id                     |
 | PUT    | /api/logs/:id                     |
 | DELETE | /api/logs/:id                     |
+
 ### Payees
 
 | Method |                                   |
@@ -77,7 +78,7 @@ This app is built upon the need for a database for my family's own workshop, so 
 | Method |                                   |
 |--------|-----------------------------------|
 | POST   | /api/cheques                      |
-| GET    | /api/cheques?since=&till=&search= |
+| GET    | /api/cheques?start=&end=&search=  |
 | GET    | /api/cheques/:id                  |
 | PUT    | /api/cheques/:id                  |
 | DELETE | /api/cheques/:id                  |
@@ -87,7 +88,7 @@ This app is built upon the need for a database for my family's own workshop, so 
 | Method |                                   |
 |--------|-----------------------------------|
 | POST   | /api/bills                        |
-| GET    | /api/bills?start=&end=            |
+| GET    | /api/bills?start=&end=&search=    |
 | GET    | /api/bills/:id                    |
 | PUT    | /api/bills/:id                    |
 | DELETE | /api/bills/:id                    |
