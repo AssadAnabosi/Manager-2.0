@@ -55,7 +55,7 @@ export const createBill = async (req, res, next) => {
 // @desc    Get a bill
 export const getBill = async (req, res, next) => {
     try {
-        const bill = await Bill.findById(req.params.id);
+        const bill = await Bill.findById(req.params.id).select("-__v");
         if (!bill)
             return next(new ResponseError("Bill not found", 404));
 
