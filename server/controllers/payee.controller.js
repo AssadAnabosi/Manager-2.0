@@ -3,8 +3,15 @@ import ResponseError from "../utils/ResponseError.js";
 
 // @desc    Get all payees
 export const getPayees = async (req, res, next) => {
+    const search = req.query.search || "";
+    
     try {
-        const payees = await Payee.find().select("-cheques");
+        const payees = await Payee.find({
+            $or: [
+                { name: { $regex: search, $options: "i" } },
+                { extraNotes: { $regex: search, $options: "i" } }
+            ]
+        }).select("-cheques -__v");
 
         return res.status(200).json({
             success: true,
@@ -36,7 +43,7 @@ export const createPayee = async (req, res, next) => {
 // @desc    Get a payee
 export const getPayee = async (req, res, next) => {
     try {
-        const payee = await Payee.findById(req.params.id);
+        const payee = await Payee.findById(req.params.id).select("-__v");
         if (!payee)
             return next(new ResponseError("Payee not found", 404));
 
