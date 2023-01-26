@@ -5,6 +5,7 @@ import ResponseError from "../utils/ResponseError.js";
 export const getPayees = async (req, res, next) => {
     try {
         const payees = await Payee.find().select("-cheques");
+
         return res.status(200).json({
             success: true,
             data: payees,
@@ -20,10 +21,12 @@ export const createPayee = async (req, res, next) => {
     if (!name) {
         return next(new ResponseError("Please provide a name", 400));
     }
+
     try {
         await Payee.create({
             name, email, phoneNumber, extraNotes
         });
+
         return res.sendStatus(201);
     } catch (error) {
         next(error);
@@ -36,6 +39,7 @@ export const getPayee = async (req, res, next) => {
         const payee = await Payee.findById(req.params.id);
         if (!payee)
             return next(new ResponseError("Payee not found", 404));
+
         return res.status(200).json({
             success: true,
             data: payee
@@ -50,6 +54,7 @@ export const getPayee = async (req, res, next) => {
 export const updatePayee = async (req, res, next) => {
     if (req.body.cheques)
         return next(new ResponseError("Cannot update payee's cheques", 400));
+
     try {
         const payee = await Payee.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
@@ -57,6 +62,7 @@ export const updatePayee = async (req, res, next) => {
         });
         if (!payee)
             return next(new ResponseError("Payee not found", 404));
+
         return res.sendStatus(204);
     } catch (error) {
         next(error);
@@ -69,7 +75,9 @@ export const deletePayee = async (req, res, next) => {
         const payee = await Payee.findById(req.params.id);
         if (!payee)
             return next(new ResponseError("Payee not found", 404));
+
         await Payee.findByIdAndDelete(req.params.id);
+
         return res.sendStatus(204);
     } catch (error) {
         next(error);

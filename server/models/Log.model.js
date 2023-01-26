@@ -43,7 +43,7 @@ const LogSchema = new mongoose.Schema({
 // @desc    Date and worker must be a composite unique value
 LogSchema.index({ date: -1, worker: 1 }, { unique: true });
 
-// @desc set startingTime and finishingTime to 00:00 if isAbsence is true
+// @desc    set startingTime and finishingTime to 00:00 if isAbsence is true
 LogSchema.pre("save", async function (next) {
     const { isAbsence } = this;
     if (isAbsence) {
