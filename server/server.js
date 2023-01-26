@@ -6,7 +6,7 @@ dotenv.config({
 import express from "express";
 
 import connectDB from "./config/db.config.js";
-import APIRoutes from "./api.js";
+import APIRoutes from "./routes/index.js";
 import errorHandler from "./middleware/error.middleware.js";
 
 // @desc    Connect to DB
