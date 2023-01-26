@@ -5,8 +5,9 @@ import * as controller from "../controllers/log.controller.js";
 
 import { hasLevel2Access, hasLevel3Access } from "../middleware/auth.middleware.js";
 
+//  @routes  api/logs
+
 router.route("/")
-    // @route   GET api/logs/
     // @access  Private (Level 2)
     .get(controller.getLogs)
     // @route   POST api/logs/

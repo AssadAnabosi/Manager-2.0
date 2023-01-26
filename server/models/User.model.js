@@ -92,8 +92,8 @@ UserSchema.methods.matchPassword = async function (password) {
     return await bcrypt.compare(password, this.password);
 }
 
-// @desc    Generate a signed token
-UserSchema.methods.getSignedToken = function () {
+// @desc    Generate an access token
+UserSchema.methods.getAccessToken = function () {
     return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRE,
     });
