@@ -1,4 +1,4 @@
-export default (query) => {
+export default query => {
     const { start, end } = query;
     const search = query.search || "";
 
@@ -14,7 +14,7 @@ export default (query) => {
     }
 
     return { startDate, endDate, search };
-}
+};
 
 const getFirstDayOfCurrentMonth = date => {
     const year = date.getFullYear();
@@ -22,7 +22,7 @@ const getFirstDayOfCurrentMonth = date => {
     const firstDay = new Date(year, month, 1, 12, 0, 0, 0);
     firstDay.setUTCHours(firstDay.getUTCHours() + 2);
     return firstDay;
-}
+};
 
 const getLastDayOfCurrentMonth = date => {
     const year = date.getFullYear();
@@ -30,4 +30,4 @@ const getLastDayOfCurrentMonth = date => {
     const lastDay = new Date(year, month + 1, 0, 12, 0, 0, 0);
     lastDay.setUTCHours(lastDay.getUTCHours() + 2);
     return lastDay;
-}
+};
