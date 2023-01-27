@@ -58,7 +58,7 @@ This app is built upon the need for a database for my family's own workshop, so 
     * Administrator can't delete himself.
 - Log
     * Log worker and date both can't be changed.
-    * Log updating or creation can either have a startingTime and a finishingTime, or isAbsent = true. but you can't have both.
+    * Log updating or creation can either have a startingTime and a finishingTime, or isAbsent = true. but you can't have both or neither.
 - Cheque
     * Cheque serial number can't be changed.
 
