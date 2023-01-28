@@ -23,7 +23,7 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
     const { username, password } = req.body;
     if (!username || !password) {
-        return next(new ResponseError("Please provide an email and password", 400));
+        return next(new ResponseError("Please provide username and password", 400));
     }
 
     try {
