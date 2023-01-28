@@ -1,5 +1,25 @@
+import Session from "../models/Session.model.js";
 import User from "../models/User.model.js";
+import accessLevels from "../constants/accessLevels.js";
 import ResponseError from "../utils/ResponseError.js";
+
+// @desc    Register a new user
+export const registerUser = async (req, res, next) => {
+    const { firstName, lastName, username, email, phoneNumber, password } = req.body;
+    if (!firstName || !lastName || !username || !password) {
+        return next(new ResponseError("Please provide first and last names, username, and password", 400));
+    }
+
+    try {
+        await User.create({
+            firstName, lastName, username, email, phoneNumber, password
+        });
+
+        return res.sendStatus(201);
+    } catch (error) {
+        next(error);
+    }
+}
 
 // @desc    Get all users
 export const getUsers = async (req, res, next) => {
@@ -133,7 +153,7 @@ export const resetPassword = async (req, res, next) => {
 
         user.password = req.body.password;
         await user.save();
-
+        await Session.deleteMany({ user: user._id });
         return res.sendStatus(204);
     } catch (error) {
         next(error);
@@ -145,8 +165,7 @@ export const setAccessLevel = async (req, res, next) => {
     if (req.params.id === req.user.id) {
         return next(new ResponseError("You are not authorized to change your access level", 400));
     }
-    
-    const accessLevels = ["User", "Spectator", "Moderator", "Administrator"];
+
     const { accessLevel } = req.body;
     if (!accessLevels.includes(accessLevel))
         return next(new ResponseError("Invalid access level", 400));
