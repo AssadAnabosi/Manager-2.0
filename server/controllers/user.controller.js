@@ -43,6 +43,7 @@ export const getUser = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
     if (req.body.password || req.body.accessLevel || req.logs || req.body.active)
         return next(new ResponseError("You are not authorized to update this field", 400));
+
     try {
         const user = await User.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
@@ -59,11 +60,11 @@ export const updateUser = async (req, res, next) => {
 
 // @desc    Delete a user
 export const deleteUser = async (req, res, next) => {
-    try {
-        if (req.params.id === req.user.id) {
-            return next(new ResponseError("You are not authorized to delete your own account", 400));
-        }
+    if (req.params.id === req.user.id) {
+        return next(new ResponseError("You are not authorized to delete your own account", 400));
+    }
 
+    try {
         const user = await User.findByIdAndDelete(req.params.id);
         if (!user)
             return next(new ResponseError("User not found", 404));
@@ -141,6 +142,10 @@ export const resetPassword = async (req, res, next) => {
 
 // @desc   Change user's access level (authorization)
 export const setAccessLevel = async (req, res, next) => {
+    if (req.params.id === req.user.id) {
+        return next(new ResponseError("You are not authorized to change your access level", 400));
+    }
+    
     const accessLevels = ["User", "Spectator", "Moderator", "Administrator"];
     const { accessLevel } = req.body;
     if (!accessLevels.includes(accessLevel))
@@ -162,6 +167,10 @@ export const setAccessLevel = async (req, res, next) => {
 
 // @desc    Deactivate or Activate a user account
 export const setActiveStatus = async (req, res, next) => {
+    if (req.params.id === req.user.id) {
+        return next(new ResponseError("You are not authorized to deactivate your own account", 400));
+    }
+
     const { active } = req.body;
     if (active === null || active === undefined)
         return next(new ResponseError("Please provide active status", 400));

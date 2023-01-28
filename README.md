@@ -56,6 +56,8 @@ This app is built upon the need for a database for my family's own workshop, so 
 
 - User
     * Administrator can't delete himself.
+    * Administrator can't deactivate himself.
+    * Administrator can't change his own access level.
 - Log
     * Log worker and date both can't be changed.
     * Log updating or creation can either have a startingTime and a finishingTime, or isAbsent = true. but you can't have both or neither.
