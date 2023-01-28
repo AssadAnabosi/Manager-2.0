@@ -142,6 +142,10 @@ export const resetPassword = async (req, res, next) => {
 
 // @desc   Change user's access level (authorization)
 export const setAccessLevel = async (req, res, next) => {
+    if (req.params.id === req.user.id) {
+        return next(new ResponseError("You are not authorized to change your access level", 400));
+    }
+    
     const accessLevels = ["User", "Spectator", "Moderator", "Administrator"];
     const { accessLevel } = req.body;
     if (!accessLevels.includes(accessLevel))
