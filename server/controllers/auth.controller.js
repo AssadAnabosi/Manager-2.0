@@ -4,8 +4,8 @@ import ResponseError from "../utils/responseError.js";
 // @desc    Register a new user
 export const register = async (req, res, next) => {
     const { firstName, lastName, username, email, phoneNumber, password } = req.body;
-    if (!firstName || !lastName || !username || !email || !password) {
-        return next(new ResponseError("Please provide first and last names, username, email, and password", 400));
+    if (!firstName || !lastName || !username || !password) {
+        return next(new ResponseError("Please provide first and last names, username, and password", 400));
     }
 
     try {
