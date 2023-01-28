@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import User from "../models/User.model.js";
+import { ADMIN } from "../constants/accessLevels.js";
 
 const connectDB = async () => {
     // @desc: Connection string 
@@ -27,7 +28,7 @@ export const createAdmin = async () => {
                 email: process.env.ADMIN_EMAIL || "",
                 phoneNumber: process.env.ADMIN_PHONE_NUMBER || "",
                 password: process.env.ADMIN_PASSWORD || "12345678",
-                accessLevel: "Administrator",
+                accessLevel: ADMIN,
             }
             try {
                 const user = new User(Admin);
