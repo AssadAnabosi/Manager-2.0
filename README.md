@@ -76,6 +76,19 @@ This app is built upon the need for a database for my family's own workshop, so 
 
 ## Configuration and Setup
 * Fill the ```config.template.env``` file with the needed information, and rename it to ```config.env```
+    * ```PORT```: is the port that the server will run on.
+    * ```MONGO_URI```: is the URI of the MongoDB database.
+    * JWT
+        * ```JWT_SECRET```: is the secret that is used to sign the JWT tokens.
+        * ```JWT_EXPIRE```: is the expiration time of the JWT tokens.
+    * ```CLIENT_URL```: is the URL of the client app for cors.
+    * Admin Account: Initial Admin Account, will run only when there are no users in the database at the moment of the server start.
+        * ```ADMIN_USERNAME```: is the username of the admin account.
+        * ```ADMIN_PASSWORD```: is the password of the admin account.
+        * ```ADMIN_EMAIL```: is the email of the admin account.
+        * ```ADMIN_FIRST_NAME```: is the first name of the admin account.
+        * ```ADMIN_LAST_NAME```: is the last name of the admin account.
+        * ```ADMIN_PHONE_NUMBER```: is the phone number of the admin account.
 * Run ```npm install``` to install all the needed dependencies
 * Run ```npm run server``` to start the server in development mode (nodemon)
 
