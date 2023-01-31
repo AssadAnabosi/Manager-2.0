@@ -9,12 +9,12 @@ This app is built upon the need for a database for my family's own workshop, so 
 ## Definitions
 
 - **User**: is the **Worker** that is allowed to access the app, and perform the actions that are allowed to them.
-    * **firstName***: is the first name of the user.
-    * **lastName***: is the last name of the user.
-    * **username***: is the username of the user.
+    * **firstName**`*`: is the first name of the user.
+    * **lastName**`*`: is the last name of the user.
+    * **username**`*`: is the username of the user.
     * **email**: is the email of the user.
     * **phoneNumber**: is the phone number of the user.
-    * **password***: is the password of the user.
+    * **password**`*`: is the password of the user.
     * **active**: is a flag that is set to decide whether the user is allowed to login or not.
     * **accessLevel**: are the different levels of access that a **Worker** can have, the higher the level the more actions they can perform.
         1. **User**: can only view his own logs and change his password.
@@ -22,7 +22,7 @@ This app is built upon the need for a database for my family's own workshop, so 
         3. **Moderator**: can do what a **Spectator** can do, and can add new records, but with restricted deletion and editing abilities, where he can't delete a worker, or update a worker's access level, change the activation status a worker account, or reset a worker's account password.
         4. **Administrator**: Highest level of access can do anything.
 - **Log**: is the record of the work that is done by the worker.
-    * **date***: is the date that the work was done.
+    * **date**`*`: is the date that the work was done.
     * **isAbsent**: is a flag that is set to true when the worker is absent.
     * **description**: is the description of the work that was done.
     * **startingTime**: is the time that the work started.
@@ -30,29 +30,30 @@ This app is built upon the need for a database for my family's own workshop, so 
     * **OTV**: is the amount of overtime that the worker worked.
     * **payment**: is the amount of money that the worker got paid.
     * **extraNotes**: is an optional extra notes about the work.
-    * **worker***: is the worker who this log is associated with.
+    * **worker**`*`: is the worker who this log is associated with.
 - **Payee**: is the person or company that the **Cheque** is made out to.
-    * **name***: is the name of the payee.
+    * **name**`*`: is the name of the payee.
     * **email**: is the email of the payee.
     * **phoneNumber**: is the phone number of the payee.
     * **extraNotes**: is an optional extra notes about the payee.
 - **Cheque**: is the payment method that is used to pay the **Payee**.
-    * **serial***: is the number that is written on the cheque.
-    * **dueDate***: is the date that the cheque is due to be cashed.
-    * **value***: is the amount that is written on the cheque.
+    * **serial**`*`: is the number that is written on the cheque.
+    * **dueDate**`*`: is the date that the cheque is due to be cashed.
+    * **value**`*`: is the amount that is written on the cheque.
     * **description**: is an optional description of the cheque.
     * **payee**: is the payee that the cheque is made out to.
     * **isCancelled**: is a flag that is set to true when the cheque is cancelled.
     * **isDeleted**: is a flag that is set to true when the cheque payee is deleted.
 - **Bill**: is the expenses that are made by the workshop.
-    * **date***: is the date that the bill was made.
-    * **value***: is the amount that the bill is for.
-    * **description***: is the description of the bill.
+    * **date**`*`: is the date that the bill was made.
+    * **value**`*`: is the amount that the bill is for.
+    * **description**`*`: is the description of the bill.
     * **extraNotes**: is an optional extra notes about the bill.
 - **Session**: is the record of the sessions that are made by the users.
-    * **refreshToken***: is the refresh token that is used to generate new access tokens.
-    * **user***: is the user that the refresh token is associated with.
-    * **expiresAt***: is the date that the refresh token expires.
+    * **refreshToken**`*`: is the refresh token that is used to generate new access tokens.
+    * **user**`*`: is the user that the refresh token is associated with.
+    * **expiresAt**`*`: is the date that the refresh token expires.
+- `*`Required field
 - When a worker gets deleted, all the logs that are associated with that worker are also deleted.
 - When a payee gets deleted, all the cheques that are associated with that payee are marked as isDeleted = true, and their payee is set to null.
 - When a user logout his refresh token is revoked.
@@ -63,7 +64,7 @@ This app is built upon the need for a database for my family's own workshop, so 
     * Administrator can't delete himself.
     * Administrator can't deactivate himself.
     * Administrator can't change his own access level.
-    * Administrator resting a user password revoke all of his refresh tokens.
+    * Administrator resting a user password revokes all of his refresh tokens.
 
 - Log
     * Log worker and date both can't be changed.
