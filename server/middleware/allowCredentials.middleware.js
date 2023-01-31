@@ -1,4 +1,4 @@
-import {allowedOrigins} from "../config/cors.config.js";
+import { allowedOrigins } from "../config/cors.config.js";
 
 const allowCredentials = (req, res, next) => {
     const origin = req.headers.origin;

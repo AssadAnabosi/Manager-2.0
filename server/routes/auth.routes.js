@@ -3,12 +3,13 @@ const router = Router();
 
 import * as controller from "../controllers/auth.controller.js";
 
-import { isAuth, hasLevel3Access } from "../middleware/auth.middleware.js";
+import { isAuth } from "../middleware/auth.middleware.js";
+import * as validator from "../middleware/validators/auth.validator.js";
 import limiter from "../middleware/limiter.middleware.js";
 
 //  @routes  api/auth
 
-router.post("/", limiter, controller.login);
+router.post("/", validator.validateLogin, limiter, controller.login);
 
 router.get("/refresh", controller.refresh);
 

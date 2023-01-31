@@ -12,9 +12,6 @@ export const login = async (req, res, next) => {
     }
 
     const { username, password } = req.body;
-    if (!username || !password) {
-        return next(new ResponseError("Please provide username and password", 400));
-    }
 
     try {
         const user = await User.findOne({ username }).select("+password -logs");

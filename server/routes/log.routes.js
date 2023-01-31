@@ -5,21 +5,23 @@ import * as controller from "../controllers/log.controller.js";
 
 import { hasLevel2Access, hasLevel3Access } from "../middleware/auth.middleware.js";
 
+import * as validator from "../middleware/validators/log.validator.js";
+
 //  @routes  api/logs
 
 router.route("/")
-    // @access  Private (Level 2)
+    // @access  Complex (Level 1 or 2) - See controller
     .get(controller.getLogs)
     // @access  Private (Level 3)
-    .post(hasLevel3Access, controller.createLog);
+    .post(hasLevel3Access, validator.validateCreateLog, controller.createLog);
+
+// @routes  api/logs/:id
 
 router.route("/:id")
     // @access  Private (Level 2)
     .get(hasLevel2Access, controller.getLog)
-    // @route   PUT api/logs/:id
     // @access  Private (Level 3)
-    .put(hasLevel3Access, controller.updateLog)
-    // @route   DELETE api/logs/:id
+    .put(hasLevel3Access, validator.validateUpdateLog, controller.updateLog)
     // @access  Private (Level 3)
     .delete(hasLevel3Access, controller.deleteLog);
 
