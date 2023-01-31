@@ -8,6 +8,7 @@ import { isAuth, hasLevel2Access, hasLevel3Access, isAdmin } from "../middleware
 //  @routes  api/users
 
 router.route("/")
+    .post(isAuth, hasLevel3Access, controller.registerUser)
     .get(hasLevel2Access, controller.getUsers);
 
 router.post("/check-username/", isAuth, hasLevel3Access, controller.checkUsername);
@@ -17,7 +18,7 @@ router.put("/change-password", isAuth, controller.changePassword);
 router.route("/:id")
     .get(hasLevel2Access, controller.getUser)
     .put(hasLevel3Access, controller.updateUser)
-    .delete(hasLevel3Access, controller.deleteUser);
+    .delete(isAdmin, controller.deleteUser);
 
 
 router.put("/:id/reset-password", isAdmin, controller.resetPassword);

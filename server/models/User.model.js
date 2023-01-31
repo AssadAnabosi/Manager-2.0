@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
+import accessLevels, { L1 } from "../constants/accessLevels.js";
+import ms from "ms";
 import Log from "./Log.model.js";
 
 const UserSchema = new mongoose.Schema({
@@ -41,8 +43,8 @@ const UserSchema = new mongoose.Schema({
     },
     accessLevel: {
         type: String,
-        enum: ["User", "Spectator", "Supervisor", "Administrator"],
-        default: "User",
+        enum: accessLevels,
+        default: L1,
     },
     active: {
         type: Boolean,
@@ -63,6 +65,7 @@ UserSchema.virtual("fullName").get(function () {
 
 // @desc    Hash the password and capitalize the first letter of the first and last name before saving the user
 UserSchema.pre("save", async function (next) {
+    this.username = this.username.toLocaleLowerCase();
     // if password is NOT modified, then don't hash the hashed value
     if (this.isModified("password")) {
         const salt = await bcrypt.genSalt(10);
@@ -73,6 +76,9 @@ UserSchema.pre("save", async function (next) {
     }
     if (this.isModified("lastName")) {
         this.lastName = capitalizeFirstLetter(this.lastName);
+    }
+    if (this.isModified("email")) {
+        this.email = this.email.toLocaleLowerCase()
     }
     return next();
 });
@@ -96,8 +102,15 @@ UserSchema.methods.matchPassword = async function (password) {
 
 // @desc    Generate an access token
 UserSchema.methods.getAccessToken = function () {
-    return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRE,
+    return jwt.sign({ id: this._id }, process.env.JWT_ACCESS_SECRET, {
+        expiresIn: process.env.JWT_ACCESS_EXPIRE,
+    });
+}
+
+// @desc    Generate a refresh token
+UserSchema.methods.getRefreshToken = function () {
+    return jwt.sign({ id: this._id }, process.env.JWT_REFRESH_SECRET, {
+        expiresIn: process.env.MAX_AGE,
     });
 }
 

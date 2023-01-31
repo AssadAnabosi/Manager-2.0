@@ -12,7 +12,7 @@ This app is built upon the need for a database for my family's own workshop, so 
     * **firstName***: is the first name of the user.
     * **lastName***: is the last name of the user.
     * **username***: is the username of the user.
-    * **email***: is the email of the user.
+    * **email**: is the email of the user.
     * **phoneNumber**: is the phone number of the user.
     * **password***: is the password of the user.
     * **active**: is a flag that is set to decide whether the user is allowed to login or not.
@@ -41,7 +41,7 @@ This app is built upon the need for a database for my family's own workshop, so 
     * **dueDate***: is the date that the cheque is due to be cashed.
     * **value***: is the amount that is written on the cheque.
     * **description**: is an optional description of the cheque.
-    * **payee***: is the payee that the cheque is made out to.
+    * **payee**: is the payee that the cheque is made out to.
     * **isCancelled**: is a flag that is set to true when the cheque is cancelled.
     * **isDeleted**: is a flag that is set to true when the cheque payee is deleted.
 - **Bill**: is the expenses that are made by the workshop.
@@ -49,8 +49,13 @@ This app is built upon the need for a database for my family's own workshop, so 
     * **value***: is the amount that the bill is for.
     * **description***: is the description of the bill.
     * **extraNotes**: is an optional extra notes about the bill.
+- **Session**: is the record of the sessions that are made by the users.
+    * **refreshToken***: is the refresh token that is used to generate new access tokens.
+    * **user***: is the user that the refresh token is associated with.
+    * **expiresAt***: is the date that the refresh token expires.
 - When a worker gets deleted, all the logs that are associated with that worker are also deleted.
 - When a payee gets deleted, all the cheques that are associated with that payee are marked as isDeleted = true, and their payee is set to null.
+- When a user logout his refresh token is revoked.
 
 ### Restrictions
 
@@ -58,13 +63,23 @@ This app is built upon the need for a database for my family's own workshop, so 
     * Administrator can't delete himself.
     * Administrator can't deactivate himself.
     * Administrator can't change his own access level.
+    * Administrator resting a user password revoke all of his refresh tokens.
+
 - Log
     * Log worker and date both can't be changed.
     * Log updating or creation can either have a startingTime and a finishingTime, or isAbsent = true. but you can't have both or neither.
 - Cheque
     * Cheque serial number can't be changed.
 
+### Authentication
+
+* The authentication is done using JWT and cookies
+    * When user sign in he gets a refresh token and an access token, the refresh token is stored in the httpOnly cookies
+    * The access token is used to authenticate the user, and the refresh token is used to generate new access tokens.
+    * Any request that is made to the server must have the access token in the Authorization header. (Bearer Token)
+
 ## Used Technologies / Libraries
+
 * NodeJS
 * ExpressJS
 * MongoDB
@@ -73,9 +88,27 @@ This app is built upon the need for a database for my family's own workshop, so 
 * JsonWebToken
 * Dotenv
 * Nodemon
+* Cors
+* Cookies
 
 ## Configuration and Setup
-* Fill the ```config.template.env``` file with the needed information, and rename it to ```config.env```
+* In ```/server/config``` Fill the ```config.template.env``` file with the needed information, and rename it to ```config.env```
+    * ```PORT```: is the port that the server will run on.
+    * ```MONGO_URI```: is the URI of the MongoDB database.
+    * Auth: JWT - Cookies
+        * ```JWT_ACCESS_SECRET```: is the secret that is used to sign the JWT access tokens.
+        * ```JWT_ACCESS_EXPIRE```: is the expiration time of the JWT access tokens.
+        * ```JWT_REFRESH_SECRET```: is the secret that is used to sign the JWT refresh tokens.
+        * ```MAX_AGE```: is the expiration time if the JWT refresh token and the max age of the cookie.
+        * ```SECURE_COOKIE```: is a flag that is set to "true" when the cookies are secure.
+    * ```CLIENT_URL```: is the URL of the client app for cors.
+    * Admin Account: Initial Admin Account, will run only when there are no users in the database at the moment of the server start.
+        * ```ADMIN_USERNAME```: is the username of the admin account.
+        * ```ADMIN_PASSWORD```: is the password of the admin account.
+        * ```ADMIN_EMAIL```: is the email of the admin account.
+        * ```ADMIN_FIRST_NAME```: is the first name of the admin account.
+        * ```ADMIN_LAST_NAME```: is the last name of the admin account.
+        * ```ADMIN_PHONE_NUMBER```: is the phone number of the admin account.
 * Run ```npm install``` to install all the needed dependencies
 * Run ```npm run server``` to start the server in development mode (nodemon)
 
@@ -87,16 +120,18 @@ This app is built upon the need for a database for my family's own workshop, so 
 
 ### Auth
 
-| Method |                                   |
+| Method | Route                             |
 |--------|-----------------------------------|
-| POST   | /api/auth/register                |
-| POST   | /api/auth/login                   |
+| POST   | /api/auth                         |
+| GET    | /api/auth/refresh                 |
+| POST   | /api/auth/logout                  |
 | GET    | /api/auth/me                      |
 
 ### Users
 
-| Method |                                   |
+| Method | Route                             |
 |--------|-----------------------------------|
+| POST   | /api/users                        |
 | GET    | /api/users?search=                |
 | GET    | /api/users/:id                    |
 | PUT    | /api/users/:id                    |
@@ -109,7 +144,7 @@ This app is built upon the need for a database for my family's own workshop, so 
 
 ### Logs
 
-| Method |                                   |
+| Method | Route                             |
 |--------|-----------------------------------|
 | POST   | /api/logs                         |
 | GET    | /api/logs?start=&end=&search=     |
@@ -128,7 +163,7 @@ This app is built upon the need for a database for my family's own workshop, so 
 | DELETE | /api/payees/:id                   |
 ### Cheques
 
-| Method |                                   |
+| Method | Route                             |
 |--------|-----------------------------------|
 | POST   | /api/cheques                      |
 | GET    | /api/cheques?start=&end=&search=  |
@@ -138,7 +173,7 @@ This app is built upon the need for a database for my family's own workshop, so 
 
 ### Bills
 
-| Method |                                   |
+| Method | Route                             |
 |--------|-----------------------------------|
 | POST   | /api/bills                        |
 | GET    | /api/bills?start=&end=&search=    |
