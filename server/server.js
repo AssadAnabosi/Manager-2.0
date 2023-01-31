@@ -1,26 +1,27 @@
 import dotenv from "dotenv";
 dotenv.config({
-    path: "./config.env"
+    path: "./config/config.env"
 });
 
 import express from "express";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 
 import connectDB, { createAdmin } from "./config/db.config.js";
 import APIRoutes from "./routes/index.js";
 import errorHandler from "./middleware/error.middleware.js";
+import credentials from "./middleware/allowCredentials.middleware.js";
+import corsOptions from "./config/cors.config.js";
 
 // @desc    Connect to DB
 connectDB();
 createAdmin();
 
 const app = express();
+app.use(credentials);
+app.use(cors(corsOptions));
 app.use(express.json());
-app.use(cors({
-    origin: process.env.CLIENT_URL,
-    methods: "GET,POST,PUT,PATCH,DELETE",
-    credentials: true,
-}));
+app.use(cookieParser());
 
 // @desc    Health Check route
 app.use("/healthcheck", (req, res) => {
