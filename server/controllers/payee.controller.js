@@ -4,7 +4,7 @@ import ResponseError from "../utils/ResponseError.js";
 // @desc    Get all payees
 export const getPayees = async (req, res, next) => {
     const search = req.query.search || "";
-    
+
     try {
         const payees = await Payee.find({
             $or: [
@@ -25,9 +25,6 @@ export const getPayees = async (req, res, next) => {
 // @desc    Create a payee
 export const createPayee = async (req, res, next) => {
     const { name, email, phoneNumber, extraNotes } = req.body;
-    if (!name) {
-        return next(new ResponseError("Please provide a name", 400));
-    }
 
     try {
         await Payee.create({
@@ -59,9 +56,6 @@ export const getPayee = async (req, res, next) => {
 
 // @desc    Update a payee
 export const updatePayee = async (req, res, next) => {
-    if (req.body.cheques)
-        return next(new ResponseError("Cannot update payee's cheques", 400));
-
     try {
         const payee = await Payee.findByIdAndUpdate(req.params.id, req.body, {
             new: true,

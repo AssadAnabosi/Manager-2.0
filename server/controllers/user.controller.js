@@ -1,5 +1,21 @@
+import Session from "../models/Session.model.js";
 import User from "../models/User.model.js";
+import accessLevels from "../constants/accessLevels.js";
 import ResponseError from "../utils/ResponseError.js";
+
+// @desc    Register a new user
+export const registerUser = async (req, res, next) => {
+    const { firstName, lastName, username, email, phoneNumber, password } = req.body;
+    try {
+        await User.create({
+            firstName, lastName, username, email, phoneNumber, password
+        });
+
+        return res.sendStatus(201);
+    } catch (error) {
+        next(error);
+    }
+}
 
 // @desc    Get all users
 export const getUsers = async (req, res, next) => {
@@ -41,9 +57,6 @@ export const getUser = async (req, res, next) => {
 
 // @desc    Update a user
 export const updateUser = async (req, res, next) => {
-    if (req.body.password || req.body.accessLevel || req.logs || req.body.active)
-        return next(new ResponseError("You are not authorized to update this field", 400));
-
     try {
         const user = await User.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
@@ -78,10 +91,6 @@ export const deleteUser = async (req, res, next) => {
 // @desc    User changing own password
 export const changePassword = async (req, res, next) => {
     const { currentPassword, newPassword } = req.body;
-    if (!currentPassword || !newPassword) {
-        return next(new ResponseError("Please provide current and new passwords", 400));
-    }
-
     try {
         const user = await User.findById(req.user.id).select("+password");
         if (!user) {
@@ -133,7 +142,7 @@ export const resetPassword = async (req, res, next) => {
 
         user.password = req.body.password;
         await user.save();
-
+        await Session.deleteMany({ user: user._id });
         return res.sendStatus(204);
     } catch (error) {
         next(error);
@@ -145,8 +154,7 @@ export const setAccessLevel = async (req, res, next) => {
     if (req.params.id === req.user.id) {
         return next(new ResponseError("You are not authorized to change your access level", 400));
     }
-    
-    const accessLevels = ["User", "Spectator", "Moderator", "Administrator"];
+
     const { accessLevel } = req.body;
     if (!accessLevels.includes(accessLevel))
         return next(new ResponseError("Invalid access level", 400));
@@ -172,8 +180,8 @@ export const setActiveStatus = async (req, res, next) => {
     }
 
     const { active } = req.body;
-    if (active === null || active === undefined)
-        return next(new ResponseError("Please provide active status", 400));
+    if (typeof active !== "boolean")
+        return next(new ResponseError("Invalid active status", 400));
 
     try {
         const user = await User.findByIdAndUpdate(req.params.id, { active }, {

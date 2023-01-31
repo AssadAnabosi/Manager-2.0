@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.model.js";
+import { L1, L2, L3, ADMIN } from "../constants/accessLevels.js";
 import ResponseError from "../utils/responseError.js";
 
 // @help    accessLevels = ["User", "Spectator", "Moderator", "Administrator"]
@@ -17,7 +18,7 @@ export const isAuth = async (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
+        const decoded = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
         const user = await User.findById(decoded.id).select("-logs");
 
         if (!user) {
@@ -38,7 +39,7 @@ export const isAuth = async (req, res, next) => {
 
 // @desc    required accessLevel is higher than User
 export const hasLevel2Access = async (req, res, next) => {
-    if (req.user.accessLevel === "User") {
+    if (req.user.accessLevel === L1) {
         return next(new ResponseError("Not Authorized To Access This Route", 403));
     }
 
@@ -47,15 +48,17 @@ export const hasLevel2Access = async (req, res, next) => {
 
 // @desc    required accessLevel is higher than Spectator
 export const hasLevel3Access = async (req, res, next) => {
-    if (req.user.accessLevel === "User" || req.user.accessLevel === "Spectator") {
-        return next(new ResponseError("Not Authorized To Access This Route", 403));
-    }
+    hasLevel2Access(req, res, () => {
+        if (req.user.accessLevel === L2) {
+            return next(new ResponseError("Not Authorized To Access This Route", 403));
+        }
 
-    return next();
+        return next();
+    });
 }
 // @desc    required accessLevel is Administrator
 export const isAdmin = async (req, res, next) => {
-    if (req.user.accessLevel !== "Administrator") {
+    if (req.user.accessLevel !== ADMIN) {
         return next(new ResponseError("Not Authorized To Access This Route", 403));
     }
 
