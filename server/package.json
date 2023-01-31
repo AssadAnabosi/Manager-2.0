@@ -26,11 +26,14 @@
   "homepage": "https://github.com/AssadAnabosi/Manager-2.0#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-rate-limit": "^6.7.0",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^6.8.4"
+    "mongoose": "^6.8.4",
+    "ms": "^2.1.3"
   },
   "devDependencies": {
     "concurrently": "^7.6.0",
