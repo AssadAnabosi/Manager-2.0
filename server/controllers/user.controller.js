@@ -6,10 +6,6 @@ import ResponseError from "../utils/ResponseError.js";
 // @desc    Register a new user
 export const registerUser = async (req, res, next) => {
     const { firstName, lastName, username, email, phoneNumber, password } = req.body;
-    if (!firstName || !lastName || !username || !password) {
-        return next(new ResponseError("Please provide first and last names, username, and password", 400));
-    }
-
     try {
         await User.create({
             firstName, lastName, username, email, phoneNumber, password
@@ -61,9 +57,6 @@ export const getUser = async (req, res, next) => {
 
 // @desc    Update a user
 export const updateUser = async (req, res, next) => {
-    if (req.body.password || req.body.accessLevel || req.logs || req.body.active)
-        return next(new ResponseError("You are not authorized to update this field", 400));
-
     try {
         const user = await User.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
@@ -98,10 +91,6 @@ export const deleteUser = async (req, res, next) => {
 // @desc    User changing own password
 export const changePassword = async (req, res, next) => {
     const { currentPassword, newPassword } = req.body;
-    if (!currentPassword || !newPassword) {
-        return next(new ResponseError("Please provide current and new passwords", 400));
-    }
-
     try {
         const user = await User.findById(req.user.id).select("+password");
         if (!user) {
@@ -191,8 +180,8 @@ export const setActiveStatus = async (req, res, next) => {
     }
 
     const { active } = req.body;
-    if (active === null || active === undefined)
-        return next(new ResponseError("Please provide active status", 400));
+    if (typeof active !== "boolean")
+        return next(new ResponseError("Invalid active status", 400));
 
     try {
         const user = await User.findByIdAndUpdate(req.params.id, { active }, {

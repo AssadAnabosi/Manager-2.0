@@ -35,9 +35,6 @@ export const getCheques = async (req, res, next) => {
 // @desc    Create a Cheque
 export const createCheque = async (req, res, next) => {
     const { serial, dueDate, value, description, isCancelled } = req.body;
-    if (!serial || !dueDate || !value) {
-        return next(new ResponseError("Please provide a serial, due date and value", 400));
-    }
 
     try {
         const payee = await Payee.findById(req.body.payee);
@@ -75,9 +72,6 @@ export const getCheque = async (req, res, next) => {
 
 // @desc    Update a Cheque
 export const updateCheque = async (req, res, next) => {
-    if (req.body.serial)
-        return next(new ResponseError("You can't change the Serial Number", 400));
-
     try {
         const cheque = await Cheque.findByIdAndUpdate(req.params.id, req.body, {
             new: true,

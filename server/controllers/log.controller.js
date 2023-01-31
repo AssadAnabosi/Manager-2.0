@@ -10,7 +10,7 @@ const { ObjectId } = Types;
 export const getLogs = async (req, res, next) => {
     const { startDate, endDate, search } = ReqQueryHelper(req.query);
     const filter = queryHelper.logsQuery(search, startDate, endDate);
-    
+
     //  Filter logs by requested user if the user is Level 1
     if (req.user.accessLevel === "User") {
         filter.unshift({ $match: { worker: ObjectId(req.user.id) } });
@@ -95,10 +95,7 @@ export const getLog = async (req, res, next) => {
 
 // @desc    Update a log
 export const updateLog = async (req, res, next) => {
-    const { worker, date, isAbsent, startingTime, finishingTime } = req.body;
-    if (worker || date) {
-        return next(new ResponseError("You can't change the date or worker", 400));
-    }
+    const { isAbsent, startingTime, finishingTime } = req.body;
 
     if ((isAbsent === undefined || isAbsent === null) && (!startingTime || !finishingTime)) {
         return next(new ResponseError("Please provide a starting time and finishing time", 400));
