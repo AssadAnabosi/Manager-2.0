@@ -31,7 +31,10 @@ export const getUsers = async (req, res, next) => {
 
         return res.status(200).json({
             success: true,
-            data: users,
+            data: {
+                users,
+                search,
+            }
         });
     } catch (error) {
         next(error);
