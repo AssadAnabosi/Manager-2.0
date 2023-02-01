@@ -20,7 +20,7 @@ router.route("/")
 // @routes  api/logs/:logID
 
 router.route("/:logID")
-    .all(validateParamID("id"))
+    .all(validateParamID("logID"))
     // @access  Private (Level 2)
     .get(hasLevel2Access, controller.getLog)
     // @access  Private (Level 3)

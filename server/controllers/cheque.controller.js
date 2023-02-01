@@ -58,7 +58,7 @@ export const getCheque = async (req, res, next) => {
 
     try {
         const cheque = await Cheque.aggregate(filter);
-        if (!cheque)
+        if (!cheque || cheque.length === 0)
             return next(new ResponseError("Cheque not found", 404));
 
         return res.status(200).json({
@@ -73,12 +73,21 @@ export const getCheque = async (req, res, next) => {
 // @desc    Update a Cheque
 export const updateCheque = async (req, res, next) => {
     try {
-        const cheque = await Cheque.findByIdAndUpdate(req.params.chequeID, req.body, {
+        // Check if the cheque exists
+        const cheque = await Cheque.findById(req.params.chequeID);
+        if (!cheque)
+            return next(new ResponseError("Cheque not found", 404));
+        // Check if the payee exists
+        if (req.body.payee) {
+            const payee = await Payee.findById(req.body.payee);
+            if (!payee)
+                return next(new ResponseError("Payee not found", 404));
+        }
+        // Update the cheque
+        await Cheque.findByIdAndUpdate(req.params.chequeID, req.body, {
             new: true,
             runValidators: true
         });
-        if (!cheque)
-            return next(new ResponseError("Cheque not found", 404));
 
         return res.sendStatus(204);
     } catch (error) {
@@ -89,9 +98,11 @@ export const updateCheque = async (req, res, next) => {
 // @desc    Delete a Cheque
 export const deleteCheque = async (req, res, next) => {
     try {
-        const cheque = await Cheque.findByIdAndDelete(req.params.chequeID);
+        const cheque = await Cheque.findById(req.params.chequeID);
         if (!cheque)
             return next(new ResponseError("Cheque not found", 404));
+
+        await Cheque.findByIdAndDelete(req.params.chequeID);
 
         return res.sendStatus(204);
     } catch (error) {

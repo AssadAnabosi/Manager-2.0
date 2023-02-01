@@ -180,7 +180,7 @@ export const setActiveStatus = async (req, res, next) => {
     }
 
     const { active } = req.body;
-    if (typeof active !== "boolean")
+    if (active !== "true" && active !== "false")
         return next(new ResponseError("Invalid active status", 400));
 
     try {
