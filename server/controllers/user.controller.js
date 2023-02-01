@@ -41,7 +41,7 @@ export const getUsers = async (req, res, next) => {
 // @desc    Get a user
 export const getUser = async (req, res, next) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.userID);
         if (!user) {
             return next(new ResponseError("User not found", 404));
         }
@@ -58,7 +58,7 @@ export const getUser = async (req, res, next) => {
 // @desc    Update a user
 export const updateUser = async (req, res, next) => {
     try {
-        const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+        const user = await User.findByIdAndUpdate(req.params.userID, req.body, {
             new: true,
             runValidators: true
         });
@@ -73,12 +73,12 @@ export const updateUser = async (req, res, next) => {
 
 // @desc    Delete a user
 export const deleteUser = async (req, res, next) => {
-    if (req.params.id === req.user.id) {
+    if (req.params.userID === req.user.id) {
         return next(new ResponseError("You are not authorized to delete your own account", 400));
     }
 
     try {
-        const user = await User.findByIdAndDelete(req.params.id);
+        const user = await User.findByIdAndDelete(req.params.userID);
         if (!user)
             return next(new ResponseError("User not found", 404));
 
@@ -136,7 +136,7 @@ export const checkUsername = async (req, res, next) => {
 // @desc    Reset a user's password by an administrator
 export const resetPassword = async (req, res, next) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.userID);
         if (!user)
             return next(new ResponseError("User not found", 404));
 
@@ -151,7 +151,7 @@ export const resetPassword = async (req, res, next) => {
 
 // @desc   Change user's access level (authorization)
 export const setAccessLevel = async (req, res, next) => {
-    if (req.params.id === req.user.id) {
+    if (req.params.userID === req.user.id) {
         return next(new ResponseError("You are not authorized to change your access level", 400));
     }
 
@@ -160,7 +160,7 @@ export const setAccessLevel = async (req, res, next) => {
         return next(new ResponseError("Invalid access level", 400));
 
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.userID);
         if (!user)
             return next(new ResponseError("User not found", 404));
 
@@ -175,7 +175,7 @@ export const setAccessLevel = async (req, res, next) => {
 
 // @desc    Deactivate or Activate a user account
 export const setActiveStatus = async (req, res, next) => {
-    if (req.params.id === req.user.id) {
+    if (req.params.userID === req.user.id) {
         return next(new ResponseError("You are not authorized to deactivate your own account", 400));
     }
 
@@ -184,7 +184,7 @@ export const setActiveStatus = async (req, res, next) => {
         return next(new ResponseError("Invalid active status", 400));
 
     try {
-        const user = await User.findByIdAndUpdate(req.params.id, { active }, {
+        const user = await User.findByIdAndUpdate(req.params.userID, { active }, {
             new: true,
             runValidators: true
         });

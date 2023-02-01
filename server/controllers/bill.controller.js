@@ -52,7 +52,7 @@ export const createBill = async (req, res, next) => {
 // @desc    Get a bill
 export const getBill = async (req, res, next) => {
     try {
-        const bill = await Bill.findById(req.params.id).select("-__v");
+        const bill = await Bill.findById(req.params.billID).select("-__v");
         if (!bill)
             return next(new ResponseError("Bill not found", 404));
 
@@ -68,7 +68,7 @@ export const getBill = async (req, res, next) => {
 // @desc    Update a bill
 export const updateBill = async (req, res, next) => {
     try {
-        const bill = await Bill.findByIdAndUpdate(req.params.id, req.body, {
+        const bill = await Bill.findByIdAndUpdate(req.params.billID, req.body, {
             new: true,
             runValidators: true
         });
@@ -84,7 +84,7 @@ export const updateBill = async (req, res, next) => {
 // @desc    Delete a bill
 export const deleteBill = async (req, res, next) => {
     try {
-        const bill = await Bill.findByIdAndDelete(req.params.id);
+        const bill = await Bill.findByIdAndDelete(req.params.billID);
         if (!bill)
             return next(new ResponseError("Bill not found", 404));
 

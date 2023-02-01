@@ -54,7 +54,7 @@ export const createCheque = async (req, res, next) => {
 
 // @desc    Get a Cheque
 export const getCheque = async (req, res, next) => {
-    const filter = queryHelper.chequeQuery(req.params.id);
+    const filter = queryHelper.chequeQuery(req.params.chequeID);
 
     try {
         const cheque = await Cheque.aggregate(filter);
@@ -73,7 +73,7 @@ export const getCheque = async (req, res, next) => {
 // @desc    Update a Cheque
 export const updateCheque = async (req, res, next) => {
     try {
-        const cheque = await Cheque.findByIdAndUpdate(req.params.id, req.body, {
+        const cheque = await Cheque.findByIdAndUpdate(req.params.chequeID, req.body, {
             new: true,
             runValidators: true
         });
@@ -89,7 +89,7 @@ export const updateCheque = async (req, res, next) => {
 // @desc    Delete a Cheque
 export const deleteCheque = async (req, res, next) => {
     try {
-        const cheque = await Cheque.findByIdAndDelete(req.params.id);
+        const cheque = await Cheque.findByIdAndDelete(req.params.chequeID);
         if (!cheque)
             return next(new ResponseError("Cheque not found", 404));
 

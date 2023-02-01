@@ -40,7 +40,7 @@ export const createPayee = async (req, res, next) => {
 // @desc    Get a payee
 export const getPayee = async (req, res, next) => {
     try {
-        const payee = await Payee.findById(req.params.id).select("-__v");
+        const payee = await Payee.findById(req.params.payeeID).select("-__v");
         if (!payee)
             return next(new ResponseError("Payee not found", 404));
 
@@ -57,7 +57,7 @@ export const getPayee = async (req, res, next) => {
 // @desc    Update a payee
 export const updatePayee = async (req, res, next) => {
     try {
-        const payee = await Payee.findByIdAndUpdate(req.params.id, req.body, {
+        const payee = await Payee.findByIdAndUpdate(req.params.payeeID, req.body, {
             new: true,
             runValidators: true
         });
@@ -73,11 +73,11 @@ export const updatePayee = async (req, res, next) => {
 // @desc    Delete a payee
 export const deletePayee = async (req, res, next) => {
     try {
-        const payee = await Payee.findById(req.params.id);
+        const payee = await Payee.findById(req.params.payeeID);
         if (!payee)
             return next(new ResponseError("Payee not found", 404));
 
-        await Payee.findByIdAndDelete(req.params.id);
+        await Payee.findByIdAndDelete(req.params.payeeID);
 
         return res.sendStatus(204);
     } catch (error) {
