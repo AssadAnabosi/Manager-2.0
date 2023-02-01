@@ -24,7 +24,10 @@ export const getCheques = async (req, res, next) => {
             success: true,
             data: {
                 cheques,
-                total: ValueSum[0].total
+                total: ValueSum[0].total,
+                startDate,
+                endDate,
+                search
             },
         });
     } catch (error) {

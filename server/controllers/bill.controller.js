@@ -26,7 +26,10 @@ export const getBills = async (req, res, next) => {
             data: {
                 bills,
                 allTimeTotal: allTimeTotal[0].total,
-                rangeTotal: rangeTotal[0].total
+                rangeTotal: rangeTotal[0].total,
+                startDate,
+                endDate,
+                search
             }
         });
     } catch (error) {

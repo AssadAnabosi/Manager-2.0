@@ -41,7 +41,10 @@ export const getLogs = async (req, res, next) => {
                 logs,
                 paymentsSum: paymentSums[0].paymentsSum,
                 daysCount: attendanceSums[0].daysCount,
-                OTVSum: attendanceSums[0].OTVSum
+                OTVSum: attendanceSums[0].OTVSum,
+                startDate,
+                endDate,
+                search,
             }
         });
     } catch (error) {
