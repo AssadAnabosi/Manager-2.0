@@ -80,7 +80,7 @@ export const createLog = async (req, res, next) => {
 export const getLog = async (req, res, next) => {
     try {
         const log = await Log.aggregate(queryHelper.logQuery(req.params.logID));
-        if (!log)
+        if (!log || log.length === 0)
             return next(new ResponseError("Log not found", 404));
 
         return res.status(200).json({
@@ -118,9 +118,11 @@ export const updateLog = async (req, res, next) => {
 // @desc    Delete a log
 export const deleteLog = async (req, res, next) => {
     try {
-        const log = await Log.findByIdAndDelete(req.params.logID);
+        const log = await Log.findById(req.params.logID);
         if (!log)
             return next(new ResponseError("Log not found", 404));
+
+        await Log.findByIdAndDelete(req.params.logID);
 
         return res.sendStatus(204);
     } catch (error) {
