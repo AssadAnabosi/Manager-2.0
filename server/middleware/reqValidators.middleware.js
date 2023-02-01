@@ -1,4 +1,7 @@
 import ResponseError from "../utils/ResponseError.js";
+import { Types } from "mongoose";
+import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
+const { ObjectId } = Types;
 
 export const reqBodyIncludes = (rules) => {
     return function validateBody(req, res, next) {
@@ -21,5 +24,17 @@ export const reqBodyExcludes = (rules) => {
             }
         }
         next()
+    }
+}
+
+export const validateParamID = (params) => {
+    params = (typeof params === "string") ? [params] : params
+    return (req, res, next) => {
+        for (let param of params) {
+            if (!ObjectId.isValid(req.params[param])) {
+                return next(new ResponseError(`Please provide a valid ${capitalizeFirstLetter(param)}`, 400));
+            }
+        }
+        return next();
     }
 }
