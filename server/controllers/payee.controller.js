@@ -15,7 +15,10 @@ export const getPayees = async (req, res, next) => {
 
         return res.status(200).json({
             success: true,
-            data: payees,
+            data: {
+                payees,
+                search,
+            }
         });
     } catch (error) {
         next(error);
