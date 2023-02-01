@@ -7,6 +7,8 @@ import { isAuth, hasLevel2Access, hasLevel3Access, isAdmin } from "../middleware
 
 import * as validator from "../middleware/validators/user.validator.js";
 
+import { validateParamID } from "../middleware/reqValidators.middleware.js";
+
 //  @routes  api/users
 
 router.route("/")
@@ -17,17 +19,21 @@ router.post("/check-username/", isAuth, hasLevel3Access, validator.validateCheck
 
 router.put("/change-password", isAuth, validator.validateChangePassword, controller.changePassword);
 
-// @routes api/users/:id
+// @routes api/users/:userID
 
-router.route("/:id")
+router.route("/:userID")
+    .all(validateParamID("userID"))
     .get(hasLevel2Access, controller.getUser)
     .put(hasLevel3Access, validator.validateUpdateUser, controller.updateUser)
     .delete(isAdmin, controller.deleteUser);
 
-router.put("/:id/reset-password", isAdmin, validator.validateResetPassword, controller.resetPassword);
+router.route("/:userID/*")
+    .all(validateParamID("userID"), isAdmin);
 
-router.put("/:id/access-level", isAdmin, validator.validateSetAccessLevel, controller.setAccessLevel)
+router.put("/:userID/reset-password", validator.validateResetPassword, controller.resetPassword);
 
-router.put("/:id/active-status", isAdmin, validator.validateSetActiveStatus, controller.setActiveStatus)
+router.put("/:userID/access-level", validator.validateSetAccessLevel, controller.setAccessLevel)
+
+router.put("/:userID/active-status", validator.validateSetActiveStatus, controller.setActiveStatus)
 
 export default router;

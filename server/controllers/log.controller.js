@@ -79,7 +79,7 @@ export const createLog = async (req, res, next) => {
 // @desc    Get a log
 export const getLog = async (req, res, next) => {
     try {
-        const log = await Log.aggregate(queryHelper.logQuery(req.params.id));
+        const log = await Log.aggregate(queryHelper.logQuery(req.params.logID));
         if (!log)
             return next(new ResponseError("Log not found", 404));
 
@@ -102,7 +102,7 @@ export const updateLog = async (req, res, next) => {
     }
 
     try {
-        const log = await Log.findByIdAndUpdate(req.params.id, req.body, {
+        const log = await Log.findByIdAndUpdate(req.params.logID, req.body, {
             new: true,
             runValidators: true
         });
@@ -118,7 +118,7 @@ export const updateLog = async (req, res, next) => {
 // @desc    Delete a log
 export const deleteLog = async (req, res, next) => {
     try {
-        const log = await Log.findByIdAndDelete(req.params.id);
+        const log = await Log.findByIdAndDelete(req.params.logID);
         if (!log)
             return next(new ResponseError("Log not found", 404));
 
