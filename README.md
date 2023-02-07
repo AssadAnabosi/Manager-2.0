@@ -1,5 +1,5 @@
 # Manager 
-
+[![Prettier-CI](https://github.com/AssadAnabosi/Manager-2.0/actions/workflows/Prettier.yml/badge.svg)](https://github.com/AssadAnabosi/Manager-2.0/actions/workflows/Prettier.yml)
 ##### Version: 2.0.0
 
 ## Backstory
