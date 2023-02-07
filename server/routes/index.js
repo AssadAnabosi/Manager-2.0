@@ -21,12 +21,12 @@ router.use("/payees", isAuth, hasLevel2Access, payeesRoutes);
 router.use("/cheques", isAuth, hasLevel2Access, chequesRoutes);
 
 // @desc    Undefined routes
-router.route("*")
-    .all((req, res) => {
-        return res.status(404).json({
-            success: false,
-            message: "Oops, you have reached an undefined route, please check your request and try again",
-        });
-    });
+router.route("*").all((req, res) => {
+  return res.status(404).json({
+    success: false,
+    message:
+      "Oops, you have reached an undefined route, please check your request and try again",
+  });
+});
 
 export default router;

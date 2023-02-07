@@ -1,6 +1,6 @@
 import {
-    reqBodyIncludes,
-    reqBodyExcludes,
+  reqBodyIncludes,
+  reqBodyExcludes,
 } from "../reqValidators.middleware.js";
 
 const createRules = ["username", "password", "firstName", "lastName"];
