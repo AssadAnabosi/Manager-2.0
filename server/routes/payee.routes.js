@@ -11,21 +11,23 @@ import { validateParamID } from "../middleware/reqValidators.middleware.js";
 
 //  @routes  api/payees
 
-router.route("/")
-    // @access  Private (Level 2)
-    .get(controller.getPayees)
-    // @access  Private (Level 3)
-    .post(hasLevel3Access, validator.validateCreatePayee, controller.createPayee);
+router
+  .route("/")
+  // @access  Private (Level 2)
+  .get(controller.getPayees)
+  // @access  Private (Level 3)
+  .post(hasLevel3Access, validator.validateCreatePayee, controller.createPayee);
 
 // @routes  api/payees/:payeeID
 
-router.route("/:payeeID")
-    .all(validateParamID("payeeID"))
-    // @access  Private (Level 2)
-    .get(controller.getPayee)
-    // @access  Private (Level 3)
-    .put(hasLevel3Access, validator.validateUpdatePayee, controller.updatePayee)
-    // @access  Private (Level 3)
-    .delete(hasLevel3Access, controller.deletePayee);
+router
+  .route("/:payeeID")
+  .all(validateParamID("payeeID"))
+  // @access  Private (Level 2)
+  .get(controller.getPayee)
+  // @access  Private (Level 3)
+  .put(hasLevel3Access, validator.validateUpdatePayee, controller.updatePayee)
+  // @access  Private (Level 3)
+  .delete(hasLevel3Access, controller.deletePayee);
 
 export default router;
