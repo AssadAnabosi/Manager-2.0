@@ -1,19 +1,18 @@
 import Log from "../models/Log.model.js";
 import Worker from "../models/User.model.js";
 import ResponseError from "../utils/ResponseError.js";
-import ReqQueryHelper from "../utils/ReqQueryHelper.js";
-import * as queryHelper from "../utils/queryHelper.js";
-import { Types } from "mongoose";
-const { ObjectId } = Types;
+import ReqQueryHelper from "../helpers/reqQuery.helper.js";
+import ObjectID from "../utils/ObjectID.js";
+import * as queryHelper from "../helpers/queries/logs.queries.js";
 
 // @desc    Get all logs
 export const getLogs = async (req, res, next) => {
   const { startDate, endDate, search } = ReqQueryHelper(req.query);
-  const filter = queryHelper.logsQuery(search, startDate, endDate);
+  const filter = queryHelper.findLogs(search, startDate, endDate);
 
   //  Filter logs by requested user if the user is Level 1
   if (req.user.accessLevel === "User") {
-    filter.unshift({ $match: { worker: ObjectId(req.user.id) } });
+    filter.unshift({ $match: { worker: ObjectID(req.user.id) } });
   }
 
   try {
@@ -22,12 +21,12 @@ export const getLogs = async (req, res, next) => {
     const _id = logs.map(({ _id }) => _id);
 
     //  Find the sum of payments
-    let paymentSums = await Log.aggregate(queryHelper.logsPaymentsSum(_id));
+    let paymentSums = await Log.aggregate(queryHelper.findPaymentsSum(_id));
     if (paymentSums.length < 1) paymentSums = [{ paymentsSum: 0 }];
 
     //  Find the days count and OTV sum
     let attendanceSums = await Log.aggregate(
-      queryHelper.logsAttendanceSums(_id)
+      queryHelper.findAttendanceSums(_id)
     );
     if (attendanceSums.length < 1) {
       attendanceSums = [{ daysCount: 0 }];
