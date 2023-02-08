@@ -1,22 +1,22 @@
 import Bill from "../models/Bill.model.js";
 import ResponseError from "../utils/responseError.js";
-import ReqQueryHelper from "../utils/ReqQueryHelper.js";
-import * as queryHelper from "../utils/queryHelper.js";
+import ReqQueryHelper from "../helpers/reqQuery.helper.js";
+import * as queryHelper from "../helpers/queries/bills.queries.js";
 
 // @desc    Get all bills
 export const getBills = async (req, res, next) => {
   const { startDate, endDate, search } = ReqQueryHelper(req.query);
   try {
     const bills = await Bill.aggregate(
-      queryHelper.billsQuery(startDate, endDate, search)
+      queryHelper.findBills(startDate, endDate, search)
     ).sort({ date: -1 });
 
     const _id = bills.map(({ _id }) => _id);
 
-    const allTimeTotal = await Bill.aggregate(queryHelper.billsValueSum());
+    const allTimeTotal = await Bill.aggregate(queryHelper.findValueSum());
     if (allTimeTotal.length < 1) allTimeTotal = [{ total: 0 }];
 
-    const rangeTotal = await Bill.aggregate(queryHelper.billsValueSum(_id));
+    const rangeTotal = await Bill.aggregate(queryHelper.findValueSum(_id));
     if (rangeTotal.length < 1) rangeTotal = [{ total: 0 }];
 
     return res.status(200).json({

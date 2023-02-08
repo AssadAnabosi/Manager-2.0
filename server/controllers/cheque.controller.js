@@ -1,13 +1,13 @@
 import Cheque from "../models/Cheque.model.js";
 import Payee from "../models/Payee.model.js";
 import ResponseError from "../utils/responseError.js";
-import ReqQueryHelper from "../utils/ReqQueryHelper.js";
-import * as queryHelper from "../utils/queryHelper.js";
+import ReqQueryHelper from "../helpers/reqQuery.helper.js";
+import * as queryHelper from "../helpers/queries/cheques.queries.js";
 
 // @desc    Get all Cheques
 export const getCheques = async (req, res, next) => {
   const { startDate, endDate, search } = ReqQueryHelper(req.query);
-  const filter = queryHelper.chequesQuery(search, startDate, endDate);
+  const filter = queryHelper.findCheques(search, startDate, endDate);
 
   try {
     const cheques = await Cheque.aggregate(filter).sort({
@@ -17,7 +17,7 @@ export const getCheques = async (req, res, next) => {
 
     const _id = cheques.map(({ _id }) => _id);
 
-    let ValueSum = await Cheque.aggregate(queryHelper.chequesValueSum(_id));
+    let ValueSum = await Cheque.aggregate(queryHelper.findValueSum(_id));
     if (ValueSum.length < 1) ValueSum = [{ total: 0 }];
 
     return res.status(200).json({
@@ -61,7 +61,7 @@ export const createCheque = async (req, res, next) => {
 
 // @desc    Get a Cheque
 export const getCheque = async (req, res, next) => {
-  const filter = queryHelper.chequeQuery(req.params.chequeID);
+  const filter = queryHelper.findChequeByID(req.params.chequeID);
 
   try {
     const cheque = await Cheque.aggregate(filter);
