@@ -1,6 +1,7 @@
 import ResponseError from "../utils/ResponseError.js";
 import { Types } from "mongoose";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
+import * as statusCode from "../constants/statusCodes.js";
 const { ObjectId } = Types;
 
 export const reqBodyIncludes = (rules) => {
@@ -11,7 +12,7 @@ export const reqBodyIncludes = (rules) => {
         return next(
           new ResponseError(
             `Please provide ${rule} in your request's body`,
-            400
+            statusCode.BAD_REQUEST
           )
         );
       }
@@ -28,7 +29,7 @@ export const reqBodyExcludes = (rules) => {
         return next(
           new ResponseError(
             `You are not authorized to update the ${rule} field`,
-            400
+            statusCode.BAD_REQUEST
           )
         );
       }
@@ -45,7 +46,7 @@ export const validateParamID = (params) => {
         return next(
           new ResponseError(
             `Please provide a valid ${capitalizeFirstLetter(param)}`,
-            400
+            statusCode.BAD_REQUEST
           )
         );
       }

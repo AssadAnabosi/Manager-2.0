@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.model.js";
-import { L1, L2, L3, ADMIN } from "../constants/accessLevels.js";
 import ResponseError from "../utils/responseError.js";
+import { L1, L2, L3, ADMIN } from "../constants/accessLevels.js";
+import * as statusCode from "../constants/statusCodes.js";
 
 // @help    accessLevels = ["User", "Spectator", "Moderator", "Administrator"]
 
@@ -18,7 +19,10 @@ export const isAuth = async (req, res, next) => {
 
   if (!accessToken) {
     return next(
-      new ResponseError("Not Authenticated To Access This Route", 401)
+      new ResponseError(
+        "Not Authenticated To Access This Route",
+        statusCode.NOT_AUTHENTICATED
+      )
     );
   }
 
@@ -27,11 +31,18 @@ export const isAuth = async (req, res, next) => {
     const user = await User.findById(decoded.id).select("-logs");
 
     if (!user) {
-      return next(new ResponseError("User Can Not Be Found", 404));
+      return next(
+        new ResponseError("User Can Not Be Found", statusCode.NOT_FOUND)
+      );
     }
 
     if (!user.active) {
-      return next(new ResponseError("Your account has been deactivated", 403));
+      return next(
+        new ResponseError(
+          "Your account has been deactivated",
+          statusCode.NOT_AUTHORIZED
+        )
+      );
     }
 
     req.user = user;
@@ -39,7 +50,10 @@ export const isAuth = async (req, res, next) => {
     return next();
   } catch (error) {
     return next(
-      new ResponseError("Not Authenticated To Access This Route", 401)
+      new ResponseError(
+        "Not Authenticated To Access This Route",
+        statusCode.NOT_AUTHENTICATED
+      )
     );
   }
 };
@@ -47,7 +61,12 @@ export const isAuth = async (req, res, next) => {
 // @desc    required accessLevel is higher than User
 export const hasLevel2Access = async (req, res, next) => {
   if (req.user.accessLevel === L1) {
-    return next(new ResponseError("Not Authorized To Access This Route", 403));
+    return next(
+      new ResponseError(
+        "Not Authorized To Access This Route",
+        statusCode.NOT_AUTHORIZED
+      )
+    );
   }
 
   return next();
@@ -58,7 +77,10 @@ export const hasLevel3Access = async (req, res, next) => {
   hasLevel2Access(req, res, () => {
     if (req.user.accessLevel === L2) {
       return next(
-        new ResponseError("Not Authorized To Access This Route", 403)
+        new ResponseError(
+          "Not Authorized To Access This Route",
+          statusCode.NOT_AUTHORIZED
+        )
       );
     }
 
@@ -68,7 +90,12 @@ export const hasLevel3Access = async (req, res, next) => {
 // @desc    required accessLevel is Administrator
 export const isAdmin = async (req, res, next) => {
   if (req.user.accessLevel !== ADMIN) {
-    return next(new ResponseError("Not Authorized To Access This Route", 403));
+    return next(
+      new ResponseError(
+        "Not Authorized To Access This Route",
+        statusCode.NOT_AUTHORIZED
+      )
+    );
   }
 
   return next();

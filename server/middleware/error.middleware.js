@@ -1,5 +1,6 @@
 import ResponseError from "../utils/responseError.js";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
+import * as statusCode from "../constants/statusCodes.js";
 
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };
@@ -28,18 +29,18 @@ const errorHandler = (err, req, res, next) => {
         default:
           message = `${capitalizeFirstLetter(
             Object.keys(err.keyPattern)[0]
-          )} is already exists`;
+          )} already exists`;
           break;
       }
-    error = new ResponseError(message, 409);
+    error = new ResponseError(message, statusCode.CONFLICT);
   }
 
   if (err.name === "ValidationError") {
     const message = Object.values(err.errors).map((val) => val.message);
-    error = new ResponseError(message, 400);
+    error = new ResponseError(message, statusCode.BAD_REQUEST);
   }
 
-  return res.status(error.statusCode || 500).json({
+  return res.status(error.statusCode || statusCode.INTERNAL_SERVER_ERROR).json({
     success: false,
     message: error.message || "Server Error",
   });
