@@ -1,7 +1,8 @@
 import Session from "../models/Session.model.js";
 import User from "../models/User.model.js";
-import accessLevels from "../constants/accessLevels.js";
 import ResponseError from "../utils/ResponseError.js";
+import accessLevels from "../constants/accessLevels.js";
+import * as statusCode from "../constants/statusCodes.js";
 
 // @desc    Register a new user
 export const registerUser = async (req, res, next) => {
@@ -17,7 +18,7 @@ export const registerUser = async (req, res, next) => {
       password,
     });
 
-    return res.sendStatus(201);
+    return res.sendStatus(statusCode.CREATED);
   } catch (error) {
     next(error);
   }
@@ -35,7 +36,7 @@ export const getUsers = async (req, res, next) => {
       ],
     }).select("-logs");
 
-    return res.status(200).json({
+    return res.status(statusCode.OK).json({
       success: true,
       data: {
         users,
@@ -52,10 +53,10 @@ export const getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.userID);
     if (!user) {
-      return next(new ResponseError("User not found", 404));
+      return next(new ResponseError("User not found", statusCode.NOT_FOUND));
     }
 
-    return res.status(200).json({
+    return res.status(statusCode.OK).json({
       success: true,
       data: user,
     });
@@ -71,9 +72,10 @@ export const updateUser = async (req, res, next) => {
       new: true,
       runValidators: true,
     });
-    if (!user) return next(new ResponseError("User not found", 404));
+    if (!user)
+      return next(new ResponseError("User not found", statusCode.NOT_FOUND));
 
-    return res.sendStatus(204);
+    return res.sendStatus(statusCode.NO_CONTENT);
   } catch (error) {
     next(error);
   }
@@ -85,16 +87,17 @@ export const deleteUser = async (req, res, next) => {
     return next(
       new ResponseError(
         "You are not authorized to delete your own account",
-        400
+        statusCode.BAD_REQUEST
       )
     );
   }
 
   try {
     const user = await User.findByIdAndDelete(req.params.userID);
-    if (!user) return next(new ResponseError("User not found", 404));
+    if (!user)
+      return next(new ResponseError("User not found", statusCode.NOT_FOUND));
 
-    return res.sendStatus(204);
+    return res.sendStatus(statusCode.NO_CONTENT);
   } catch (error) {
     next(error);
   }
@@ -106,18 +109,20 @@ export const changePassword = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id).select("+password");
     if (!user) {
-      return next(new ResponseError("User not found", 404));
+      return next(new ResponseError("User not found", statusCode.NOT_FOUND));
     }
 
     const isMatch = await user.matchPassword(currentPassword);
     if (!isMatch) {
-      return next(new ResponseError("Wrong current password", 400));
+      return next(
+        new ResponseError("Wrong current password", statusCode.BAD_REQUEST)
+      );
     }
 
     user.password = newPassword;
     await user.save();
 
-    return res.status(200).json({
+    return res.status(statusCode.OK).json({
       success: true,
       message: "Password changed successfully",
     });
@@ -134,7 +139,7 @@ export const checkUsername = async (req, res, next) => {
     const user = await User.findOne({ username });
     const isAvailable = user ? false : true;
 
-    return res.status(200).json({
+    return res.status(statusCode.OK).json({
       success: true,
       data: isAvailable,
     });
@@ -147,12 +152,13 @@ export const checkUsername = async (req, res, next) => {
 export const resetPassword = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.userID);
-    if (!user) return next(new ResponseError("User not found", 404));
+    if (!user)
+      return next(new ResponseError("User not found", statusCode.NOT_FOUND));
 
     user.password = req.body.password;
     await user.save();
     await Session.deleteMany({ user: user._id });
-    return res.sendStatus(204);
+    return res.sendStatus(statusCode.NO_CONTENT);
   } catch (error) {
     next(error);
   }
@@ -164,23 +170,26 @@ export const setAccessLevel = async (req, res, next) => {
     return next(
       new ResponseError(
         "You are not authorized to change your access level",
-        400
+        statusCode.BAD_REQUEST
       )
     );
   }
 
   const { accessLevel } = req.body;
   if (!accessLevels.includes(accessLevel))
-    return next(new ResponseError("Invalid access level", 400));
+    return next(
+      new ResponseError("Invalid access level", statusCode.BAD_REQUEST)
+    );
 
   try {
     const user = await User.findById(req.params.userID);
-    if (!user) return next(new ResponseError("User not found", 404));
+    if (!user)
+      return next(new ResponseError("User not found", statusCode.NOT_FOUND));
 
     user.accessLevel = accessLevel;
     await user.save();
 
-    return res.sendStatus(204);
+    return res.sendStatus(statusCode.NO_CONTENT);
   } catch (error) {
     next(error);
   }
@@ -192,14 +201,16 @@ export const setActiveStatus = async (req, res, next) => {
     return next(
       new ResponseError(
         "You are not authorized to deactivate your own account",
-        400
+        statusCode.BAD_REQUEST
       )
     );
   }
 
   const { active } = req.body;
   if (active !== "true" && active !== "false")
-    return next(new ResponseError("Invalid active status", 400));
+    return next(
+      new ResponseError("Invalid active status", statusCode.BAD_REQUEST)
+    );
 
   try {
     const user = await User.findByIdAndUpdate(
@@ -210,9 +221,10 @@ export const setActiveStatus = async (req, res, next) => {
         runValidators: true,
       }
     );
-    if (!user) return next(new ResponseError("User not found", 404));
+    if (!user)
+      return next(new ResponseError("User not found", statusCode.NOT_FOUND));
 
-    return res.sendStatus(204);
+    return res.sendStatus(statusCode.NO_CONTENT);
   } catch (error) {
     next(error);
   }

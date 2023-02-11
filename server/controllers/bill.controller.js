@@ -1,5 +1,6 @@
 import Bill from "../models/Bill.model.js";
 import ResponseError from "../utils/responseError.js";
+import * as statusCode from "../constants/statusCodes.js";
 import ReqQueryHelper from "../helpers/reqQuery.helper.js";
 import * as queryHelper from "../helpers/queries/bills.queries.js";
 
@@ -19,7 +20,7 @@ export const getBills = async (req, res, next) => {
     const rangeTotal = await Bill.aggregate(queryHelper.findValueSum(_id));
     if (rangeTotal.length < 1) rangeTotal = [{ total: 0 }];
 
-    return res.status(200).json({
+    return res.status(statusCode.OK).json({
       success: true,
       data: {
         bills,
@@ -47,7 +48,7 @@ export const createBill = async (req, res, next) => {
       extraNotes,
     });
 
-    return res.sendStatus(201);
+    return res.sendStatus(statusCode.CREATED);
   } catch (error) {
     next(error);
   }
@@ -57,9 +58,10 @@ export const createBill = async (req, res, next) => {
 export const getBill = async (req, res, next) => {
   try {
     const bill = await Bill.findById(req.params.billID).select("-__v");
-    if (!bill) return next(new ResponseError("Bill not found", 404));
+    if (!bill)
+      return next(new ResponseError("Bill not found", statusCode.NOT_FOUND));
 
-    return res.status(200).json({
+    return res.status(statusCode.OK).json({
       success: true,
       data: bill,
     });
@@ -75,9 +77,10 @@ export const updateBill = async (req, res, next) => {
       new: true,
       runValidators: true,
     });
-    if (!bill) return next(new ResponseError("Bill not found", 404));
+    if (!bill)
+      return next(new ResponseError("Bill not found", statusCode.NOT_FOUND));
 
-    return res.sendStatus(204);
+    return res.sendStatus(statusCode.NO_CONTENT);
   } catch (error) {
     next(error);
   }
@@ -87,9 +90,10 @@ export const updateBill = async (req, res, next) => {
 export const deleteBill = async (req, res, next) => {
   try {
     const bill = await Bill.findByIdAndDelete(req.params.billID);
-    if (!bill) return next(new ResponseError("Bill not found", 404));
+    if (!bill)
+      return next(new ResponseError("Bill not found", statusCode.NOT_FOUND));
 
-    return res.sendStatus(204);
+    return res.sendStatus(statusCode.NO_CONTENT);
   } catch (error) {
     next(error);
   }
