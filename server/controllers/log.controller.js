@@ -1,8 +1,9 @@
 import Log from "../models/Log.model.js";
 import Worker from "../models/User.model.js";
 import ResponseError from "../utils/ResponseError.js";
-import ReqQueryHelper from "../helpers/reqQuery.helper.js";
 import ObjectID from "../utils/ObjectID.js";
+import * as statusCode from "../constants/statusCodes.js";
+import ReqQueryHelper from "../helpers/reqQuery.helper.js";
 import * as queryHelper from "../helpers/queries/logs.queries.js";
 
 // @desc    Get all logs
@@ -33,7 +34,7 @@ export const getLogs = async (req, res, next) => {
       attendanceSums = [{ OTVSum: 0 }];
     }
 
-    return res.status(200).json({
+    return res.status(statusCode.OK).json({
       success: true,
       data: {
         logs,
@@ -56,7 +57,12 @@ export const createLog = async (req, res, next) => {
     req.body;
 
   if (!date || !req.body.worker)
-    return next(new ResponseError("Please provide a date and workerId", 400));
+    return next(
+      new ResponseError(
+        "Please provide a date and workerId",
+        statusCode.BAD_REQUEST
+      )
+    );
 
   if (
     (isAbsent === undefined || isAbsent === null) &&
@@ -65,14 +71,15 @@ export const createLog = async (req, res, next) => {
     return next(
       new ResponseError(
         "Please provide a starting time and finishing time",
-        400
+        statusCode.BAD_REQUEST
       )
     );
   }
 
   try {
     const worker = await Worker.findById(req.body.worker);
-    if (!worker) return next(new ResponseError("Worker not found", 404));
+    if (!worker)
+      return next(new ResponseError("Worker not found", statusCode.NOT_FOUND));
 
     const log = new Log({
       worker: req.body.worker,
@@ -85,7 +92,7 @@ export const createLog = async (req, res, next) => {
     });
     await log.save();
 
-    return res.sendStatus(201);
+    return res.sendStatus(statusCode.CREATED);
   } catch (error) {
     next(error);
   }
@@ -96,9 +103,9 @@ export const getLog = async (req, res, next) => {
   try {
     const log = await Log.aggregate(queryHelper.logQuery(req.params.logID));
     if (!log || log.length === 0)
-      return next(new ResponseError("Log not found", 404));
+      return next(new ResponseError("Log not found", statusCode.NOT_FOUND));
 
-    return res.status(200).json({
+    return res.status(statusCode.OK).json({
       success: true,
       data: log,
     });
@@ -118,7 +125,7 @@ export const updateLog = async (req, res, next) => {
     return next(
       new ResponseError(
         "Please provide a starting time and finishing time",
-        400
+        statusCode.BAD_REQUEST
       )
     );
   }
@@ -128,9 +135,10 @@ export const updateLog = async (req, res, next) => {
       new: true,
       runValidators: true,
     });
-    if (!log) return next(new ResponseError("Log not found", 404));
+    if (!log)
+      return next(new ResponseError("Log not found", statusCode.NOT_FOUND));
 
-    return res.sendStatus(204);
+    return res.sendStatus(statusCode.NO_CONTENT);
   } catch (error) {
     next(error);
   }
@@ -140,11 +148,12 @@ export const updateLog = async (req, res, next) => {
 export const deleteLog = async (req, res, next) => {
   try {
     const log = await Log.findById(req.params.logID);
-    if (!log) return next(new ResponseError("Log not found", 404));
+    if (!log)
+      return next(new ResponseError("Log not found", statusCode.NOT_FOUND));
 
     await Log.findByIdAndDelete(req.params.logID);
 
-    return res.sendStatus(204);
+    return res.sendStatus(statusCode.NO_CONTENT);
   } catch (error) {
     next(error);
   }
