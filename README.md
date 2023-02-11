@@ -1,5 +1,5 @@
-# Manager 
-[![Prettier-CI](https://github.com/AssadAnabosi/Manager-2.0/actions/workflows/Prettier.yml/badge.svg)](https://github.com/AssadAnabosi/Manager-2.0/actions/workflows/Prettier.yml)
+# Manager
+
 ##### Version: 2.0.0
 
 ## Backstory
@@ -9,50 +9,50 @@ This app is built upon the need for a database for my family's own workshop, so 
 ## Definitions
 
 - **User**: is the **Worker** that is allowed to access the app, and perform the actions that are allowed to them.
-    * **firstName**`*`: is the first name of the user.
-    * **lastName**`*`: is the last name of the user.
-    * **username**`*`: is the username of the user.
-    * **email**: is the email of the user.
-    * **phoneNumber**: is the phone number of the user.
-    * **password**`*`: is the password of the user.
-    * **active**: is a flag that is set to decide whether the user is allowed to login or not.
-    * **accessLevel**: are the different levels of access that a **Worker** can have, the higher the level the more actions they can perform.
-        1. **User**: can only view his own logs and change his password.
-        2. **Spectator**: can view all the bills, workers, logs, payees and cheques, but can't edit anything besides his own password.
-        3. **Moderator**: can do what a **Spectator** can do, and can add new records, but with restricted deletion and editing abilities, where he can't delete a worker, or update a worker's access level, change the activation status a worker account, or reset a worker's account password.
-        4. **Administrator**: Highest level of access can do anything.
+  - **firstName**`*`: is the first name of the user.
+  - **lastName**`*`: is the last name of the user.
+  - **username**`*`: is the username of the user.
+  - **email**: is the email of the user.
+  - **phoneNumber**: is the phone number of the user.
+  - **password**`*`: is the password of the user.
+  - **active**: is a flag that is set to decide whether the user is allowed to login or not.
+  - **accessLevel**: are the different levels of access that a **Worker** can have, the higher the level the more actions they can perform.
+    1. **User**: can only view his own logs and change his password.
+    2. **Spectator**: can view all the bills, workers, logs, payees and cheques, but can't edit anything besides his own password.
+    3. **Moderator**: can do what a **Spectator** can do, and can add new records, but with restricted deletion and editing abilities, where he can't delete a worker, or update a worker's access level, change the activation status a worker account, or reset a worker's account password.
+    4. **Administrator**: Highest level of access can do anything.
 - **Log**: is the record of the work that is done by the worker.
-    * **date**`*`: is the date that the work was done.
-    * **isAbsent**: is a flag that is set to true when the worker is absent.
-    * **description**: is the description of the work that was done.
-    * **startingTime**: is the time that the work started.
-    * **finishingTime**: is the time that the work finished.
-    * **OTV**: is the amount of overtime that the worker worked.
-    * **payment**: is the amount of money that the worker got paid.
-    * **extraNotes**: is an optional extra notes about the work.
-    * **worker**`*`: is the worker who this log is associated with.
+  - **date**`*`: is the date that the work was done.
+  - **isAbsent**: is a flag that is set to true when the worker is absent.
+  - **description**: is the description of the work that was done.
+  - **startingTime**: is the time that the work started.
+  - **finishingTime**: is the time that the work finished.
+  - **OTV**: is the amount of overtime that the worker worked.
+  - **payment**: is the amount of money that the worker got paid.
+  - **extraNotes**: is an optional extra notes about the work.
+  - **worker**`*`: is the worker who this log is associated with.
 - **Payee**: is the person or company that the **Cheque** is made out to.
-    * **name**`*`: is the name of the payee.
-    * **email**: is the email of the payee.
-    * **phoneNumber**: is the phone number of the payee.
-    * **extraNotes**: is an optional extra notes about the payee.
+  - **name**`*`: is the name of the payee.
+  - **email**: is the email of the payee.
+  - **phoneNumber**: is the phone number of the payee.
+  - **extraNotes**: is an optional extra notes about the payee.
 - **Cheque**: is the payment method that is used to pay the **Payee**.
-    * **serial**`*`: is the number that is written on the cheque.
-    * **dueDate**`*`: is the date that the cheque is due to be cashed.
-    * **value**`*`: is the amount that is written on the cheque.
-    * **description**: is an optional description of the cheque.
-    * **payee**: is the payee that the cheque is made out to.
-    * **isCancelled**: is a flag that is set to true when the cheque is cancelled.
-    * **isDeleted**: is a flag that is set to true when the cheque payee is deleted.
+  - **serial**`*`: is the number that is written on the cheque.
+  - **dueDate**`*`: is the date that the cheque is due to be cashed.
+  - **value**`*`: is the amount that is written on the cheque.
+  - **description**: is an optional description of the cheque.
+  - **payee**: is the payee that the cheque is made out to.
+  - **isCancelled**: is a flag that is set to true when the cheque is cancelled.
+  - **isDeleted**: is a flag that is set to true when the cheque payee is deleted.
 - **Bill**: is the expenses that are made by the workshop.
-    * **date**`*`: is the date that the bill was made.
-    * **value**`*`: is the amount that the bill is for.
-    * **description**`*`: is the description of the bill.
-    * **extraNotes**: is an optional extra notes about the bill.
+  - **date**`*`: is the date that the bill was made.
+  - **value**`*`: is the amount that the bill is for.
+  - **description**`*`: is the description of the bill.
+  - **extraNotes**: is an optional extra notes about the bill.
 - **Session**: is the record of the sessions that are made by the users.
-    * **refreshToken**`*`: is the refresh token that is used to generate new access tokens.
-    * **user**`*`: is the user that the refresh token is associated with.
-    * **expiresAt**`*`: is the date that the refresh token expires.
+  - **refreshToken**`*`: is the refresh token that is used to generate new access tokens.
+  - **user**`*`: is the user that the refresh token is associated with.
+  - **expiresAt**`*`: is the date that the refresh token expires.
 - `*`Required field
 - When a worker gets deleted, all the logs that are associated with that worker are also deleted.
 - When a payee gets deleted, all the cheques that are associated with that payee are marked as isDeleted = true, and their payee is set to null.
@@ -61,57 +61,59 @@ This app is built upon the need for a database for my family's own workshop, so 
 ### Restrictions
 
 - User
-    * Administrator can't delete himself.
-    * Administrator can't deactivate himself.
-    * Administrator can't change his own access level.
-    * Administrator resting a user password revokes all of his refresh tokens.
+
+  - Administrator can't delete himself.
+  - Administrator can't deactivate himself.
+  - Administrator can't change his own access level.
+  - Administrator resting a user password revokes all of his refresh tokens.
 
 - Log
-    * Log worker and date both can't be changed.
-    * Log updating or creation can either have a startingTime and a finishingTime, or isAbsent = true. but you can't have both or neither.
+  - Log worker and date both can't be changed.
+  - Log updating or creation can either have a startingTime and a finishingTime, or isAbsent = true. but you can't have both or neither.
 - Cheque
-    * Cheque serial number can't be changed.
+  - Cheque serial number can't be changed.
 
 ### Authentication
 
-* The authentication is done using JWT and cookies
-    * When user sign in he gets a refresh token and an access token, the refresh token is stored in the httpOnly cookies
-    * The access token is used to authenticate the user, and the refresh token is used to generate new access tokens.
-    * Any request that is made to the server must have the access token in the Authorization header. (Bearer Token)
+- The authentication is done using JWT and cookies
+  - When user sign in he gets a refresh token and an access token, the refresh token is stored in the httpOnly cookies
+  - The access token is used to authenticate the user, and the refresh token is used to generate new access tokens.
+  - Any request that is made to the server must have the access token in the Authorization header. (Bearer Token)
 
 ## Used Technologies / Libraries
 
-* NodeJS
-* ExpressJS
-* MongoDB
-* Mongoose
-* BcryptJS
-* JsonWebToken
-* Dotenv
-* Nodemon
-* Cors
-* Cookies
+- NodeJS
+- ExpressJS
+- MongoDB
+- Mongoose
+- BcryptJS
+- JsonWebToken
+- Dotenv
+- Nodemon
+- Cors
+- Cookies
 
 ## Configuration and Setup
-* In ```/server/config``` Fill the ```config.env.template``` file with the needed information, and rename it to ```config.env```
-    * ```PORT```: is the port that the server will run on.
-    * ```MONGO_URI```: is the URI of the MongoDB database.
-    * Auth: JWT - Cookies
-        * ```JWT_ACCESS_SECRET```: is the secret that is used to sign the JWT access tokens.
-        * ```JWT_ACCESS_EXPIRE```: is the expiration time of the JWT access tokens.
-        * ```JWT_REFRESH_SECRET```: is the secret that is used to sign the JWT refresh tokens.
-        * ```MAX_AGE```: is the expiration time if the JWT refresh token and the max age of the cookie.
-        * ```SECURE_COOKIE```: is a flag that is set to "true" when the cookies are secure.
-    * ```CLIENT_URL```: is the URL of the client app for cors.
-    * Admin Account: Initial Admin Account, will run only when there are no users in the database at the moment of the server start.
-        * ```ADMIN_USERNAME```: is the username of the admin account.
-        * ```ADMIN_PASSWORD```: is the password of the admin account.
-        * ```ADMIN_EMAIL```: is the email of the admin account.
-        * ```ADMIN_FIRST_NAME```: is the first name of the admin account.
-        * ```ADMIN_LAST_NAME```: is the last name of the admin account.
-        * ```ADMIN_PHONE_NUMBER```: is the phone number of the admin account.
-* Run ```npm install``` to install all the needed dependencies
-* Run ```npm run server``` to start the server in development mode (nodemon)
+
+- In `/server/config` Fill the `config.env.template` file with the needed information, and rename it to `config.env`
+  - `PORT`: is the port that the server will run on.
+  - `MONGO_URI`: is the URI of the MongoDB database.
+  - Auth: JWT - Cookies
+    - `JWT_ACCESS_SECRET`: is the secret that is used to sign the JWT access tokens.
+    - `JWT_ACCESS_EXPIRE`: is the expiration time of the JWT access tokens.
+    - `JWT_REFRESH_SECRET`: is the secret that is used to sign the JWT refresh tokens.
+    - `MAX_AGE`: is the expiration time if the JWT refresh token and the max age of the cookie.
+    - `SECURE_COOKIE`: is a flag that is set to "true" when the cookies are secure.
+  - `CLIENT_URL`: is the URL of the client app for cors.
+  - Admin Account: Initial Admin Account, will run only when there are no users in the database at the moment of the server start.
+    - `ADMIN_USERNAME`: is the username of the admin account.
+    - `ADMIN_PASSWORD`: is the password of the admin account.
+    - `ADMIN_EMAIL`: is the email of the admin account.
+    - `ADMIN_FIRST_NAME`: is the first name of the admin account.
+    - `ADMIN_LAST_NAME`: is the last name of the admin account.
+    - `ADMIN_PHONE_NUMBER`: is the phone number of the admin account.
+- Run `npm install` to install all the needed dependencies
+- Run `npm run server` to start the server in development mode (nodemon)
 
 </br>
 </br>
@@ -121,63 +123,64 @@ This app is built upon the need for a database for my family's own workshop, so 
 
 ### Auth
 
-| Method | Route                             |
-|--------|-----------------------------------|
-| POST   | /api/auth                         |
-| GET    | /api/auth/refresh                 |
-| POST   | /api/auth/logout                  |
-| GET    | /api/auth/me                      |
+| Method | Route             |
+| ------ | ----------------- |
+| POST   | /api/auth         |
+| GET    | /api/auth/refresh |
+| POST   | /api/auth/logout  |
+| GET    | /api/auth/me      |
 
 ### Users
 
-| Method | Route                             |
-|--------|-----------------------------------|
-| POST   | /api/users                        |
-| GET    | /api/users?search=                |
-| GET    | /api/users/:id                    |
-| PUT    | /api/users/:id                    |
-| DELETE | /api/users/:id                    |
-| POST   | /api/users/check-username         |
-| PUT    | /api/users/change-password        |
-| PUT    | /api/users/reset-password         |
-| PUT    | /api/users/access-level           |
-| PUT    | /api/users/active-status          |
+| Method | Route                      |
+| ------ | -------------------------- |
+| POST   | /api/users                 |
+| GET    | /api/users?search=         |
+| GET    | /api/users/:id             |
+| PUT    | /api/users/:id             |
+| DELETE | /api/users/:id             |
+| POST   | /api/users/check-username  |
+| PUT    | /api/users/change-password |
+| PUT    | /api/users/reset-password  |
+| PUT    | /api/users/access-level    |
+| PUT    | /api/users/active-status   |
 
 ### Logs
 
-| Method | Route                             |
-|--------|-----------------------------------|
-| POST   | /api/logs                         |
-| GET    | /api/logs?start=&end=&search=     |
-| GET    | /api/logs/:id                     |
-| PUT    | /api/logs/:id                     |
-| DELETE | /api/logs/:id                     |
+| Method | Route                         |
+| ------ | ----------------------------- |
+| POST   | /api/logs                     |
+| GET    | /api/logs?start=&end=&search= |
+| GET    | /api/logs/:id                 |
+| PUT    | /api/logs/:id                 |
+| DELETE | /api/logs/:id                 |
 
 ### Payees
 
-| Method |                                   |
-|--------|-----------------------------------|
-| POST   | /api/payees                       |
-| GET    | /api/payees?search=               |
-| GET    | /api/payees/:id                   |
-| PUT    | /api/payees/:id                   |
-| DELETE | /api/payees/:id                   |
+| Method |                     |
+| ------ | ------------------- |
+| POST   | /api/payees         |
+| GET    | /api/payees?search= |
+| GET    | /api/payees/:id     |
+| PUT    | /api/payees/:id     |
+| DELETE | /api/payees/:id     |
+
 ### Cheques
 
-| Method | Route                             |
-|--------|-----------------------------------|
-| POST   | /api/cheques                      |
-| GET    | /api/cheques?start=&end=&search=  |
-| GET    | /api/cheques/:id                  |
-| PUT    | /api/cheques/:id                  |
-| DELETE | /api/cheques/:id                  |
+| Method | Route                            |
+| ------ | -------------------------------- |
+| POST   | /api/cheques                     |
+| GET    | /api/cheques?start=&end=&search= |
+| GET    | /api/cheques/:id                 |
+| PUT    | /api/cheques/:id                 |
+| DELETE | /api/cheques/:id                 |
 
 ### Bills
 
-| Method | Route                             |
-|--------|-----------------------------------|
-| POST   | /api/bills                        |
-| GET    | /api/bills?start=&end=&search=    |
-| GET    | /api/bills/:id                    |
-| PUT    | /api/bills/:id                    |
-| DELETE | /api/bills/:id                    |
+| Method | Route                          |
+| ------ | ------------------------------ |
+| POST   | /api/bills                     |
+| GET    | /api/bills?start=&end=&search= |
+| GET    | /api/bills/:id                 |
+| PUT    | /api/bills/:id                 |
+| DELETE | /api/bills/:id                 |
