@@ -1,6 +1,6 @@
 import Payee from "../models/Payee.model.js";
 import ResponseError from "../utils/ResponseError.js";
-import * as statusCode from "../constants/statusCodes.js";
+import * as statusCode from "../utils/constants/statusCodes.js";
 
 // @desc    Get all payees
 export const getPayees = async (req, res, next) => {

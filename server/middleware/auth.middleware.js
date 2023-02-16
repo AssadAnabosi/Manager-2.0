@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.model.js";
 import ResponseError from "../utils/responseError.js";
-import { L1, L2, L3, ADMIN } from "../constants/accessLevels.js";
-import * as statusCode from "../constants/statusCodes.js";
+import { L1, L2, L3, ADMIN } from "../utils/constants/accessLevels.js";
+import * as statusCode from "../utils/constants/statusCodes.js";
 
 // @desc   Check if user is authenticated
 export const isAuth = async (req, res, next) => {
