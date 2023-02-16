@@ -1,7 +1,7 @@
 import ResponseError from "../utils/ResponseError.js";
 import { Types } from "mongoose";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
-import * as statusCode from "../constants/statusCodes.js";
+import * as statusCode from "../utils/constants/statusCodes.js";
 const { ObjectId } = Types;
 
 export const reqBodyIncludes = (rules) => {
