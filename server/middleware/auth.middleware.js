@@ -44,7 +44,7 @@ export const isAuth = async (req, res, next) => {
         )
       );
     }
-
+    user.active = undefined;
     req.user = user;
 
     return next();

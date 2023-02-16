@@ -141,7 +141,7 @@ export const checkUsername = async (req, res, next) => {
 
     return res.status(statusCode.OK).json({
       success: true,
-      data: isAvailable,
+      data: { isAvailable },
     });
   } catch (error) {
     next(error);
