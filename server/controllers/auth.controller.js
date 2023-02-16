@@ -58,7 +58,7 @@ export const refresh = async (req, res, next) => {
   try {
     const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
 
-    const user = await User.findById(decoded.id).select("-logs");
+    const user = await User.findById(decoded.id).select("-logs -active");
     if (!user) {
       res.clearCookie("refreshToken");
       return next(
@@ -139,6 +139,7 @@ const sendTokens = async (user, statusCode, res) => {
   });
 
   user.password = undefined;
+  user.active = undefined;
   return res.status(statusCode).json({
     success: true,
     message: "User logged in successfully",

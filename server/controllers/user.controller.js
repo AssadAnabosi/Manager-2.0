@@ -141,7 +141,7 @@ export const checkUsername = async (req, res, next) => {
 
     return res.status(statusCode.OK).json({
       success: true,
-      data: isAvailable,
+      data: { isAvailable },
     });
   } catch (error) {
     next(error);
@@ -207,7 +207,8 @@ export const setActiveStatus = async (req, res, next) => {
   }
 
   const { active } = req.body;
-  if (active !== "true" && active !== "false")
+  const status = ["true", "false"];
+  if (!status.includes(active))
     return next(
       new ResponseError("Invalid active status", statusCode.BAD_REQUEST)
     );
