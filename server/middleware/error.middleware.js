@@ -1,6 +1,6 @@
 import ResponseError from "../utils/responseError.js";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
-import * as statusCode from "../constants/statusCodes.js";
+import * as statusCode from "../utils/constants/statusCodes.js";
 
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };

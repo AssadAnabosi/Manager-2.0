@@ -2,8 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
-import accessLevels, { L1 } from "../constants/accessLevels.js";
-import ms from "ms";
+import accessLevels, { L1 } from "../utils/constants/accessLevels.js";
 import Log from "./Log.model.js";
 
 const UserSchema = new mongoose.Schema({
@@ -84,9 +83,9 @@ UserSchema.pre("save", async function (next) {
 });
 
 UserSchema.set("toJSON", {
-  // @desc    send the virtual field "fullName" in the response of a find query
+  // send the virtual field "fullName" in the response of a find query
   virtuals: true,
-  // @desc    remove the firstName and lastName fields and don't include the id field
+  // remove the firstName and lastName fields and don't include the id field
   transform: function (doc, ret) {
     delete ret.firstName;
     delete ret.lastName;
