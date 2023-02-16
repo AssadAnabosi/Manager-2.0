@@ -1,7 +1,7 @@
 import Cheque from "../models/Cheque.model.js";
 import Payee from "../models/Payee.model.js";
 import ResponseError from "../utils/responseError.js";
-import * as statusCode from "../constants/statusCodes.js";
+import * as statusCode from "../utils/constants/statusCodes.js";
 import ReqQueryHelper from "../helpers/reqQuery.helper.js";
 import * as queryHelper from "../helpers/queries/cheques.queries.js";
 

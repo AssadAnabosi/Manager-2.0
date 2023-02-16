@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import User from "../models/User.model.js";
-import { ADMIN } from "../constants/accessLevels.js";
+import { ADMIN } from "../utils/constants/accessLevels.js";
 
 const connectDB = async () => {
   // @desc: Connection string

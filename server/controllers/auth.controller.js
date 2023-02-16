@@ -3,7 +3,7 @@ import ms from "ms";
 import User from "../models/User.model.js";
 import Session from "../models/Session.model.js";
 import ResponseError from "../utils/responseError.js";
-import * as statusCode from "../constants/statusCodes.js";
+import * as statusCode from "../utils/constants/statusCodes.js";
 
 // @desc    Login a user
 export const login = async (req, res, next) => {

@@ -2,7 +2,7 @@ import Log from "../models/Log.model.js";
 import Worker from "../models/User.model.js";
 import ResponseError from "../utils/ResponseError.js";
 import ObjectID from "../utils/ObjectID.js";
-import * as statusCode from "../constants/statusCodes.js";
+import * as statusCode from "../utils/constants/statusCodes.js";
 import ReqQueryHelper from "../helpers/reqQuery.helper.js";
 import * as queryHelper from "../helpers/queries/logs.queries.js";
 
