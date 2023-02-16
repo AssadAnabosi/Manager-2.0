@@ -4,8 +4,6 @@ import ResponseError from "../utils/responseError.js";
 import { L1, L2, L3, ADMIN } from "../constants/accessLevels.js";
 import * as statusCode from "../constants/statusCodes.js";
 
-// @help    accessLevels = ["User", "Spectator", "Moderator", "Administrator"]
-
 // @desc   Check if user is authenticated
 export const isAuth = async (req, res, next) => {
   let accessToken;

@@ -207,7 +207,8 @@ export const setActiveStatus = async (req, res, next) => {
   }
 
   const { active } = req.body;
-  if (active !== "true" && active !== "false")
+  const status = ["true", "false"];
+  if (!status.includes(active))
     return next(
       new ResponseError("Invalid active status", statusCode.BAD_REQUEST)
     );
