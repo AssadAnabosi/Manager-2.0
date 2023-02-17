@@ -14,10 +14,10 @@ export const getBills = async (req, res, next) => {
 
     const _id = bills.map(({ _id }) => _id);
 
-    const allTimeTotal = await Bill.aggregate(queryHelper.findValueSum());
+    let allTimeTotal = await Bill.aggregate(queryHelper.findValueSum());
     if (allTimeTotal.length < 1) allTimeTotal = [{ total: 0 }];
 
-    const rangeTotal = await Bill.aggregate(queryHelper.findValueSum(_id));
+    let rangeTotal = await Bill.aggregate(queryHelper.findValueSum(_id));
     if (rangeTotal.length < 1) rangeTotal = [{ total: 0 }];
 
     return res.status(statusCode.OK).json({
@@ -26,8 +26,8 @@ export const getBills = async (req, res, next) => {
         bills,
         allTimeTotal: allTimeTotal[0].total,
         rangeTotal: rangeTotal[0].total,
-        startDate,
-        endDate,
+        startDate: startDate.toISOString().substring(0, 10),
+        endDate: endDate.toISOString().substring(0, 10),
         search,
       },
     });
