@@ -7,10 +7,12 @@ export default (query) => {
 
   if (start) {
     startDate = new Date(start);
+    startDate.setUTCHours(date.getUTCHours() + 2);
   }
 
   if (end) {
     endDate = new Date(end);
+    endDate.setUTCHours(date.getUTCHours() + 2);
   }
 
   return { startDate, endDate, search };

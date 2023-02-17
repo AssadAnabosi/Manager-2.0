@@ -38,8 +38,9 @@ export const getCheques = async (req, res, next) => {
 
 // @desc    Create a Cheque
 export const createCheque = async (req, res, next) => {
-  const { serial, dueDate, value, description, isCancelled } = req.body;
-
+  let { serial, dueDate, value, description, isCancelled } = req.body;
+  dueDate = new Date(dueDate);
+  dueDate.setUTCHours(date.getUTCHours() + 2);
   try {
     const payee = await Payee.findById(req.body.payee);
     if (!payee)
