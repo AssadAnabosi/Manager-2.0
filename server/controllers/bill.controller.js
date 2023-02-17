@@ -38,8 +38,9 @@ export const getBills = async (req, res, next) => {
 
 // @desc    Create a bill
 export const createBill = async (req, res, next) => {
-  const { date, value, description, extraNotes } = req.body;
-
+  let { date, value, description, extraNotes } = req.body;
+  date = new Date(date);
+  date.setUTCHours(date.getUTCHours() + 2);
   try {
     await Bill.create({
       date,
