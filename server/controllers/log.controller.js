@@ -53,17 +53,10 @@ export const getLogs = async (req, res, next) => {
 
 // @desc    Create a log
 export const createLog = async (req, res, next) => {
-  const { date, isAbsent, startingTime, finishingTime, payment, extraNotes } =
+  let { date, isAbsent, startingTime, finishingTime, payment, extraNotes } =
     req.body;
-
-  if (!date || !req.body.worker)
-    return next(
-      new ResponseError(
-        "Please provide a date and workerId",
-        statusCode.BAD_REQUEST
-      )
-    );
-
+  date = new Date(date);
+  date.setUTCHours(date.getUTCHours() + 2);
   if (
     (isAbsent === undefined || isAbsent === null) &&
     (!startingTime || !finishingTime)
