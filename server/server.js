@@ -12,10 +12,11 @@ await connectDB();
 // @desc    Start Server
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
-  console.log(`Server has started on PORT: ${PORT}`);
+  console.log(`Server has started on PORT: ${PORT} 🎉`);
 });
 
 process.on("unhandledRejection", (err, promise) => {
-  console.log(`Logged Error: \n${err}`);
+  console.log(`⚠️  Logged Error: \n${err}`);
   server.close(() => process.exit(1));
+  console.log(`☢️  Server Closed`);
 });

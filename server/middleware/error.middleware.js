@@ -7,9 +7,9 @@ const errorHandler = (err, req, res, next) => {
 
   error.message = err.message;
 
-  console.log(`Error Occurred`);
+  console.log(`⚠️  Error Occurred`);
   console.log(err);
-  console.log(`---~~~---`);
+  console.log(`---~~~--- End of Error ---~~~---`);
 
   if (err.code === 11000) {
     let message;

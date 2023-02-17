@@ -12,14 +12,13 @@ const connectDB = async () => {
   };
   mongoose.connect(MONGO_URI, options);
 
-  console.log("Connection to the Database was established successfully 🌍");
-
   createAdmin();
 };
 
 // @desc: Create an admin user if there are no Admin users in the database
 const createAdmin = async () => {
   mongoose.connection.once("open", async () => {
+    console.log("Connection to the Database was established successfully 🌍");
     const count = await User.countDocuments({
       accessLevel: ADMIN,
     }).exec();
