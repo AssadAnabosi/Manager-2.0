@@ -21,7 +21,7 @@ const connectDB = async () => {
 const createAdmin = async () => {
   mongoose.connection.once("open", async () => {
     const count = await User.countDocuments({
-      accessLevel: "Administrator",
+      accessLevel: ADMIN,
     }).exec();
     if (count === 0) {
       const Admin = {
