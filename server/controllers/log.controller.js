@@ -41,8 +41,8 @@ export const getLogs = async (req, res, next) => {
         paymentsSum: paymentSums[0].paymentsSum,
         daysCount: attendanceSums[0].daysCount,
         OTVSum: attendanceSums[0].OTVSum,
-        startDate,
-        endDate,
+        startDate: startDate.toISOString().substring(0, 10),
+        endDate: endDate.toISOString().substring(0, 10),
         search,
       },
     });

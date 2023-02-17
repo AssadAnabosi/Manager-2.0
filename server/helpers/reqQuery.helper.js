@@ -2,8 +2,8 @@ export default (query) => {
   const { start, end } = query;
   const search = query.search || "";
 
-  const startDate = getFirstDayOfCurrentMonth(new Date());
-  const endDate = getLastDayOfCurrentMonth(new Date());
+  let startDate = getFirstDayOfCurrentMonth(new Date());
+  let endDate = getLastDayOfCurrentMonth(new Date());
 
   if (start) {
     startDate = new Date(start);

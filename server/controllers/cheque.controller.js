@@ -26,8 +26,8 @@ export const getCheques = async (req, res, next) => {
       data: {
         cheques,
         total: ValueSum[0].total,
-        startDate,
-        endDate,
+        startDate: startDate.toISOString().substring(0, 10),
+        endDate: endDate.toISOString().substring(0, 10),
         search,
       },
     });
