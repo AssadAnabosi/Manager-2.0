@@ -1,4 +1,5 @@
 import rateLimit from "express-rate-limit";
+import ResponseError from "../utils/responseError.js";
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
@@ -7,7 +8,8 @@ const limiter = rateLimit({
     message: "Too many requests from this IP, please try again after a minute",
   },
   handler: (req, res, next, options) => {
-    res.status(options.statusCode).send(options.message);
+    console.log(`🚩  ${req.socket.remoteAddress}`);
+    throw new ResponseError(options.message.message, options.statusCode);
   },
 });
 
