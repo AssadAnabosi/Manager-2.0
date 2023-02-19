@@ -10,9 +10,9 @@ const connectDB = async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   };
-  mongoose.connect(MONGO_URI, options);
-
   createAdmin();
+
+  await mongoose.connect(MONGO_URI, options);
 };
 
 // @desc: Create an admin user if there are no Admin users in the database
