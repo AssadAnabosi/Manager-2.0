@@ -7,3 +7,6 @@ client/node_modules
 #ignore .env files
 server/config/config.env
 server/.env
+
+#ignore ssl certificates
+server/config/ssl

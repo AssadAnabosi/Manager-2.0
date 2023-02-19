@@ -10,18 +10,17 @@ const connectDB = async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   };
-  mongoose.connect(MONGO_URI, options);
-
-  console.log("Connection to the Database was established successfully 🌍");
-
   createAdmin();
+
+  await mongoose.connect(MONGO_URI, options);
 };
 
 // @desc: Create an admin user if there are no Admin users in the database
 const createAdmin = async () => {
   mongoose.connection.once("open", async () => {
+    console.log("Connection to the Database was established successfully 🌍");
     const count = await User.countDocuments({
-      accessLevel: "Administrator",
+      accessLevel: ADMIN,
     }).exec();
     if (count === 0) {
       const Admin = {
