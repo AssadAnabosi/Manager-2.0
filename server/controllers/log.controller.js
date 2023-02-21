@@ -1,6 +1,6 @@
 import Log from "../models/Log.model.js";
 import Worker from "../models/User.model.js";
-import ResponseError from "../utils/ResponseError.js";
+import ResponseError from "../utils/responseError.js";
 import ObjectID from "../utils/ObjectID.js";
 import * as statusCode from "../utils/constants/statusCodes.js";
 import ReqQueryHelper from "../helpers/reqQuery.helper.js";

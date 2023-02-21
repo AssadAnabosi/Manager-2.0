@@ -1,4 +1,4 @@
-import ResponseError from "../utils/ResponseError.js";
+import ResponseError from "../utils/responseError.js";
 import { Types } from "mongoose";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
 import * as statusCode from "../utils/constants/statusCodes.js";

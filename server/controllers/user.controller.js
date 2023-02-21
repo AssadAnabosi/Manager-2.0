@@ -1,6 +1,6 @@
 import Session from "../models/Session.model.js";
 import User from "../models/User.model.js";
-import ResponseError from "../utils/ResponseError.js";
+import ResponseError from "../utils/responseError.js";
 import accessLevels from "../utils/constants/accessLevels.js";
 import * as statusCode from "../utils/constants/statusCodes.js";
 
