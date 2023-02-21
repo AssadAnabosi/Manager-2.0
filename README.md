@@ -112,8 +112,15 @@ This app is built upon the need for a database for my family's own workshop, so 
     - `ADMIN_FIRST_NAME`: is the first name of the admin account.
     - `ADMIN_LAST_NAME`: is the last name of the admin account.
     - `ADMIN_PHONE_NUMBER`: is the phone number of the admin account.
-- Run `npm install` to install all the needed dependencies
-- Run `npm run server` to start the server in development mode (nodemon)
+- Run directly on your machine
+  - Run `npm install` to install all the needed dependencies
+  - Run `npm run server` to start the server in development mode (nodemon)
+- Run using docker and docker-compose
+  </br>
+  Note that you need to have docker and docker-compose installed on your machine
+  </br>
+  - Run `make compose`
+    - Or Run `docker-compose up --build -d` if you don't have make installed on your machine.
 
 </br>
 </br>
