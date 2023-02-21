@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  manager-api:
+    build:
+      context: ./server
+    restart: always
+    volumes:
+      - ./server:/usr/src/app
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./server/config/config.env
+    command: npm start
