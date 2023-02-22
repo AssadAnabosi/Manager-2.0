@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  manager-api:
+    # Build the image from the Dockerfile in the server folder
+    build:
+      context: ./server
+    # Run on startup and restart if it crashes
+    restart: always
+    # This will mount the server folder to the container so that we can
+    # make changes to the code and see them reflected in the container
+    volumes:
+      - ./server:/usr/src/app
+    # Expose the port 5000 to the host machine
+    # Change this to whatever port you put in the config.env file
+    ports:
+      # "HOST_PORT:CONTAINER_PORT"
+      - "5000:5000"
+    # Assign the environment variables to the container
+    # from the config.env file
+    env_file:
+      - ./server/config/config.env
+    command: npm start

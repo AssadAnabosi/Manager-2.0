@@ -1,7 +1,4 @@
-export const allowedOrigins = [
-  "http://127.0.0.1:3000",
-  "http://localhost:3000",
-];
+export const allowedOrigins = [process.env.CLIENT_URL];
 
 const corsOptions = {
   origin: allowedOrigins,
