@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   manager-api:
+    container_name: manager-api
     # Build the image from the Dockerfile in the server folder
     build:
       context: ./server
