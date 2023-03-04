@@ -96,6 +96,7 @@ This app is built upon the need for a database for my family's own workshop, so 
 ## Configuration and Setup
 
 - In `/server/config` Fill the `config.env.template` file with the needed information, and rename it to `config.env`
+  - `NODE_ENV`: is the environment that the server will run on. [development, production]
   - `PORT`: is the port that the server will run on.
   - `MONGO_URI`: is the URI of the MongoDB database.
   - Auth: JWT - Cookies
