@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
+import { Types } from "mongoose";
 
-const ObjectID = (id) => mongoose.Types.ObjectId(id);
+const ObjectID = (id) => Types.ObjectId(id);
 
 export default ObjectID;
