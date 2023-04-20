@@ -7,9 +7,9 @@ const errorHandler = (err, req, res, next) => {
 
   error.message = err.message;
 
-  console.log(`⚠️  Error Occurred`);
-  console.log(err);
-  console.log(`---~~~--- End of Error ---~~~---`);
+  // Log to console for dev
+  errorLogger(err, req);
+
   // Mongoose Duplicate Key Error
   if (err.code === 11000) {
     let message;
@@ -47,3 +47,16 @@ const errorHandler = (err, req, res, next) => {
 };
 
 export default errorHandler;
+
+const errorLogger = (err, req) => {
+  console.log(`⚠️  Error Occurred`);
+  // [IP] METHOD URL
+  console.log(`📌  [${req.ip_address}] ${req.method} ${req.originalUrl}`);
+  // body
+  console.log(`📌  Body: \n${JSON.stringify(req.body)}`);
+  // error
+  console.log(`---~~~--- Start of Error ---~~~---`);
+  console.log(err);
+  console.log(`---~~~--- End of Error ---~~~---`);
+  return;
+};
