@@ -12,6 +12,11 @@ import chequesRoutes from "./cheque.routes.js";
 // @desc    Middleware Import
 import { hasLevel2Access, isAuth } from "../middleware/auth.middleware.js";
 
+// @desc    Health Check route, used for monitoring
+router.use("/health", (req, res) => {
+  return res.sendStatus(200);
+});
+
 // @desc    Routes
 router.use("/auth", authRoutes);
 router.use("/users", isAuth, usersRoutes);

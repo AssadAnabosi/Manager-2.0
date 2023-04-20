@@ -13,11 +13,6 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
-// @desc    Health Check route
-app.use("/healthcheck", (req, res) => {
-  return res.sendStatus(200);
-});
-
 // @desc    Serving API routes
 app.use("/api", APIRoutes);
 
