@@ -14,36 +14,32 @@ export const login = async (req, res, next) => {
 
   const { username, password } = req.body;
 
-  try {
-    const user = await User.findOne({ username }).select("+password -logs");
-    //  Invalid Username
-    if (!user) {
-      return next(
-        new ResponseError("Invalid Credentials", statusCode.NOT_AUTHENTICATED)
-      );
-    }
-    //  Deactivated Account
-    if (!user.active) {
-      return next(
-        new ResponseError(
-          "Your account has been deactivated",
-          statusCode.NOT_AUTHORIZED
-        )
-      );
-    }
-    //  Password Check
-    const isMatch = await user.matchPassword(password);
-    // Wrong Password
-    if (!isMatch) {
-      return next(
-        new ResponseError("Invalid Credentials", statusCode.NOT_AUTHENTICATED)
-      );
-    }
-    //  Valid User
-    return sendTokens(user, statusCode.OK, res);
-  } catch (error) {
-    next(error);
+  const user = await User.findOne({ username }).select("+password -logs");
+  //  Invalid Username
+  if (!user) {
+    return next(
+      new ResponseError("Invalid Credentials", statusCode.NOT_AUTHENTICATED)
+    );
   }
+  //  Deactivated Account
+  if (!user.active) {
+    return next(
+      new ResponseError(
+        "Your account has been deactivated",
+        statusCode.NOT_AUTHORIZED
+      )
+    );
+  }
+  //  Password Check
+  const isMatch = await user.matchPassword(password);
+  // Wrong Password
+  if (!isMatch) {
+    return next(
+      new ResponseError("Invalid Credentials", statusCode.NOT_AUTHENTICATED)
+    );
+  }
+  //  Valid User
+  return sendTokens(user, statusCode.OK, res);
 };
 
 // @desc    Refresh a user's access token
@@ -97,16 +93,12 @@ export const logout = async (req, res, next) => {
     );
   }
 
-  try {
-    await Session.findOneAndDelete({ refreshToken });
-    res.clearCookie("refreshToken");
-    return res.status(statusCode.OK).json({
-      success: true,
-      message: "Logged out successfully",
-    });
-  } catch (error) {
-    next(error);
-  }
+  await Session.findOneAndDelete({ refreshToken });
+  res.clearCookie("refreshToken");
+  return res.status(statusCode.OK).json({
+    success: true,
+    message: "Logged out successfully",
+  });
 };
 
 // @desc    Get current logged in user

@@ -10,30 +10,26 @@ export const getCheques = async (req, res, next) => {
   const { startDate, endDate, search } = ReqQueryHelper(req.query);
   const filter = queryHelper.findCheques(search, startDate, endDate);
 
-  try {
-    const cheques = await Cheque.aggregate(filter).sort({
-      dueDate: 1,
-      serial: 1,
-    });
+  const cheques = await Cheque.aggregate(filter).sort({
+    dueDate: 1,
+    serial: 1,
+  });
 
-    const _id = cheques.map(({ _id }) => _id);
+  const _id = cheques.map(({ _id }) => _id);
 
-    let ValueSum = await Cheque.aggregate(queryHelper.findValueSum(_id));
-    if (ValueSum.length < 1) ValueSum = [{ total: 0 }];
+  let ValueSum = await Cheque.aggregate(queryHelper.findValueSum(_id));
+  if (ValueSum.length < 1) ValueSum = [{ total: 0 }];
 
-    return res.status(statusCode.OK).json({
-      success: true,
-      data: {
-        cheques,
-        total: ValueSum[0].total,
-        startDate: startDate.toISOString().substring(0, 10),
-        endDate: endDate.toISOString().substring(0, 10),
-        search,
-      },
-    });
-  } catch (error) {
-    next(error);
-  }
+  return res.status(statusCode.OK).json({
+    success: true,
+    data: {
+      cheques,
+      total: ValueSum[0].total,
+      startDate: startDate.toISOString().substring(0, 10),
+      endDate: endDate.toISOString().substring(0, 10),
+      search,
+    },
+  });
 };
 
 // @desc    Create a Cheque
@@ -41,81 +37,66 @@ export const createCheque = async (req, res, next) => {
   let { serial, dueDate, value, description, isCancelled } = req.body;
   dueDate = new Date(dueDate);
   dueDate.setUTCHours(dueDate.getUTCHours() + 2);
-  try {
-    const payee = await Payee.findById(req.body.payee);
-    if (!payee)
-      return next(new ResponseError("Payee not found", statusCode.NOT_FOUND));
 
-    const cheque = new Cheque({
-      serial,
-      dueDate,
-      value,
-      description,
-      payee,
-      isCancelled,
-    });
-    await cheque.save();
+  const payee = await Payee.findById(req.body.payee);
+  if (!payee)
+    return next(new ResponseError("Payee not found", statusCode.NOT_FOUND));
 
-    return res.sendStatus(statusCode.CREATED);
-  } catch (error) {
-    next(error);
-  }
+  const cheque = new Cheque({
+    serial,
+    dueDate,
+    value,
+    description,
+    payee,
+    isCancelled,
+  });
+  await cheque.save();
+
+  return res.sendStatus(statusCode.CREATED);
 };
 
 // @desc    Get a Cheque
 export const getCheque = async (req, res, next) => {
   const filter = queryHelper.findChequeByID(req.params.chequeID);
 
-  try {
-    const cheque = await Cheque.aggregate(filter);
-    if (!cheque || cheque.length === 0)
-      return next(new ResponseError("Cheque not found", statusCode.NOT_FOUND));
+  const cheque = await Cheque.aggregate(filter);
+  if (!cheque || cheque.length === 0)
+    return next(new ResponseError("Cheque not found", statusCode.NOT_FOUND));
 
-    return res.status(statusCode.OK).json({
-      success: true,
-      data: cheque,
-    });
-  } catch (error) {
-    next(error);
-  }
+  return res.status(statusCode.OK).json({
+    success: true,
+    data: cheque,
+  });
 };
 
 // @desc    Update a Cheque
 export const updateCheque = async (req, res, next) => {
-  try {
-    // Check if the cheque exists
-    const cheque = await Cheque.findById(req.params.chequeID);
-    if (!cheque)
-      return next(new ResponseError("Cheque not found", statusCode.NOT_FOUND));
-    // Check if the payee exists
-    if (req.body.payee) {
-      const payee = await Payee.findById(req.body.payee);
-      if (!payee)
-        return next(new ResponseError("Payee not found", statusCode.NOT_FOUND));
-    }
-    // Update the cheque
-    await Cheque.findByIdAndUpdate(req.params.chequeID, req.body, {
-      new: true,
-      runValidators: true,
-    });
-
-    return res.sendStatus(statusCode.NO_CONTENT);
-  } catch (error) {
-    next(error);
+  // Check if the cheque exists
+  const cheque = await Cheque.findById(req.params.chequeID);
+  if (!cheque)
+    return next(new ResponseError("Cheque not found", statusCode.NOT_FOUND));
+  // Check if the payee exists
+  if (req.body.payee) {
+    const payee = await Payee.findById(req.body.payee);
+    if (!payee)
+      return next(new ResponseError("Payee not found", statusCode.NOT_FOUND));
   }
+  // Update the cheque
+  await Cheque.findByIdAndUpdate(req.params.chequeID, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  return res.sendStatus(statusCode.NO_CONTENT);
 };
 
 // @desc    Delete a Cheque
 export const deleteCheque = async (req, res, next) => {
-  try {
-    const cheque = await Cheque.findById(req.params.chequeID);
-    if (!cheque)
-      return next(new ResponseError("Cheque not found", statusCode.NOT_FOUND));
+  const cheque = await Cheque.findById(req.params.chequeID);
+  if (!cheque)
+    return next(new ResponseError("Cheque not found", statusCode.NOT_FOUND));
 
-    await Cheque.findByIdAndDelete(req.params.chequeID);
+  await Cheque.findByIdAndDelete(req.params.chequeID);
 
-    return res.sendStatus(statusCode.NO_CONTENT);
-  } catch (error) {
-    next(error);
-  }
+  return res.sendStatus(statusCode.NO_CONTENT);
 };
