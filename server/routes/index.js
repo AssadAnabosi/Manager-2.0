@@ -11,10 +11,11 @@ import chequesRoutes from "./cheque.routes.js";
 
 // @desc    Middleware Import
 import { hasLevel2Access, isAuth } from "../middleware/auth.middleware.js";
+import { OK, NOT_FOUND } from "../utils/constants/statusCodes.js";
 
 // @desc    Health Check route, used for monitoring
 router.use("/health", (req, res) => {
-  return res.sendStatus(200);
+  return res.sendStatus(OK);
 });
 
 // @desc    Routes
@@ -27,7 +28,7 @@ router.use("/cheques", isAuth, hasLevel2Access, chequesRoutes);
 
 // @desc    Undefined routes
 router.route("*").all((req, res) => {
-  return res.status(404).json({
+  return res.status(NOT_FOUND).json({
     success: false,
     message:
       "Oops, you have reached an undefined route, please check your request and try again",
