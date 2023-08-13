@@ -1,6 +1,11 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.model.js";
-import { L1, L2, L3, ADMIN } from "../utils/constants/accessLevels.js";
+import {
+  USER,
+  SPECTATOR,
+  MODERATOR,
+  ADMIN,
+} from "../utils/constants/accessLevels.js";
 import * as statusCode from "../utils/constants/statusCodes.js";
 
 // @desc   Check if user is authenticated
@@ -53,7 +58,7 @@ export const isAuth = async (req, res, next) => {
 
 // @desc    required accessLevel is higher than User
 export const hasLevel2Access = async (req, res, next) => {
-  if (req.user.accessLevel === L1) {
+  if (req.user.accessLevel === USER) {
     return res.status(statusCode.NOT_AUTHORIZED).json({
       success: false,
       message: "Not Authorized To Access This Route",
@@ -66,7 +71,7 @@ export const hasLevel2Access = async (req, res, next) => {
 // @desc    required accessLevel is higher than Spectator
 export const hasLevel3Access = async (req, res, next) => {
   hasLevel2Access(req, res, () => {
-    if (req.user.accessLevel === L2) {
+    if (req.user.accessLevel === SPECTATOR) {
       return res.status(statusCode.NOT_AUTHORIZED).json({
         success: false,
         message: "Not Authorized To Access This Route",

@@ -1,8 +1,8 @@
-export const L1 = "User";
-export const L2 = "Spectator";
-export const L3 = "Moderator";
+export const USER = "User";
+export const SPECTATOR = "Spectator";
+export const MODERATOR = "Moderator";
 export const ADMIN = "Administrator";
 
-const accessLevels = [L1, L2, L3, ADMIN];
+const accessLevels = [USER, SPECTATOR, MODERATOR, ADMIN];
 
 export default accessLevels;
