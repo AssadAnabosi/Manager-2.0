@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
-import accessLevels, { L1 } from "../utils/constants/accessLevels.js";
+import accessLevels, { USER } from "../utils/constants/accessLevels.js";
 import Log from "./Log.model.js";
 
 const UserSchema = new mongoose.Schema({
@@ -43,7 +43,7 @@ const UserSchema = new mongoose.Schema({
   accessLevel: {
     type: String,
     enum: accessLevels,
-    default: L1,
+    default: USER,
   },
   active: {
     type: Boolean,
