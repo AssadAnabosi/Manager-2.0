@@ -1,13 +1,13 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
-const SessionSchema = new mongoose.Schema({
+const SessionSchema = new Schema({
   refreshToken: {
     type: String,
     required: [true, "Please provide a refresh token"],
     unique: true,
   },
   user: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "User",
   },
   expiresAt: {
@@ -16,6 +16,6 @@ const SessionSchema = new mongoose.Schema({
   },
 });
 
-const Session = mongoose.model("Session", SessionSchema);
+const Session = model("Session", SessionSchema);
 
 export default Session;

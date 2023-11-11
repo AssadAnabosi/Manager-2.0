@@ -7,9 +7,6 @@ const errorHandler = (err, req, res, next) => {
 
   error.message = err.message;
 
-  // Log to console for dev
-  errorLogger(err, req);
-
   // Mongoose Duplicate Key Error
   if (err.code === 11000) {
     let message;
@@ -34,6 +31,10 @@ const errorHandler = (err, req, res, next) => {
       }
     error = new ResponseError(message, statusCode.CONFLICT);
   }
+
+  // Log to console for dev if error wasn't thrown by ResponseError
+  if (!error.statusCode) errorLogger(err, req);
+
   //  Mongoose Validation Error
   if (err.name === "ValidationError") {
     const message = Object.values(err.errors).map((val) => val.message);
@@ -42,16 +43,18 @@ const errorHandler = (err, req, res, next) => {
 
   return res.status(error.statusCode || statusCode.INTERNAL_SERVER_ERROR).json({
     success: false,
-    message: error.message || "Server Error",
+    message: error.message || "Internal Server Error",
   });
 };
 
 export default errorHandler;
 
 const errorLogger = (err, req) => {
-  console.log(`⚠️  Error Occurred`);
-  // [IP] METHOD URL
-  console.log(`📌  [${req.ip_address}] ${req.method} ${req.originalUrl}`);
+  console.log(`⚠️  Error Occurred - ${new Date().toLocaleString()}`);
+  // [IP]
+  console.log(`📌  [${req.ip_address}]`);
+  // METHOD URL
+  console.log(`📌  ${req.method} ${req.originalUrl}`);
   // body
   console.log(`📌  Body: \n${JSON.stringify(req.body)}`);
   // error

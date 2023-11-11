@@ -1,8 +1,9 @@
 import Session from "../models/Session.model.js";
 import User from "../models/User.model.js";
 import ResponseError from "../utils/responseError.js";
-import accessLevels from "../utils/constants/accessLevels.js";
+import userRoles from "../utils/constants/userRoles.js";
 import * as statusCode from "../utils/constants/statusCodes.js";
+import Log from "../models/Log.model.js";
 
 // @desc    Register a new user
 export const registerUser = async (req, res, next) => {
@@ -30,7 +31,7 @@ export const getUsers = async (req, res, next) => {
       { firstName: { $regex: search, $options: "i" } },
       { lastName: { $regex: search, $options: "i" } },
     ],
-  }).select("-logs");
+  });
 
   return res.status(statusCode.OK).json({
     success: true,
@@ -66,7 +67,7 @@ export const updateUser = async (req, res, next) => {
   return res.sendStatus(statusCode.NO_CONTENT);
 };
 
-// @desc    Delete a user
+// @desc    Delete a user and all their logs
 export const deleteUser = async (req, res, next) => {
   if (req.params.userID === req.user.id) {
     return next(
@@ -80,6 +81,7 @@ export const deleteUser = async (req, res, next) => {
   const user = await User.findByIdAndDelete(req.params.userID);
   if (!user)
     return next(new ResponseError("User not found", statusCode.NOT_FOUND));
+  await Log.deleteMany({ worker: req.params.userID });
 
   return res.sendStatus(statusCode.NO_CONTENT);
 };
@@ -134,28 +136,31 @@ export const resetPassword = async (req, res, next) => {
   return res.sendStatus(statusCode.NO_CONTENT);
 };
 
-// @desc   Change user's access level (authorization)
-export const setAccessLevel = async (req, res, next) => {
+// @desc   Update a user's role
+export const updateUserRole = async (req, res, next) => {
   if (req.params.userID === req.user.id) {
     return next(
       new ResponseError(
-        "You are not authorized to change your access level",
+        "You are not authorized to change your role",
         statusCode.BAD_REQUEST
       )
     );
   }
 
-  const { accessLevel } = req.body;
-  if (!accessLevels.includes(accessLevel))
+  const { role } = req.body;
+  if (!userRoles.includes(role))
     return next(
-      new ResponseError("Invalid access level", statusCode.BAD_REQUEST)
+      new ResponseError(
+        `Invalid User Role [${userRoles.toString()}]`,
+        statusCode.BAD_REQUEST
+      )
     );
 
   const user = await User.findById(req.params.userID);
   if (!user)
     return next(new ResponseError("User not found", statusCode.NOT_FOUND));
 
-  user.accessLevel = accessLevel;
+  user.role = role;
   await user.save();
 
   return res.sendStatus(statusCode.NO_CONTENT);

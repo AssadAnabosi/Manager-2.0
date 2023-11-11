@@ -1,6 +1,7 @@
 import Payee from "../models/Payee.model.js";
 import ResponseError from "../utils/responseError.js";
 import * as statusCode from "../utils/constants/statusCodes.js";
+import Cheque from "../models/Cheque.model.js";
 
 // @desc    Get all payees
 export const getPayees = async (req, res, next) => {
@@ -11,7 +12,7 @@ export const getPayees = async (req, res, next) => {
       { name: { $regex: search, $options: "i" } },
       { extraNotes: { $regex: search, $options: "i" } },
     ],
-  }).select("-cheques -__v");
+  });
 
   return res.status(statusCode.OK).json({
     success: true,
@@ -38,7 +39,7 @@ export const createPayee = async (req, res, next) => {
 
 // @desc    Get a payee
 export const getPayee = async (req, res, next) => {
-  const payee = await Payee.findById(req.params.payeeID).select("-__v");
+  const payee = await Payee.findById(req.params.payeeID);
   if (!payee)
     return next(new ResponseError("Payee not found", statusCode.NOT_FOUND));
 
@@ -62,11 +63,13 @@ export const updatePayee = async (req, res, next) => {
 
 // @desc    Delete a payee
 export const deletePayee = async (req, res, next) => {
-  const payee = await Payee.findById(req.params.payeeID);
+  const payee = await Payee.findByIdAndDelete(req.params.payeeID);
   if (!payee)
     return next(new ResponseError("Payee not found", statusCode.NOT_FOUND));
 
-  await Payee.findByIdAndDelete(req.params.payeeID);
-
+  await Cheque.updateMany(
+    { payee: req.params.payeeID },
+    { $set: { payee: null, isDeleted: true } }
+  );
   return res.sendStatus(statusCode.NO_CONTENT);
 };

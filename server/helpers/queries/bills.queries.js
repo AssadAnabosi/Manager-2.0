@@ -11,7 +11,8 @@ export const findBills = (startDate, endDate, search) => {
     },
     {
       $project: {
-        _id: 1,
+        _id: 0,
+        id: "$_id",
         date: 1,
         value: 1,
         description: 1,
