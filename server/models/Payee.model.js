@@ -1,7 +1,6 @@
-import mongoose from "mongoose";
-import Cheque from "./Cheque.model.js";
+import { Schema, model } from "mongoose";
 
-const PayeeSchema = new mongoose.Schema({
+const PayeeSchema = new Schema({
   name: {
     type: String,
     required: [true, "Please provide a name"],
@@ -19,22 +18,16 @@ const PayeeSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  cheques: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Cheque",
-    },
-  ],
 });
 
-// @desc   set isDeleted property to true and set the payee's cheques' payee property to null in the associated cheques
-PayeeSchema.post("findOneAndDelete", async function (payee) {
-  await Cheque.updateMany(
-    { payee: payee._id },
-    { payee: null, isDeleted: true }
-  );
+PayeeSchema.set("toJSON", {
+  virtuals: true,
+  transform: function (doc, ret) {
+    delete ret._id;
+    delete ret.__v;
+  },
 });
 
-const Payee = mongoose.model("Payee", PayeeSchema);
+const Payee = model("Payee", PayeeSchema);
 
 export default Payee;

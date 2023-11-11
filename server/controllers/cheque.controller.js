@@ -8,23 +8,20 @@ import * as queryHelper from "../helpers/queries/cheques.queries.js";
 // @desc    Get all Cheques
 export const getCheques = async (req, res, next) => {
   const { startDate, endDate, search } = ReqQueryHelper(req.query);
-  const filter = queryHelper.findCheques(search, startDate, endDate);
+  const filter = queryHelper.findCheques({ search, startDate, endDate });
 
-  const cheques = await Cheque.aggregate(filter).sort({
-    dueDate: 1,
-    serial: 1,
-  });
+  const cheques = await Cheque.aggregate(filter);
 
-  const _id = cheques.map(({ _id }) => _id);
+  const _id = cheques.map(({ id }) => id);
 
-  let ValueSum = await Cheque.aggregate(queryHelper.findValueSum(_id));
-  if (ValueSum.length < 1) ValueSum = [{ total: 0 }];
+  let ValueSum = (await Cheque.aggregate(queryHelper.findValueSum(_id)))[0];
+  const total = ValueSum ? ValueSum.total : 0;
 
   return res.status(statusCode.OK).json({
     success: true,
     data: {
       cheques,
-      total: ValueSum[0].total,
+      total,
       startDate: startDate.toISOString().substring(0, 10),
       endDate: endDate.toISOString().substring(0, 10),
       search,
@@ -36,7 +33,7 @@ export const getCheques = async (req, res, next) => {
 export const createCheque = async (req, res, next) => {
   let { serial, dueDate, value, description, isCancelled } = req.body;
   dueDate = new Date(dueDate);
-  dueDate.setUTCHours(dueDate.getUTCHours() + 2);
+  dueDate.setUTCHours(0, 0, 0, 0);
 
   const payee = await Payee.findById(req.body.payee);
   if (!payee)
@@ -65,7 +62,9 @@ export const getCheque = async (req, res, next) => {
 
   return res.status(statusCode.OK).json({
     success: true,
-    data: cheque,
+    data: {
+      cheque: cheque[0],
+    },
   });
 };
 
@@ -80,6 +79,10 @@ export const updateCheque = async (req, res, next) => {
     const payee = await Payee.findById(req.body.payee);
     if (!payee)
       return next(new ResponseError("Payee not found", statusCode.NOT_FOUND));
+  }
+  if (req.body.dueDate) {
+    req.body.dueDate = new Date(req.body.dueDate);
+    req.body.dueDate.setUTCHours(0, 0, 0, 0);
   }
   // Update the cheque
   await Cheque.findByIdAndUpdate(req.params.chequeID, req.body, {

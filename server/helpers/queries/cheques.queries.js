@@ -1,50 +1,62 @@
 import ObjectID from "../../utils/ObjectID.js";
 
-export const findCheques = (search, startDate, endDate) => {
-  return [
-    {
-      $lookup: {
-        from: "payees",
-        localField: "payee",
-        foreignField: "_id",
-        as: "payee",
-      },
+export const findCheques = ({ search, startDate, endDate }) => {
+  const filter = [];
+  if (startDate) {
+    filter.push({ $match: { dueDate: { $gte: startDate } } });
+  }
+  if (endDate) {
+    filter.push({ $match: { dueDate: { $lte: endDate } } });
+  }
+  filter.push({
+    $lookup: {
+      from: "payees",
+      localField: "payee",
+      foreignField: "_id",
+      as: "payee",
     },
-    {
+  });
+  filter.push({
+    $unwind: {
+      path: "$payee",
+      preserveNullAndEmptyArrays: true,
+    },
+  });
+  if (search) {
+    filter.push({
       $match: {
         $or: [
-          {
-            $and: [
-              { dueDate: { $gte: startDate, $lte: endDate } },
-              {
-                $or: [
-                  { "payee.name": { $regex: search, $options: "i" } },
-                  { isDeleted: true },
-                  { isCancelled: true },
-                ],
-              },
-            ],
-          },
-          {
-            serial: { $eq: parseInt(search) },
-          },
+          { "payee.name": { $regex: search, $options: "i" } },
+          { serial: { $eq: parseInt(search) } },
         ],
       },
-    },
-    {
-      $project: {
-        _id: 1,
-        serial: 1,
-        dueDate: 1,
-        value: 1,
-        description: 1,
-        "payee.name": 1,
-        "payee._id": 1,
-        isCancelled: 1,
-        isDeleted: 1,
+    });
+  }
+  filter.push({
+    $project: {
+      _id: 0,
+      id: "$_id",
+      serial: 1,
+      dueDate: 1,
+      value: 1,
+      description: 1,
+      "payee.id": {
+        $ifNull: ["$payee._id", null],
       },
+      "payee.name": {
+        $ifNull: ["$payee.name", "Deleted Payee"],
+      },
+      isCancelled: 1,
+      isDeleted: 1,
     },
-  ];
+  });
+  filter.push({
+    $sort: {
+      dueDate: 1,
+      serial: 1,
+    },
+  });
+  return filter;
 };
 
 export const findValueSum = (_id) => {
@@ -80,17 +92,25 @@ export const findChequeByID = (id) => {
       },
     },
     {
-      $unwind: "$payee",
+      $unwind: {
+        path: "$payee",
+        preserveNullAndEmptyArrays: true,
+      },
     },
     {
       $project: {
-        _id: 1,
+        _id: 0,
+        id: "$_id",
         serial: 1,
         dueDate: 1,
         value: 1,
         description: 1,
-        "payee.name": 1,
-        "payee._id": 1,
+        "payee.id": {
+          $ifNull: ["$payee._id", null],
+        },
+        "payee.name": {
+          $ifNull: ["$payee.name", "Deleted Payee"],
+        },
         isCancelled: 1,
         isDeleted: 1,
       },

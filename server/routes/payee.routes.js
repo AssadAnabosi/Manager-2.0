@@ -4,7 +4,8 @@ const router = Router();
 import * as controller from "../controllers/payee.controller.js";
 import catchError from "../utils/catchError.js";
 
-import { hasLevel3Access } from "../middleware/auth.middleware.js";
+import { authorize } from "../middleware/auth.middleware.js";
+import { ADMIN, MODERATOR } from "../utils/constants/userRoles.js";
 import * as validator from "../middleware/validators/payee.validator.js";
 import { validateParamID } from "../middleware/reqValidators.middleware.js";
 
@@ -12,11 +13,11 @@ import { validateParamID } from "../middleware/reqValidators.middleware.js";
 
 router
   .route("/")
-  // @access  Private (Level 2)
+  // @access  Spec, Mod, Admin
   .get(catchError(controller.getPayees))
-  // @access  Private (Level 3)
+  // @access  Mod, Admin
   .post(
-    hasLevel3Access,
+    authorize([MODERATOR, ADMIN]),
     validator.validateCreatePayee,
     catchError(controller.createPayee)
   );
@@ -26,15 +27,11 @@ router
 router
   .route("/:payeeID")
   .all(validateParamID("payeeID"))
-  // @access  Private (Level 2)
+  // @access  Spec, Mod, Admin
   .get(catchError(controller.getPayee))
-  // @access  Private (Level 3)
-  .put(
-    hasLevel3Access,
-    validator.validateUpdatePayee,
-    catchError(controller.updatePayee)
-  )
-  // @access  Private (Level 3)
-  .delete(hasLevel3Access, catchError(controller.deletePayee));
+  // @access  Mod, Admin
+  .put(authorize([MODERATOR, ADMIN]), catchError(controller.updatePayee))
+  // @access  Mod, Admin
+  .delete(authorize([MODERATOR, ADMIN]), catchError(controller.deletePayee));
 
 export default router;

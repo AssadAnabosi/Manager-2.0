@@ -3,6 +3,6 @@ export const SPECTATOR = "Spectator";
 export const MODERATOR = "Moderator";
 export const ADMIN = "Administrator";
 
-const accessLevels = [USER, SPECTATOR, MODERATOR, ADMIN];
+const userRoles = [USER, SPECTATOR, MODERATOR, ADMIN];
 
-export default accessLevels;
+export default userRoles;

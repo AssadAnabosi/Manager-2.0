@@ -5,39 +5,40 @@ import ObjectID from "../utils/ObjectID.js";
 import * as statusCode from "../utils/constants/statusCodes.js";
 import ReqQueryHelper from "../helpers/reqQuery.helper.js";
 import * as queryHelper from "../helpers/queries/logs.queries.js";
+import { USER } from "../utils/constants/userRoles.js";
 
 // @desc    Get all logs
 export const getLogs = async (req, res, next) => {
   const { startDate, endDate, search } = ReqQueryHelper(req.query);
-  const filter = queryHelper.findLogs(search, startDate, endDate);
+  const filter = queryHelper.findLogs({ search, startDate, endDate });
 
-  //  Filter logs by requested user if the user is Level 1
-  if (req.user.accessLevel === "User") {
+  //  Filter logs by requested user if the user role is USER
+  if (req.user.role === USER) {
     filter.unshift({ $match: { worker: ObjectID(req.user.id) } });
   }
 
   const logs = await Log.aggregate(filter).sort({ date: -1 });
 
-  const _id = logs.map(({ _id }) => _id);
+  const _id = logs.map(({ id }) => id);
 
   //  Find the sum of payments
-  let paymentSums = await Log.aggregate(queryHelper.findPaymentsSum(_id));
-  if (paymentSums.length < 1) paymentSums = [{ paymentsSum: 0 }];
+  let paymentSums = (await Log.aggregate(queryHelper.findPaymentsSum(_id)))[0];
+  const paymentsSumValue = paymentSums ? paymentSums.paymentsSum : 0;
 
   //  Find the days count and OTV sum
-  let attendanceSums = await Log.aggregate(queryHelper.findAttendanceSums(_id));
-  if (attendanceSums.length < 1) {
-    attendanceSums = [{ daysCount: 0 }];
-    attendanceSums = [{ OTVSum: 0 }];
-  }
+  let attendanceSums = (
+    await Log.aggregate(queryHelper.findAttendanceSums(_id))
+  )[0];
+  const daysCount = attendanceSums ? attendanceSums.daysCount : 0;
+  const OTVSum = attendanceSums ? attendanceSums.OTVSum : 0;
 
   return res.status(statusCode.OK).json({
     success: true,
     data: {
       logs,
-      paymentsSum: paymentSums[0].paymentsSum,
-      daysCount: attendanceSums[0].daysCount,
-      OTVSum: attendanceSums[0].OTVSum,
+      paymentsSumValue,
+      daysCount,
+      OTVSum,
       startDate: startDate.toISOString().substring(0, 10),
       endDate: endDate.toISOString().substring(0, 10),
       search,
@@ -50,7 +51,7 @@ export const createLog = async (req, res, next) => {
   let { date, isAbsent, startingTime, finishingTime, payment, extraNotes } =
     req.body;
   date = new Date(date);
-  date.setUTCHours(date.getUTCHours() + 2);
+  date.setUTCHours(0, 0, 0, 0);
   if (
     (isAbsent === undefined || isAbsent === null) &&
     (!startingTime || !finishingTime)
@@ -83,7 +84,15 @@ export const createLog = async (req, res, next) => {
 
 // @desc    Get a log
 export const getLog = async (req, res, next) => {
-  const log = await Log.aggregate(queryHelper.logQuery(req.params.logID));
+  const log = await Log.aggregate(queryHelper.findLogByID(req.params.logID));
+  if (req.user.role === USER && log.worker.id !== req.user.id) {
+    return next(
+      new ResponseError(
+        "You are not authorized to access this log",
+        statusCode.NOT_AUTHORIZED
+      )
+    );
+  }
   if (!log || log.length === 0)
     return next(new ResponseError("Log not found", statusCode.NOT_FOUND));
 
@@ -108,7 +117,10 @@ export const updateLog = async (req, res, next) => {
       )
     );
   }
-
+  if (req.body.date) {
+    req.body.date = new Date(req.body.date);
+    req.body.date.setUTCHours(0, 0, 0, 0);
+  }
   const log = await Log.findByIdAndUpdate(req.params.logID, req.body, {
     new: true,
     runValidators: true,
@@ -121,11 +133,9 @@ export const updateLog = async (req, res, next) => {
 
 // @desc    Delete a log
 export const deleteLog = async (req, res, next) => {
-  const log = await Log.findById(req.params.logID);
+  const log = await Log.findByIdAndDelete(req.params.logID);
   if (!log)
     return next(new ResponseError("Log not found", statusCode.NOT_FOUND));
-
-  await Log.findByIdAndDelete(req.params.logID);
 
   return res.sendStatus(statusCode.NO_CONTENT);
 };

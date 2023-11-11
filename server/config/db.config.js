@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import User from "../models/User.model.js";
-import { ADMIN } from "../utils/constants/accessLevels.js";
+import { ADMIN } from "../utils/constants/userRoles.js";
 
 const connectDB = async () => {
   // @desc: Connection string
@@ -20,7 +20,7 @@ const createAdmin = async () => {
   mongoose.connection.once("open", async () => {
     console.log("Connection to the Database was established successfully 🌍");
     const count = await User.countDocuments({
-      accessLevel: ADMIN,
+      role: ADMIN,
     }).exec();
     if (count === 0) {
       const Admin = {
@@ -30,7 +30,7 @@ const createAdmin = async () => {
         email: process.env.ADMIN_EMAIL || "",
         phoneNumber: process.env.ADMIN_PHONE_NUMBER || "",
         password: process.env.ADMIN_PASSWORD || "12345678",
-        accessLevel: ADMIN,
+        role: ADMIN,
       };
       try {
         const user = new User(Admin);
