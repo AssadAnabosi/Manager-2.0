@@ -16,10 +16,10 @@ This app is built upon the need for a database for my family's own workshop, so 
   - **phoneNumber**: is the phone number of the user.
   - **password**`*`: is the password of the user.
   - **active**: is a flag that is set to decide whether the user is allowed to login or not.
-  - **accessLevel**: are the different levels of access that a **Worker** can have, the higher the level the more actions they can perform.
+  - **role**: are the different roles that a **Worker** can have, different roles gives the ability to do more or less actions they can perform.
     1. **User**: can only view his own logs and change his password.
     2. **Spectator**: can view all the bills, workers, logs, payees and cheques, but can't edit anything besides his own password.
-    3. **Moderator**: can do what a **Spectator** can do, and can add new records, but with restricted deletion and editing abilities, where he can't delete a worker, or update a worker's access level, change the activation status a worker account, or reset a worker's account password.
+    3. **Moderator**: can do what a **Spectator** can do, and can add new records, but with restricted deletion and editing abilities, where he can't delete a worker, or update a worker's role, change the activation status a worker account, or reset a worker's account password.
     4. **Administrator**: Highest level of access can do anything.
 - **Log**: is the record of the work that is done by the worker.
   - **date**`*`: is the date that the work was done.
@@ -64,7 +64,7 @@ This app is built upon the need for a database for my family's own workshop, so 
 
   - Administrator can't delete himself.
   - Administrator can't deactivate himself.
-  - Administrator can't change his own access level.
+  - Administrator can't change his own role.
   - Administrator resting a user password revokes all of his refresh tokens.
 
 - Log
@@ -140,18 +140,18 @@ This app is built upon the need for a database for my family's own workshop, so 
 
 ### Users
 
-| Method | Route                      |
-| ------ | -------------------------- |
-| POST   | /api/users                 |
-| GET    | /api/users?search=         |
-| GET    | /api/users/:id             |
-| PUT    | /api/users/:id             |
-| DELETE | /api/users/:id             |
-| POST   | /api/users/check-username  |
-| PUT    | /api/users/change-password |
-| PUT    | /api/users/reset-password  |
-| PUT    | /api/users/access-level    |
-| PUT    | /api/users/active-status   |
+| Method | Route                             |
+| ------ | --------------------------------- |
+| POST   | /api/users                        |
+| GET    | /api/users?search=                |
+| GET    | /api/users/:userID                |
+| PUT    | /api/users/:userID                |
+| DELETE | /api/users/:userID                |
+| POST   | /api/users/check-username         |
+| PATCH  | /api/users/change-password        |
+| PATCH  | /api/users/:userID/reset-password |
+| PATCH  | /api/users/:userID/role           |
+| PATCH  | /api/users/:userID/active-status  |
 
 ### Logs
 
@@ -159,19 +159,19 @@ This app is built upon the need for a database for my family's own workshop, so 
 | ------ | ----------------------------- |
 | POST   | /api/logs                     |
 | GET    | /api/logs?start=&end=&search= |
-| GET    | /api/logs/:id                 |
-| PUT    | /api/logs/:id                 |
-| DELETE | /api/logs/:id                 |
+| GET    | /api/logs/:logID              |
+| PUT    | /api/logs/:logID              |
+| DELETE | /api/logs/:logID              |
 
 ### Payees
 
-| Method |                     |
-| ------ | ------------------- |
-| POST   | /api/payees         |
-| GET    | /api/payees?search= |
-| GET    | /api/payees/:id     |
-| PUT    | /api/payees/:id     |
-| DELETE | /api/payees/:id     |
+| Method |                      |
+| ------ | -------------------- |
+| POST   | /api/payees          |
+| GET    | /api/payees?search=  |
+| GET    | /api/payees/:payeeID |
+| PUT    | /api/payees/:payeeID |
+| DELETE | /api/payees/:payeeID |
 
 ### Cheques
 
@@ -179,9 +179,9 @@ This app is built upon the need for a database for my family's own workshop, so 
 | ------ | -------------------------------- |
 | POST   | /api/cheques                     |
 | GET    | /api/cheques?start=&end=&search= |
-| GET    | /api/cheques/:id                 |
-| PUT    | /api/cheques/:id                 |
-| DELETE | /api/cheques/:id                 |
+| GET    | /api/cheques/:chequeID           |
+| PUT    | /api/cheques/:chequeID           |
+| DELETE | /api/cheques/:chequeID           |
 
 ### Bills
 
@@ -189,6 +189,6 @@ This app is built upon the need for a database for my family's own workshop, so 
 | ------ | ------------------------------ |
 | POST   | /api/bills                     |
 | GET    | /api/bills?start=&end=&search= |
-| GET    | /api/bills/:id                 |
-| PUT    | /api/bills/:id                 |
-| DELETE | /api/bills/:id                 |
+| GET    | /api/bills/:billID             |
+| PUT    | /api/bills/:billID             |
+| DELETE | /api/bills/:billID             |

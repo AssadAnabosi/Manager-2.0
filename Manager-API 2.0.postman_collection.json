@@ -626,7 +626,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"firstName\": \"Sam\",\r\n    \"lastName\": \"Johnson\",\r\n    \"username\": \"AsaAm_johnson1\",\r\n    \"email\": \"Asam.johnson1@email.com\",\r\n    \"phoneNumber\": \"+440000000000\",\r\n    \"password\": \"12345678\",\r\n    \"logs\": [\"123\"]\r\n}"
+              "raw": "{\r\n    \"firstName\": \"Sam\",\r\n    \"lastName\": \"Johnson\",\r\n    \"username\": \"AsaAm_johnson1\",\r\n    \"email\": \"Asam.johnson1@email.com\",\r\n    \"phoneNumber\": \"+440000000000\",\r\n    \"password\": \"12345678\"\r\n}"
             },
             "url": {
               "raw": "{{baseURL}}/api/users",
@@ -1070,13 +1070,13 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/users/:id",
+              "raw": "{{baseURL}}/api/users/:userID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "users", ":id"],
+              "path": ["api", "users", ":userID"],
               "variable": [
                 {
-                  "key": "id",
-                  "value": "63d58572b16527a66f5ac322"
+                  "key": "userID",
+                  "value": "654f891d516606556ea8df0f"
                 }
               ]
             }
@@ -1239,16 +1239,16 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"firstName\": \"Jack\",\r\n}"
+              "raw": "{\r\n    \"firstName\": \"Jack\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/users/:id",
+              "raw": "{{baseURL}}/api/users/:userID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "users", ":id"],
+              "path": ["api", "users", ":userID"],
               "variable": [
                 {
-                  "key": "id",
-                  "value": "63d591990abae991c4f2bf2c"
+                  "key": "userID",
+                  "value": "654f891d516606556ea8df0f"
                 }
               ]
             }
@@ -1342,13 +1342,13 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/users/:id",
+              "raw": "{{baseURL}}/api/users/:userID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "users", ":id"],
+              "path": ["api", "users", ":userID"],
               "variable": [
                 {
-                  "key": "id",
-                  "value": "63d591990abae991c4f2bf2c"
+                  "key": "userID",
+                  "value": "654f891d516606556ea8df0f"
                 }
               ]
             }
@@ -1559,7 +1559,7 @@
         {
           "name": "change-password",
           "request": {
-            "method": "PUT",
+            "method": "PATCH",
             "header": [
               {
                 "key": "Content-Type",
@@ -1574,7 +1574,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"currentPassword\": \"12345678\",\r\n    \"newPassword\": \"12345678\"\r\n}"
+              "raw": "{\r\n    \"currentPassword\": \"56348967\",\r\n    \"newPassword\": \"01234567890\"\r\n}"
             },
             "url": {
               "raw": "{{baseURL}}/api/users/change-password",
@@ -1725,7 +1725,7 @@
         {
           "name": "reset-password",
           "request": {
-            "method": "PUT",
+            "method": "PATCH",
             "header": [
               {
                 "key": "Content-Type",
@@ -1738,13 +1738,13 @@
               "raw": "{\r\n    \"password\" : \"12345678\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/users/:id/reset-password",
+              "raw": "{{baseURL}}/api/users/:userID/reset-password",
               "host": ["{{baseURL}}"],
-              "path": ["api", "users", ":id", "reset-password"],
+              "path": ["api", "users", ":userID", "reset-password"],
               "variable": [
                 {
-                  "key": "id",
-                  "value": "63d58572b16527a66f5ac322"
+                  "key": "userID",
+                  "value": "654f891d516606556ea8df0f"
                 }
               ]
             }
@@ -1814,9 +1814,9 @@
           ]
         },
         {
-          "name": "access-level",
+          "name": "role",
           "request": {
-            "method": "PUT",
+            "method": "PATCH",
             "header": [
               {
                 "key": "Content-Type",
@@ -1826,16 +1826,16 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"accessLevel\" : \"Moderator\"\r\n}"
+              "raw": "{\r\n    \"role\" : \"Moderator\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/users/:id/access-level",
+              "raw": "{{baseURL}}/api/users/:userID/role",
               "host": ["{{baseURL}}"],
-              "path": ["api", "users", ":id", "access-level"],
+              "path": ["api", "users", ":userID", "role"],
               "variable": [
                 {
-                  "key": "id",
-                  "value": "63d58572b16527a66f5ac322"
+                  "key": "userID",
+                  "value": "654f891d516606556ea8df0f"
                 }
               ]
             }
@@ -2069,7 +2069,7 @@
         {
           "name": "active-status",
           "request": {
-            "method": "PUT",
+            "method": "PATCH",
             "header": [
               {
                 "key": "Content-Type",
@@ -2082,13 +2082,13 @@
               "raw": "{\r\n    \"active\" : \"false\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/users/:id/active-status",
+              "raw": "{{baseURL}}/api/users/:userID/active-status",
               "host": ["{{baseURL}}"],
-              "path": ["api", "users", ":id", "active-status"],
+              "path": ["api", "users", ":userID", "active-status"],
               "variable": [
                 {
-                  "key": "id",
-                  "value": "63d58572b16527a66f5ac322"
+                  "key": "userID",
+                  "value": "654f891d516606556ea8df0f"
                 }
               ]
             }
@@ -2257,7 +2257,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"date\": \"2023-02-27T01:34:17.692Z\",\r\n    \"startingTime\": \"08:30\",\r\n    \"finishingTime\": \"14:30\",\r\n    \"payment\": \"0\",\r\n    \"extraNotes\": \"Baqa Al-Gharbia\",\r\n    \"worker\": \"63d97005f0aeb0e4645ad46e\",\r\n    \"isAbsence\": false\r\n}"
+              "raw": "{\r\n    \"date\": \"2023-03-28\",\r\n    \"startingTime\": \"08:30\",\r\n    \"finishingTime\": \"14:30\",\r\n    \"payment\": \"0\",\r\n    \"extraNotes\": \"Baqa Al-Gharbia\",\r\n    \"worker\": \"654f891d516606556ea8df0f\",\r\n    \"isAbsence\": false\r\n}"
             },
             "url": {
               "raw": "{{baseURL}}/api/logs",
@@ -2279,7 +2279,7 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/logs",
+              "raw": "{{baseURL}}/api/logs?start=2020-11-01&end=2025-11-01",
               "host": ["{{baseURL}}"],
               "path": ["api", "logs"],
               "query": [
@@ -2290,13 +2290,11 @@
                 },
                 {
                   "key": "start",
-                  "value": "",
-                  "disabled": true
+                  "value": "2020-11-01"
                 },
                 {
                   "key": "end",
-                  "value": "",
-                  "disabled": true
+                  "value": "2025-11-01"
                 }
               ]
             }
@@ -2315,13 +2313,13 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/logs/:id",
+              "raw": "{{baseURL}}/api/logs/:logID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "logs", ":id"],
+              "path": ["api", "logs", ":logID"],
               "variable": [
                 {
-                  "key": "id",
-                  "value": "63d1b0b473d0ba75162472"
+                  "key": "logID",
+                  "value": "63f55fb8958efa9a1457ec53"
                 }
               ]
             }
@@ -2341,16 +2339,16 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"isAbsent\": true\r\n}"
+              "raw": "{\r\n    \"isAbsent\": false,\r\n    \"payment\": 750\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/logs/:id",
+              "raw": "{{baseURL}}/api/logs/:logID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "logs", ":id"],
+              "path": ["api", "logs", ":logID"],
               "variable": [
                 {
-                  "key": "id",
-                  "value": "63da63c171a8cea8957d59b8"
+                  "key": "logID",
+                  "value": "654f8d0fec52bd2d39ce6baf"
                 }
               ]
             }
@@ -2373,13 +2371,13 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{baseURL}}/api/logs/:id",
+              "raw": "{{baseURL}}/api/logs/:logID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "logs", ":id"],
+              "path": ["api", "logs", ":logID"],
               "variable": [
                 {
-                  "key": "id",
-                  "value": "63da63c171a8cea8957d59b8"
+                  "key": "logID",
+                  "value": "654f8d0fec52bd2d39ce6baf"
                 }
               ]
             }
@@ -2426,9 +2424,15 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/payees",
+              "raw": "{{baseURL}}/api/payees?search",
               "host": ["{{baseURL}}"],
-              "path": ["api", "payees"]
+              "path": ["api", "payees"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": null
+                }
+              ]
             }
           },
           "response": []
@@ -2445,13 +2449,13 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/payees/:id",
+              "raw": "{{baseURL}}/api/payees/:payeeID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "payees", ":id"],
+              "path": ["api", "payees", ":payeeID"],
               "variable": [
                 {
-                  "key": "id",
-                  "value": "63d58572b16527a66f5ac322"
+                  "key": "payeeID",
+                  "value": "654f92bc31dce4a9a0c507cd"
                 }
               ]
             }
@@ -2474,13 +2478,13 @@
               "raw": "{\r\n    \"name\": \"Sample Payee 1\",\r\n    \"extraNotes\": \"Jenin, West Bank\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/payees/:id",
+              "raw": "{{baseURL}}/api/payees/:payeeID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "payees", ":id"],
+              "path": ["api", "payees", ":payeeID"],
               "variable": [
                 {
-                  "key": "id",
-                  "value": "63d58572b16527a66f5ac322"
+                  "key": "payeeID",
+                  "value": "654f8d86ec52bd2d39ce6bcf"
                 }
               ]
             }
@@ -2503,13 +2507,13 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{baseURL}}/api/payees/:id",
+              "raw": "{{baseURL}}/api/payees/:payeeID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "payees", ":id"],
+              "path": ["api", "payees", ":payeeID"],
               "variable": [
                 {
-                  "key": "id",
-                  "value": "63d58572b16527a66f5ac322"
+                  "key": "payeeID",
+                  "value": "654f9949baa272c8616c193d"
                 }
               ]
             }
@@ -2534,7 +2538,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"serial\": \"523\",\r\n    \"dueDate\": \"2023-02-15\",\r\n    \"value\": \"2300\",\r\n    \"description\": \"This is a tset\",\r\n    \"payee\": \"63da619a1271fb2a14a7ad60\"\r\n}"
+              "raw": "{\r\n    \"serial\": \"561\",\r\n    \"dueDate\": \"2023-02-15\",\r\n    \"value\": \"2300\",\r\n    \"description\": \"This is a tset\",\r\n    \"payee\": \"654f9949baa272c8616c193d\"\r\n}"
             },
             "url": {
               "raw": "{{baseURL}}/api/cheques",
@@ -2556,7 +2560,7 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/cheques",
+              "raw": "{{baseURL}}/api/cheques?start=2020-11-01&end=2025-11-01",
               "host": ["{{baseURL}}"],
               "path": ["api", "cheques"],
               "query": [
@@ -2566,14 +2570,12 @@
                   "disabled": true
                 },
                 {
-                  "key": "end",
-                  "value": "",
-                  "disabled": true
+                  "key": "start",
+                  "value": "2020-11-01"
                 },
                 {
-                  "key": "start",
-                  "value": "",
-                  "disabled": true
+                  "key": "end",
+                  "value": "2025-11-01"
                 }
               ]
             }
@@ -2592,13 +2594,13 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/cheques/:id",
+              "raw": "{{baseURL}}/api/cheques/:chequeID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "cheques", ":id"],
+              "path": ["api", "cheques", ":chequeID"],
               "variable": [
                 {
-                  "key": "id",
-                  "value": "63da62991271fb2a14a7ad9a"
+                  "key": "chequeID",
+                  "value": "654f9955baa272c8616c1944"
                 }
               ]
             }
@@ -2618,16 +2620,16 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"isCanceled\": \"true\",\r\n    \"payee\": \"63da619a1271fb2a14a7ad60\"\r\n}"
+              "raw": "{\r\n    \"isCancelled\": false,\r\n    \"payee\": \"654f92bc31dce4a9a0c507cd\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/cheques/:id",
+              "raw": "{{baseURL}}/api/cheques/:chequeID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "cheques", ":id"],
+              "path": ["api", "cheques", ":chequeID"],
               "variable": [
                 {
-                  "key": "id",
-                  "value": "63da62991271fb2a14a7ad9a"
+                  "key": "chequeID",
+                  "value": "654f9955baa272c8616c1944"
                 }
               ]
             }
@@ -2650,13 +2652,13 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{baseURL}}/api/cheques/:id",
+              "raw": "{{baseURL}}/api/cheques/:chequeID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "cheques", ":id"],
+              "path": ["api", "cheques", ":chequeID"],
               "variable": [
                 {
-                  "key": "id",
-                  "value": "63da62991271fb2a14a7ad9a"
+                  "key": "chequeID",
+                  "value": "654f92cb31dce4a9a0c507d9"
                 }
               ]
             }
@@ -2681,7 +2683,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"date\": \"2023-01-18T01:34:17.692Z\",\r\n    \"value\": \"500\",\r\n    \"description\": \"Sample Bill\",\r\n    \"extraNotes\": \"\"\r\n}"
+              "raw": "{\r\n    \"date\": \"2023-02-28\",\r\n    \"value\": \"500\",\r\n    \"description\": \"Sample Bill\",\r\n    \"extraNotes\": \"\"\r\n}"
             },
             "url": {
               "raw": "{{baseURL}}/api/bills",
@@ -2703,9 +2705,24 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/bills",
+              "raw": "{{baseURL}}/api/bills?start=2020-11-01&end=2025-11-01",
               "host": ["{{baseURL}}"],
-              "path": ["api", "bills"]
+              "path": ["api", "bills"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "start",
+                  "value": "2020-11-01"
+                },
+                {
+                  "key": "end",
+                  "value": "2025-11-01"
+                }
+              ]
             }
           },
           "response": []
@@ -2722,13 +2739,13 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/bills/:id",
+              "raw": "{{baseURL}}/api/bills/:billID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "bills", ":id"],
+              "path": ["api", "bills", ":billID"],
               "variable": [
                 {
-                  "key": "id",
-                  "value": "63d3053cff164f91c77c89d8"
+                  "key": "billID",
+                  "value": "63f560724cf33dd1652eec7b"
                 }
               ]
             }
@@ -2757,7 +2774,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "63cb13acad57f6d229d99532"
+                  "value": "63f560724cf33dd1652eec7b"
                 }
               ]
             }
@@ -2780,13 +2797,13 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{baseURL}}/api/bills/:id",
+              "raw": "{{baseURL}}/api/bills/:billID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "bills", ":id"],
+              "path": ["api", "bills", ":billID"],
               "variable": [
                 {
-                  "key": "id",
-                  "value": "63cb13acad57f6d229d99532"
+                  "key": "billID",
+                  "value": "63f560724cf33dd1652eec7b"
                 }
               ]
             }
