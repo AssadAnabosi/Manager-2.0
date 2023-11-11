@@ -66,7 +66,7 @@ export const refresh = async (req, res, next) => {
     if (!session) {
       res.clearCookie("refreshToken");
       return next(
-        new ResponseError("Session expired", statusCode.NOT_AUTHENTICATED)
+        new ResponseError("Please Login Again", statusCode.NOT_AUTHENTICATED)
       );
     }
 
@@ -78,11 +78,17 @@ export const refresh = async (req, res, next) => {
       },
     });
   } catch (error) {
-    res.clearCookie("refreshToken");
-    await Session.findOneAndDelete({ refreshToken });
-    return next(
-      new ResponseError("Session expired", statusCode.NOT_AUTHENTICATED)
-    );
+    if (error.name === "TokenExpiredError") {
+      res.clearCookie("refreshToken");
+      await Session.findOneAndDelete({ refreshToken });
+      return next(
+        new ResponseError(
+          "Token Expired, Please Login Again",
+          statusCode.NOT_AUTHENTICATED
+        )
+      );
+    }
+    return next(error);
   }
 };
 

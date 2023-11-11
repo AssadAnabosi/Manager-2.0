@@ -1,5 +1,4 @@
 import Bill from "../models/Bill.model.js";
-import ResponseError from "../utils/responseError.js";
 import * as statusCode from "../utils/constants/statusCodes.js";
 import ReqQueryHelper from "../helpers/reqQuery.helper.js";
 import * as queryHelper from "../helpers/queries/bills.queries.js";
@@ -49,13 +48,10 @@ export const createBill = async (req, res) => {
 
 // @desc    Get a bill
 export const getBill = async (req, res) => {
-  const bill = await Bill.findById(req.params.billID);
-  if (!bill) throw new ResponseError("Bill not found", statusCode.NOT_FOUND);
-
   return res.status(statusCode.OK).json({
     success: true,
     data: {
-      bill,
+      bill: req.Bill,
     },
   });
 };
@@ -66,19 +62,17 @@ export const updateBill = async (req, res) => {
     req.body.date = new Date(req.body.date);
     req.body.date.setUTCHours(0, 0, 0, 0);
   }
-  const bill = await Bill.findByIdAndUpdate(req.params.billID, req.body, {
+  await Bill.findByIdAndUpdate(req.params.billID, req.body, {
     new: true,
     runValidators: true,
   });
-  if (!bill) throw new ResponseError("Bill not found", statusCode.NOT_FOUND);
 
   return res.sendStatus(statusCode.NO_CONTENT);
 };
 
 // @desc    Delete a bill
 export const deleteBill = async (req, res) => {
-  const bill = await Bill.findByIdAndDelete(req.params.billID);
-  if (!bill) throw new ResponseError("Bill not found", statusCode.NOT_FOUND);
+  await Bill.findByIdAndDelete(req.params.billID);
 
   return res.sendStatus(statusCode.NO_CONTENT);
 };

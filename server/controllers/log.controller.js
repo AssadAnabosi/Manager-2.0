@@ -91,8 +91,6 @@ export const getLog = async (req, res) => {
       statusCode.NOT_AUTHORIZED
     );
   }
-  if (!log || log.length === 0)
-    throw new ResponseError("Log not found", statusCode.NOT_FOUND);
 
   return res.status(statusCode.OK).json({
     success: true,
@@ -121,19 +119,17 @@ export const updateLog = async (req, res) => {
     req.body.date = new Date(req.body.date);
     req.body.date.setUTCHours(0, 0, 0, 0);
   }
-  const log = await Log.findByIdAndUpdate(req.params.logID, req.body, {
+  await Log.findByIdAndUpdate(req.params.logID, req.body, {
     new: true,
     runValidators: true,
   });
-  if (!log) throw new ResponseError("Log not found", statusCode.NOT_FOUND);
 
   return res.sendStatus(statusCode.NO_CONTENT);
 };
 
 // @desc    Delete a log
 export const deleteLog = async (req, res) => {
-  const log = await Log.findByIdAndDelete(req.params.logID);
-  if (!log) throw new ResponseError("Log not found", statusCode.NOT_FOUND);
+  await Log.findByIdAndDelete(req.params.logID);
 
   return res.sendStatus(statusCode.NO_CONTENT);
 };

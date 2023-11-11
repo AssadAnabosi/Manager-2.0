@@ -16,7 +16,10 @@ import { OK, NOT_FOUND } from "../utils/constants/statusCodes.js";
 
 // @desc    Health Check route, used for monitoring
 router.use("/health", (req, res) => {
-  return res.sendStatus(OK);
+  return res.status(OK).json({
+    success: true,
+    message: "What are you doing here ?",
+  });
 });
 
 // @desc    Routes

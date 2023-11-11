@@ -387,7 +387,7 @@
                 "exec": [
                   "pm.test(\"Save accessToken as variable\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
-                  "    pm.collectionVariables.set(\"accessToken\", jsonData.accessToken);\r",
+                  "    pm.collectionVariables.set(\"accessToken\", jsonData.data.accessToken);\r",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -2600,7 +2600,7 @@
               "variable": [
                 {
                   "key": "chequeID",
-                  "value": "654f9955baa272c8616c1944"
+                  "value": "654f9955baa272c8616c1943"
                 }
               ]
             }
@@ -2745,7 +2745,7 @@
               "variable": [
                 {
                   "key": "billID",
-                  "value": "63f560724cf33dd1652eec7b"
+                  "value": "654fa04d33fb1d4f7d7b1a29"
                 }
               ]
             }

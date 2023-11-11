@@ -56,8 +56,6 @@ export const getCheque = async (req, res) => {
   const filter = queryHelper.findChequeByID(req.params.chequeID);
 
   const cheque = await Cheque.aggregate(filter);
-  if (!cheque || cheque.length === 0)
-    throw new ResponseError("Cheque not found", statusCode.NOT_FOUND);
 
   return res.status(statusCode.OK).json({
     success: true,
@@ -69,10 +67,6 @@ export const getCheque = async (req, res) => {
 
 // @desc    Update a Cheque
 export const updateCheque = async (req, res) => {
-  // Check if the cheque exists
-  const cheque = await Cheque.findById(req.params.chequeID);
-  if (!cheque)
-    throw new ResponseError("Cheque not found", statusCode.NOT_FOUND);
   // Check if the payee exists
   if (req.body.payee) {
     const payee = await Payee.findById(req.body.payee);
@@ -94,10 +88,6 @@ export const updateCheque = async (req, res) => {
 
 // @desc    Delete a Cheque
 export const deleteCheque = async (req, res) => {
-  const cheque = await Cheque.findById(req.params.chequeID);
-  if (!cheque)
-    throw new ResponseError("Cheque not found", statusCode.NOT_FOUND);
-
   await Cheque.findByIdAndDelete(req.params.chequeID);
 
   return res.sendStatus(statusCode.NO_CONTENT);

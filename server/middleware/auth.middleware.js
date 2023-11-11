@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.model.js";
 import * as statusCode from "../utils/constants/statusCodes.js";
+import ResponseError from "../utils/responseError.js";
 
 // @desc   Check if user is authenticated
 export const isAuth = async (req, res, next) => {
@@ -14,10 +15,12 @@ export const isAuth = async (req, res, next) => {
   }
 
   if (!accessToken) {
-    return res.status(statusCode.NOT_AUTHENTICATED).json({
-      success: false,
-      message: "Not Authenticated To Access This Route",
-    });
+    return next(
+      new ResponseError(
+        "Not Authenticated To Access This Route",
+        statusCode.NOT_AUTHENTICATED
+      )
+    );
   }
 
   try {
@@ -25,17 +28,18 @@ export const isAuth = async (req, res, next) => {
     const user = await User.findById(decoded.id).select("-logs");
 
     if (!user) {
-      return res.status(statusCode.NOT_FOUND).json({
-        success: false,
-        message: "User Can Not Be Found",
-      });
+      return next(
+        new ResponseError("User Can Not Be Found", statusCode.NOT_FOUND)
+      );
     }
 
     if (!user.active) {
-      return res.status(statusCode.NOT_AUTHORIZED).json({
-        success: false,
-        message: "Your account has been deactivated",
-      });
+      return next(
+        new ResponseError(
+          "Your account has been deactivated",
+          statusCode.NOT_AUTHORIZED
+        )
+      );
     }
     user.active = undefined;
     req.user = user;
@@ -44,10 +48,12 @@ export const isAuth = async (req, res, next) => {
   } catch (error) {
     // JWT token has expired
     if (error.name === "TokenExpiredError") {
-      return res.status(statusCode.NOT_AUTHENTICATED).json({
-        success: false,
-        message: "Token Expired, Please Refresh Token",
-      });
+      return next(
+        new ResponseError(
+          "Token Expired, Please Refresh Token",
+          statusCode.NOT_AUTHENTICATED
+        )
+      );
     }
     return next(error);
   }
@@ -60,10 +66,12 @@ export const authorize = (userRoles = []) => {
   return async (req, res, next) => {
     await isAuth(req, res, () => {
       if (userRoles.length && !userRoles.includes(req.user.role)) {
-        return res.status(statusCode.NOT_AUTHORIZED).json({
-          success: false,
-          message: "Not Authorized To Access This Route",
-        });
+        return next(
+          new ResponseError(
+            "Not Authorized To Access This Route",
+            statusCode.NOT_AUTHORIZED
+          )
+        );
       }
 
       return next();
@@ -78,10 +86,12 @@ export const notAuthorized = (userRoles = []) => {
   return async (req, res, next) => {
     await isAuth(req, res, () => {
       if (userRoles.length && userRoles.includes(req.user.role)) {
-        return res.status(statusCode.NOT_AUTHORIZED).json({
-          success: false,
-          message: "Not Authorized To Access This Route",
-        });
+        return next(
+          new ResponseError(
+            "Not Authorized To Access This Route",
+            statusCode.NOT_AUTHORIZED
+          )
+        );
       }
 
       return next();

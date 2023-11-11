@@ -44,26 +44,20 @@ export const getUsers = async (req, res) => {
 
 // @desc    Get a user
 export const getUser = async (req, res) => {
-  const user = await User.findById(req.params.userID);
-  if (!user) {
-    throw new ResponseError("User not found", statusCode.NOT_FOUND);
-  }
-
   return res.status(statusCode.OK).json({
     success: true,
     data: {
-      user,
+      user: req.User,
     },
   });
 };
 
 // @desc    Update a user
 export const updateUser = async (req, res) => {
-  const user = await User.findByIdAndUpdate(req.params.userID, req.body, {
+  await User.findByIdAndUpdate(req.params.userID, req.body, {
     new: true,
     runValidators: true,
   });
-  if (!user) throw new ResponseError("User not found", statusCode.NOT_FOUND);
 
   return res.sendStatus(statusCode.NO_CONTENT);
 };
@@ -77,8 +71,7 @@ export const deleteUser = async (req, res) => {
     );
   }
 
-  const user = await User.findByIdAndDelete(req.params.userID);
-  if (!user) throw new ResponseError("User not found", statusCode.NOT_FOUND);
+  await User.findByIdAndDelete(req.params.userID);
   await Log.deleteMany({ worker: req.params.userID });
 
   return res.sendStatus(statusCode.NO_CONTENT);
@@ -89,9 +82,6 @@ export const changePassword = async (req, res) => {
   const { currentPassword, newPassword } = req.body;
 
   const user = await User.findById(req.user.id).select("+password");
-  if (!user) {
-    throw new ResponseError("User not found", statusCode.NOT_FOUND);
-  }
 
   const isMatch = await user.matchPassword(currentPassword);
   if (!isMatch) {
@@ -123,7 +113,6 @@ export const checkUsername = async (req, res) => {
 // @desc    Reset a user's password by an administrator
 export const resetPassword = async (req, res) => {
   const user = await User.findById(req.params.userID);
-  if (!user) throw new ResponseError("User not found", statusCode.NOT_FOUND);
 
   user.password = req.body.password;
   await user.save();
@@ -152,7 +141,6 @@ export const updateUserRole = async (req, res) => {
     );
 
   const user = await User.findById(req.params.userID);
-  if (!user) throw new ResponseError("User not found", statusCode.NOT_FOUND);
 
   user.role = role;
   await user.save();
@@ -178,7 +166,7 @@ export const setActiveStatus = async (req, res) => {
       new ResponseError("Invalid active status", statusCode.BAD_REQUEST)
     );
 
-  const user = await User.findByIdAndUpdate(
+  await User.findByIdAndUpdate(
     req.params.userID,
     { active },
     {
@@ -186,7 +174,6 @@ export const setActiveStatus = async (req, res) => {
       runValidators: true,
     }
   );
-  if (!user) throw new ResponseError("User not found", statusCode.NOT_FOUND);
 
   return res.sendStatus(statusCode.NO_CONTENT);
 };
