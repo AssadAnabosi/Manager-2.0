@@ -43,7 +43,6 @@ This app is built upon the need for a database for my family's own workshop, so 
   - **description**: is an optional description of the cheque.
   - **payee**: is the payee that the cheque is made out to.
   - **isCancelled**: is a flag that is set to true when the cheque is cancelled.
-  - **isDeleted**: is a flag that is set to true when the cheque payee is deleted.
 - **Bill**: is the expenses that are made by the workshop.
   - **date**`*`: is the date that the bill was made.
   - **value**`*`: is the amount that the bill is for.
@@ -55,7 +54,7 @@ This app is built upon the need for a database for my family's own workshop, so 
   - **expiresAt**`*`: is the date that the refresh token expires.
 - `*`Required field
 - When a worker gets deleted, all the logs that are associated with that worker are also deleted.
-- When a payee gets deleted, all the cheques that are associated with that payee are marked as isDeleted = true, and their payee is set to null.
+- When a payee gets deleted, all the cheques that are associated with that payee are has payee set to null.
 - When a user logout his refresh token is revoked.
 
 ### Restrictions

@@ -73,7 +73,9 @@ export const refresh = async (req, res, next) => {
     return res.status(statusCode.OK).json({
       success: true,
       message: "Refreshed Access Token Successfully",
-      accessToken: user.getAccessToken(),
+      data: {
+        accessToken: user.getAccessToken(),
+      },
     });
   } catch (error) {
     res.clearCookie("refreshToken");
@@ -105,7 +107,9 @@ export const logout = async (req, res, next) => {
 export const getMe = async (req, res, next) => {
   return res.status(statusCode.OK).json({
     success: true,
-    data: req.user,
+    data: {
+      user: req.user,
+    },
   });
 };
 
@@ -135,7 +139,9 @@ const sendTokens = async (user, statusCode, res) => {
   return res.status(statusCode).json({
     success: true,
     message: "User logged in successfully",
-    user,
-    accessToken,
+    data: {
+      user,
+      accessToken,
+    },
   });
 };

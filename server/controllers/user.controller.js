@@ -51,7 +51,9 @@ export const getUser = async (req, res, next) => {
 
   return res.status(statusCode.OK).json({
     success: true,
-    data: user,
+    data: {
+      user,
+    },
   });
 };
 

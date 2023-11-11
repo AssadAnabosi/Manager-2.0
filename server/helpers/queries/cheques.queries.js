@@ -47,7 +47,6 @@ export const findCheques = ({ search, startDate, endDate }) => {
         $ifNull: ["$payee.name", "Deleted Payee"],
       },
       isCancelled: 1,
-      isDeleted: 1,
     },
   });
   filter.push({
@@ -112,7 +111,6 @@ export const findChequeByID = (id) => {
           $ifNull: ["$payee.name", "Deleted Payee"],
         },
         isCancelled: 1,
-        isDeleted: 1,
       },
     },
   ];

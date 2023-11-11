@@ -98,7 +98,9 @@ export const getLog = async (req, res, next) => {
 
   return res.status(statusCode.OK).json({
     success: true,
-    data: log,
+    data: {
+      log: log[0],
+    },
   });
 };
 

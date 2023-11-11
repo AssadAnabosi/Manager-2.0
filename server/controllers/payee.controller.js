@@ -45,7 +45,9 @@ export const getPayee = async (req, res, next) => {
 
   return res.status(statusCode.OK).json({
     success: true,
-    data: payee,
+    data: {
+      payee: payee,
+    },
   });
 };
 
@@ -69,7 +71,7 @@ export const deletePayee = async (req, res, next) => {
 
   await Cheque.updateMany(
     { payee: req.params.payeeID },
-    { $set: { payee: null, isDeleted: true } }
+    { $set: { payee: null } }
   );
   return res.sendStatus(statusCode.NO_CONTENT);
 };
