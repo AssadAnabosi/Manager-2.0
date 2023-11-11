@@ -6,7 +6,7 @@ import ReqQueryHelper from "../helpers/reqQuery.helper.js";
 import * as queryHelper from "../helpers/queries/cheques.queries.js";
 
 // @desc    Get all Cheques
-export const getCheques = async (req, res, next) => {
+export const getCheques = async (req, res) => {
   const { startDate, endDate, search } = ReqQueryHelper(req.query);
   const filter = queryHelper.findCheques({ search, startDate, endDate });
 
@@ -30,14 +30,13 @@ export const getCheques = async (req, res, next) => {
 };
 
 // @desc    Create a Cheque
-export const createCheque = async (req, res, next) => {
+export const createCheque = async (req, res) => {
   let { serial, dueDate, value, description, isCancelled } = req.body;
   dueDate = new Date(dueDate);
   dueDate.setUTCHours(0, 0, 0, 0);
 
   const payee = await Payee.findById(req.body.payee);
-  if (!payee)
-    return next(new ResponseError("Payee not found", statusCode.NOT_FOUND));
+  if (!payee) throw new ResponseError("Payee not found", statusCode.NOT_FOUND);
 
   const cheque = new Cheque({
     serial,
@@ -53,12 +52,12 @@ export const createCheque = async (req, res, next) => {
 };
 
 // @desc    Get a Cheque
-export const getCheque = async (req, res, next) => {
+export const getCheque = async (req, res) => {
   const filter = queryHelper.findChequeByID(req.params.chequeID);
 
   const cheque = await Cheque.aggregate(filter);
   if (!cheque || cheque.length === 0)
-    return next(new ResponseError("Cheque not found", statusCode.NOT_FOUND));
+    throw new ResponseError("Cheque not found", statusCode.NOT_FOUND);
 
   return res.status(statusCode.OK).json({
     success: true,
@@ -69,16 +68,16 @@ export const getCheque = async (req, res, next) => {
 };
 
 // @desc    Update a Cheque
-export const updateCheque = async (req, res, next) => {
+export const updateCheque = async (req, res) => {
   // Check if the cheque exists
   const cheque = await Cheque.findById(req.params.chequeID);
   if (!cheque)
-    return next(new ResponseError("Cheque not found", statusCode.NOT_FOUND));
+    throw new ResponseError("Cheque not found", statusCode.NOT_FOUND);
   // Check if the payee exists
   if (req.body.payee) {
     const payee = await Payee.findById(req.body.payee);
     if (!payee)
-      return next(new ResponseError("Payee not found", statusCode.NOT_FOUND));
+      throw new ResponseError("Payee not found", statusCode.NOT_FOUND);
   }
   if (req.body.dueDate) {
     req.body.dueDate = new Date(req.body.dueDate);
@@ -94,10 +93,10 @@ export const updateCheque = async (req, res, next) => {
 };
 
 // @desc    Delete a Cheque
-export const deleteCheque = async (req, res, next) => {
+export const deleteCheque = async (req, res) => {
   const cheque = await Cheque.findById(req.params.chequeID);
   if (!cheque)
-    return next(new ResponseError("Cheque not found", statusCode.NOT_FOUND));
+    throw new ResponseError("Cheque not found", statusCode.NOT_FOUND);
 
   await Cheque.findByIdAndDelete(req.params.chequeID);
 

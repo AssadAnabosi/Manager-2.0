@@ -8,7 +8,7 @@ import * as queryHelper from "../helpers/queries/logs.queries.js";
 import { USER } from "../utils/constants/userRoles.js";
 
 // @desc    Get all logs
-export const getLogs = async (req, res, next) => {
+export const getLogs = async (req, res) => {
   const { startDate, endDate, search } = ReqQueryHelper(req.query);
   const filter = queryHelper.findLogs({ search, startDate, endDate });
 
@@ -47,7 +47,7 @@ export const getLogs = async (req, res, next) => {
 };
 
 // @desc    Create a log
-export const createLog = async (req, res, next) => {
+export const createLog = async (req, res) => {
   let { date, isAbsent, startingTime, finishingTime, payment, extraNotes } =
     req.body;
   date = new Date(date);
@@ -66,7 +66,7 @@ export const createLog = async (req, res, next) => {
 
   const worker = await Worker.findById(req.body.worker);
   if (!worker)
-    return next(new ResponseError("Worker not found", statusCode.NOT_FOUND));
+    throw new ResponseError("Worker not found", statusCode.NOT_FOUND);
 
   const log = new Log({
     worker: req.body.worker,
@@ -83,18 +83,16 @@ export const createLog = async (req, res, next) => {
 };
 
 // @desc    Get a log
-export const getLog = async (req, res, next) => {
+export const getLog = async (req, res) => {
   const log = await Log.aggregate(queryHelper.findLogByID(req.params.logID));
   if (req.user.role === USER && log.worker.id !== req.user.id) {
-    return next(
-      new ResponseError(
-        "You are not authorized to access this log",
-        statusCode.NOT_AUTHORIZED
-      )
+    throw new ResponseError(
+      "You are not authorized to access this log",
+      statusCode.NOT_AUTHORIZED
     );
   }
   if (!log || log.length === 0)
-    return next(new ResponseError("Log not found", statusCode.NOT_FOUND));
+    throw new ResponseError("Log not found", statusCode.NOT_FOUND);
 
   return res.status(statusCode.OK).json({
     success: true,
@@ -105,7 +103,7 @@ export const getLog = async (req, res, next) => {
 };
 
 // @desc    Update a log
-export const updateLog = async (req, res, next) => {
+export const updateLog = async (req, res) => {
   const { isAbsent, startingTime, finishingTime } = req.body;
 
   if (
@@ -127,17 +125,15 @@ export const updateLog = async (req, res, next) => {
     new: true,
     runValidators: true,
   });
-  if (!log)
-    return next(new ResponseError("Log not found", statusCode.NOT_FOUND));
+  if (!log) throw new ResponseError("Log not found", statusCode.NOT_FOUND);
 
   return res.sendStatus(statusCode.NO_CONTENT);
 };
 
 // @desc    Delete a log
-export const deleteLog = async (req, res, next) => {
+export const deleteLog = async (req, res) => {
   const log = await Log.findByIdAndDelete(req.params.logID);
-  if (!log)
-    return next(new ResponseError("Log not found", statusCode.NOT_FOUND));
+  if (!log) throw new ResponseError("Log not found", statusCode.NOT_FOUND);
 
   return res.sendStatus(statusCode.NO_CONTENT);
 };

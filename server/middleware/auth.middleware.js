@@ -43,10 +43,13 @@ export const isAuth = async (req, res, next) => {
     return next();
   } catch (error) {
     // JWT token has expired
-    return res.status(statusCode.NOT_AUTHENTICATED).json({
-      success: false,
-      message: "Not Authenticated To Access This Route",
-    });
+    if (error.name === "TokenExpiredError") {
+      return res.status(statusCode.NOT_AUTHENTICATED).json({
+        success: false,
+        message: "Token Expired, Please Refresh Token",
+      });
+    }
+    return next(error);
   }
 };
 

@@ -4,7 +4,7 @@ import * as statusCode from "../utils/constants/statusCodes.js";
 import Cheque from "../models/Cheque.model.js";
 
 // @desc    Get all payees
-export const getPayees = async (req, res, next) => {
+export const getPayees = async (req, res) => {
   const search = req.query.search || "";
 
   const payees = await Payee.find({
@@ -24,7 +24,7 @@ export const getPayees = async (req, res, next) => {
 };
 
 // @desc    Create a payee
-export const createPayee = async (req, res, next) => {
+export const createPayee = async (req, res) => {
   const { name, email, phoneNumber, extraNotes } = req.body;
 
   await Payee.create({
@@ -38,10 +38,9 @@ export const createPayee = async (req, res, next) => {
 };
 
 // @desc    Get a payee
-export const getPayee = async (req, res, next) => {
+export const getPayee = async (req, res) => {
   const payee = await Payee.findById(req.params.payeeID);
-  if (!payee)
-    return next(new ResponseError("Payee not found", statusCode.NOT_FOUND));
+  if (!payee) throw new ResponseError("Payee not found", statusCode.NOT_FOUND);
 
   return res.status(statusCode.OK).json({
     success: true,
@@ -52,22 +51,20 @@ export const getPayee = async (req, res, next) => {
 };
 
 // @desc    Update a payee
-export const updatePayee = async (req, res, next) => {
+export const updatePayee = async (req, res) => {
   const payee = await Payee.findByIdAndUpdate(req.params.payeeID, req.body, {
     new: true,
     runValidators: true,
   });
-  if (!payee)
-    return next(new ResponseError("Payee not found", statusCode.NOT_FOUND));
+  if (!payee) throw new ResponseError("Payee not found", statusCode.NOT_FOUND);
 
   return res.sendStatus(statusCode.NO_CONTENT);
 };
 
 // @desc    Delete a payee
-export const deletePayee = async (req, res, next) => {
+export const deletePayee = async (req, res) => {
   const payee = await Payee.findByIdAndDelete(req.params.payeeID);
-  if (!payee)
-    return next(new ResponseError("Payee not found", statusCode.NOT_FOUND));
+  if (!payee) throw new ResponseError("Payee not found", statusCode.NOT_FOUND);
 
   await Cheque.updateMany(
     { payee: req.params.payeeID },

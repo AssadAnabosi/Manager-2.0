@@ -5,7 +5,7 @@ import ReqQueryHelper from "../helpers/reqQuery.helper.js";
 import * as queryHelper from "../helpers/queries/bills.queries.js";
 
 // @desc    Get all bills
-export const getBills = async (req, res, next) => {
+export const getBills = async (req, res) => {
   const { startDate, endDate, search } = ReqQueryHelper(req.query);
   const bills = await Bill.aggregate(
     queryHelper.findBills(startDate, endDate, search)
@@ -33,7 +33,7 @@ export const getBills = async (req, res, next) => {
 };
 
 // @desc    Create a bill
-export const createBill = async (req, res, next) => {
+export const createBill = async (req, res) => {
   let { date, value, description, extraNotes } = req.body;
   date = new Date(date);
   date.setUTCHours(0, 0, 0, 0);
@@ -48,10 +48,9 @@ export const createBill = async (req, res, next) => {
 };
 
 // @desc    Get a bill
-export const getBill = async (req, res, next) => {
+export const getBill = async (req, res) => {
   const bill = await Bill.findById(req.params.billID);
-  if (!bill)
-    return next(new ResponseError("Bill not found", statusCode.NOT_FOUND));
+  if (!bill) throw new ResponseError("Bill not found", statusCode.NOT_FOUND);
 
   return res.status(statusCode.OK).json({
     success: true,
@@ -62,7 +61,7 @@ export const getBill = async (req, res, next) => {
 };
 
 // @desc    Update a bill
-export const updateBill = async (req, res, next) => {
+export const updateBill = async (req, res) => {
   if (req.body.date) {
     req.body.date = new Date(req.body.date);
     req.body.date.setUTCHours(0, 0, 0, 0);
@@ -71,17 +70,15 @@ export const updateBill = async (req, res, next) => {
     new: true,
     runValidators: true,
   });
-  if (!bill)
-    return next(new ResponseError("Bill not found", statusCode.NOT_FOUND));
+  if (!bill) throw new ResponseError("Bill not found", statusCode.NOT_FOUND);
 
   return res.sendStatus(statusCode.NO_CONTENT);
 };
 
 // @desc    Delete a bill
-export const deleteBill = async (req, res, next) => {
+export const deleteBill = async (req, res) => {
   const bill = await Bill.findByIdAndDelete(req.params.billID);
-  if (!bill)
-    return next(new ResponseError("Bill not found", statusCode.NOT_FOUND));
+  if (!bill) throw new ResponseError("Bill not found", statusCode.NOT_FOUND);
 
   return res.sendStatus(statusCode.NO_CONTENT);
 };
