@@ -129,6 +129,7 @@ const sendTokens = async (user, statusCode, res) => {
 
   await Session.create({
     refreshToken,
+    ipAddress: req.ip_address,
     user: user._id,
     expiresAt: Date.now() + maxAge,
   });

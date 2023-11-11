@@ -6,6 +6,10 @@ const SessionSchema = new Schema({
     required: [true, "Please provide a refresh token"],
     unique: true,
   },
+  ipAddress: {
+    type: String,
+    required: [true, "Please provide an IP address"],
+  },
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",
