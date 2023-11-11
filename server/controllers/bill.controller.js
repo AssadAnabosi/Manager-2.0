@@ -11,20 +11,20 @@ export const getBills = async (req, res, next) => {
     queryHelper.findBills(startDate, endDate, search)
   ).sort({ date: -1 });
 
-  const _id = bills.map(({ _id }) => _id);
+  const _id = bills.map(({ id }) => id);
 
-  let allTimeTotal = await Bill.aggregate(queryHelper.findValueSum());
-  if (allTimeTotal.length < 1) allTimeTotal = [{ total: 0 }];
+  let allTimeTotal = (await Bill.aggregate(queryHelper.findValueSum()))[0];
+  const allTimeTotalValue = allTimeTotal ? allTimeTotal.total : 0;
 
-  let rangeTotal = await Bill.aggregate(queryHelper.findValueSum(_id));
-  if (rangeTotal.length < 1) rangeTotal = [{ total: 0 }];
+  let rangeTotal = (await Bill.aggregate(queryHelper.findValueSum(_id)))[0];
+  const rangeTotalValue = rangeTotal ? rangeTotal.total : 0;
 
   return res.status(statusCode.OK).json({
     success: true,
     data: {
       bills,
-      allTimeTotal: allTimeTotal[0].total,
-      rangeTotal: rangeTotal[0].total,
+      allTimeTotalValue,
+      rangeTotalValue,
       startDate: startDate.toISOString().substring(0, 10),
       endDate: endDate.toISOString().substring(0, 10),
       search,
@@ -36,7 +36,7 @@ export const getBills = async (req, res, next) => {
 export const createBill = async (req, res, next) => {
   let { date, value, description, extraNotes } = req.body;
   date = new Date(date);
-  date.setUTCHours(date.getUTCHours() + 2);
+  date.setUTCHours(0, 0, 0, 0);
   await Bill.create({
     date,
     value,
@@ -49,18 +49,24 @@ export const createBill = async (req, res, next) => {
 
 // @desc    Get a bill
 export const getBill = async (req, res, next) => {
-  const bill = await Bill.findById(req.params.billID).select("-__v");
+  const bill = await Bill.findById(req.params.billID);
   if (!bill)
     return next(new ResponseError("Bill not found", statusCode.NOT_FOUND));
 
   return res.status(statusCode.OK).json({
     success: true,
-    data: bill,
+    data: {
+      bill,
+    },
   });
 };
 
 // @desc    Update a bill
 export const updateBill = async (req, res, next) => {
+  if (req.body.date) {
+    req.body.date = new Date(req.body.date);
+    req.body.date.setUTCHours(0, 0, 0, 0);
+  }
   const bill = await Bill.findByIdAndUpdate(req.params.billID, req.body, {
     new: true,
     runValidators: true,

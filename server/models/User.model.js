@@ -1,11 +1,10 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
-import accessLevels, { USER } from "../utils/constants/accessLevels.js";
-import Log from "./Log.model.js";
+import userRoles, { USER } from "../utils/constants/userRoles.js";
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema({
   firstName: {
     type: String,
     required: [true, "Please provide a first name"],
@@ -40,21 +39,15 @@ const UserSchema = new mongoose.Schema({
     minlength: 8,
     select: false,
   },
-  accessLevel: {
+  role: {
     type: String,
-    enum: accessLevels,
+    enum: userRoles,
     default: USER,
   },
   active: {
     type: Boolean,
     default: true,
   },
-  logs: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Log",
-    },
-  ],
 });
 
 // @desc    Create a virtual field "fullName" that combines the first and last name
@@ -83,13 +76,11 @@ UserSchema.pre("save", async function (next) {
 });
 
 UserSchema.set("toJSON", {
-  // send the virtual field "fullName" in the response of a find query
   virtuals: true,
-  // remove the firstName and lastName fields and don't include the id field
   transform: function (doc, ret) {
     delete ret.firstName;
     delete ret.lastName;
-    delete ret.id;
+    delete ret._id;
     delete ret.__v;
   },
 });
@@ -113,11 +104,6 @@ UserSchema.methods.getRefreshToken = function () {
   });
 };
 
-// @desc   Delete all logs associated with the user when the user is deleted
-UserSchema.post("findOneAndDelete", async function (user) {
-  await Log.deleteMany({ worker: user._id });
-});
-
-const User = mongoose.model("User", UserSchema);
+const User = model("User", UserSchema);
 
 export default User;

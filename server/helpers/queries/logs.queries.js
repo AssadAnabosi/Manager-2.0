@@ -1,7 +1,14 @@
 import ObjectID from "../../utils/ObjectID.js";
 
-export const findLogs = (search, startDate, endDate) => {
-  return [
+export const findLogs = ({ search, startDate, endDate }) => {
+  const filter = [];
+  if (startDate) {
+    filter.push({ $match: { date: { $gte: startDate } } });
+  }
+  if (endDate) {
+    filter.push({ $match: { date: { $lte: endDate } } });
+  }
+  filter.push(
     {
       $lookup: {
         from: "users",
@@ -19,28 +26,29 @@ export const findLogs = (search, startDate, endDate) => {
           $concat: ["$worker.firstName", " ", "$worker.lastName"],
         },
       },
+    }
+  );
+  if (search) {
+    filter.push({
+      $match: { "worker.name": { $regex: search, $options: "i" } },
+    });
+  }
+  filter.push({
+    $project: {
+      _id: 0,
+      id: "$_id",
+      date: 1,
+      isAbsent: 1,
+      startingTime: 1,
+      finishingTime: 1,
+      OTV: 1,
+      payment: 1,
+      extraNotes: 1,
+      "worker.id": "$worker._id",
+      "worker.name": 1,
     },
-    {
-      $match: {
-        date: { $gte: startDate, $lte: endDate },
-        "worker.name": { $regex: search, $options: "i" },
-      },
-    },
-    {
-      $project: {
-        _id: 1,
-        date: 1,
-        isAbsent: 1,
-        startingTime: 1,
-        finishingTime: 1,
-        OTV: 1,
-        payment: 1,
-        extraNotes: 1,
-        "worker._id": 1,
-        "worker.name": 1,
-      },
-    },
-  ];
+  });
+  return filter;
 };
 
 export const findPaymentsSum = (_id) => {
@@ -104,7 +112,8 @@ export const findLogByID = (id) => {
     },
     {
       $project: {
-        _id: 1,
+        _id: 0,
+        id: "$_id",
         date: 1,
         isAbsent: 1,
         startingTime: 1,
@@ -112,7 +121,7 @@ export const findLogByID = (id) => {
         OTV: 1,
         payment: 1,
         extraNotes: 1,
-        "worker._id": 1,
+        "worker.id": "$worker._id",
         "worker.fullName": 1,
       },
     },

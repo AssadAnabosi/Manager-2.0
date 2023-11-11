@@ -14,7 +14,7 @@ export const login = async (req, res, next) => {
 
   const { username, password } = req.body;
 
-  const user = await User.findOne({ username }).select("+password -logs");
+  const user = await User.findOne({ username }).select("+password");
   //  Invalid Username
   if (!user) {
     return next(
@@ -54,7 +54,7 @@ export const refresh = async (req, res, next) => {
   try {
     const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
 
-    const user = await User.findById(decoded.id).select("-logs -active");
+    const user = await User.findById(decoded.id).select("-active");
     if (!user) {
       res.clearCookie("refreshToken");
       return next(

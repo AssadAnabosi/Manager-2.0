@@ -4,7 +4,8 @@ const router = Router();
 import * as controller from "../controllers/cheque.controller.js";
 import catchError from "../utils/catchError.js";
 
-import { hasLevel3Access } from "../middleware/auth.middleware.js";
+import { authorize } from "../middleware/auth.middleware.js";
+import { ADMIN, MODERATOR } from "../utils/constants/userRoles.js";
 import * as validator from "../middleware/validators/cheque.validator.js";
 import { validateParamID } from "../middleware/reqValidators.middleware.js";
 
@@ -12,11 +13,11 @@ import { validateParamID } from "../middleware/reqValidators.middleware.js";
 
 router
   .route("/")
-  // @access  Private (Level 2)
+  // @access  Spec, Mod, Admin
   .get(catchError(controller.getCheques))
-  // @access  Private (Level 3)
+  // @access  Mod, Admin
   .post(
-    hasLevel3Access,
+    authorize([MODERATOR, ADMIN]),
     validator.validateCreateCheque,
     catchError(controller.createCheque)
   );
@@ -26,15 +27,15 @@ router
 router
   .route("/:chequeID")
   .all(validateParamID("chequeID"))
-  // @access  Private (Level 2)
+  // @access  Spec, Mod, Admin
   .get(catchError(controller.getCheque))
-  // @access  Private (Level 3)
+  // @access  Mod, Admin
   .put(
-    hasLevel3Access,
+    authorize([MODERATOR, ADMIN]),
     validator.validateUpdateCheque,
     catchError(controller.updateCheque)
   )
-  // @access  Private (Level 3)
-  .delete(hasLevel3Access, catchError(controller.deleteCheque));
+  // @access  Mod, Admin
+  .delete(authorize([MODERATOR, ADMIN]), catchError(controller.deleteCheque));
 
 export default router;

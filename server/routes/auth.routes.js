@@ -4,7 +4,7 @@ const router = Router();
 import * as controller from "../controllers/auth.controller.js";
 import catchError from "../utils/catchError.js";
 
-import { isAuth } from "../middleware/auth.middleware.js";
+import { authorize, isAuth } from "../middleware/auth.middleware.js";
 import * as validator from "../middleware/validators/auth.validator.js";
 import limiter from "../middleware/limiter.middleware.js";
 
@@ -22,6 +22,6 @@ router.get("/refresh", catchError(controller.refresh));
 router.post("/logout", catchError(controller.logout));
 
 // @desc    Retrieve current authenticated user info
-router.get("/me", isAuth, catchError(controller.getMe));
+router.get("/me", authorize(), catchError(controller.getMe));
 
 export default router;

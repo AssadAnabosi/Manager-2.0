@@ -10,7 +10,8 @@ import payeesRoutes from "./payee.routes.js";
 import chequesRoutes from "./cheque.routes.js";
 
 // @desc    Middleware Import
-import { hasLevel2Access, isAuth } from "../middleware/auth.middleware.js";
+import { authorize, notAuthorized } from "../middleware/auth.middleware.js";
+import { USER } from "../utils/constants/userRoles.js";
 import { OK, NOT_FOUND } from "../utils/constants/statusCodes.js";
 
 // @desc    Health Check route, used for monitoring
@@ -20,11 +21,11 @@ router.use("/health", (req, res) => {
 
 // @desc    Routes
 router.use("/auth", authRoutes);
-router.use("/users", isAuth, usersRoutes);
-router.use("/logs", isAuth, logsRoutes);
-router.use("/bills", isAuth, hasLevel2Access, billsRoutes);
-router.use("/payees", isAuth, hasLevel2Access, payeesRoutes);
-router.use("/cheques", isAuth, hasLevel2Access, chequesRoutes);
+router.use("/users", authorize(), usersRoutes);
+router.use("/logs", authorize(), logsRoutes);
+router.use("/bills", notAuthorized([USER]), billsRoutes);
+router.use("/payees", notAuthorized([USER]), payeesRoutes);
+router.use("/cheques", notAuthorized([USER]), chequesRoutes);
 
 // @desc    Undefined routes
 router.route("*").all((req, res) => {

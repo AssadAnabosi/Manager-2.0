@@ -1,7 +1,6 @@
-import mongoose from "mongoose";
-import User from "./User.model.js";
+import { Schema, model } from "mongoose";
 
-const LogSchema = new mongoose.Schema({
+const LogSchema = new Schema({
   date: {
     type: Date,
     required: [true, "Please provide a date"],
@@ -34,7 +33,7 @@ const LogSchema = new mongoose.Schema({
     required: false,
   },
   worker: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "User",
     required: [true, "Please specify a worker"],
   },
@@ -84,16 +83,14 @@ LogSchema.pre("findOneAndUpdate", async function (next) {
   next();
 });
 
-// @desc    Add the log to the worker's logs array when the log is created
-LogSchema.post("save", async function (log) {
-  await User.updateOne({ _id: log.worker }, { $push: { logs: log._id } });
+LogSchema.set("toJSON", {
+  virtuals: true,
+  transform: function (doc, ret) {
+    delete ret._id;
+    delete ret.__v;
+  },
 });
 
-// @desc    Remove the log from the worker's logs array when the log is deleted
-LogSchema.post("findOneAndDelete", async function (log) {
-  await User.updateOne({ _id: log.worker }, { $pull: { logs: log._id } });
-});
-
-const Log = mongoose.model("Log", LogSchema);
+const Log = model("Log", LogSchema);
 
 export default Log;

@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
-const BillSchema = new mongoose.Schema({
+const BillSchema = new Schema({
   date: {
     type: Date,
     required: [true, "Please provide a date"],
@@ -19,6 +19,14 @@ const BillSchema = new mongoose.Schema({
   },
 });
 
-const Bill = mongoose.model("Bill", BillSchema);
+BillSchema.set("toJSON", {
+  virtuals: true,
+  transform: function (doc, ret) {
+    delete ret._id;
+    delete ret.__v;
+  },
+});
+
+const Bill = model("Bill", BillSchema);
 
 export default Bill;

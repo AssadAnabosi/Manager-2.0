@@ -4,7 +4,8 @@ const router = Router();
 import * as controller from "../controllers/bill.controller.js";
 import catchError from "../utils/catchError.js";
 
-import { hasLevel3Access } from "../middleware/auth.middleware.js";
+import { authorize } from "../middleware/auth.middleware.js";
+import { ADMIN, MODERATOR } from "../utils/constants/userRoles.js";
 import * as validator from "../middleware/validators/bill.validator.js";
 import { validateParamID } from "../middleware/reqValidators.middleware.js";
 
@@ -12,11 +13,11 @@ import { validateParamID } from "../middleware/reqValidators.middleware.js";
 
 router
   .route("/")
-  // @access  Private (Level 2)
+  // @access  Spec, Mod, Admin
   .get(catchError(controller.getBills))
-  // @access  Private (Level 3)
+  // @access  Mod, Admin
   .post(
-    hasLevel3Access,
+    authorize([MODERATOR, ADMIN]),
     validator.validateCreateBill,
     catchError(controller.createBill)
   );
@@ -26,11 +27,11 @@ router
 router
   .route("/:billID")
   .all(validateParamID("billID"))
-  // @access  Private (Level 2)
+  // @access  Spec, Mod, Admin
   .get(catchError(controller.getBill))
-  // @access  Private (Level 3)
-  .put(hasLevel3Access, catchError(controller.updateBill))
-  // @access  Private (Level 3)
-  .delete(hasLevel3Access, catchError(controller.deleteBill));
+  // @access  Mod, Admin
+  .put(authorize([MODERATOR, ADMIN]), catchError(controller.updateBill))
+  // @access  Mod, Admin
+  .delete(authorize([MODERATOR, ADMIN]), catchError(controller.deleteBill));
 
 export default router;
