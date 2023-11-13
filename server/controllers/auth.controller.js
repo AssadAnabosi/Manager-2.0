@@ -39,7 +39,7 @@ export const login = async (req, res, next) => {
     );
   }
   //  Valid User
-  return sendTokens(user, statusCode.OK, res);
+  return sendTokens(user, req.ip_address, statusCode.OK, res);
 };
 
 // @desc    Refresh a user's access token
@@ -120,7 +120,7 @@ export const getMe = async (req, res, next) => {
 };
 
 // @desc   Tokens Generator
-const sendTokens = async (user, statusCode, res) => {
+const sendTokens = async (user, ipAddress, statusCode, res) => {
   const accessToken = user.getAccessToken();
   const refreshToken = user.getRefreshToken();
 
@@ -129,7 +129,7 @@ const sendTokens = async (user, statusCode, res) => {
 
   await Session.create({
     refreshToken,
-    ipAddress: req.ip_address,
+    ipAddress: ipAddress,
     user: user._id,
     expiresAt: Date.now() + maxAge,
   });
