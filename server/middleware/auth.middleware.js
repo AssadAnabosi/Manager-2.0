@@ -64,7 +64,9 @@ export const authorize = (userRoles = []) => {
   userRoles = typeof userRoles === "string" ? [userRoles] : userRoles;
 
   return async (req, res, next) => {
-    await isAuth(req, res, () => {
+    await isAuth(req, res, (error) => {
+      if (error)
+        return next(error);
       if (userRoles.length && !userRoles.includes(req.user.role)) {
         return next(
           new ResponseError(
@@ -84,7 +86,9 @@ export const notAuthorized = (userRoles = []) => {
   userRoles = typeof userRoles === "string" ? [userRoles] : userRoles;
 
   return async (req, res, next) => {
-    await isAuth(req, res, () => {
+    await isAuth(req, res, (error) => {
+      if (error)
+        return next(error);
       if (userRoles.length && userRoles.includes(req.user.role)) {
         return next(
           new ResponseError(
