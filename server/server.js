@@ -1,3 +1,5 @@
+console.log(`Environment: ${process.env.NODE_ENV}  🏳️`);
+
 import dotenv from "dotenv";
 if (process.env.NODE_ENV !== "production")
   dotenv.config({
@@ -16,8 +18,42 @@ const server = app.listen(PORT, () => {
   console.log(`Server has started on PORT: ${PORT} 🎉`);
 });
 
-process.on("unhandledRejection", (err, promise) => {
-  console.log(`⚠️  Logged Error: \n${err}`);
+process.on("unhandledRejection", (reason, promise) => {
+  console.log(`⚠️  Unhandled Rejection}`);
+  console.log(`📌  Promise(at): ${promise}`);
+  console.log(`📌  Reason: ${reason}`);
   server.close(() => process.exit(1));
-  console.log(`☢️  Server Closed`);
+});
+
+process.on("uncaughtException", (exception, origin) => {
+  console.log(`⚠️  Uncaught Exception}`);
+  console.log(`📌  Caught exception: ${exception}`);
+  console.log(`📌  Exception origin: ${origin}`);
+  server.close(() => process.exit(1));
+});
+
+process.on("SIGTERM", () => {
+  console.log("⚠️  SIGTERM received. Shutting down gracefully");
+  server.close(() => {
+    console.log(`☢️  Server Closed`);
+  });
+});
+
+process.on("SIGINT", () => {
+  console.log("⚠️  SIGINT received. Shutting down gracefully");
+  server.close(() => {
+    console.log(`☢️  Server Closed`);
+  });
+});
+
+process.on("SIGUSR2", () => {
+  console.log("⚠️  SIGUSR2 received. Shutting down gracefully");
+  server.close(() => {
+    console.log(`☢️  Server Closed`);
+  });
+});
+
+process.on("exit", () => {
+  console.log(`☢️  Server Closed}`);
+  console.log(`☢️  Process Exited}`);
 });

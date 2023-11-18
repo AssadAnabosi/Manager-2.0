@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // @desc    Serving API routes
-app.use("/api", APIRoutes);
+app.use("/", APIRoutes);
 
 // @desc    Error Handler
 // @warn    Must be the last middleware

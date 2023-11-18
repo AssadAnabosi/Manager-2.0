@@ -14,12 +14,20 @@ import { authorize, notAuthorized } from "../middleware/auth.middleware.js";
 import { USER } from "../utils/constants/userRoles.js";
 import { OK, NOT_FOUND } from "../utils/constants/statusCodes.js";
 
-// @desc    Health Check route, used for monitoring
-router.use("/health", (req, res) => {
+router.get("/", (req, res) => {
   return res.status(OK).json({
     success: true,
     message: "What are you doing here ?",
+    data: {
+      version: "2.0.0",
+      environment: process.env.NODE_ENV,
+    },
   });
+});
+
+// @desc    Health Check route, used for monitoring
+router.use("/health", (req, res) => {
+  return res.sendStatus(OK);
 });
 
 // @desc    Routes
