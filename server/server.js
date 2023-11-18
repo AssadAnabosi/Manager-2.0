@@ -19,14 +19,14 @@ const server = app.listen(PORT, () => {
 });
 
 process.on("unhandledRejection", (reason, promise) => {
-  console.log(`⚠️  Unhandled Rejection}`);
-  console.log(`📌  Promise(at): ${promise}`);
+  console.log(`⚠️  Unhandled Rejection`);
   console.log(`📌  Reason: ${reason}`);
+  console.log(`📌  Promise(at): ${JSON.stringify(promise)}`);
   server.close(() => process.exit(1));
 });
 
 process.on("uncaughtException", (exception, origin) => {
-  console.log(`⚠️  Uncaught Exception}`);
+  console.log(`⚠️  Uncaught Exception`);
   console.log(`📌  Caught exception: ${exception}`);
   console.log(`📌  Exception origin: ${origin}`);
   server.close(() => process.exit(1));
@@ -54,6 +54,6 @@ process.on("SIGUSR2", () => {
 });
 
 process.on("exit", () => {
-  console.log(`☢️  Server Closed}`);
-  console.log(`☢️  Process Exited}`);
+  console.log(`☢️  Server Closed`);
+  console.log(`☢️  Process Exited`);
 });
