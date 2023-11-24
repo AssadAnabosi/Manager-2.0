@@ -126,7 +126,9 @@ const Bills = () => {
       <Separator />
       {/* FILTER */}
       <div className="flex justify-end flex-wrap">
-        <Searchbox value={search} setValue={setSearch} />
+        <div className=" w-[100%] md:w-[335px]">
+          <Searchbox value={search} setValue={setSearch} />
+        </div>
       </div>
       {/* TABLE */}
       {!isLoading && !billsData.bills.length ? (

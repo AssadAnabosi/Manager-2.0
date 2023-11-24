@@ -7,7 +7,7 @@ const AvatarCombo = ({
 }: {
   fallback: React.ReactNode | string;
   title: string;
-  description: string | JSX.Element;
+  description?: string | JSX.Element;
 }) => {
   return (
     <div className="flex items-center">

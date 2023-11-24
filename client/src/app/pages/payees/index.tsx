@@ -1,11 +1,10 @@
 import { useState } from "react";
 import AvatarCombo from "@/components/component/avatar-combo";
-import { AvatarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
+import { PersonIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { DownloadIcon } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -52,7 +51,9 @@ const Payees = () => {
       <Separator />
       {/* FILTER */}
       <div className="flex justify-end flex-wrap">
-        <Searchbox value={search} setValue={setSearch} />
+        <div className=" w-[100%] md:w-[335px]">
+          <Searchbox value={search} setValue={setSearch} />
+        </div>
       </div>
       {/* TABLE */}
       {!isLoading && !payeesData.payees.length ? (
@@ -63,13 +64,13 @@ const Payees = () => {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[270px]">Payee</TableHead>
-              <TableHead className="w-[130px] text-center hidden md:table-cell">
-                Role
-              </TableHead>
-              <TableHead className="w-max hidden md:table-cell">
+              <TableHead className="hidden md:table-cell w-[300px]">
                 Contact Details
               </TableHead>
-              <TableHead className="w-[60px] lg:w-[130px]"></TableHead>
+              <TableHead className="hidden lg:table-cell w-max">
+                Remarks
+              </TableHead>
+              <TableHead className="w-max lg:w-[130px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -90,15 +91,9 @@ const InsertPayee = (payee: PayeeType) => {
     <TableRow key={payee.id} className="h-[73px]">
       <TableCell>
         <AvatarCombo
-          title={payee.fullName}
-          description={`@${payee.payeename}`}
-          fallback={<AvatarIcon className="h-5 w-5" />}
+          title={payee.name}
+          fallback={<PersonIcon className="h-5 w-5" />}
         ></AvatarCombo>
-      </TableCell>
-      <TableCell className="text-center">
-        <Badge className="hidden md:inline-block h-[25px] w-[100%]">
-          {payee.role}
-        </Badge>
       </TableCell>
       <TableCell className="hidden md:table-cell">
         <div className="flex flex-col space-y-1">
@@ -116,6 +111,7 @@ const InsertPayee = (payee: PayeeType) => {
           </a>
         </div>
       </TableCell>
+      <TableCell className="hidden lg:table-cell">{payee.remarks}</TableCell>
       <TableCell className="w-max text-right lg:hidden">
         <ActionDropdownMenu />
       </TableCell>
@@ -147,23 +143,14 @@ const SkeletonRow = (index: number) => {
           </div>
         </div>
       </TableCell>
-      <TableCell>
-        <Skeleton className="h-5 w-[65px] sm:w-[100%] sm:max-w-[65px] md:w-[65px] rounded-full " />
-      </TableCell>
       <TableCell className="hidden md:table-cell">
         <div className="space-y-1">
-          <Skeleton className="h-[14px] w-[100px] leading-none " />
+          <Skeleton className="h-[20px] w-[100px] leading-none " />
           <Skeleton className="h-[20px] w-[120px] " />
         </div>
       </TableCell>
-      <TableCell className="hidden md:table-cell">
-        <Skeleton className="h-5 w-[120px] rounded-full " />
-      </TableCell>
-      <TableCell className="hidden md:table-cell">
-        <Skeleton className="h-5 w-[100%] rounded-full " />
-      </TableCell>
       <TableCell className="hidden lg:table-cell">
-        <Skeleton className="h-5 w-[100%] rounded-full " />
+        <Skeleton className="h-5 w-[120px] rounded-full " />
       </TableCell>
       <TableCell className="hidden md:table-cell"></TableCell>
     </TableRow>

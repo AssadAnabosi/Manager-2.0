@@ -50,12 +50,14 @@ const CardIcon = () => (
 
 import Combobox from "@/components/component/combobox";
 import { toList } from "@/lib/utils";
+import Searchbox from "@/components/component/searchbox";
 
 const Cheques = () => {
   // chequesData.cheques=[];
   const payees = toList(payeesData.payees, "name");
   const dummy = [...Array(4)];
   const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("");
   const [date, setDate] = useState<DateRange>({
     from: getFirstDayOfCurrentMonth(),
     to: getLastDayOfCurrentMonth(),
@@ -110,11 +112,14 @@ const Cheques = () => {
         )}
       </div>
       <Separator />
-      <div className="flex justify-end flex-wrap">
+      <div className="flex justify-end gap-3">
+        <div className="w-[100%] md:w-[335px]">
+          <Searchbox value={search} setValue={setSearch} />
+        </div>
         <Combobox
           list={payees}
-          search={search}
-          setSearch={setSearch}
+          search={filter}
+          setSearch={setFilter}
           placeholder="Select payee..."
         />
       </div>
