@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useAuth } from "./auth-provider";
 
 export type Theme = "dark" | "light" | "system";
 
@@ -23,11 +24,13 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 export function ThemeProvider({
   children,
   defaultTheme = "system",
-  storageKey = "vite-ui-theme",
+  storageKey = "ui-theme",
   ...props
 }: ThemeProviderProps) {
+  const { user } = useAuth();
   const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
+    () =>
+      (localStorage.getItem(storageKey) as Theme) || user?.theme || defaultTheme
   );
 
   useEffect(() => {
