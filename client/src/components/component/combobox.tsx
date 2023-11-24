@@ -42,13 +42,13 @@ const Combobox = ({
         >
           {search
             ? list.find((framework) => framework.value === search)?.label
-            : "Select worker..."}
+            : placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="md:w-[335px] p-0">
         <Command>
-          <CommandInput placeholder={placeholder} />
+          <CommandInput placeholder="Search..." />
           <CommandEmpty>No matching results.</CommandEmpty>
           <CommandGroup>
             {list.map((item) => (
