@@ -97,18 +97,22 @@ const InsertPayee = (payee: PayeeType) => {
       </TableCell>
       <TableCell className="hidden md:table-cell">
         <div className="flex flex-col space-y-1">
-          <a
-            className="font-bold hover:cursor-pointer"
-            href={`mailto:${payee.email}`}
-          >
-            {payee.email}
-          </a>
-          <a
-            className="text-muted-foreground hover:cursor-pointer"
-            href={`tel:${payee.phoneNumber}`}
-          >
-            {payee.phoneNumber}
-          </a>
+          <p>
+            <a
+              className="font-bold hover:cursor-pointer"
+              href={`mailto:${payee.email}`}
+            >
+              {payee.email}
+            </a>
+          </p>
+          <p>
+            <a
+              className="text-muted-foreground hover:cursor-pointer"
+              href={`tel:${payee.phoneNumber}`}
+            >
+              {payee.phoneNumber}
+            </a>
+          </p>
         </div>
       </TableCell>
       <TableCell className="hidden lg:table-cell">{payee.remarks}</TableCell>

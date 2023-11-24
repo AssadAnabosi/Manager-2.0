@@ -97,25 +97,27 @@ const InsertUser = (user: UserType) => {
           fallback={<AvatarIcon className="h-7 w-7" />}
         ></AvatarCombo>
       </TableCell>
-      <TableCell className="text-center">
-        <Badge className="hidden md:inline-block h-[25px] w-[100%]">
-          {user.role}
-        </Badge>
+      <TableCell className="text-center hidden md:table-cell">
+        <Badge className="inline-block h-[25px] w-[100%]">{user.role}</Badge>
       </TableCell>
       <TableCell className="hidden md:table-cell">
         <div className="flex flex-col space-y-1">
-          <a
-            className="font-bold hover:cursor-pointer"
-            href={`mailto:${user.email}`}
-          >
-            {user.email}
-          </a>
-          <a
-            className="text-muted-foreground hover:cursor-pointer"
-            href={`tel:${user.phoneNumber}`}
-          >
-            {user.phoneNumber}
-          </a>
+          <p>
+            <a
+              className="font-bold hover:cursor-pointer"
+              href={`mailto:${user.email}`}
+            >
+              {user.email}
+            </a>
+          </p>
+          <p>
+            <a
+              className="text-muted-foreground hover:cursor-pointer"
+              href={`tel:${user.phoneNumber}`}
+            >
+              {user.phoneNumber}
+            </a>
+          </p>
         </div>
       </TableCell>
       <TableCell className="w-max text-right lg:hidden">
