@@ -9,7 +9,8 @@ import { useAuth } from "@/providers/auth-provider";
 import { useState } from "react";
 import axios from "@/api/axios";
 import { useTheme } from "@/providers/theme-provider";
-import Layout from "./layout";
+import Layout from "@/app/layout";
+
 function Login() {
   const { setTheme } = useTheme();
   const { user, setUser } = useAuth();
@@ -50,7 +51,7 @@ function Login() {
     } finally {
       // set theme and language
       // i18n.changeLanguage(user.language);
-      setTheme(user.theme);
+      // setTheme(user.theme);
     }
   };
 
