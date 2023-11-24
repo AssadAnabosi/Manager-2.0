@@ -1,7 +1,6 @@
 import Log from "../models/Log.model.js";
 import Worker from "../models/User.model.js";
 import ResponseError from "../utils/responseError.js";
-import ObjectID from "../utils/ObjectID.js";
 import * as statusCode from "../utils/constants/statusCodes.js";
 import ReqQueryHelper from "../helpers/reqQuery.helper.js";
 import * as queryHelper from "../helpers/queries/logs.queries.js";
@@ -10,14 +9,14 @@ import { USER } from "../utils/constants/userRoles.js";
 // @desc    Get all logs
 export const getLogs = async (req, res) => {
   const { startDate, endDate, search } = ReqQueryHelper(req.query);
-  const filter = queryHelper.findLogs({ search, startDate, endDate });
+  const filter = queryHelper.findLogs({
+    userRole: req.user.role,
+    startDate,
+    endDate,
+    search,
+  });
 
-  //  Filter logs by requested user if the user role is USER
-  if (req.user.role === USER) {
-    filter.unshift({ $match: { worker: ObjectID(req.user.id) } });
-  }
-
-  const logs = await Log.aggregate(filter).sort({ date: -1 });
+  const logs = await Log.aggregate(filter);
 
   const _id = logs.map(({ id }) => id);
 

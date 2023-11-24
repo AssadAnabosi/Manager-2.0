@@ -8,7 +8,7 @@ export const getBills = async (req, res) => {
   const { startDate, endDate, search } = ReqQueryHelper(req.query);
   const bills = await Bill.aggregate(
     queryHelper.findBills(startDate, endDate, search)
-  ).sort({ date: -1 });
+  );
 
   const _id = bills.map(({ id }) => id);
 

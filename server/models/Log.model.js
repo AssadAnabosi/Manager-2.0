@@ -7,7 +7,7 @@ const LogSchema = new Schema({
   },
   isAbsent: {
     type: Boolean,
-    default: false,
+    required: true,
   },
   startingTime: {
     type: String,

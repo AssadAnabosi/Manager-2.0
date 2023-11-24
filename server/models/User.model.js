@@ -3,6 +3,12 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
 import userRoles, { USER } from "../utils/constants/userRoles.js";
+import {
+  THEMES,
+  LANGUAGES,
+  SYSTEM,
+  AR,
+} from "../utils/constants/preferences.js";
 
 const UserSchema = new Schema({
   firstName: {
@@ -47,6 +53,16 @@ const UserSchema = new Schema({
   active: {
     type: Boolean,
     default: true,
+  },
+  theme: {
+    type: String,
+    enum: THEMES,
+    default: SYSTEM,
+  },
+  language: {
+    type: String,
+    enum: LANGUAGES,
+    default: AR,
   },
 });
 

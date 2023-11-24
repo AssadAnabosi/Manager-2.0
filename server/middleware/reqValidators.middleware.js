@@ -9,7 +9,7 @@ export const reqBodyIncludes = (rules) => {
   return function validateBody(req, res, next) {
     rules = typeof rules === "string" ? [rules] : rules;
     for (const rule of rules) {
-      if (!req.body[rule]) {
+      if (typeof req.body[rule] === "undefined") {
         return next(
           new ResponseError(
             `Please provide ${rule} in your request's body`,
@@ -26,7 +26,7 @@ export const reqBodyExcludes = (rules) => {
   rules = typeof rules === "string" ? [rules] : rules;
   return function validateBody(req, res, next) {
     for (const rule of rules) {
-      if (req.body[rule] !== undefined) {
+      if (typeof req.body[rule] !== undefined) {
         return next(
           new ResponseError(
             `You are not authorized to update the ${rule} field`,

@@ -4,6 +4,7 @@ import ResponseError from "../utils/responseError.js";
 import userRoles from "../utils/constants/userRoles.js";
 import * as statusCode from "../utils/constants/statusCodes.js";
 import Log from "../models/Log.model.js";
+import { THEMES, LANGUAGES } from "../utils/constants/preferences.js";
 
 // @desc    Register a new user
 export const registerUser = async (req, res) => {
@@ -78,7 +79,7 @@ export const deleteUser = async (req, res) => {
 };
 
 // @desc    User changing own password
-export const changePassword = async (req, res) => {
+export const updatePassword = async (req, res) => {
   const { currentPassword, newPassword } = req.body;
 
   const user = await User.findById(req.user.id).select("+password");
@@ -94,6 +95,40 @@ export const changePassword = async (req, res) => {
   return res.status(statusCode.OK).json({
     success: true,
     message: "Password changed successfully",
+  });
+};
+
+// @desc    User updating own preferences
+export const updatePreferences = async (req, res) => {
+  const { theme, language } = req.body;
+
+  if (!THEMES.includes(theme))
+    throw new ResponseError(
+      `Invalid theme [${THEMES.toString()}]`,
+      statusCode.BAD_REQUEST
+    );
+  if (!LANGUAGES.includes(language))
+    throw new ResponseError(
+      `Invalid language [${LANGUAGES.toString()}]`,
+      statusCode.BAD_REQUEST
+    );
+
+  await User.findByIdAndUpdate(
+    req.user.id,
+    { theme, language },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  return res.status(statusCode.OK).json({
+    success: true,
+    message: "Preferences updated successfully",
+    data: {
+      theme,
+      language,
+    },
   });
 };
 

@@ -31,9 +31,15 @@ router.post(
 );
 
 router.patch(
-  "/change-password",
-  validator.validateChangePassword,
-  catchError(controller.changePassword)
+  "/update-password",
+  validator.validateUpdatePassword,
+  catchError(controller.updatePassword)
+);
+
+router.patch(
+  "/update-preferences",
+  validator.validateUpdatePreferences,
+  catchError(controller.updatePreferences)
 );
 
 // @routes api/users/:userID

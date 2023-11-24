@@ -1,7 +1,11 @@
 import ObjectID from "../../utils/ObjectID.js";
+import { USER } from "../../utils/constants/userRoles.js";
 
-export const findLogs = ({ search, startDate, endDate }) => {
+export const findLogs = ({ userRole, search, startDate, endDate }) => {
   const filter = [];
+  if (userRole === USER) {
+    filter.push({ $match: { worker: ObjectID(req.user.id) } });
+  }
   if (startDate) {
     filter.push({ $match: { date: { $gte: startDate } } });
   }
@@ -22,17 +26,22 @@ export const findLogs = ({ search, startDate, endDate }) => {
     },
     {
       $addFields: {
-        "worker.name": {
+        "worker.fullName": {
           $concat: ["$worker.firstName", " ", "$worker.lastName"],
         },
       },
     }
   );
-  if (search) {
+  if (userRole !== USER && search) {
     filter.push({
-      $match: { "worker.name": { $regex: search, $options: "i" } },
+      $match: { "worker.fullName": { $regex: search, $options: "i" } },
     });
   }
+  filter.push({
+    $sort: {
+      date: -1,
+    },
+  });
   filter.push({
     $project: {
       _id: 0,
