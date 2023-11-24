@@ -191,7 +191,7 @@ const Logs = () => {
                 Payment
               </TableHead>
               <TableHead className="hidden lg:table-cell w-max">
-                Extra Notes
+                Remarks
               </TableHead>
               <TableHead className="hidden md:table-cell md:w-[60px] 2xl:w-[130px]"></TableHead>
             </TableRow>
@@ -240,7 +240,7 @@ const InsertLog = (log: LogType) => {
         {log.startingTime} - {log.finishingTime} ({log.OTV})
       </TableCell>
       <TableCell className="hidden md:table-cell">₪ {log.payment}</TableCell>
-      <TableCell className="hidden lg:table-cell">{log.extraNotes}</TableCell>
+      <TableCell className="hidden lg:table-cell">{log.remarks}</TableCell>
       <TableCell className="hidden md:table-cell 2xl:hidden">
         <ActionDropdownMenu />
       </TableCell>

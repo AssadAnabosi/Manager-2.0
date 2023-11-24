@@ -33,14 +33,14 @@ export const getBills = async (req, res) => {
 
 // @desc    Create a bill
 export const createBill = async (req, res) => {
-  let { date, value, description, extraNotes } = req.body;
+  let { date, value, description, remarks } = req.body;
   date = new Date(date);
   date.setUTCHours(0, 0, 0, 0);
   await Bill.create({
     date,
     value,
     description,
-    extraNotes,
+    remarks,
   });
 
   return res.sendStatus(statusCode.CREATED);

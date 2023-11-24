@@ -28,7 +28,7 @@ const LogSchema = new Schema({
     default: 0,
     required: false,
   },
-  extraNotes: {
+  remarks: {
     type: String,
     required: false,
   },

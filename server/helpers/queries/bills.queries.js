@@ -17,7 +17,7 @@ export const findBills = (startDate, endDate, search) => {
       $match: {
         $or: [
           { description: { $regex: search, $options: "i" } },
-          { extraNotes: { $regex: search, $options: "i" } },
+          { remarks: { $regex: search, $options: "i" } },
         ],
       },
     });
@@ -34,7 +34,7 @@ export const findBills = (startDate, endDate, search) => {
       date: 1,
       value: 1,
       description: 1,
-      extraNotes: 1,
+      remarks: 1,
     },
   });
   return filter;

@@ -9,7 +9,7 @@ export const getPayees = async (req, res) => {
   const payees = await Payee.find({
     $or: [
       { name: { $regex: search, $options: "i" } },
-      { extraNotes: { $regex: search, $options: "i" } },
+      { remarks: { $regex: search, $options: "i" } },
     ],
   });
 
@@ -24,13 +24,13 @@ export const getPayees = async (req, res) => {
 
 // @desc    Create a payee
 export const createPayee = async (req, res) => {
-  const { name, email, phoneNumber, extraNotes } = req.body;
+  const { name, email, phoneNumber, remarks } = req.body;
 
   await Payee.create({
     name,
     email,
     phoneNumber,
-    extraNotes,
+    remarks,
   });
 
   return res.sendStatus(statusCode.CREATED);

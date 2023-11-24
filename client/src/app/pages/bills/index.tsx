@@ -154,9 +154,7 @@ const Bills = () => {
               <TableHead className="hidden md:table-cell">
                 Description
               </TableHead>
-              <TableHead className="hidden lg:table-cell">
-                Extra Notes
-              </TableHead>
+              <TableHead className="hidden lg:table-cell">Remarks</TableHead>
               <TableHead className="hidden md:table-cell md:w-[60px] lg:w-[130px]"></TableHead>
             </TableRow>
           </TableHeader>
@@ -185,7 +183,7 @@ const InsertBill = (bill: BillType) => {
       </TableCell>
       <TableCell className="table-cell">₪ {bill.value}</TableCell>
       <TableCell className="hidden md:table-cell">{bill.description}</TableCell>
-      <TableCell className="hidden lg:table-cell">{bill.extraNotes}</TableCell>
+      <TableCell className="hidden lg:table-cell">{bill.remarks}</TableCell>
       <TableCell className="text-right hidden md:table-cell lg:hidden">
         <ActionDropdownMenu />
       </TableCell>

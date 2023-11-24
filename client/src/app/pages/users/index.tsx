@@ -92,7 +92,7 @@ const InsertUser = (user: UserType) => {
         <AvatarCombo
           title={user.fullName}
           description={`@${user.username}`}
-          fallback={<AvatarIcon className="h-5 w-5" />}
+          fallback={<AvatarIcon className="h-7 w-7" />}
         ></AvatarCombo>
       </TableCell>
       <TableCell className="text-center">

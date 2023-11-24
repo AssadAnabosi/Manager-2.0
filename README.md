@@ -29,13 +29,13 @@ This app is built upon the need for a database for my family's own workshop, so 
   - **finishingTime**: is the time that the work finished.
   - **OTV**: is the amount of overtime that the worker worked.
   - **payment**: is the amount of money that the worker got paid.
-  - **extraNotes**: is an optional extra notes about the work.
+  - **remarks**: is an optional extra notes about the work.
   - **worker**`*`: is the worker who this log is associated with.
 - **Payee**: is the person or company that the **Cheque** is made out to.
   - **name**`*`: is the name of the payee.
   - **email**: is the email of the payee.
   - **phoneNumber**: is the phone number of the payee.
-  - **extraNotes**: is an optional extra notes about the payee.
+  - **remarks**: is an optional extra notes about the payee.
 - **Cheque**: is the payment method that is used to pay the **Payee**.
   - **serial**`*`: is the number that is written on the cheque.
   - **dueDate**`*`: is the date that the cheque is due to be cashed.
@@ -47,7 +47,7 @@ This app is built upon the need for a database for my family's own workshop, so 
   - **date**`*`: is the date that the bill was made.
   - **value**`*`: is the amount that the bill is for.
   - **description**`*`: is the description of the bill.
-  - **extraNotes**: is an optional extra notes about the bill.
+  - **remarks**: is an optional extra notes about the bill.
 - **Session**: is the record of the sessions that are made by the users.
   - **refreshToken**`*`: is the refresh token that is used to generate new access tokens.
   - **user**`*`: is the user that the refresh token is associated with.

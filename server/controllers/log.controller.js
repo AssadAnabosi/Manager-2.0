@@ -47,7 +47,7 @@ export const getLogs = async (req, res) => {
 
 // @desc    Create a log
 export const createLog = async (req, res) => {
-  let { date, isAbsent, startingTime, finishingTime, payment, extraNotes } =
+  let { date, isAbsent, startingTime, finishingTime, payment, remarks } =
     req.body;
   date = new Date(date);
   date.setUTCHours(0, 0, 0, 0);
@@ -74,7 +74,7 @@ export const createLog = async (req, res) => {
     startingTime,
     finishingTime,
     payment,
-    extraNotes,
+    remarks,
   });
   await log.save();
 

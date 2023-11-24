@@ -18,7 +18,7 @@ export type LogType = {
   finishingTime: string;
   OTV: number;
   payment: number;
-  extraNotes: string;
+  remarks: string;
   worker: {
     id: string;
     fullName: string;
@@ -30,7 +30,7 @@ export type BillType = {
   date: Date | string;
   value: number;
   description: string;
-  extraNotes: string;
+  remarks: string;
 };
 
 export type ChequeType = {
@@ -48,12 +48,8 @@ export type ChequeType = {
 
 export type PayeeType = {
   id: string;
-  fullName: string;
-  username: string;
+  name: string;
   email: string;
   phoneNumber: string;
-  role: string;
-  active: boolean;
-  theme: string;
-  language: string;
+  remarks: string;
 };
