@@ -1,12 +1,14 @@
 import ObjectID from "../../utils/ObjectID.js";
 
-export const findCheques = ({ search, startDate, endDate }) => {
+export const findCheques = ({ search, startDate, endDate, filter: payee }) => {
   const filter = [];
+  const serial = parseInt(search) | 0;
+  const dueDateFilter = {};
   if (startDate) {
-    filter.push({ $match: { dueDate: { $gte: startDate } } });
+    dueDateFilter.$gte = startDate;
   }
   if (endDate) {
-    filter.push({ $match: { dueDate: { $lte: endDate } } });
+    dueDateFilter.$lte = endDate;
   }
   filter.push({
     $lookup: {
@@ -22,16 +24,23 @@ export const findCheques = ({ search, startDate, endDate }) => {
       preserveNullAndEmptyArrays: true,
     },
   });
-  if (search) {
-    filter.push({
-      $match: {
-        $or: [
-          { "payee.name": { $regex: search, $options: "i" } },
-          { serial: { $eq: parseInt(search) } },
-        ],
-      },
-    });
-  }
+  filter.push({
+    $match: {
+      $or: [
+        {
+          serial: { $eq: serial },
+        },
+        {
+          $and: [
+            { dueDate: dueDateFilter },
+            {
+              "payee.name": { $regex: payee, $options: "i" },
+            },
+          ],
+        },
+      ],
+    },
+  });
   filter.push({
     $project: {
       _id: 0,

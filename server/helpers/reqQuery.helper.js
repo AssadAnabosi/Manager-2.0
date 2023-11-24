@@ -2,6 +2,8 @@ export default (query) => {
   const { start, end } = query;
   let search = query.search || "";
   search = search.trim();
+  let filter = query.filter || "";
+  filter = filter.trim();
 
   let startDate = getFirstDayOfCurrentMonth(new Date());
   let endDate = getLastDayOfCurrentMonth(new Date());
@@ -18,7 +20,7 @@ export default (query) => {
     endDate.setHours(23, 59, 59, 999);
   }
 
-  return { startDate, endDate, search };
+  return { startDate, endDate, search, filter };
 };
 
 const getFirstDayOfCurrentMonth = (date) => {

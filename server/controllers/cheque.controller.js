@@ -7,8 +7,18 @@ import * as queryHelper from "../helpers/queries/cheques.queries.js";
 
 // @desc    Get all Cheques
 export const getCheques = async (req, res) => {
-  const { startDate, endDate, search } = ReqQueryHelper(req.query);
-  const filter = queryHelper.findCheques({ search, startDate, endDate });
+  const {
+    startDate,
+    endDate,
+    filter: payee,
+    search,
+  } = ReqQueryHelper(req.query);
+  const filter = queryHelper.findCheques({
+    search,
+    startDate,
+    endDate,
+    filter: payee,
+  });
 
   const cheques = await Cheque.aggregate(filter);
 
