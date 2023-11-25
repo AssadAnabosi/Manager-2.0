@@ -38,9 +38,19 @@ export const currencyFormatter = (amount: any) => {
   if (typeof amount !== "number") {
     amount = 0;
   }
-  const formatter = new Intl.NumberFormat("en-gb", {
+  const locale = document.documentElement.lang === "en" ? "en-gb" : "ar-ae";
+  const formatter = new Intl.NumberFormat(locale, {
     currency: "ILS",
     style: "currency",
   });
   return formatter.format(amount);
+};
+
+export const numberFormatter = (number: any) => {
+  if (typeof number !== "number") {
+    number = 0;
+  }
+  const formatter = new Intl.NumberFormat("ar-ae");
+
+  return formatter.format(number);
 };

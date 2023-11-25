@@ -31,6 +31,7 @@ import {
   getLastDayOfCurrentMonth,
   toList,
   currencyFormatter,
+  numberFormatter,
 } from "@/lib/utils";
 
 import logsData from "@/data/logs.json";
@@ -69,7 +70,6 @@ const Logs = () => {
             </Button>
           </div>
         </div>
-        {/* <button className="w-full md:w-auto">test</button> */}
       </div>
       <Separator />
       {/* CARDS */}
@@ -122,7 +122,9 @@ const Logs = () => {
                 <ClockIcon />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{logsData.OTVSum}</div>
+                <div className="text-2xl font-bold">
+                  {numberFormatter(logsData.OTVSum)}
+                </div>
                 <p className="text-xs text-muted-foreground">
                   {t(
                     "Expected 8-hour workday; extra hours receive positive, fewer hours negative."

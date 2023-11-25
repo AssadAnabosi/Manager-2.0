@@ -19,7 +19,7 @@ import {
   TrashIcon,
 } from "@radix-ui/react-icons";
 
-import { currencyFormatter } from "@/lib/utils";
+import { currencyFormatter, numberFormatter } from "@/lib/utils";
 
 const Row = (log: LogType) => {
   return (
@@ -51,7 +51,7 @@ const Row = (log: LogType) => {
         )}
       </TableCell>
       <TableCell className="hidden md:table-cell">
-        {log.startingTime} - {log.finishingTime} ({log.OTV})
+        {log.startingTime} - {log.finishingTime} ({numberFormatter(log.OTV)})
       </TableCell>
       <TableCell className="hidden md:table-cell">
         {currencyFormatter(log.payment)}
