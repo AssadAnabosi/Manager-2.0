@@ -19,7 +19,7 @@ export type SideNavItem = {
 export const SIDENAV_ITEMS: SideNavItem[] = [
   {
     title: "Worksheets",
-    path: "/logs",
+    path: "/worksheets",
     icon: <ArchiveIcon className="h-5 w-5 mr-5" />,
   },
   {

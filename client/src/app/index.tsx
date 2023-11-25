@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
 import Login from "@/app/pages/login";
-import Logs from "@/app/pages/logs";
+import Logs from "@/app/pages/timesheets";
 import Bills from "@/app/pages/bills";
 import Cheques from "@/app/pages/cheques";
 import Users from "@/app/pages/users";

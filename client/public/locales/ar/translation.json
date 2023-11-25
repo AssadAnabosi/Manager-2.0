@@ -56,8 +56,9 @@
   "Value": "القيمة",
   "Contact Details": "بيانات الاتصال",
 
-  "LOGS": "السجلات",
+  "TIMESHEETS": "السجلات",
 
+  "Work Timesheets": "سجلات العمل",
   "Days Worked": "ايام العمل",
   "This does include days worked less than 8-hours.": "هذا يشمل الايام التي تقل فيها ساعات العمل عن 8 ساعات.",
   "Received Payments": "الدفعات المستلمة",
@@ -65,7 +66,7 @@
   "Workday Variance: Balancing Hours": "موازنة ساعات العمل",
   "Expected 8-hour workday; extra hours receive positive, fewer hours negative.": "يتوقع 8 ساعات عمل ؛ ساعات اضافية موجبة ، اقل ساعات سالبة.",
   "Filter by worker": "تصفية حسب العامل",
-  "A list of logs": "قائمة السجلات",
+  "A list of timesheets": "قائمة السجلات",
   "Status": "الحالة",
   "Payment": "الدفعة",
 

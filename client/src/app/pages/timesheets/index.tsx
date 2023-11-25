@@ -57,7 +57,9 @@ const Logs = () => {
     <div className="flex-1 space-y-4 p-8 pt-6">
       {/* HEADER */}
       <div className="flex space-y-2 flex-col justify-between md:flex-row gap-5">
-        <h2 className="text-3xl font-bold tracking-tight">{t("Worksheets")}</h2>
+        <h2 className="text-3xl font-bold tracking-tight">
+          {t("Work Timesheets")}
+        </h2>
         <div className="flex space-x-2 rtl:space-x-reverse w-full md:w-auto">
           <DateRangePicker date={date} setDate={setDate} />
           <div className="hidden md:inline-block">
@@ -150,7 +152,7 @@ const Logs = () => {
             {date?.from ? (
               date.to ? (
                 <>
-                  {t("A list of logs")} {t("from")}{" "}
+                  {t("A list of timesheets")} {t("from")}{" "}
                   {format(date.from, "EEEE, dd/LL/y", {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}{" "}
@@ -161,14 +163,14 @@ const Logs = () => {
                 </>
               ) : (
                 <>
-                  {t("A list of logs")} {t("from")}{" "}
+                  {t("A list of timesheets")} {t("from")}{" "}
                   {format(date.from, "EEEE, dd/LL/y", {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}
                 </>
               )
             ) : (
-              <>{t("A list of logs")}</>
+              <>{t("A list of timesheets")}</>
             )}
           </TableCaption>
           <TableHeader>

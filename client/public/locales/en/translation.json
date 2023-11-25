@@ -56,8 +56,9 @@
   "Value": "Value",
   "Contact Details": "Contact Details",
 
-  "LOGS": "LOGS",
+  "TIMESHEETS": "TIMESHEETS",
 
+  "Work Timesheets": "Work Timesheets",
   "Days Worked": "Days Worked",
   "This does include days worked less than 8-hours.": "This does include days worked less than 8-hours.",
   "Received Payments": "Received Payments",
@@ -65,7 +66,7 @@
   "Workday Variance: Balancing Hours": "Workday Variance: Balancing Hours",
   "Expected 8-hour workday; extra hours receive positive, fewer hours negative.": "Expected 8-hour workday; extra hours receive positive, fewer hours negative.",
   "Filter by worker": "Filter by worker",
-  "A list of logs": "A list of logs",
+  "A list of timesheets": "A list of timesheets",
   "Status": "Status",
   "Payment": "Payment",
 
