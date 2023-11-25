@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   PopoverTrigger,
   PopoverContent,
@@ -18,8 +19,10 @@ import { useTranslation } from "react-i18next";
 
 function SettingsGear() {
   const { t, i18n } = useTranslation();
+  const [open, setOpen] = useState(false);
   const handleLanguageChange = (lang: string) => {
     i18n.changeLanguage(lang.substring(0, 2));
+    setOpen(false);
   };
   const { setTheme, theme } = useTheme();
   const lang = document.documentElement.lang.substring(0, 2);
@@ -28,7 +31,7 @@ function SettingsGear() {
   };
   return (
     <div className="absolute top-[25%] ltr:right-8 rtl:left-8">
-      <Popover>
+      <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger>
           <GearIcon className="h-7 w-7" />
         </PopoverTrigger>
