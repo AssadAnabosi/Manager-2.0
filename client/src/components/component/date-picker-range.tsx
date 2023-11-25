@@ -1,7 +1,7 @@
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { ar, enGB } from "date-fns/locale";
-import { DateRange, SelectRangeEventHandler } from "react-day-picker";
+import { SelectRangeEventHandler } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -16,16 +16,23 @@ import { useTranslation } from "react-i18next";
 
 type DatePickerWithRangeProps = {
   className?: string;
-  date: DateRange;
+  date: {
+    from: string | null | undefined;
+    to?: string | null | undefined;
+  };
   setDate: SelectRangeEventHandler | any;
 };
 
 export default function DatePickerWithRange({
   className,
-  date,
+  date: data,
   setDate,
 }: DatePickerWithRangeProps) {
   const { t } = useTranslation();
+  const date = {
+    from: data.from ? new Date(parseInt(data?.from)) : undefined,
+    to: data.to ? new Date(parseInt(data?.to)) : undefined,
+  };
   return (
     <div className={cn("grid gap-2 w-full", className)}>
       <Popover>

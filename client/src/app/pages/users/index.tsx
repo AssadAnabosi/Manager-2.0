@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { Separator } from "@/components/ui/separator";
@@ -21,10 +22,24 @@ import usersData from "@/data/users.json";
 import { DownloadIcon } from "@radix-ui/react-icons";
 
 const Users = () => {
-  const { t } = useTranslation();
   // usersData.users=[];
   const dummy = [...Array(8)];
-  const [search, setSearch] = useState("");
+  const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams({
+    search: "",
+  });
+
+  const search = searchParams.get("search") || "";
+  const setSearch = (value: string) => {
+    setSearchParams(
+      (prev) => {
+        prev.delete("search");
+        if (value) prev.set("search", value);
+        return prev;
+      },
+      { replace: true }
+    );
+  };
 
   // set is loading to true for 1500ms
   const [isLoading, setIsLoading] = useState(true);

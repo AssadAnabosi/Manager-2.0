@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
@@ -38,15 +39,46 @@ import logsData from "@/data/logs.json";
 import usersData from "@/data/users.json";
 
 const Logs = () => {
-  const { t } = useTranslation();
   // logsData.logs=[];
   const dummy = [...Array(8)];
-  const [search, setSearch] = useState("");
-  const workers = toList(usersData.users, "fullName");
-  const [date, setDate] = useState<DateRange>({
-    from: getFirstDayOfCurrentMonth(),
-    to: getLastDayOfCurrentMonth(),
+  const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams({
+    filter: "",
+    from: getFirstDayOfCurrentMonth().toString(),
+    to: getLastDayOfCurrentMonth().toString(),
   });
+
+  const filter = searchParams.get("filter") || "";
+  const setFilter = (value: string) => {
+    setSearchParams(
+      (prev) => {
+        prev.delete("filter");
+        if (value) prev.set("filter", value);
+        return prev;
+      },
+      { replace: true }
+    );
+  };
+
+  const date = {
+    from: searchParams.get("from"),
+    to: searchParams.get("to"),
+  };
+  const setDate = (date: DateRange) => {
+    setSearchParams(
+      (prev) => {
+        prev.delete("from");
+        prev.delete("to");
+        if (date) {
+          if (date.from) prev.set("from", date.from.getTime().toString());
+          if (date.to) prev.set("to", date.to.getTime().toString());
+        }
+        return prev;
+      },
+      { replace: true }
+    );
+  };
+  const workers = toList(usersData.users, "fullName");
 
   // set is loading to true for 1500ms
   const [isLoading, setIsLoading] = useState(true);
@@ -140,8 +172,8 @@ const Logs = () => {
       <div className="flex justify-end flex-wrap">
         <Combobox
           list={workers}
-          search={search}
-          setSearch={setSearch}
+          search={filter}
+          setSearch={setFilter}
           placeholder={t("Filter by worker")}
         />
       </div>
@@ -155,18 +187,18 @@ const Logs = () => {
               date.to ? (
                 <>
                   {t("A list of timesheets")} {t("from")}{" "}
-                  {format(date.from, "EEEE, dd/LL/y", {
+                  {format(Number(date.from), "EEEE, dd/LL/y", {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}{" "}
                   {t("to")}{" "}
-                  {format(date.to, "EEEE, dd/LL/y", {
+                  {format(Number(date.to), "EEEE, dd/LL/y", {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}
                 </>
               ) : (
                 <>
                   {t("A list of timesheets")} {t("from")}{" "}
-                  {format(date.from, "EEEE, dd/LL/y", {
+                  {format(Number(date.from), "EEEE, dd/LL/y", {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}
                 </>

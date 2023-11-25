@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -24,10 +25,24 @@ import { useTheme, Theme } from "@/providers/theme-provider";
 import { useTranslation } from "react-i18next";
 
 function Settings() {
-  const [value, setValue] = useState("password");
   const { t, i18n } = useTranslation();
   const { setTheme, theme } = useTheme();
   const lang = document.documentElement.lang.substring(0, 2);
+  const [searchParams, setSearchParams] = useSearchParams({
+    tab: "password",
+  });
+
+  const tab = searchParams.get("tab") || "";
+  const setTab = (value: string) => {
+    setSearchParams(
+      (prev) => {
+        prev.delete("tab");
+        if (value) prev.set("tab", value);
+        return prev;
+      },
+      { replace: true }
+    );
+  };
   const [input, setInput] = useState({
     theme: theme,
     lang: lang,
@@ -37,10 +52,6 @@ function Settings() {
   };
   const handleLanguageChange = (lang: string) => {
     setInput({ ...input, lang: lang.substring(0, 2) });
-  };
-
-  const handleValueChange = (value: string) => {
-    setValue(value);
   };
 
   const handlePresencesChange = () => {
@@ -54,8 +65,8 @@ function Settings() {
   return (
     <div className="flex justify-center items-center align-center my-auto">
       <Tabs
-        value={value}
-        onValueChange={handleValueChange}
+        value={tab}
+        onValueChange={setTab}
         defaultValue="password"
         className="w-[400px]"
       >

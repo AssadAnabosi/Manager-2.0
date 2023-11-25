@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
@@ -35,14 +36,45 @@ import {
 import billsData from "@/data/bills.json";
 
 const Bills = () => {
-  const { t } = useTranslation();
   // billsData.bills=[];
   const dummy = [...Array(8)];
-  const [search, setSearch] = useState("");
-  const [date, setDate] = useState<DateRange>({
-    from: getFirstDayOfCurrentMonth(),
-    to: getLastDayOfCurrentMonth(),
+  const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams({
+    search: "",
+    from: getFirstDayOfCurrentMonth().toString(),
+    to: getLastDayOfCurrentMonth().toString(),
   });
+
+  const search = searchParams.get("search") || "";
+  const setSearch = (value: string) => {
+    setSearchParams(
+      (prev) => {
+        prev.delete("search");
+        if (value) prev.set("search", value);
+        return prev;
+      },
+      { replace: true }
+    );
+  };
+
+  const date = {
+    from: searchParams.get("from"),
+    to: searchParams.get("to"),
+  };
+  const setDate = (date: DateRange) => {
+    setSearchParams(
+      (prev) => {
+        prev.delete("from");
+        prev.delete("to");
+        if (date) {
+          if (date.from) prev.set("from", date.from.getTime().toString());
+          if (date.to) prev.set("to", date.to.getTime().toString());
+        }
+        return prev;
+      },
+      { replace: true }
+    );
+  };
 
   // set is loading to true for 1500ms
   const [isLoading, setIsLoading] = useState(true);
@@ -129,18 +161,18 @@ const Bills = () => {
               date.to ? (
                 <>
                   {t("A list of bills")} {t("from")}{" "}
-                  {format(date.from, "EEEE, dd/LL/y", {
+                  {format(Number(date.from), "EEEE, dd/LL/y", {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}{" "}
                   {t("to")}{" "}
-                  {format(date.to, "EEEE, dd/LL/y", {
+                  {format(Number(date.to), "EEEE, dd/LL/y", {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}
                 </>
               ) : (
                 <>
                   {t("A list of bills")} {t("from")}{" "}
-                  {format(date.from, "EEEE, dd/LL/y", {
+                  {format(Number(date.from), "EEEE, dd/LL/y", {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}
                 </>
