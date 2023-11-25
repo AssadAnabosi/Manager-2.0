@@ -1,32 +1,30 @@
 import { useState } from "react";
-import AvatarCombo from "@/components/component/avatar-combo";
-import { PersonIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
+import { useTranslation } from "react-i18next";
+
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { DownloadIcon } from "lucide-react";
 import {
   Table,
   TableBody,
   TableCaption,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { PayeeType } from "@/types";
+import Searchbox from "@/components/component/searchbox";
+import NoResults from "@/components/component/no-results";
+
+import RowSkeleton from "./row-skeleton";
+import Row from "./row";
+
+import { DownloadIcon } from "@radix-ui/react-icons";
 
 import payeesData from "@/data/payees.json";
-import Searchbox from "@/components/component/searchbox";
-
-import NoResults from "@/components/component/no-results";
-import DeleteDialog from "@/components/component/delete-dialog";
-import EditDialog from "./form-dialog";
-import ActionDropdownMenu from "./action-drop-down";
 
 const Payees = () => {
+  const { t } = useTranslation();
   // payeesData.payees=[];
-  const dummy = [...Array(15)];
+  const dummy = [...Array(8)];
   const [search, setSearch] = useState("");
 
   // set is loading to true for 1500ms
@@ -39,11 +37,12 @@ const Payees = () => {
     <div className="flex-1 space-y-4 p-8 pt-6">
       {/* HEADER */}
       <div className="flex space-y-2 flex-col justify-between md:flex-row gap-5">
-        <h2 className="text-3xl font-bold tracking-tight">Payees</h2>
-        <div className="flex items-center space-x-2">
+        <h2 className="text-3xl font-bold tracking-tight">{t("Payees")}</h2>
+        <div className="flex items-center space-x-2 rtl:space-x-reverse">
           <div className="hidden md:inline-block">
             <Button>
-              <DownloadIcon className="mr-2 h-4 w-4" /> Download
+              <DownloadIcon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />{" "}
+              {t("Download")}
             </Button>
           </div>
         </div>
@@ -60,23 +59,25 @@ const Payees = () => {
         <NoResults />
       ) : (
         <Table>
-          <TableCaption> A list of payees</TableCaption>
+          <TableCaption>{t("A list of payees")}</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[270px]">Payee</TableHead>
-              <TableHead className="hidden md:table-cell w-[300px]">
-                Contact Details
+              <TableHead className="w-[270px] rtl:text-right">
+                {t("Payee Name")}
               </TableHead>
-              <TableHead className="hidden lg:table-cell w-max">
-                Remarks
+              <TableHead className="hidden md:table-cell w-[300px] rtl:text-right">
+                {t("Contact Details")}
+              </TableHead>
+              <TableHead className="hidden lg:table-cell w-max rtl:text-right">
+                {t("Remarks")}
               </TableHead>
               <TableHead className="w-max lg:w-[130px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading
-              ? dummy.map((_, index) => SkeletonRow(index))
-              : payeesData.payees.map((payee) => InsertPayee(payee))}
+              ? dummy.map((_, index) => RowSkeleton(index))
+              : payeesData.payees.map((payee) => Row(payee))}
           </TableBody>
         </Table>
       )}
@@ -85,78 +86,3 @@ const Payees = () => {
 };
 
 export default Payees;
-
-const InsertPayee = (payee: PayeeType) => {
-  return (
-    <TableRow key={payee.id} className="h-[73px]">
-      <TableCell>
-        <AvatarCombo
-          title={payee.name}
-          fallback={<PersonIcon className="h-5 w-5" />}
-        ></AvatarCombo>
-      </TableCell>
-      <TableCell className="hidden md:table-cell">
-        <div className="flex flex-col space-y-1">
-          <p>
-            <a
-              className="font-bold hover:cursor-pointer"
-              href={`mailto:${payee.email}`}
-            >
-              {payee.email}
-            </a>
-          </p>
-          <p>
-            <a
-              className="text-muted-foreground hover:cursor-pointer"
-              href={`tel:${payee.phoneNumber}`}
-            >
-              {payee.phoneNumber}
-            </a>
-          </p>
-        </div>
-      </TableCell>
-      <TableCell className="hidden lg:table-cell">{payee.remarks}</TableCell>
-      <TableCell className="w-max text-right lg:hidden">
-        <ActionDropdownMenu />
-      </TableCell>
-      <TableCell className="w-max text-right hidden lg:table-cell">
-        <EditDialog>
-          <Button variant="edit">
-            <Pencil2Icon className="h-4 w-4" />
-          </Button>
-        </EditDialog>
-        <DeleteDialog onClick={() => console.log(payee.id)}>
-          <Button variant="delete">
-            <TrashIcon className="h-4 w-4" />
-          </Button>
-        </DeleteDialog>
-      </TableCell>
-    </TableRow>
-  );
-};
-
-const SkeletonRow = (index: number) => {
-  return (
-    <TableRow key={index} className="h-[73px]">
-      <TableCell>
-        <div className="flex items-center space-x-4">
-          <Skeleton className="h-9 w-9 rounded-full" />
-          <div className="ml-4 space-y-1">
-            <Skeleton className="h-[14px] w-[100px] leading-none " />
-            <Skeleton className="h-[20px] w-[120px] " />
-          </div>
-        </div>
-      </TableCell>
-      <TableCell className="hidden md:table-cell">
-        <div className="space-y-1">
-          <Skeleton className="h-[20px] w-[100px] leading-none " />
-          <Skeleton className="h-[20px] w-[120px] " />
-        </div>
-      </TableCell>
-      <TableCell className="hidden lg:table-cell">
-        <Skeleton className="h-5 w-[120px] rounded-full " />
-      </TableCell>
-      <TableCell className="hidden md:table-cell"></TableCell>
-    </TableRow>
-  );
-};

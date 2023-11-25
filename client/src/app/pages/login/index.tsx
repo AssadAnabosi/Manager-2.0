@@ -9,7 +9,7 @@ import { useAuth } from "@/providers/auth-provider";
 import { useState } from "react";
 import axios from "@/api/axios";
 import { useTheme } from "@/providers/theme-provider";
-import Layout from "@/app/layout";
+import Layout from "./layout";
 
 function Login() {
   const { setTheme } = useTheme();

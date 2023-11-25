@@ -2,7 +2,7 @@ import {
   EnvelopeClosedIcon,
   GitHubLogoIcon,
   LinkedInLogoIcon,
-  SewingPinFilledIcon,
+  // SewingPinFilledIcon,
 } from "@radix-ui/react-icons";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -23,7 +23,7 @@ export default function FooterHoverCard() {
           </a>
         </Button>
       </HoverCardTrigger>
-      <HoverCardContent>
+      <HoverCardContent style={{ direction: "ltr" }}>
         <div className="flex space-x-4">
           <Avatar className="aspect-square">
             <AvatarImage src="/avatar.jpeg" />

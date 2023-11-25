@@ -1,61 +1,47 @@
 import { useState } from "react";
-import AvatarCombo from "@/components/component/avatar-combo";
+import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
-import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
+import { ar, enGB } from "date-fns/locale";
+import { DateRange } from "react-day-picker";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import DateRangePicker from "@/components/component/date-picker-range";
-import { DownloadIcon } from "lucide-react";
 import {
   Table,
   TableBody,
   TableCaption,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DateRange } from "react-day-picker";
+
+import DateRangePicker from "@/components/component/date-picker-range";
+import Combobox from "@/components/component/combobox";
+import Searchbox from "@/components/component/searchbox";
+import NoResults from "@/components/component/no-results";
+
+import RowSkeleton from "./row-skeleton";
+import Row from "./row";
+
+import CardIcon from "@/components/icons/cardIcon";
+import { DownloadIcon } from "@radix-ui/react-icons";
+
 import {
   getFirstDayOfCurrentMonth,
   getLastDayOfCurrentMonth,
 } from "@/lib/date";
-import { ChequeType } from "@/types";
+import { toList } from "@/lib/utils";
 
 import chequesData from "@/data/cheques.json";
 import payeesData from "@/data/payees.json";
 
-import NoResults from "@/components/component/no-results";
-import DeleteDialog from "@/components/component/delete-dialog";
-import EditDialog from "./form-dialog";
-import ActionDropdownMenu from "./action-drop-down";
-
-const CardIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth="2"
-    className="h-4 w-4 text-muted-foreground"
-  >
-    <rect width="20" height="14" x="2" y="5" rx="2" />
-    <path d="M2 10h20" />
-  </svg>
-);
-
-import Combobox from "@/components/component/combobox";
-import { toList } from "@/lib/utils";
-import Searchbox from "@/components/component/searchbox";
-
 const Cheques = () => {
+  const { t } = useTranslation();
   // chequesData.cheques=[];
   const payees = toList(payeesData.payees, "name");
-  const dummy = [...Array(4)];
+  const dummy = [...Array(8)];
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
   const [date, setDate] = useState<DateRange>({
@@ -73,12 +59,13 @@ const Cheques = () => {
     <div className="flex-1 space-y-4 p-8 pt-6">
       {/* HEADER */}
       <div className="flex space-y-2 flex-col justify-between md:flex-row gap-5">
-        <h2 className="text-3xl font-bold tracking-tight">Cheques</h2>
-        <div className="flex items-center space-x-2">
+        <h2 className="text-3xl font-bold tracking-tight">{t("Cheques")}</h2>
+        <div className="flex items-center space-x-2 rtl:space-x-reverse">
           <DateRangePicker date={date} setDate={setDate} />
           <div className="hidden md:inline-block">
             <Button>
-              <DownloadIcon className="mr-2 h-4 w-4" /> Download
+              <DownloadIcon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />{" "}
+              {t("Download")}
             </Button>
           </div>
         </div>
@@ -94,7 +81,9 @@ const Cheques = () => {
           <>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 h-[72px]">
-                <CardTitle className="text-sm font-medium">Total</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  {t("Total Sum")}
+                </CardTitle>
                 <CardIcon />
               </CardHeader>
               <CardContent>
@@ -104,7 +93,7 @@ const Cheques = () => {
                 </div>
 
                 <p className="text-xs text-muted-foreground">
-                  Sum of all cheques in the selected range
+                  {t("Sum of all cheques in the selected range.")}
                 </p>
               </CardContent>
             </Card>
@@ -120,7 +109,7 @@ const Cheques = () => {
           list={payees}
           search={filter}
           setSearch={setFilter}
-          placeholder="Select payee..."
+          placeholder={t("Filter by payee")}
         />
       </div>
       {/* TABLE */}
@@ -132,30 +121,45 @@ const Cheques = () => {
             {date?.from ? (
               date.to ? (
                 <>
-                  A list of cheques from {format(date.from, "EEEE, dd/LL/y")} to{" "}
-                  {format(date.to, "EEEE, dd/LL/y")}
+                  {t("A list of cheques")} {t("from")}{" "}
+                  {format(date.from, "EEEE, dd/LL/y", {
+                    locale: document.documentElement.lang === "ar" ? ar : enGB,
+                  })}{" "}
+                  {t("to")}{" "}
+                  {format(date.to, "EEEE, dd/LL/y", {
+                    locale: document.documentElement.lang === "ar" ? ar : enGB,
+                  })}
                 </>
               ) : (
-                <>A list of cheques from {format(date.from, "EEEE, dd/LL/y")}</>
+                <>
+                  {t("A list of cheques")} {t("from")}{" "}
+                  {format(date.from, "EEEE, dd/LL/y", {
+                    locale: document.documentElement.lang === "ar" ? ar : enGB,
+                  })}
+                </>
               )
             ) : (
-              <>A list of cheques</>
+              <>{t("A list of cheques")}</>
             )}
           </TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[270px]">Serial No.</TableHead>
-              <TableHead className="table-cell w-[120px]">Value</TableHead>
-              <TableHead className="hidden md:table-cell">
-                Description
+              <TableHead className="w-[270px] rtl:text-right">
+                {t("Serial No.")}
+              </TableHead>
+              <TableHead className="table-cell w-[120px] rtl:text-right">
+                {t("Value")}
+              </TableHead>
+              <TableHead className="hidden md:table-cell rtl:text-right">
+                {t("Description")}
               </TableHead>
               <TableHead className="hidden md:table-cell md:w-[60px] lg:w-[130px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading
-              ? dummy.map((_, index) => SkeletonRow(index))
-              : chequesData.cheques.map((cheque) => InsertCheque(cheque))}
+              ? dummy.map((_, index) => RowSkeleton(index))
+              : chequesData.cheques.map((cheque) => Row(cheque))}
           </TableBody>
         </Table>
       )}
@@ -164,59 +168,3 @@ const Cheques = () => {
 };
 
 export default Cheques;
-
-const InsertCheque = (cheque: ChequeType) => {
-  return (
-    <TableRow key={cheque.id} className="h-[73px]">
-      <TableCell>
-        <AvatarCombo
-          title={cheque.payee.name}
-          description={format(new Date(cheque.dueDate), "EEEE, dd/LL/y")}
-          fallback={cheque.serial}
-        ></AvatarCombo>
-      </TableCell>
-      <TableCell className="table-cell">₪ {cheque.value}</TableCell>
-      <TableCell className="hidden md:table-cell">
-        {cheque.description}
-      </TableCell>
-      <TableCell className="text-right hidden md:table-cell lg:hidden">
-        <ActionDropdownMenu />
-      </TableCell>
-      <TableCell className="text-right hidden lg:table-cell">
-        <EditDialog>
-          <Button variant="edit">
-            <Pencil2Icon className="h-4 w-4" />
-          </Button>
-        </EditDialog>
-        <DeleteDialog onClick={() => console.log(cheque.id)}>
-          <Button variant="delete">
-            <TrashIcon className="h-4 w-4" />
-          </Button>
-        </DeleteDialog>
-      </TableCell>
-    </TableRow>
-  );
-};
-
-const SkeletonRow = (index: number) => {
-  return (
-    <TableRow key={index} className="h-[73px]">
-      <TableCell>
-        <div className="flex items-center space-x-4">
-          <Skeleton className="h-9 w-9 rounded-full" />
-          <div className="ml-4 space-y-1">
-            <Skeleton className="h-[14px] w-[100px] leading-none " />
-            <Skeleton className="h-[20px] w-[130px] " />
-          </div>
-        </div>
-      </TableCell>
-      <TableCell className="table-cell ">
-        <Skeleton className="h-5 w-[85px] rounded-full " />
-      </TableCell>
-      <TableCell className="hidden md:table-cell">
-        <Skeleton className="h-5 w-[100%] max-w-[185px] rounded-full " />
-      </TableCell>
-      <TableCell className="hidden md:table-cell"></TableCell>
-    </TableRow>
-  );
-};

@@ -16,6 +16,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+import { useTranslation } from "react-i18next";
+
 type ComboboxProps = {
   list: { label: string; value: string }[];
   search: string;
@@ -29,6 +31,7 @@ const Combobox = ({
   setSearch,
   placeholder = "Select...",
 }: ComboboxProps) => {
+  const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -38,18 +41,18 @@ const Combobox = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[100%] md:w-[335px] justify-between"
+          className="w-[100%] md:w-[335px] justify-between text-muted-foreground font-semibold"
         >
           {search
             ? list.find((framework) => framework.value === search)?.label
             : placeholder}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronsUpDown className="ltr:ml-2 rtl:mr-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="md:w-[335px] p-0">
         <Command>
-          <CommandInput placeholder="Search..." />
-          <CommandEmpty>No matching results.</CommandEmpty>
+          <CommandInput placeholder={t("Search...")} />
+          <CommandEmpty>{t("No matching results")}</CommandEmpty>
           <CommandGroup>
             {list.map((item) => (
               <CommandItem
@@ -62,7 +65,7 @@ const Combobox = ({
               >
                 <Check
                   className={cn(
-                    "mr-2 h-4 w-4",
+                    "ltr:mr-2 rtl:ml-2 h-4 w-4",
                     search === item.value ? "opacity-100" : "opacity-0"
                   )}
                 />

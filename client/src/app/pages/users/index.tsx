@@ -1,33 +1,29 @@
 import { useState } from "react";
-import AvatarCombo from "@/components/component/avatar-combo";
-import { AvatarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
+import { useTranslation } from "react-i18next";
+
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { DownloadIcon } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
   TableCaption,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { UserType } from "@/types";
+import Searchbox from "@/components/component/searchbox";
+import NoResults from "@/components/component/no-results";
+
+import RowSkeleton from "./row-skeleton";
+import Row from "./row";
 
 import usersData from "@/data/users.json";
-import Searchbox from "@/components/component/searchbox";
-
-import NoResults from "@/components/component/no-results";
-import DeleteDialog from "@/components/component/delete-dialog";
-import EditDialog from "./form-dialog";
-import ActionDropdownMenu from "./action-drop-down";
+import { DownloadIcon } from "@radix-ui/react-icons";
 
 const Users = () => {
+  const { t } = useTranslation();
   // usersData.users=[];
-  const dummy = [...Array(15)];
+  const dummy = [...Array(8)];
   const [search, setSearch] = useState("");
 
   // set is loading to true for 1500ms
@@ -40,11 +36,12 @@ const Users = () => {
     <div className="flex-1 space-y-4 p-8 pt-6">
       {/* HEADER */}
       <div className="flex space-y-2 flex-col justify-between md:flex-row gap-5">
-        <h2 className="text-3xl font-bold tracking-tight">Users</h2>
-        <div className="flex items-center space-x-2">
+        <h2 className="text-3xl font-bold tracking-tight">{t("Users")}</h2>
+        <div className="flex items-center space-x-2 rtl:space-x-reverse">
           <div className="hidden md:inline-block">
             <Button>
-              <DownloadIcon className="mr-2 h-4 w-4" /> Download
+              <DownloadIcon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />{" "}
+              {t("Download")}
             </Button>
           </div>
         </div>
@@ -61,23 +58,25 @@ const Users = () => {
         <NoResults />
       ) : (
         <Table>
-          <TableCaption> A list of users</TableCaption>
+          <TableCaption>{t("A list of users")}</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[270px]">User</TableHead>
-              <TableHead className="w-[130px] text-center hidden md:table-cell">
-                Role
+              <TableHead className="w-[270px] rtl:text-right">
+                {t("Full Name")}
               </TableHead>
-              <TableHead className="w-max hidden md:table-cell">
-                Contact Details
+              <TableHead className="w-[130px] text-center hidden md:table-cell">
+                {t("Role")}
+              </TableHead>
+              <TableHead className="w-max hidden md:table-cell rtl:text-right">
+                {t("Contact Details")}
               </TableHead>
               <TableHead className="w-[60px] lg:w-[130px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading
-              ? dummy.map((_, index) => SkeletonRow(index))
-              : usersData.users.map((user) => InsertUser(user))}
+              ? dummy.map((_, index) => RowSkeleton(index))
+              : usersData.users.map((user) => Row(user))}
           </TableBody>
         </Table>
       )}
@@ -86,80 +85,3 @@ const Users = () => {
 };
 
 export default Users;
-
-const InsertUser = (user: UserType) => {
-  return (
-    <TableRow key={user.id} className="h-[73px]">
-      <TableCell>
-        <AvatarCombo
-          title={user.fullName}
-          description={`@${user.username}`}
-          fallback={<AvatarIcon className="h-7 w-7" />}
-        ></AvatarCombo>
-      </TableCell>
-      <TableCell className="text-center hidden md:table-cell">
-        <Badge className="inline-block h-[25px] w-[100%]">{user.role}</Badge>
-      </TableCell>
-      <TableCell className="hidden md:table-cell">
-        <div className="flex flex-col space-y-1">
-          <p>
-            <a
-              className="font-bold hover:cursor-pointer"
-              href={`mailto:${user.email}`}
-            >
-              {user.email}
-            </a>
-          </p>
-          <p>
-            <a
-              className="text-muted-foreground hover:cursor-pointer"
-              href={`tel:${user.phoneNumber}`}
-            >
-              {user.phoneNumber}
-            </a>
-          </p>
-        </div>
-      </TableCell>
-      <TableCell className="w-max text-right lg:hidden">
-        <ActionDropdownMenu />
-      </TableCell>
-      <TableCell className="w-max text-right hidden lg:table-cell">
-        <EditDialog>
-          <Button variant="edit">
-            <Pencil2Icon className="h-4 w-4" />
-          </Button>
-        </EditDialog>
-        <DeleteDialog onClick={() => console.log(user.id)}>
-          <Button variant="delete">
-            <TrashIcon className="h-4 w-4" />
-          </Button>
-        </DeleteDialog>
-      </TableCell>
-    </TableRow>
-  );
-};
-
-const SkeletonRow = (index: number) => {
-  return (
-    <TableRow key={index} className="h-[73px]">
-      <TableCell>
-        <div className="flex items-center space-x-4">
-          <Skeleton className="h-9 w-9 rounded-full" />
-          <div className="ml-4 space-y-1">
-            <Skeleton className="h-[14px] w-[120px] leading-none " />
-            <Skeleton className="h-[20px] w-[100px] " />
-          </div>
-        </div>
-      </TableCell>
-      <TableCell>
-        <Skeleton className="hidden md:inline-block h-[25px] w-[100%] rounded-full" />
-      </TableCell>
-      <TableCell>
-        <div className="flex flex-col space-y-1">
-          <Skeleton className="h-[20px] w-[190px] leading-none " />
-          <Skeleton className="h-[20px] w-[120px] " />
-        </div>
-      </TableCell>
-    </TableRow>
-  );
-};

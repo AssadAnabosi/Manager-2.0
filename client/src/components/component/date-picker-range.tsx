@@ -1,5 +1,6 @@
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
+import { ar, enGB } from "date-fns/locale";
 import { DateRange, SelectRangeEventHandler } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
@@ -10,6 +11,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+
+import { useTranslation } from "react-i18next";
 
 type DatePickerWithRangeProps = {
   className?: string;
@@ -22,6 +25,7 @@ export default function DatePickerWithRange({
   date,
   setDate,
 }: DatePickerWithRangeProps) {
+  const { t } = useTranslation();
   return (
     <div className={cn("grid gap-2", className)}>
       <Popover>
@@ -34,18 +38,25 @@ export default function DatePickerWithRange({
               !date && "text-muted-foreground"
             )}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
+            <CalendarIcon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
             {date?.from ? (
               date.to ? (
                 <>
-                  {format(date.from, "EEE, dd/LL/y")} -{" "}
-                  {format(date.to, "EEE, dd/LL/y")}
+                  {format(date.from, "EEE, dd/LL/y", {
+                    locale: document.documentElement.lang === "ar" ? ar : enGB,
+                  })}{" "}
+                  -{" "}
+                  {format(date.to, "EEE, dd/LL/y", {
+                    locale: document.documentElement.lang === "ar" ? ar : enGB,
+                  })}
                 </>
               ) : (
-                format(date.from, "EEE, dd/LL/y")
+                format(date.from, "EEE, dd/LL/y,", {
+                  locale: document.documentElement.lang === "ar" ? ar : enGB,
+                })
               )
             ) : (
-              <span>Pick a date</span>
+              <span>{t("Pick a date")}</span>
             )}
           </Button>
         </PopoverTrigger>

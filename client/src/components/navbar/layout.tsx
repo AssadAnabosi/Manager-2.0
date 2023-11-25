@@ -5,7 +5,9 @@ import SideNav from "@/components/navbar/side-nav";
 import PageWrapper from "@/components/navbar/page-wrapper";
 import MarginWidthWrapper from "@/components/navbar/margin-width-wrapper";
 import FooterHoverCard from "@/components/component/footer-hover-card";
+import { useTranslation } from "react-i18next";
 const Layout = () => {
+  const { t } = useTranslation();
   return (
     <>
       <aside className="flex">
@@ -21,7 +23,7 @@ const Layout = () => {
           </PageWrapper>
           <footer className="footer text-sm mx-auto">
             <p className="text-sm">
-              Made with ❤️ by <FooterHoverCard />
+              {t("Made with ❤️ by")} <FooterHoverCard />
             </p>
           </footer>
         </MarginWidthWrapper>

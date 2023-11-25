@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { DashboardIcon } from "@radix-ui/react-icons";
 import PageWrapper from "@/components/navbar/page-wrapper";
 import FooterHoverCard from "@/components/component/footer-hover-card";
-// import SettingsGear from "@/components/component/settings-gear";
+import SettingsGear from "@/components/component/settings-gear";
 import { useTranslation } from "react-i18next";
 const Layout = ({ children }: { children: ReactNode }) => {
   const { t } = useTranslation();
@@ -15,9 +15,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
               <DashboardIcon className="h-7 w-7" />
               <span className="font-bold text-xl flex ">Dashboard</span>
             </div>
-            {/* <div>
-              <SettingsGear />
-            </div> */}
+            <SettingsGear />
           </div>
         </div>
         <PageWrapper>{children}</PageWrapper>

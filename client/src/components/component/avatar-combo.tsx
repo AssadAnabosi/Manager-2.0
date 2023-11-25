@@ -15,7 +15,7 @@ const AvatarCombo = ({
         <AvatarImage alt="Avatar" />
         <AvatarFallback>{fallback}</AvatarFallback>
       </Avatar>
-      <div className="ml-4 space-y-1">
+      <div className="ltr:ml-4 rtl:mr-4 space-y-1">
         <p className="text-sm font-medium leading-none">{title}</p>
         <p className="text-sm text-muted-foreground">{description}</p>
       </div>

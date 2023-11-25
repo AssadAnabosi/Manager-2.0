@@ -2,7 +2,7 @@ import { DashboardIcon } from "@radix-ui/react-icons";
 
 import useScroll from "@/hooks/use-scroll";
 import { cn } from "@/lib/utils";
-import SettingsGear from "@/components/component/settings-gear";
+// import SettingsGear from "@/components/component/settings-gear";
 
 const Header = () => {
   const scrolled = useScroll(5);
@@ -18,14 +18,14 @@ const Header = () => {
     >
       <div className="flex h-[47px] items-center justify-between px-4">
         <div className="flex items-center space-x-4">
-          <div className="flex flex-row space-x-3 items-center justify-center xl:hidden">
+          <div className="flex flex-row space-x-3 rtl:space-x-reverse items-center justify-center xl:hidden">
             <DashboardIcon className="h-7 w-7" />
-            <span className="font-bold text-xl flex ">Anabosi</span>
+            <span className="font-bold text-xl flex ">Dashboard</span>
           </div>
         </div>
-        <div className="hidden xl:block">
+        {/* <div className="hidden xl:block">
           <SettingsGear />
-        </div>
+        </div> */}
       </div>
     </div>
   );

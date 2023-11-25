@@ -6,6 +6,7 @@ import { SIDENAV_ITEMS, SideNavItem } from "./nav-items";
 import { motion, useCycle } from "framer-motion";
 
 import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { t } from "i18next";
 
 type MenuItemWithSubMenuProps = {
   item: SideNavItem;
@@ -14,7 +15,10 @@ type MenuItemWithSubMenuProps = {
 
 const sidebar = {
   open: (height = 1000) => ({
-    clipPath: `circle(${height * 2 + 200}px at 100% 0)`,
+    clipPath:
+      document.documentElement.dir === "ltr"
+        ? `circle(${height * 2 + 200}px at 100% 0)`
+        : `circle(${height * 2 + 200}px at 0% 0)`,
     transition: {
       type: "spring",
       stiffness: 20,
@@ -22,7 +26,10 @@ const sidebar = {
     },
   }),
   closed: {
-    clipPath: "circle(0px at 100% 0)",
+    clipPath:
+      document.documentElement.dir === "ltr"
+        ? "circle(0px at 100% 0)"
+        : "circle(0px at 0% 0)",
     transition: {
       type: "spring",
       stiffness: 400,
@@ -48,7 +55,7 @@ const HeaderMobile = () => {
       ref={containerRef}
     >
       <motion.div
-        className="absolute inset-0 right-0 w-full bg-inverse"
+        className="absolute inset-0 w-full bg-inverse ltr:right-0 rtl:left-0"
         variants={sidebar}
       />
       <motion.ul
@@ -71,7 +78,7 @@ const HeaderMobile = () => {
                       item.path === pathname ? "font-bold" : ""
                     }`}
                   >
-                    {item.title}
+                    {t(item.title)}
                   </Link>
                 </MenuItem>
               )}
@@ -93,7 +100,7 @@ export default HeaderMobile;
 const MenuToggle = ({ toggle }: { toggle: any }) => (
   <button
     onClick={toggle}
-    className="pointer-events-auto absolute right-4 top-[14px] z-30"
+    className="pointer-events-auto absolute top-[14px] z-30 ltr:right-4 rtl:left-4"
   >
     <svg width="23" height="23" viewBox="0 0 23 23">
       <Path
@@ -170,7 +177,7 @@ const MenuItemWithSubMenu: React.FC<MenuItemWithSubMenuProps> = ({
             <span
               className={`${pathname.includes(item.path) ? "font-bold" : ""}`}
             >
-              {item.title}
+              {t(item.title)}
             </span>
             <div className={`${subMenuOpen && "rotate-180"}`}>
               <ChevronDownIcon className="w-5 h-5" />
@@ -191,7 +198,7 @@ const MenuItemWithSubMenu: React.FC<MenuItemWithSubMenuProps> = ({
                       subItem.path === pathname ? "font-bold" : ""
                     }`}
                   >
-                    {subItem.title}
+                    {t(subItem.title)}
                   </Link>
                 </MenuItem>
               );
@@ -238,7 +245,6 @@ const useDimensions = (ref: any) => {
       dimensions.current.width = ref.current.offsetWidth;
       dimensions.current.height = ref.current.offsetHeight;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref]);
 
   return dimensions.current;

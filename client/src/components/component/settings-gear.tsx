@@ -14,59 +14,70 @@ import {
 } from "@/components/ui/select";
 import { GearIcon } from "@radix-ui/react-icons";
 import { useTheme, Theme } from "@/providers/theme-provider";
+import { useTranslation } from "react-i18next";
 
 function SettingsGear() {
+  const { t, i18n } = useTranslation();
+  const handleLanguageChange = (lang: string) => {
+    i18n.changeLanguage(lang.substring(0, 2));
+  };
   const { setTheme, theme } = useTheme();
+  const lang = document.documentElement.lang.substring(0, 2);
   const handleThemeChange = (value: Theme) => {
     setTheme(value);
   };
   return (
-    <Popover>
-      <PopoverTrigger>
-        <GearIcon className="h-7 w-7" />
-      </PopoverTrigger>
-      <PopoverContent className="w-96">
-        <div className="grid gap-4">
-          <div className="space-y-2">
-            <h4 className="font-medium leading-none">Settings</h4>
-            <p className="text-sm text-muted-foreground">
-              Adjust your application settings.
-            </p>
-          </div>
-          <div className="grid gap-2">
-            <div className="grid grid-cols-3 items-center gap-4 w-full">
-              <Label htmlFor="theme">Theme</Label>
-              <Select onValueChange={handleThemeChange} defaultValue={theme}>
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="light">Light</SelectItem>
-                    <SelectItem value="dark">Dark</SelectItem>
-                    <SelectItem value="system">System</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+    <div className="absolute top-[25%] ltr:right-8 rtl:left-8">
+      <Popover>
+        <PopoverTrigger>
+          <GearIcon className="h-7 w-7" />
+        </PopoverTrigger>
+        <PopoverContent className="w-96">
+          <div className="grid gap-4">
+            <div className="space-y-2">
+              <h4 className="font-medium leading-none">{t("Settings")}</h4>
+              <p className="text-sm text-muted-foreground">
+                {t("Adjust your application settings.")}
+              </p>
             </div>
-            <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="language">Language</Label>
-              <Select>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="English" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="english">English</SelectItem>
-                    <SelectItem value="arabic">Arabic</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+            <div className="grid gap-2">
+              <div className="grid grid-cols-3 items-center gap-4 w-full">
+                <Label htmlFor="theme">{t("Theme")}</Label>
+                <Select onValueChange={handleThemeChange} defaultValue={theme}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="light">{t("Light")}</SelectItem>
+                      <SelectItem value="dark">{t("Dark")}</SelectItem>
+                      <SelectItem value="system">{t("System")}</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label htmlFor="language">{t("Language")}</Label>
+                <Select
+                  onValueChange={handleLanguageChange}
+                  defaultValue={lang}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="ar">العربية</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
-        </div>
-      </PopoverContent>
-    </Popover>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 }
 
