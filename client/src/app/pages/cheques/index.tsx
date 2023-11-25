@@ -102,7 +102,7 @@ const Cheques = () => {
       </div>
       <Separator />
       <div className="flex justify-end gap-3">
-        <div className="w-[100%] md:w-[335px]">
+        <div className="w-full md:w-[335px]">
           <Searchbox value={search} setValue={setSearch} />
         </div>
         <Combobox

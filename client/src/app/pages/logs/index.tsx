@@ -58,7 +58,7 @@ const Logs = () => {
       {/* HEADER */}
       <div className="flex space-y-2 flex-col justify-between md:flex-row gap-5">
         <h2 className="text-3xl font-bold tracking-tight">{t("Worksheets")}</h2>
-        <div className="flex items-center space-x-2 rtl:space-x-reverse">
+        <div className="flex space-x-2 rtl:space-x-reverse w-full md:w-auto">
           <DateRangePicker date={date} setDate={setDate} />
           <div className="hidden md:inline-block">
             <Button>
@@ -67,6 +67,7 @@ const Logs = () => {
             </Button>
           </div>
         </div>
+        {/* <button className="w-full md:w-auto">test</button> */}
       </div>
       <Separator />
       {/* CARDS */}

@@ -23,8 +23,8 @@ const Row = (user: UserType) => {
         ></AvatarCombo>
       </TableCell>
       <TableCell className="text-center hidden md:table-cell">
-        {/* <Badge className="inline-block h-[25px] w-[100%]">{t(user.role)}</Badge> */}
-        <Badge className="inline-block h-[25px] w-[100%]">{user.role}</Badge>
+        {/* <Badge className="inline-block h-[25px] w-full">{t(user.role)}</Badge> */}
+        <Badge className="inline-block h-[25px] w-full">{user.role}</Badge>
       </TableCell>
       <TableCell className="hidden md:table-cell">
         <div className="flex flex-col space-y-1">

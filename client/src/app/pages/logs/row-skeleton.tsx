@@ -14,16 +14,16 @@ const RowSkeleton = (key: number) => {
         </div>
       </TableCell>
       <TableCell>
-        <Skeleton className="h-5 w-[65px] sm:w-[100%] sm:max-w-[65px] md:w-[65px] rounded-full " />
+        <Skeleton className="h-5 w-[65px] sm:w-full sm:max-w-[65px] md:w-[65px] rounded-full " />
       </TableCell>
       <TableCell className="hidden md:table-cell">
         <Skeleton className="h-5 w-[120px] rounded-full " />
       </TableCell>
       <TableCell className="hidden md:table-cell">
-        <Skeleton className="h-5 w-[100%] rounded-full " />
+        <Skeleton className="h-5 w-full rounded-full " />
       </TableCell>
       <TableCell className="hidden lg:table-cell">
-        <Skeleton className="h-5 w-[100%] rounded-full " />
+        <Skeleton className="h-5 w-full rounded-full " />
       </TableCell>
       <TableCell className="hidden md:table-cell"></TableCell>
     </TableRow>

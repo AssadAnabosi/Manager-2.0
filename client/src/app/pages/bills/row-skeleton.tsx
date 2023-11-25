@@ -17,10 +17,10 @@ const RowSkeleton = (key: number) => {
         <Skeleton className="h-5 w-[85px] rounded-full " />
       </TableCell>
       <TableCell className="hidden md:table-cell">
-        <Skeleton className="h-5 w-[100%] rounded-full " />
+        <Skeleton className="h-5 w-full rounded-full " />
       </TableCell>
       <TableCell className="hidden lg:table-cell">
-        <Skeleton className="h-5 w-[100%] rounded-full " />
+        <Skeleton className="h-5 w-full rounded-full " />
       </TableCell>
       <TableCell className="hidden md:table-cell"></TableCell>
     </TableRow>

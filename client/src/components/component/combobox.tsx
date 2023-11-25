@@ -41,7 +41,7 @@ const Combobox = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[100%] md:w-[335px] justify-between text-muted-foreground font-semibold"
+          className="w-full md:w-[335px] justify-between text-muted-foreground font-semibold"
         >
           {search
             ? list.find((framework) => framework.value === search)?.label

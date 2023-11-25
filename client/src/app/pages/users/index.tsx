@@ -49,7 +49,7 @@ const Users = () => {
       <Separator />
       {/* FILTER */}
       <div className="flex justify-end flex-wrap">
-        <div className=" w-[100%] md:w-[335px]">
+        <div className=" w-full md:w-[335px]">
           <Searchbox value={search} setValue={setSearch} />
         </div>
       </div>

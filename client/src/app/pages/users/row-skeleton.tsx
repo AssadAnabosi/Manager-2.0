@@ -14,7 +14,7 @@ const RowSkeleton = (key: number) => {
         </div>
       </TableCell>
       <TableCell>
-        <Skeleton className="hidden md:inline-block h-[25px] w-[100%] rounded-full" />
+        <Skeleton className="hidden md:inline-block h-[25px] w-full rounded-full" />
       </TableCell>
       <TableCell>
         <div className="flex flex-col space-y-1">

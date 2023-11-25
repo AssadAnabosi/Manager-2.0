@@ -37,14 +37,14 @@ const Row = (log: LogType) => {
         {log.isAbsent ? (
           <Badge
             variant="destructive"
-            className="w-[65px] sm:w-[100%] sm:max-w-[65px] md:w-[65px] h-[20px]"
+            className="w-[65px] sm:w-full sm:max-w-[65px] md:w-[65px] h-[20px]"
           >
             <Cross2Icon className="h-4 w-4 mx-auto" />
           </Badge>
         ) : (
           <Badge
             variant="success"
-            className="w-[65px] sm:w-[100%] sm:max-w-[65px] md:w-[65px] h-[20px]"
+            className="w-[65px] sm:w-full sm:max-w-[65px] md:w-[65px] h-[20px]"
           >
             <CheckIcon className="h-4 w-4 mx-auto" />
           </Badge>
