@@ -24,6 +24,7 @@ import { useTheme, Theme } from "@/providers/theme-provider";
 import { useTranslation } from "react-i18next";
 
 function Settings() {
+  const [value, setValue] = useState("password");
   const { t, i18n } = useTranslation();
   const { setTheme, theme } = useTheme();
   const lang = document.documentElement.lang.substring(0, 2);
@@ -38,6 +39,10 @@ function Settings() {
     setInput({ ...input, lang: lang.substring(0, 2) });
   };
 
+  const handleValueChange = (value: string) => {
+    setValue(value);
+  };
+
   const handlePresencesChange = () => {
     // send to server
     // apply themes
@@ -48,7 +53,12 @@ function Settings() {
 
   return (
     <div className="flex justify-center items-center align-center my-auto">
-      <Tabs defaultValue="password" className="w-[400px]">
+      <Tabs
+        value={value}
+        onValueChange={handleValueChange}
+        defaultValue="password"
+        className="w-[400px]"
+      >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="password">{t("Password")}</TabsTrigger>
           <TabsTrigger value="preferences">{t("Preferences")}</TabsTrigger>
