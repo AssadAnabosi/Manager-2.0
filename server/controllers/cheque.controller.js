@@ -41,7 +41,7 @@ export const getCheques = async (req, res) => {
 
 // @desc    Create a Cheque
 export const createCheque = async (req, res) => {
-  let { serial, dueDate, value, description, isCancelled } = req.body;
+  let { serial, dueDate, value, remarks, isCancelled } = req.body;
   dueDate = new Date(dueDate);
   dueDate.setUTCHours(0, 0, 0, 0);
 
@@ -52,7 +52,7 @@ export const createCheque = async (req, res) => {
     serial,
     dueDate,
     value,
-    description,
+    remarks,
     payee,
     isCancelled,
   });

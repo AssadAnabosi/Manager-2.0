@@ -20,9 +20,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
         </div>
         <PageWrapper>{children}</PageWrapper>
         <footer className="footer text-sm mx-auto">
-          <p className="text-sm">
-            {t("Made with ❤️ by")} <FooterHoverCard />
-          </p>
+          {t("Made with ❤️ by")} <FooterHoverCard />
         </footer>
       </div>
     </div>

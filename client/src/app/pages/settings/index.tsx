@@ -32,12 +32,15 @@ function Settings() {
     tab: "password",
   });
 
-  const tab = searchParams.get("tab") || "";
+  const tab = searchParams.get("tab") || "password";
   const setTab = (value: string) => {
     setSearchParams(
       (prev) => {
         prev.delete("tab");
-        if (value) prev.set("tab", value);
+        if (value) {
+          prev.set("tab", value);
+          console.log(value);
+        } else prev.set("tab", "password");
         return prev;
       },
       { replace: true }

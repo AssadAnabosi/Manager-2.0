@@ -38,7 +38,7 @@ export type ChequeType = {
   serial: number;
   dueDate: Date | string;
   value: number;
-  description: string;
+  remarks: string;
   isCancelled: boolean;
   payee: {
     id: string;

@@ -4,11 +4,11 @@ import { BillType } from "@/types";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import AvatarCombo from "@/components/component/avatar-combo";
 import DeleteDialog from "@/components/component/delete-dialog";
 
+import AvatarCombo from "./avatar-combo";
 import ActionDropdownMenu from "./action-drop-down";
-import EditDialog from "./form-dialog";
+import FormDialog from "./form-dialog";
 
 import { CalendarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
@@ -26,6 +26,7 @@ const Row = (bill: BillType) => {
             locale: document.documentElement.lang === "ar" ? ar : enGB,
           })}
           fallback={<CalendarIcon className="h-5 w-5" />}
+          bill={bill}
         ></AvatarCombo>
       </TableCell>
       <TableCell className="table-cell">
@@ -34,15 +35,15 @@ const Row = (bill: BillType) => {
       <TableCell className="hidden md:table-cell">{bill.description}</TableCell>
       <TableCell className="hidden lg:table-cell">{bill.remarks}</TableCell>
       <TableCell className="text-right hidden md:table-cell lg:hidden">
-        <ActionDropdownMenu />
+        <ActionDropdownMenu bill={bill} />
       </TableCell>
       <TableCell className="text-right hidden lg:table-cell">
-        <EditDialog>
+        <FormDialog bill={bill}>
           <Button variant="edit">
             <Pencil2Icon className="h-4 w-4" />
           </Button>
-        </EditDialog>
-        <DeleteDialog onClick={() => console.log(bill.id)}>
+        </FormDialog>
+        <DeleteDialog onAction={() => console.log(bill.id)}>
           <Button variant="delete">
             <TrashIcon className="h-4 w-4" />
           </Button>

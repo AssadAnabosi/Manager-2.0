@@ -4,20 +4,14 @@ import { LogType } from "@/types";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import AvatarCombo from "@/components/component/avatar-combo";
 import DeleteDialog from "@/components/component/delete-dialog";
 
+import AvatarCombo from "./avatar-combo";
 import ActionDropdownMenu from "./action-drop-down";
-import EditDialog from "./form-dialog";
+import FormDialog from "./form-dialog";
+import StatusBadge from "@/components/component/status-badge";
 
-import {
-  CalendarIcon,
-  CheckIcon,
-  Cross2Icon,
-  Pencil2Icon,
-  TrashIcon,
-} from "@radix-ui/react-icons";
+import { CalendarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
 import { currencyFormatter, numberFormatter } from "@/lib/utils";
 
@@ -31,24 +25,11 @@ const Row = (log: LogType) => {
             locale: document.documentElement.lang === "ar" ? ar : enGB,
           })}
           fallback={<CalendarIcon className="h-5 w-5" />}
+          log={log}
         ></AvatarCombo>
       </TableCell>
       <TableCell className="text-center">
-        {log.isAbsent ? (
-          <Badge
-            variant="destructive"
-            className="w-[65px] sm:w-full sm:max-w-[65px] md:w-[65px] h-[20px]"
-          >
-            <Cross2Icon className="h-4 w-4 mx-auto" />
-          </Badge>
-        ) : (
-          <Badge
-            variant="success"
-            className="w-[65px] sm:w-full sm:max-w-[65px] md:w-[65px] h-[20px]"
-          >
-            <CheckIcon className="h-4 w-4 mx-auto" />
-          </Badge>
-        )}
+        <StatusBadge status={log.isAbsent} />
       </TableCell>
       <TableCell className="hidden md:table-cell">
         {log.startingTime} - {log.finishingTime} ({numberFormatter(log.OTV)})
@@ -58,15 +39,15 @@ const Row = (log: LogType) => {
       </TableCell>
       <TableCell className="hidden lg:table-cell">{log.remarks}</TableCell>
       <TableCell className="hidden md:table-cell 2xl:hidden">
-        <ActionDropdownMenu />
+        <ActionDropdownMenu log={log} />
       </TableCell>
       <TableCell className="hidden 2xl:table-cell">
-        <EditDialog>
+        <FormDialog log={log}>
           <Button variant="edit">
             <Pencil2Icon className="h-4 w-4" />
           </Button>
-        </EditDialog>
-        <DeleteDialog onClick={() => console.log(log.id)}>
+        </FormDialog>
+        <DeleteDialog onAction={() => console.log(log.id)}>
           <Button variant="delete">
             <TrashIcon className="h-4 w-4" />
           </Button>

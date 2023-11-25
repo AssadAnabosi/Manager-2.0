@@ -5,7 +5,7 @@ const RowSkeleton = (key: number) => {
   return (
     <TableRow key={key} className="h-[73px]">
       <TableCell>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 rtl:space-x-reverse">
           <Skeleton className="h-9 w-9 rounded-full" />
           <div className="ml-4 space-y-1">
             <Skeleton className="h-[14px] w-[100px] leading-none " />

@@ -22,9 +22,7 @@ const Layout = () => {
             <Outlet />
           </PageWrapper>
           <footer className="footer text-sm mx-auto">
-            <p className="text-sm">
-              {t("Made with ❤️ by")} <FooterHoverCard />
-            </p>
+            {t("Made with ❤️ by")} <FooterHoverCard />
           </footer>
         </MarginWidthWrapper>
       </div>

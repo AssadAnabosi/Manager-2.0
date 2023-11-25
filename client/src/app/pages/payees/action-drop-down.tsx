@@ -12,7 +12,7 @@ import {
   TrashIcon,
 } from "@radix-ui/react-icons";
 
-import EditDialog from "./form-dialog";
+import FormDialog from "./form-dialog";
 import DeleteDialog from "@/components/component/delete-dialog";
 
 export default function ActionDropdownMenu() {
@@ -25,13 +25,13 @@ export default function ActionDropdownMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuGroup>
-          <EditDialog>
+          <FormDialog>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               <Pencil2Icon className="mr-2 h-4 w-4" />
               <span>Edit</span>
             </DropdownMenuItem>
-          </EditDialog>
-          <DeleteDialog onClick={() => console.log("123")}>
+          </FormDialog>
+          <DeleteDialog onAction={() => console.log("123")}>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               <TrashIcon className="mr-2 h-4 w-4" />
               <span>Delete</span>

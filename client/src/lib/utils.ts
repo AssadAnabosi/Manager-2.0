@@ -50,7 +50,9 @@ export const numberFormatter = (number: any) => {
   if (typeof number !== "number") {
     number = 0;
   }
-  const formatter = new Intl.NumberFormat("ar-ae");
+  const formatter = new Intl.NumberFormat("ar-ae", {
+    signDisplay: "always",
+  });
 
   return formatter.format(number);
 };

@@ -48,7 +48,7 @@ export const findCheques = ({ search, startDate, endDate, filter: payee }) => {
       serial: 1,
       dueDate: 1,
       value: 1,
-      description: 1,
+      remarks: 1,
       "payee.id": {
         $ifNull: ["$payee._id", null],
       },
@@ -112,7 +112,7 @@ export const findChequeByID = (id) => {
         serial: 1,
         dueDate: 1,
         value: 1,
-        description: 1,
+        remarks: 1,
         "payee.id": {
           $ifNull: ["$payee._id", null],
         },

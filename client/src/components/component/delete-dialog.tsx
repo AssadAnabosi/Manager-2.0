@@ -15,12 +15,12 @@ import { useTranslation } from "react-i18next";
 
 type ComponentProps = {
   children: ReactNode;
-  onClick: () => void;
+  onAction: () => void;
 };
 
 export default function DeleteAlertDialog({
   children,
-  onClick,
+  onAction,
 }: ComponentProps) {
   const { t } = useTranslation();
   return (
@@ -37,7 +37,9 @@ export default function DeleteAlertDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>{t("Cancel")}</AlertDialogCancel>
-          <AlertDialogAction onClick={onClick}>{t("Delete")}</AlertDialogAction>
+          <AlertDialogAction onClick={onAction}>
+            {t("Delete")}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -13,10 +13,12 @@ type MenuItemWithSubMenuProps = {
   toggleOpen: () => void;
 };
 
+const dir = document.documentElement.dir;
+
 const sidebar = {
   open: (height = 1000) => ({
     clipPath:
-      document.documentElement.dir === "ltr"
+      dir === "ltr"
         ? `circle(${height * 2 + 200}px at 100% 0)`
         : `circle(${height * 2 + 200}px at 0% 0)`,
     transition: {
@@ -26,10 +28,7 @@ const sidebar = {
     },
   }),
   closed: {
-    clipPath:
-      document.documentElement.dir === "ltr"
-        ? "circle(0px at 100% 0)"
-        : "circle(0px at 0% 0)",
+    clipPath: dir === "ltr" ? "circle(0px at 100% 0)" : "circle(0px at 0% 0)",
     transition: {
       type: "spring",
       stiffness: 400,

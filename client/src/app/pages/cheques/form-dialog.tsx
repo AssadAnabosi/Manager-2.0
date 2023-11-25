@@ -1,4 +1,6 @@
 import { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
+import { ChequeType } from "@/types";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,17 +16,30 @@ import { Label } from "@/components/ui/label";
 
 type ComponentProps = {
   children: ReactNode;
+  cheque: ChequeType;
+  onClose?: (status: boolean) => void;
 };
 
-export default function EditDialog({ children }: ComponentProps) {
+export default function FormDialog({
+  children,
+  cheque,
+  onClose,
+}: ComponentProps) {
+  const { t } = useTranslation();
   return (
-    <Dialog>
+    <Dialog onOpenChange={onClose}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+        <DialogHeader className="text-left rtl:text-right pt-6">
+          <DialogTitle>
+            {cheque ? t("Edit Cheque") : t("New Cheque")}
+          </DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            {cheque
+              ? t("Edit the worksheet for {{no}}", {
+                  num: cheque.serial,
+                })
+              : t("Enter the details for the new cheque")}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -33,6 +48,7 @@ export default function EditDialog({ children }: ComponentProps) {
               Name
             </Label>
             <Input
+              type="date"
               id="name"
               defaultValue="Pedro Duarte"
               className="col-span-3"
@@ -50,7 +66,9 @@ export default function EditDialog({ children }: ComponentProps) {
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit">Save changes</Button>
+          <Button type="submit">
+            {cheque ? t("Save Changes") : t("Create")}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

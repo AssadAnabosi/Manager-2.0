@@ -29,7 +29,7 @@ This app is built upon the need for a database for my family's own workshop, so 
   - **finishingTime**: is the time that the work finished.
   - **OTV**: is the amount of overtime that the worker worked.
   - **payment**: is the amount of money that the worker got paid.
-  - **remarks**: is an optional extra notes about the work.
+  - **remarks**: is an optional extra notes about the log.
   - **worker**`*`: is the worker who this log is associated with.
 - **Payee**: is the person or company that the **Cheque** is made out to.
   - **name**`*`: is the name of the payee.
@@ -40,7 +40,7 @@ This app is built upon the need for a database for my family's own workshop, so 
   - **serial**`*`: is the number that is written on the cheque.
   - **dueDate**`*`: is the date that the cheque is due to be cashed.
   - **value**`*`: is the amount that is written on the cheque.
-  - **description**: is an optional description of the cheque.
+  - **remarks**: is an optional extra notes about the cheque.
   - **payee**: is the payee that the cheque is made out to.
   - **isCancelled**: is a flag that is set to true when the cheque is cancelled.
 - **Bill**: is the expenses that are made by the workshop.

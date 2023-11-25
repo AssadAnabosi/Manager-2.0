@@ -1,4 +1,6 @@
 import { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
+import { BillType } from "@/types";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,17 +16,26 @@ import { Label } from "@/components/ui/label";
 
 type ComponentProps = {
   children: ReactNode;
+  bill: BillType;
+  onClose?: (status: boolean) => void;
 };
 
-export default function EditDialog({ children }: ComponentProps) {
+export default function FormDialog({
+  children,
+  bill,
+  onClose,
+}: ComponentProps) {
+  const { t } = useTranslation();
   return (
-    <Dialog>
+    <Dialog onOpenChange={onClose}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+        <DialogHeader className="text-left rtl:text-right pt-6">
+          <DialogTitle>{bill ? t("Edit Bill") : t("New Bill")}</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            {bill
+              ? t("Edit the bill")
+              : t("Enter the details for the new worksheet")}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -33,6 +44,7 @@ export default function EditDialog({ children }: ComponentProps) {
               Name
             </Label>
             <Input
+              type="date"
               id="name"
               defaultValue="Pedro Duarte"
               className="col-span-3"
@@ -50,7 +62,9 @@ export default function EditDialog({ children }: ComponentProps) {
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit">Save changes</Button>
+          <Button type="submit">
+            {bill ? t("Save Changes") : t("Create")}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -2,14 +2,14 @@
 import { UserType } from "@/types";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import DeleteDialog from "@/components/component/delete-dialog";
+
+import AvatarCombo from "./avatar-combo";
+import ActionDropdownMenu from "./action-drop-down";
+import FormDialog from "./form-dialog";
+import RoleBadge from "./role-badge";
 
 import { AvatarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
-
-import AvatarCombo from "@/components/component/avatar-combo";
-import ActionDropdownMenu from "./action-drop-down";
-import EditDialog from "./form-dialog";
-import DeleteDialog from "@/components/component/delete-dialog";
 
 const Row = (user: UserType) => {
   // const { t } = useTranslation();
@@ -20,11 +20,11 @@ const Row = (user: UserType) => {
           title={user.fullName}
           description={`@${user.username}`}
           fallback={<AvatarIcon className="h-7 w-7" />}
+          user={user}
         ></AvatarCombo>
       </TableCell>
-      <TableCell className="text-center hidden md:table-cell">
-        {/* <Badge className="inline-block h-[25px] w-full">{t(user.role)}</Badge> */}
-        <Badge className="inline-block h-[25px] w-full">{user.role}</Badge>
+      <TableCell className="hidden md:table-cell">
+        <RoleBadge role={user.role} />
       </TableCell>
       <TableCell className="hidden md:table-cell">
         <div className="flex flex-col space-y-1">
@@ -36,7 +36,7 @@ const Row = (user: UserType) => {
               {user.email}
             </a>
           </p>
-          <p>
+          <p style={{ direction: "ltr" }} className="rtl:text-right">
             <a
               className="text-muted-foreground hover:cursor-pointer"
               href={`tel:${user.phoneNumber}`}
@@ -50,12 +50,12 @@ const Row = (user: UserType) => {
         <ActionDropdownMenu />
       </TableCell>
       <TableCell className="w-max text-right hidden lg:table-cell">
-        <EditDialog>
+        <FormDialog user={user}>
           <Button variant="edit">
             <Pencil2Icon className="h-4 w-4" />
           </Button>
-        </EditDialog>
-        <DeleteDialog onClick={() => console.log(user.id)}>
+        </FormDialog>
+        <DeleteDialog onAction={() => console.log(user.id)}>
           <Button variant="delete">
             <TrashIcon className="h-4 w-4" />
           </Button>
