@@ -1,15 +1,18 @@
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 import { ChequeType } from "@/types";
+
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import AvatarCombo from "@/components/component/avatar-combo";
+import DeleteDialog from "@/components/component/delete-dialog";
+
+import ActionDropdownMenu from "./action-drop-down";
+import EditDialog from "./form-dialog";
 
 import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
-import AvatarCombo from "@/components/component/avatar-combo";
-import ActionDropdownMenu from "./action-drop-down";
-import EditDialog from "./form-dialog";
-import DeleteDialog from "@/components/component/delete-dialog";
+import { currencyFormatter } from "@/lib/utils";
 
 const Row = (cheque: ChequeType) => {
   return (
@@ -23,7 +26,9 @@ const Row = (cheque: ChequeType) => {
           fallback={cheque.serial}
         ></AvatarCombo>
       </TableCell>
-      <TableCell className="table-cell">₪ {cheque.value}</TableCell>
+      <TableCell className="table-cell">
+        {currencyFormatter(cheque.value)}
+      </TableCell>
       <TableCell className="hidden md:table-cell">
         {cheque.description}
       </TableCell>

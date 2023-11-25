@@ -1,9 +1,15 @@
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 import { LogType } from "@/types";
+
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import AvatarCombo from "@/components/component/avatar-combo";
+import DeleteDialog from "@/components/component/delete-dialog";
+
+import ActionDropdownMenu from "./action-drop-down";
+import EditDialog from "./form-dialog";
 
 import {
   CalendarIcon,
@@ -13,10 +19,7 @@ import {
   TrashIcon,
 } from "@radix-ui/react-icons";
 
-import AvatarCombo from "@/components/component/avatar-combo";
-import ActionDropdownMenu from "./action-drop-down";
-import EditDialog from "./form-dialog";
-import DeleteDialog from "@/components/component/delete-dialog";
+import { currencyFormatter } from "@/lib/utils";
 
 const Row = (log: LogType) => {
   return (
@@ -50,7 +53,9 @@ const Row = (log: LogType) => {
       <TableCell className="hidden md:table-cell">
         {log.startingTime} - {log.finishingTime} ({log.OTV})
       </TableCell>
-      <TableCell className="hidden md:table-cell">₪ {log.payment}</TableCell>
+      <TableCell className="hidden md:table-cell">
+        {currencyFormatter(log.payment)}
+      </TableCell>
       <TableCell className="hidden lg:table-cell">{log.remarks}</TableCell>
       <TableCell className="hidden md:table-cell 2xl:hidden">
         <ActionDropdownMenu />

@@ -29,8 +29,9 @@ import { BarChartIcon, ClockIcon, DownloadIcon } from "@radix-ui/react-icons";
 import {
   getFirstDayOfCurrentMonth,
   getLastDayOfCurrentMonth,
-} from "@/lib/date";
-import { toList } from "@/lib/utils";
+  toList,
+  currencyFormatter,
+} from "@/lib/utils";
 
 import logsData from "@/data/logs.json";
 import usersData from "@/data/users.json";
@@ -102,8 +103,7 @@ const Logs = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  <span className="text-primary">₪ </span>
-                  {logsData.paymentsSumValue}
+                  {currencyFormatter(logsData.paymentsSumValue)}
                 </div>
 
                 <p className="text-xs text-muted-foreground">

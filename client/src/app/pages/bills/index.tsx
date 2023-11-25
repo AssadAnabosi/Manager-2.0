@@ -29,7 +29,8 @@ import { DownloadIcon } from "@radix-ui/react-icons";
 import {
   getFirstDayOfCurrentMonth,
   getLastDayOfCurrentMonth,
-} from "@/lib/date";
+  currencyFormatter,
+} from "@/lib/utils";
 
 import billsData from "@/data/bills.json";
 
@@ -83,8 +84,7 @@ const Bills = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  <span className="text-primary">₪ </span>
-                  {billsData.rangeTotalValue}
+                  {currencyFormatter(billsData.rangeTotalValue)}
                 </div>
 
                 <p className="text-xs text-muted-foreground">
@@ -101,8 +101,7 @@ const Bills = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  <span className="text-primary">₪ </span>
-                  {billsData.allTimeTotalValue}
+                  {currencyFormatter(billsData.allTimeTotalValue)}
                 </div>
 
                 <p className="text-xs text-muted-foreground">

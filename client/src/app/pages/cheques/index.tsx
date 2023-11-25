@@ -31,8 +31,9 @@ import { DownloadIcon } from "@radix-ui/react-icons";
 import {
   getFirstDayOfCurrentMonth,
   getLastDayOfCurrentMonth,
-} from "@/lib/date";
-import { toList } from "@/lib/utils";
+  toList,
+  currencyFormatter,
+} from "@/lib/utils";
 
 import chequesData from "@/data/cheques.json";
 import payeesData from "@/data/payees.json";
@@ -88,8 +89,7 @@ const Cheques = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  <span className="text-primary">₪ </span>
-                  {chequesData.total}
+                  {currencyFormatter(chequesData.total)}
                 </div>
 
                 <p className="text-xs text-muted-foreground">

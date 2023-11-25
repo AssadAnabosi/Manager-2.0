@@ -1,15 +1,18 @@
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 import { BillType } from "@/types";
+
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import AvatarCombo from "@/components/component/avatar-combo";
+import DeleteDialog from "@/components/component/delete-dialog";
+
+import ActionDropdownMenu from "./action-drop-down";
+import EditDialog from "./form-dialog";
 
 import { CalendarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
-import AvatarCombo from "@/components/component/avatar-combo";
-import ActionDropdownMenu from "./action-drop-down";
-import EditDialog from "./form-dialog";
-import DeleteDialog from "@/components/component/delete-dialog";
+import { currencyFormatter } from "@/lib/utils";
 
 const Row = (bill: BillType) => {
   return (
@@ -25,7 +28,9 @@ const Row = (bill: BillType) => {
           fallback={<CalendarIcon className="h-5 w-5" />}
         ></AvatarCombo>
       </TableCell>
-      <TableCell className="table-cell">₪ {bill.value}</TableCell>
+      <TableCell className="table-cell">
+        {currencyFormatter(bill.value)}
+      </TableCell>
       <TableCell className="hidden md:table-cell">{bill.description}</TableCell>
       <TableCell className="hidden lg:table-cell">{bill.remarks}</TableCell>
       <TableCell className="text-right hidden md:table-cell lg:hidden">
