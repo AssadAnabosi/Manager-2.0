@@ -2,7 +2,6 @@ import { ReactNode } from "react";
 import { DashboardIcon } from "@radix-ui/react-icons";
 import PageWrapper from "@/components/navbar/page-wrapper";
 import FooterHoverCard from "@/components/component/footer-hover-card";
-// import SettingsGear from "@/components/component/settings-gear";
 import { useTranslation } from "react-i18next";
 const Layout = ({ children }: { children: ReactNode }) => {
   const { t } = useTranslation();
@@ -15,14 +14,11 @@ const Layout = ({ children }: { children: ReactNode }) => {
               <DashboardIcon className="h-7 w-7" />
               <span className="font-bold text-xl flex ">Dashboard</span>
             </div>
-            {/* <div>
-              <SettingsGear />
-            </div> */}
           </div>
         </div>
         <PageWrapper>{children}</PageWrapper>
-        <footer className="footer text-sm mx-auto">
-          <p className="text-sm">
+        <footer className="text-sm mx-auto">
+          <p>
             {t("Made with ❤️ by")} <FooterHoverCard />
           </p>
         </footer>
