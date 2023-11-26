@@ -31,15 +31,14 @@ function Settings() {
   const [searchParams, setSearchParams] = useSearchParams({
     tab: "password",
   });
-
+  const tabs = ["password", "preferences"];
   const tab = searchParams.get("tab") || "password";
   const setTab = (value: string) => {
     setSearchParams(
       (prev) => {
         prev.delete("tab");
-        if (value) {
+        if (value && tabs.includes(value)) {
           prev.set("tab", value);
-          console.log(value);
         } else prev.set("tab", "password");
         return prev;
       },
