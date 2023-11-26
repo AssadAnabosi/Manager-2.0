@@ -21,8 +21,7 @@ import {
   SelectContent,
   Select,
 } from "@/components/ui/select";
-import { useTheme } from "@/providers/theme-provider";
-import { ThemeType } from "@/types";
+import { useTheme, ThemeType } from "@/providers/theme-provider";
 import { useTranslation } from "react-i18next";
 
 function Settings() {

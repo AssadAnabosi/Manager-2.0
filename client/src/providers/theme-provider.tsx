@@ -2,6 +2,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { ThemeType } from "@/types";
 import { useAuth } from "./auth-provider";
 
+export type { ThemeType } from "@/types";
+
 type ThemeProviderProps = {
   children: React.ReactNode;
   defaultTheme?: ThemeType;

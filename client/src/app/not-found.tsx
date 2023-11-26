@@ -1,11 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-import Layout from "@/app/layout";
-
+import Layout from "./layout";
 import { Unlink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-import { useTranslation } from "react-i18next";
 
 const NotFound = () => {
   const { t } = useTranslation();

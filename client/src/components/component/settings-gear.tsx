@@ -14,8 +14,7 @@ import {
   Select,
 } from "@/components/ui/select";
 import { GearIcon } from "@radix-ui/react-icons";
-import { useTheme } from "@/providers/theme-provider";
-import { ThemeType } from "@/types";
+import { useTheme, ThemeType } from "@/providers/theme-provider";
 import { useTranslation } from "react-i18next";
 
 function SettingsGear() {

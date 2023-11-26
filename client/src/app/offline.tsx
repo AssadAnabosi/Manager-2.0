@@ -1,32 +1,35 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
 
 import Layout from "./layout";
-import { ShieldAlert } from "lucide-react";
+import { Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Unauthorized = () => {
   const { t } = useTranslation();
+  const handleRefresh = () => {
+    window.location.reload();
+  };
   return (
     <Layout>
       <div className="flex justify-center items-center my-auto flex-col gap-6">
-        <ShieldAlert
-          className="text-warning"
+        <Globe
+          className="text-[#3ea6ff]"
           size={256}
           strokeWidth={10}
           absoluteStrokeWidth
         />
-        <p className="uppercase tracking-[20px] text-warning text-3xl">
-          error 403
-        </p>
         <p className="text-2xl text-center capitalize">
-          {t("You are not authorized to view this page.")}
+          {t("You are offline")}
         </p>
         <span className="pl-2 rtl:pr-2 text-xl text-center capitalize">
-          {t("Your adventure ends here, brave traveler.")}
+          {t("Please check your internet connection")}
         </span>
-        <Button>
-          <Link to="/">{t("Go back home")}</Link>
+        <Button
+          variant={"outline"}
+          className="text-[#3ea6ff] hover:text-[#3ea6ff] mt-6"
+          onClick={handleRefresh}
+        >
+          {t("Retry")}
         </Button>
       </div>
     </Layout>
