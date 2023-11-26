@@ -8,7 +8,7 @@ const RowSkeleton = (key: number) => {
         <div className="flex items-center space-x-4 rtl:space-x-reverse">
           <Skeleton className="h-9 w-9 rounded-full" />
           <div className="ml-4 space-y-1">
-            <Skeleton className="h-[14px] w-[100px] leading-none " />
+            <Skeleton className="h-[18px] w-[100px] leading-none " />
             <Skeleton className="h-[20px] w-[130px] " />
           </div>
         </div>

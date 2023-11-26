@@ -3,6 +3,7 @@ import { UserType } from "@/types";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import DeleteDialog from "@/components/component/delete-dialog";
+import StatusBadge from "@/components/component/status-badge";
 
 import AvatarCombo from "./avatar-combo";
 import ActionDropdownMenu from "./action-drop-down";
@@ -27,6 +28,9 @@ const Row = (user: UserType) => {
         <RoleBadge role={user.role} />
       </TableCell>
       <TableCell className="hidden md:table-cell">
+        <StatusBadge status={user.active} />
+      </TableCell>
+      <TableCell className="hidden lg:table-cell">
         <div className="flex flex-col space-y-1">
           <p>
             <a

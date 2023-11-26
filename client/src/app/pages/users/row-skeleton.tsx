@@ -8,18 +8,21 @@ const RowSkeleton = (key: number) => {
         <div className="flex items-center space-x-4 rtl:space-x-reverse">
           <Skeleton className="h-9 w-9 rounded-full" />
           <div className="ml-4 space-y-1">
-            <Skeleton className="h-[14px] w-[120px] leading-none " />
-            <Skeleton className="h-[20px] w-[100px] " />
+            <Skeleton className="h-[20px] w-[120px] leading-none " />
+            <Skeleton className="h-[14px] w-[100px] " />
           </div>
         </div>
       </TableCell>
-      <TableCell>
-        <Skeleton className="hidden md:inline-block h-[25px] w-full rounded-full" />
+      <TableCell className="hidden md:table-cell">
+        <Skeleton className="h-[25px] w-full rounded-full" />
       </TableCell>
-      <TableCell>
+      <TableCell className="hidden md:table-cell">
+        <Skeleton className="h-5 w-[65px] sm:w-full sm:max-w-[65px] md:w-[65px] rounded-full" />
+      </TableCell>
+      <TableCell className="hidden lg:table-cell">
         <div className="flex flex-col space-y-1">
           <Skeleton className="h-[20px] w-[190px] leading-none " />
-          <Skeleton className="h-[20px] w-[120px] " />
+          <Skeleton className="h-[14px] w-[120px] " />
         </div>
       </TableCell>
     </TableRow>

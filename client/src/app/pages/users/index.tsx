@@ -82,10 +82,13 @@ const Users = () => {
               <TableHead className="w-[130px] text-center hidden md:table-cell">
                 {t("Role")}
               </TableHead>
-              <TableHead className="w-max hidden md:table-cell rtl:text-right">
+              <TableHead className="w-[80px] text-center hidden md:table-cell">
+                {t("Status")}
+              </TableHead>
+              <TableHead className="w-max hidden lg:table-cell rtl:text-right">
                 {t("Contact Details")}
               </TableHead>
-              <TableHead className="w-[60px] lg:w-[130px]"></TableHead>
+              <TableHead className="w-max lg:w-[130px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
