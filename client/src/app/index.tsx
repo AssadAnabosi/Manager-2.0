@@ -9,7 +9,8 @@ import Payee from "@/app/pages/payees";
 import Settings from "@/app/pages/settings";
 
 import Layout from "@/components/navbar/layout";
-import NotFound from "./not_found";
+import NotFound from "./not-found";
+import Unauthorized from "./unauthorized";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/payees" element={<Payee />} />
         <Route path="/settings" element={<Settings />} />
       </Route>
+      <Route path="/unauthorized" element={<Unauthorized />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
