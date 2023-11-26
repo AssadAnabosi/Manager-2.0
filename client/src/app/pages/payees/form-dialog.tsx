@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 
 type ComponentProps = {
   children: ReactNode;
-  payee?: PayeeType;
+  payee: PayeeType;
   onClose?: (status: boolean) => void;
 };
 

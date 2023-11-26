@@ -1,3 +1,4 @@
+import { ChequeType } from "@/types";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,7 +16,7 @@ import {
 import FormDialog from "./form-dialog";
 import DeleteDialog from "@/components/component/delete-dialog";
 
-export default function ActionDropdownMenu() {
+export default function ActionDropdownMenu({ cheque }: { cheque: ChequeType }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -25,7 +26,7 @@ export default function ActionDropdownMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuGroup>
-          <FormDialog>
+          <FormDialog cheque={cheque}>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               <Pencil2Icon className="mr-2 h-4 w-4" />
               <span>Edit</span>

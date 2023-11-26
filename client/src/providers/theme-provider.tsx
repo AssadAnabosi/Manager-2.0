@@ -1,17 +1,16 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { ThemeType } from "@/types";
 import { useAuth } from "./auth-provider";
-
-export type Theme = "dark" | "light" | "system";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
-  defaultTheme?: Theme;
+  defaultTheme?: ThemeType;
   storageKey?: string;
 };
 
 type ThemeProviderState = {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
+  theme: ThemeType;
+  setTheme: (theme: ThemeType) => void;
 };
 
 const initialState: ThemeProviderState = {
@@ -28,9 +27,11 @@ export function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   const { user } = useAuth();
-  const [theme, setTheme] = useState<Theme>(
+  const [theme, setTheme] = useState<ThemeType>(
     () =>
-      (localStorage.getItem(storageKey) as Theme) || user?.theme || defaultTheme
+      (localStorage.getItem(storageKey) as ThemeType) ||
+      user?.theme ||
+      defaultTheme
   );
 
   useEffect(() => {
@@ -53,7 +54,7 @@ export function ThemeProvider({
 
   const value = {
     theme,
-    setTheme: (theme: Theme) => {
+    setTheme: (theme: ThemeType) => {
       localStorage.setItem(storageKey, theme);
       setTheme(theme);
     },

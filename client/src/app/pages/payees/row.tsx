@@ -41,10 +41,10 @@ const Row = (payee: PayeeType) => {
       </TableCell>
       <TableCell className="hidden lg:table-cell">{payee.remarks}</TableCell>
       <TableCell className="w-max text-right rtl:text-left lg:hidden">
-        <ActionDropdownMenu />
+        <ActionDropdownMenu payee={payee} />
       </TableCell>
       <TableCell className="w-max ltr:text-right rtl:text-left hidden lg:table-cell">
-        <FormDialog>
+        <FormDialog payee={payee}>
           <Button variant="edit" aria-label="Edit">
             <Pencil2Icon className="h-4 w-4" />
           </Button>

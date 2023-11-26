@@ -21,7 +21,8 @@ import {
   SelectContent,
   Select,
 } from "@/components/ui/select";
-import { useTheme, Theme } from "@/providers/theme-provider";
+import { useTheme } from "@/providers/theme-provider";
+import { ThemeType } from "@/types";
 import { useTranslation } from "react-i18next";
 
 function Settings() {
@@ -49,7 +50,7 @@ function Settings() {
     theme: theme,
     lang: lang,
   });
-  const handleThemeChange = (value: Theme) => {
+  const handleThemeChange = (value: ThemeType) => {
     setInput({ ...input, theme: value });
   };
   const handleLanguageChange = (lang: string) => {
@@ -111,7 +112,7 @@ function Settings() {
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="space-y-1 rtl:text-right">
-                <Label htmlFor="theme">{t("Theme")}</Label>
+                <Label htmlFor="theme">{t("ThemeType")}</Label>
                 <Select onValueChange={handleThemeChange} defaultValue={theme}>
                   <SelectTrigger className="w-full">
                     <SelectValue />

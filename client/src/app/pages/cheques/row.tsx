@@ -32,7 +32,7 @@ const Row = (cheque: ChequeType) => {
       </TableCell>
       <TableCell className="hidden md:table-cell">{cheque.remarks}</TableCell>
       <TableCell className="text-right hidden md:table-cell lg:hidden">
-        <ActionDropdownMenu />
+        <ActionDropdownMenu cheque={cheque} />
       </TableCell>
       <TableCell className="text-right hidden lg:table-cell">
         <FormDialog cheque={cheque}>

@@ -1,23 +1,13 @@
 import { createContext, useState, useContext } from "react";
-
-export type User = {
-  id: string;
-  username: string;
-  role: string;
-  fullName: string;
-  email: string;
-  phoneNumber: string;
-  theme: string;
-  language: string;
-};
+import { UserType } from "@/types";
 
 type AuthProviderState = {
-  user: User;
-  setUser: (user: User) => void;
+  user: UserType;
+  setUser: (user: UserType) => void;
 };
 
 const initialState: AuthProviderState = {
-  user: {} as User,
+  user: {} as UserType,
   setUser: () => null,
 };
 
@@ -25,15 +15,15 @@ const AuthProviderContext = createContext<AuthProviderState>(initialState);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const storageKey = "auth-user";
-  const [user, setUser] = useState<User>(() => {
+  const [user, setUser] = useState<UserType>(() => {
     if (localStorage.getItem(storageKey))
-      return JSON.parse(localStorage.getItem(storageKey) as string) as User;
-    return {} as User;
+      return JSON.parse(localStorage.getItem(storageKey) as string) as UserType;
+    return {} as UserType;
   });
 
   const value = {
     user,
-    setUser: (user: User) => {
+    setUser: (user: UserType) => {
       localStorage.setItem(storageKey, JSON.stringify(user));
       setUser(user);
     },

@@ -1,4 +1,3 @@
-// import { useTranslation } from "react-i18next";
 import { UserType } from "@/types";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -13,7 +12,6 @@ import RoleBadge from "./role-badge";
 import { AvatarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
 const Row = (user: UserType) => {
-  // const { t } = useTranslation();
   return (
     <TableRow key={user.id} className="h-[73px]">
       <TableCell>
@@ -51,7 +49,7 @@ const Row = (user: UserType) => {
         </div>
       </TableCell>
       <TableCell className="w-max text-right lg:hidden">
-        <ActionDropdownMenu />
+        <ActionDropdownMenu user={user} />
       </TableCell>
       <TableCell className="w-max text-right hidden lg:table-cell">
         <FormDialog user={user}>

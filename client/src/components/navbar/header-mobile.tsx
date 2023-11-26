@@ -98,6 +98,7 @@ export default HeaderMobile;
 
 const MenuToggle = ({ toggle }: { toggle: any }) => (
   <button
+    aria-label="Toggle Navigation Menu"
     onClick={toggle}
     className="pointer-events-auto absolute top-[14px] z-30 ltr:right-4 rtl:left-4"
   >

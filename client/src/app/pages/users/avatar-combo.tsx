@@ -51,8 +51,15 @@ const AvatarCombo = ({
           <AvatarFallback>{fallback}</AvatarFallback>
         </Avatar>
         <div className="ltr:ml-4 rtl:mr-4 space-y-1">
-          <p className="text-sm font-medium leading-none">{title}</p>
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <p
+            className="text-sm font-medium leading-none"
+            aria-label="Full Name"
+          >
+            {title}
+          </p>
+          <p className="text-sm text-muted-foreground" aria-label="Username">
+            {description}
+          </p>
         </div>
       </div>
       <AlertDialogTrigger asChild className="lg:hidden">
@@ -62,8 +69,15 @@ const AvatarCombo = ({
             <AvatarFallback>{fallback}</AvatarFallback>
           </Avatar>
           <div className="ltr:ml-4 rtl:mr-4 space-y-1">
-            <p className="text-sm font-medium leading-none">{title}</p>
-            <p className="text-sm text-muted-foreground">{description}</p>
+            <p
+              className="text-sm font-medium leading-none"
+              aria-label="Full Name"
+            >
+              {title}
+            </p>
+            <p className="text-sm text-muted-foreground" aria-label="Username">
+              {description}
+            </p>
           </div>
         </div>
       </AlertDialogTrigger>

@@ -14,7 +14,8 @@ import {
   Select,
 } from "@/components/ui/select";
 import { GearIcon } from "@radix-ui/react-icons";
-import { useTheme, Theme } from "@/providers/theme-provider";
+import { useTheme } from "@/providers/theme-provider";
+import { ThemeType } from "@/types";
 import { useTranslation } from "react-i18next";
 
 function SettingsGear() {
@@ -26,7 +27,7 @@ function SettingsGear() {
   };
   const { setTheme, theme } = useTheme();
   const lang = document.documentElement.lang.substring(0, 2);
-  const handleThemeChange = (value: Theme) => {
+  const handleThemeChange = (value: ThemeType) => {
     setTheme(value);
   };
   return (
@@ -45,7 +46,7 @@ function SettingsGear() {
             </div>
             <div className="grid gap-2">
               <div className="grid grid-cols-3 items-center gap-4 w-full">
-                <Label htmlFor="theme">{t("Theme")}</Label>
+                <Label htmlFor="theme">{t("ThemeType")}</Label>
                 <Select onValueChange={handleThemeChange} defaultValue={theme}>
                   <SelectTrigger className="w-full">
                     <SelectValue />

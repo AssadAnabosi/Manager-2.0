@@ -2,135 +2,137 @@
 <html lang="en" dir="trl" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Al-Anabosi</title>
     <meta
       name="description"
       content="Al-Anabosi Workshop Management Dashboard"
     />
+    <meta name="theme-color" content="hsla(0, 72.2%, 50.6%, 0.3)" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon192.png" />
+    <style>
+      html {
+        background-color: hsl(0 0% 3.9%);
+      }
+
+      .noscript1 {
+        font-family: sans-serif;
+        flex: 1 1 0%;
+        color: hsl(0 0% 100%);
+        background-color: hsl(0 0% 3.9%);
+      }
+
+      .noscript2 {
+        display: flex;
+        flex-direction: column;
+        min-height: 98vh;
+      }
+
+      .noscript3 {
+        position: sticky;
+        right: 0;
+        left: 0;
+        top: 0;
+        z-index: 30;
+        width: 100%;
+        border: 0px solid hsl(0 0% 14.9%);
+        border-bottom-width: 1px;
+        width: 100%;
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 300ms;
+      }
+
+      .noscript4 {
+        display: flex;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        justify-content: space-between;
+        align-items: center;
+        height: 47px;
+      }
+
+      .noscript5 {
+        display: flex;
+        margin-left: 1rem;
+        align-items: center;
+        margin-right: calc(1rem /* 16px */);
+        margin-left: calc(1rem /* 16px */);
+      }
+
+      .noscript6 {
+        height: 28px;
+        width: 28px;
+      }
+
+      .noscript7 {
+        display: flex;
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+        font-weight: 700;
+        margin-left: 16px;
+      }
+
+      .noscript8 {
+        display: flex;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-top: 0.5rem;
+        padding-bottom: 1rem;
+        margin-top: 0.5rem;
+        flex-direction: column;
+        flex-grow: 1;
+        margin-top: calc(0.5rem /* 8px */);
+        margin-bottom: calc(0.5rem /* 8px */);
+      }
+
+      .noscript9 {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        justify-content: center;
+        align-items: center;
+        margin-top: auto;
+        margin-bottom: auto;
+      }
+
+      .noscript10 {
+        font-size: 1.875rem;
+        line-height: 2.25rem;
+        text-transform: uppercase;
+        letter-spacing: 20px;
+        color: hsl(0 62.8% 30.6%);
+      }
+
+      .noscript11 {
+        font-size: 1.5rem;
+        line-height: 2rem;
+        text-align: center;
+        text-transform: capitalize;
+      }
+
+      .noscript12 {
+        padding-right: 0.5rem;
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+        text-align: center;
+        text-transform: capitalize;
+      }
+
+      .noscript13 {
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .noscript14 {
+        color: hsl(0 72.2% 50.6%);
+      }
+    </style>
   </head>
-
-  <style>
-    html {
-      background-color: hsl(0 0% 3.9%);
-    }
-
-    .noscript1 {
-      font-family: sans-serif;
-      flex: 1 1 0%;
-      color: hsl(0 0% 100%);
-      background-color: hsl(0 0% 3.9%);
-    }
-
-    .noscript2 {
-      display: flex;
-      flex-direction: column;
-      min-height: 98vh;
-    }
-
-    .noscript3 {
-      position: sticky;
-      right: 0;
-      left: 0;
-      top: 0;
-      z-index: 30;
-      width: 100%;
-      border: 0px solid hsl(0 0% 14.9%);
-      border-bottom-width: 1px;
-      width: 100%;
-      transition-property: all;
-      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-      transition-duration: 300ms;
-    }
-
-    .noscript4 {
-      display: flex;
-      padding-left: 1rem;
-      padding-right: 1rem;
-      justify-content: space-between;
-      align-items: center;
-      height: 47px;
-    }
-
-    .noscript5 {
-      display: flex;
-      margin-left: 1rem;
-      align-items: center;
-      margin-right: calc(1rem /* 16px */);
-      margin-left: calc(1rem /* 16px */);
-    }
-
-    .noscript6 {
-      height: 28px;
-      width: 28px;
-    }
-
-    .noscript7 {
-      display: flex;
-      font-size: 1.25rem;
-      line-height: 1.75rem;
-      font-weight: 700;
-      margin-left: 16px;
-    }
-
-    .noscript8 {
-      display: flex;
-      padding-left: 1rem;
-      padding-right: 1rem;
-      padding-top: 0.5rem;
-      padding-bottom: 1rem;
-      margin-top: 0.5rem;
-      flex-direction: column;
-      flex-grow: 1;
-      margin-top: calc(0.5rem /* 8px */);
-      margin-bottom: calc(0.5rem /* 8px */);
-    }
-
-    .noscript9 {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      justify-content: center;
-      align-items: center;
-      margin-top: auto;
-      margin-bottom: auto;
-    }
-
-    .noscript10 {
-      font-size: 1.875rem;
-      line-height: 2.25rem;
-      text-transform: uppercase;
-      letter-spacing: 20px;
-      color: hsl(0 62.8% 30.6%);
-    }
-
-    .noscript11 {
-      font-size: 1.5rem;
-      line-height: 2rem;
-      text-align: center;
-      text-transform: capitalize;
-    }
-
-    .noscript12 {
-      padding-right: 0.5rem;
-      font-size: 1.25rem;
-      line-height: 1.75rem;
-      text-align: center;
-      text-transform: capitalize;
-    }
-
-    .noscript13 {
-      font-size: 0.875rem;
-      line-height: 1.25rem;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .noscript14 {
-      color: hsl(0 72.2% 50.6%);
-    }
-  </style>
 
   <body>
     <div id="root"></div>

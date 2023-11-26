@@ -8,22 +8,26 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useAuth } from "@/providers/auth-provider";
 import { useState } from "react";
 import axios from "@/api/axios";
-import { useTheme } from "@/providers/theme-provider";
+// import { useTheme } from "@/providers/theme-provider";
 import Layout from "./layout";
 
 function Login() {
-  const { setTheme } = useTheme();
-  const { user, setUser } = useAuth();
+  // const { setTheme } = useTheme();
+  // const { user, setUser } = useAuth();
+  const { setUser } = useAuth();
   const { toast } = useToast();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<{
+    title?: string;
+    description?: string;
+  }>();
 
-  const handleUserName = (e) => {
+  const handleUserName = (e: any) => {
     setUsername(e.target.value);
   };
 
-  const handlePassword = (e) => {
+  const handlePassword = (e: any) => {
     setPassword(e.target.value);
   };
   const handleLogin = async () => {
@@ -37,8 +41,8 @@ function Login() {
       toast({
         title: `Welcome Back, ${data.data.user.fullName}`,
       });
-      setError(null);
-    } catch (error) {
+      setError(undefined);
+    } catch (error: any) {
       if (error.code === "ERR_NETWORK" || !error?.response) {
         setError({
           title: "Server is down",

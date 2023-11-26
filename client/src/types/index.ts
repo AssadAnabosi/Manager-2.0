@@ -1,3 +1,6 @@
+export type ThemeType = "dark" | "light" | "system";
+export type LanguageType = "en" | "ar";
+
 export type UserType = {
   id: string;
   fullName: string;
