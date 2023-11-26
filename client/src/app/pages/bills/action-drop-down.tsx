@@ -20,7 +20,7 @@ export default function ActionDropdownMenu({ bill }: { bill: BillType }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost">
+        <Button variant="ghost" aria-label="More">
           <DotsHorizontalIcon />
         </Button>
       </DropdownMenuTrigger>

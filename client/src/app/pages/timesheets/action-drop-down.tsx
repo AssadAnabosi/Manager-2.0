@@ -20,7 +20,7 @@ export default function ActionDropdownMenu({ log }: { log: LogType }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost">
+        <Button variant="ghost" aria-label="More">
           <DotsHorizontalIcon />
         </Button>
       </DropdownMenuTrigger>

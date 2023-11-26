@@ -43,12 +43,12 @@ const Row = (log: LogType) => {
       </TableCell>
       <TableCell className="hidden 2xl:table-cell">
         <FormDialog log={log}>
-          <Button variant="edit">
+          <Button variant="edit" aria-label="Edit">
             <Pencil2Icon className="h-4 w-4" />
           </Button>
         </FormDialog>
         <DeleteDialog onAction={() => console.log(log.id)}>
-          <Button variant="delete">
+          <Button variant="delete" aria-label="Delete">
             <TrashIcon className="h-4 w-4" />
           </Button>
         </DeleteDialog>

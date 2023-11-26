@@ -36,12 +36,12 @@ const Row = (cheque: ChequeType) => {
       </TableCell>
       <TableCell className="text-right hidden lg:table-cell">
         <FormDialog cheque={cheque}>
-          <Button variant="edit">
+          <Button variant="edit" aria-label="Edit">
             <Pencil2Icon className="h-4 w-4" />
           </Button>
         </FormDialog>
         <DeleteDialog onAction={() => console.log(cheque.id)}>
-          <Button variant="delete">
+          <Button variant="delete" aria-label="Delete">
             <TrashIcon className="h-4 w-4" />
           </Button>
         </DeleteDialog>

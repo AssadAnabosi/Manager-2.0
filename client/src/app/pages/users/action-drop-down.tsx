@@ -1,3 +1,4 @@
+import { UserType } from "@/types";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,17 +16,17 @@ import {
 import FormDialog from "./form-dialog";
 import DeleteDialog from "@/components/component/delete-dialog";
 
-export default function ActionDropdownMenu() {
+export default function ActionDropdownMenu({ user }: { user: UserType }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost">
+        <Button variant="ghost" aria-label="More">
           <DotsHorizontalIcon />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuGroup>
-          <FormDialog>
+          <FormDialog user={user}>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               <Pencil2Icon className="mr-2 h-4 w-4" />
               <span>Edit</span>
