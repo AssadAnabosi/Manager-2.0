@@ -1,4 +1,4 @@
-import { UserType } from "@/types";
+import { UserType } from "@/lib/types";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import DeleteDialog from "@/components/component/delete-dialog";

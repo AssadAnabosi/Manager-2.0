@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { BillType } from "@/types";
+import { BillType } from "@/lib/types";
 import {
   AlertDialog,
   AlertDialogCancel,

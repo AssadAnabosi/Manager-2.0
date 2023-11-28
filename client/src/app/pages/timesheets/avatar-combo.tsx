@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { LogType } from "@/types";
+import { LogType } from "@/lib/types";
 import {
   AlertDialog,
   AlertDialogCancel,

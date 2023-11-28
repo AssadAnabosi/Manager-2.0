@@ -1,4 +1,4 @@
-import { PayeeType } from "@/types";
+import { PayeeType } from "@/lib/types";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 

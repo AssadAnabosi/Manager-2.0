@@ -1,4 +1,4 @@
-import { BillType } from "@/types";
+import { BillType } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,

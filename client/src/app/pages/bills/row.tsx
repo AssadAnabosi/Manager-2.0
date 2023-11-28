@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
-import { BillType } from "@/types";
+import { BillType } from "@/lib/types";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";

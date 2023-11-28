@@ -1,4 +1,4 @@
-import { PayeeType } from "@/types";
+import { PayeeType } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,

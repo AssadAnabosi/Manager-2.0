@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { LogType } from "@/types";
+import { LogType } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

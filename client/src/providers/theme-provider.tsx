@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { ThemeType } from "@/types";
+import { ThemeType } from "@/lib/types";
 import { useAuth } from "./auth-provider";
 
-export type { ThemeType } from "@/types";
+export type { ThemeType } from "@/lib/types";
 
 type ThemeProviderProps = {
   children: React.ReactNode;

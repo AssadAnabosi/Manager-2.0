@@ -1,4 +1,4 @@
-import { UserType } from "@/types";
+import { UserType } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
