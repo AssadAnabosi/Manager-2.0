@@ -10,7 +10,8 @@ export default defineConfig({
       manifest: {
         name: "Al-Anabosi Management Dashboard",
         short_name: "Al-Anabosi",
-        theme_color: "hsla(0, 72.2%, 50.6%, 0.3)",
+        theme_color: "hsl(0, 72.2%, 50.6%)",
+        background_color: "hsl(0, 0%, 3.9%)",
         start_url: "/",
         display: "standalone",
         icons: [
@@ -18,11 +19,6 @@ export default defineConfig({
             src: "favicon.ico",
             sizes: "64x64 32x32 24x24 16x16",
             type: "image/x-icon",
-          },
-          {
-            src: "favicon192.ico",
-            sizes: "192x192",
-            type: "image/png",
           },
           {
             src: "icons/icon-72x72.png",
