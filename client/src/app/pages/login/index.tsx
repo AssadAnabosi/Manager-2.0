@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -7,11 +8,16 @@ import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useAuth } from "@/providers/auth-provider";
 import { useState } from "react";
-import axios from "@/api/axios";
+// import axios from "@/api/axios";
 // import { useTheme } from "@/providers/theme-provider";
 import Layout from "./layout";
 
+import usersData from "@/data/users.json";
+
 function Login() {
+  const Navigate = useNavigate();
+  const users = usersData.users;
+  const usernames = users.map((user) => user.username);
   // const { setTheme } = useTheme();
   // const { user, setUser } = useAuth();
   const { setUser } = useAuth();
@@ -30,35 +36,55 @@ function Login() {
   const handlePassword = (e: any) => {
     setPassword(e.target.value);
   };
+  // const handleLogin = async () => {
+  //   try {
+  //     const response = await axios.post("/auth", {
+  //       username,
+  //       password,
+  //     });
+  //     const { data } = response;
+  //     setUser(data.data.user);
+  //     toast({
+  //       title: `Welcome Back, ${data.data.user.fullName}`,
+  //     });
+  //     setError(undefined);
+  //   } catch (error: any) {
+  //     if (error.code === "ERR_NETWORK" || !error?.response) {
+  //       setError({
+  //         title: "Server is down",
+  //         description: "Network Error, Please try again later",
+  //       });
+  //     }
+  //     setError({
+  //       description: error.response.data.message,
+  //     });
+  //   } finally {
+  //     // set theme and language
+  //     // i18n.changeLanguage(user.language);
+  //     // setTheme(user.theme);
+  //   }
+  // };
   const handleLogin = async () => {
-    try {
-      const response = await axios.post("/auth", {
-        username,
-        password,
-      });
-      const { data } = response;
-      setUser(data.data.user);
-      toast({
-        title: `Welcome Back, ${data.data.user.fullName}`,
-      });
-      setError(undefined);
-    } catch (error: any) {
-      if (error.code === "ERR_NETWORK" || !error?.response) {
+    if (usernames.includes(username)) {
+      const user = users.filter((user) => user.username === username)[0];
+      if (password === "1231239*") {
+        setError(undefined);
+        setUser(user);
+        toast({
+          title: `Welcome Back, ${user.fullName}`,
+        });
+        Navigate("/worksheets");
+      } else {
         setError({
-          title: "Server is down",
-          description: "Network Error, Please try again later",
+          description: "Wrong Password",
         });
       }
+    } else {
       setError({
-        description: error.response.data.message,
+        description: "User not found",
       });
-    } finally {
-      // set theme and language
-      // i18n.changeLanguage(user.language);
-      // setTheme(user.theme);
     }
   };
-
   return (
     <Layout>
       <div className="flex justify-center items-center align-center my-auto">
