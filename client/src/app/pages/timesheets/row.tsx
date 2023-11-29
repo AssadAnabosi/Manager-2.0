@@ -29,7 +29,7 @@ const Row = (log: LogType) => {
         ></AvatarCombo>
       </TableCell>
       <TableCell className="text-center">
-        <StatusBadge status={log.isAbsent} />
+        <StatusBadge status={!log.isAbsent} />
       </TableCell>
       <TableCell className="hidden md:table-cell">
         {log.startingTime} - {log.finishingTime} ({numberFormatter(log.OTV)})
