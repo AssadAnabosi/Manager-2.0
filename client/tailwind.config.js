@@ -25,6 +25,7 @@ module.exports = {
         inverse: {
           DEFAULT: "hsl(var(--inverse))",
           foreground: "hsl(var(--inverse-foreground))",
+          border: "hsl(var(--inverse-border))",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",

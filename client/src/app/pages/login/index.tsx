@@ -71,6 +71,7 @@ function Login() {
         setError(undefined);
         setUser(user);
         toast({
+          variant: "inverse",
           title: `Welcome Back, ${user.fullName}`,
         });
         Navigate("/worksheets");

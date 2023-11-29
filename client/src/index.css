@@ -6,6 +6,7 @@
   :root {
     --inverse: 0 0% 3.9%;
     --inverse-foreground: 0 0% 98%;
+    --inverse-border: 0 0% 14.9%;
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -35,6 +36,7 @@
   .dark {
     --inverse: 0 0% 100%;
     --inverse-foreground: 0 0% 3.9%;
+    --inverse-border: 0 0% 89.8%;
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
