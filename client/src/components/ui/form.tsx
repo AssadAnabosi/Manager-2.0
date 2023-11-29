@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";
 import {
@@ -145,8 +146,9 @@ const FormMessage = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, children, ...props }, ref) => {
+  const { t } = useTranslation();
   const { error, formMessageId } = useFormField();
-  const body = error ? String(error?.message) : children;
+  const body = error && error.message ? String(t(error.message)) : children;
 
   if (!body) {
     return null;

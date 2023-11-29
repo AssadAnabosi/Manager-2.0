@@ -145,7 +145,7 @@ const sendTokens = async (user, ipAddress, statusCode, res) => {
   user.active = undefined;
   return res.status(statusCode).json({
     success: true,
-    message: "User logged in successfully",
+    message: `Welcome back, ${user.fullName}`,
     data: {
       user,
       accessToken,

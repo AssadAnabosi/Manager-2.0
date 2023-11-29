@@ -2,12 +2,12 @@ import { createContext, useState, useContext } from "react";
 import { UserType } from "@/lib/types";
 
 type AuthProviderState = {
-  user: UserType;
+  user: UserType | undefined;
   setUser: (user: UserType) => void;
 };
 
 const initialState: AuthProviderState = {
-  user: {} as UserType,
+  user: undefined,
   setUser: () => null,
 };
 
@@ -15,10 +15,10 @@ const AuthProviderContext = createContext<AuthProviderState>(initialState);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const storageKey = "auth-user";
-  const [user, setUser] = useState<UserType>(() => {
+  const [user, setUser] = useState<UserType | undefined>(() => {
     if (localStorage.getItem(storageKey))
       return JSON.parse(localStorage.getItem(storageKey) as string) as UserType;
-    return {} as UserType;
+    return undefined;
   });
 
   const value = {

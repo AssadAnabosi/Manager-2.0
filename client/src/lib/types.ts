@@ -56,3 +56,8 @@ export type PayeeType = {
   phoneNumber: string;
   remarks: string;
 };
+
+export type AlertType = {
+  title?: string;
+  description: string;
+};

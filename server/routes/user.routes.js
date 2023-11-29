@@ -31,13 +31,13 @@ router.post(
 );
 
 router.patch(
-  "/update-password",
+  "/password",
   validator.validateUpdatePassword,
   catchError(controller.updatePassword)
 );
 
 router.patch(
-  "/update-preferences",
+  "/preferences",
   validator.validateUpdatePreferences,
   catchError(controller.updatePreferences)
 );
@@ -58,7 +58,7 @@ router
 router.route("/:userID/*").all(validateParamID("userID"), authorize([ADMIN]));
 
 router.patch(
-  "/:userID/reset-password",
+  "/:userID/password",
   validator.validateResetPassword,
   catchError(controller.resetPassword)
 );
@@ -70,7 +70,7 @@ router.patch(
 );
 
 router.patch(
-  "/:userID/active-status",
+  "/:userID/status",
   validator.validateSetActiveStatus,
   catchError(controller.setActiveStatus)
 );

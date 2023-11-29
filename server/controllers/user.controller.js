@@ -86,7 +86,7 @@ export const updatePassword = async (req, res) => {
 
   const isMatch = await user.matchPassword(currentPassword);
   if (!isMatch) {
-    throw new ResponseError("Wrong current password", statusCode.BAD_REQUEST);
+    throw new ResponseError("Invalid current password", statusCode.BAD_REQUEST);
   }
 
   user.password = newPassword;
