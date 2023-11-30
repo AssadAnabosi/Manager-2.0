@@ -1,11 +1,17 @@
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "@/api/axios";
 
-import { useEffect } from "react";
-import { useAuth, useRefreshToken } from "@/providers/auth-provider";
+import { useAuth, useLogout, useRefreshToken } from "@/providers/auth-provider";
+import { useError } from "@/providers/error-provider";
 
 const useAxios = () => {
   const { accessToken, setAccessToken } = useAuth();
   const refreshToken = useRefreshToken();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const logout = useLogout();
+  const { setError } = useError();
 
   useEffect(() => {
     const requestInterceptor = axios.interceptors.request.use(
@@ -39,6 +45,16 @@ const useAxios = () => {
           } catch (error) {
             return Promise.reject(error);
           }
+        } else {
+          navigate("/", {
+            state: { from: location },
+            replace: true,
+          });
+          logout();
+          setError({
+            title: "Session Expired",
+            description: "Please login again.",
+          });
         }
       }
     );

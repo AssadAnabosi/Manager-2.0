@@ -11,6 +11,7 @@ import App from "@/app";
 
 import { Toaster } from "@/components/ui/toaster";
 import Loading from "@/components/component/loading";
+import { ErrorProvider } from "./providers/error-provider";
 
 i18n.on("languageChanged", (locale) => {
   let lang = locale.substring(0, 2);
@@ -29,12 +30,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AuthProvider>
       <ThemeProvider defaultTheme="system">
-        <BrowserRouter>
-          <React.Suspense fallback={<Loading />}>
-            <App />
-            <Toaster />
-          </React.Suspense>
-        </BrowserRouter>
+        <ErrorProvider>
+          <BrowserRouter>
+            <React.Suspense fallback={<Loading />}>
+              <App />
+              <Toaster />
+            </React.Suspense>
+          </BrowserRouter>
+        </ErrorProvider>
       </ThemeProvider>
     </AuthProvider>
   </React.StrictMode>

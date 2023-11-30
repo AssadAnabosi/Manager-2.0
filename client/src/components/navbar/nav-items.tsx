@@ -5,6 +5,7 @@ import {
   FileIcon,
   IdCardIcon,
   EnvelopeClosedIcon,
+  ExitIcon,
 } from "@radix-ui/react-icons";
 
 export type SideNavItem = {
@@ -50,5 +51,10 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     title: "Settings",
     path: "/settings",
     icon: <GearIcon className="h-5 w-5 mr-5" />,
+  },
+  {
+    title: "Logout",
+    path: "/logout",
+    icon: <ExitIcon className="h-5 w-5 mr-5" />,
   },
 ];

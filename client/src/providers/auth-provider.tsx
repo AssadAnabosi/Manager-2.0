@@ -5,12 +5,12 @@ import axios from "@/api/axios";
 type AuthProviderState = {
   user: UserType | undefined;
   accessToken: string | undefined;
-  setUser: (user: UserType) => void;
+  setUser: (user: UserType | null) => void;
   setAccessToken: (accessToken: string) => void;
 };
 
 const initialState: AuthProviderState = {
-  user: {} as UserType,
+  user: undefined,
   accessToken: undefined,
   setUser: () => null,
   setAccessToken: () => null,
@@ -19,10 +19,7 @@ const initialState: AuthProviderState = {
 const AuthProviderContext = createContext<AuthProviderState>(initialState);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  // const storageKey = "auth-user";
   const [user, setUser] = useState<UserType | undefined>(() => {
-    // if (localStorage.getItem(storageKey))
-    //   return JSON.parse(localStorage.getItem(storageKey) as string) as UserType;
     return undefined;
   });
   const [accessToken, setAccessToken] = useState<string | undefined>(() => {
@@ -31,8 +28,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const value = {
     user,
-    setUser: (user: UserType) => {
-      // localStorage.setItem(storageKey, JSON.stringify(user));
+    setUser: (user: UserType | null) => {
+      if (!user) {
+        setUser(undefined);
+        return;
+      }
       setUser(user);
     },
     accessToken,
@@ -56,15 +56,44 @@ export const useAuth = () => {
   return context;
 };
 
+const getAuth = async (accessToken: string) => {
+  const { data: response } = await axios.get("/auth", {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const { data } = response;
+  return data.user;
+};
+
 export const useRefreshToken = () => {
-  const { setAccessToken } = useAuth();
+  const { setAccessToken, setUser } = useAuth();
   const refresh = async () => {
     const { data: response } = await axios.get("/auth/refresh");
     const { data } = response;
-    setAccessToken(data.accessToken);
-    return data.accessToken;
+    const accessToken = data.accessToken;
+    setAccessToken(accessToken);
+    const user = await getAuth(accessToken);
+    setUser(user);
+    return accessToken;
   };
   return refresh;
+};
+
+export const useLogout = () => {
+  const { setUser, setAccessToken } = useAuth();
+  const logout = async () => {
+    try {
+      await axios.post("/auth/logout");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setUser(null);
+      setAccessToken("");
+    }
+  };
+  return logout;
 };
 
 export default AuthProviderContext;

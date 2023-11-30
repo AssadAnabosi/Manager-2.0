@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import axios from "@/api/axios";
-import { AlertType } from "@/lib/types";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +23,7 @@ import { useToast } from "@/components/ui/use-toast";
 import Layout from "./layout";
 import { useTheme } from "@/providers/theme-provider";
 import { useAuth } from "@/providers/auth-provider";
+import { useError } from "@/providers/error-provider";
 import Spinner from "@/components/component/spinner";
 
 const loginSchema = z.object({
@@ -37,11 +37,14 @@ export default function Login() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/worksheets";
+  const pathname = location.state?.from?.pathname;
+  const from = !["/logout", "/unauthorized"].includes(pathname)
+    ? pathname
+    : "/worksheets";
   const { toast } = useToast();
   const { setTheme } = useTheme();
   const { user, setUser, setAccessToken } = useAuth();
-  const [error, setError] = useState<AlertType | undefined>(undefined);
+  const { error, setError } = useError();
 
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
@@ -64,6 +67,7 @@ export default function Login() {
       toast({
         variant: "inverse",
         title: t(message),
+        duration: 2500,
       });
       navigate(from, { replace: true });
     } catch (error: any) {
@@ -100,7 +104,9 @@ export default function Login() {
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
               {error?.title && <AlertTitle>{t(error.title)}</AlertTitle>}
-              <AlertDescription>{t(error.description)}</AlertDescription>
+              {error?.description && (
+                <AlertDescription>{t(error.description)}</AlertDescription>
+              )}
             </Alert>
           )}
           <div className="space-y-4">

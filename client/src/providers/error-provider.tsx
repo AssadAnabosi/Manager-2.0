@@ -6,8 +6,8 @@ type Error = {
 };
 
 type ErrorProviderState = {
-  error: Error;
-  setError: (error: Error) => void;
+  error: Error | undefined;
+  setError: (error: Error | undefined) => void;
 };
 
 const initialState: ErrorProviderState = {
@@ -17,14 +17,18 @@ const initialState: ErrorProviderState = {
 
 const ErrorProviderContext = createContext<ErrorProviderState>(initialState);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const ErrorProvider = ({ children }: { children: React.ReactNode }) => {
   const [error, setError] = useState<Error | undefined>(() => {
     return undefined;
   });
 
   const value = {
     error,
-    setError: (error: Error) => {
+    setError: (error: Error | undefined) => {
+      if (!error) {
+        setError(undefined);
+        return;
+      }
       setError(error);
     },
   };

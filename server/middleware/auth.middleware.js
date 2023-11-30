@@ -51,7 +51,7 @@ export const isAuth = async (req, res, next) => {
       return next(
         new ResponseError(
           "Token Expired, Please Refresh Token",
-          statusCode.NOT_AUTHENTICATED
+          statusCode.NOT_AUTHORIZED
         )
       );
     }
@@ -65,8 +65,7 @@ export const authorize = (userRoles = []) => {
 
   return async (req, res, next) => {
     await isAuth(req, res, (error) => {
-      if (error)
-        return next(error);
+      if (error) return next(error);
       if (userRoles.length && !userRoles.includes(req.user.role)) {
         return next(
           new ResponseError(
@@ -87,8 +86,7 @@ export const notAuthorized = (userRoles = []) => {
 
   return async (req, res, next) => {
     await isAuth(req, res, (error) => {
-      if (error)
-        return next(error);
+      if (error) return next(error);
       if (userRoles.length && userRoles.includes(req.user.role)) {
         return next(
           new ResponseError(
