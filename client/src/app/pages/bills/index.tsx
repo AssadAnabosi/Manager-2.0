@@ -115,7 +115,10 @@ const Bills = () => {
                 <Coins />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
+                <div
+                  style={{ direction: "ltr" }}
+                  className="text-2xl font-bold rtl:text-right"
+                >
                   {currencyFormatter(billsData.rangeTotalValue)}
                 </div>
 
@@ -132,7 +135,10 @@ const Bills = () => {
                 <Coins />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
+                <div
+                  style={{ direction: "ltr" }}
+                  className="text-2xl font-bold rtl:text-right"
+                >
                   {currencyFormatter(billsData.allTimeTotalValue)}
                 </div>
 

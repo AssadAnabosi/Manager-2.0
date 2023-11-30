@@ -35,7 +35,9 @@ const Row = (log: LogType) => {
         {log.startingTime} - {log.finishingTime} ({numberFormatter(log.OTV)})
       </TableCell>
       <TableCell className="hidden md:table-cell">
-        {currencyFormatter(log.payment)}
+        <p style={{ direction: "ltr" }} className="rtl:text-right">
+          {currencyFormatter(log.payment)}
+        </p>
       </TableCell>
       <TableCell className="hidden lg:table-cell">{log.remarks}</TableCell>
       <TableCell className="hidden md:table-cell 2xl:hidden">

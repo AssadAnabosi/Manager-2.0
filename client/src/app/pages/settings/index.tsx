@@ -6,8 +6,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { LanguageType } from "@/lib/types";
 
-import axios from "@/api/axios";
-
 import {
   Card,
   CardContent,
@@ -38,6 +36,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import Spinner from "@/components/component/spinner";
 import { useTheme } from "@/providers/theme-provider";
+import useAxios from "@/hooks/use-axios";
 
 const updatePasswordSchema = z
   .object({
@@ -60,7 +59,7 @@ type UpdatePreferencesSchema = z.infer<typeof UpdatePreferencesSchemaType>;
 export default function Settings() {
   const { t, i18n } = useTranslation();
   const Navigate = useNavigate();
-
+  const axios = useAxios();
   const [searchParams, setSearchParams] = useSearchParams({
     tab: "password",
   });

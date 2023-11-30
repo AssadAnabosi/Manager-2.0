@@ -57,7 +57,11 @@ const AvatarCombo = ({
           >
             {title}
           </p>
-          <p className="text-sm text-muted-foreground" aria-label="Username">
+          <p
+            style={{ direction: "ltr" }}
+            className="text-sm text-muted-foreground rtl:text-right"
+            aria-label="Username"
+          >
             {description}
           </p>
         </div>

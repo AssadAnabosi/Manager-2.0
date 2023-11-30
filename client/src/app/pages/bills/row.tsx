@@ -29,7 +29,7 @@ const Row = (bill: BillType) => {
           bill={bill}
         ></AvatarCombo>
       </TableCell>
-      <TableCell className="table-cell">
+      <TableCell style={{ direction: "ltr" }} className="rtl:text-right">
         {currencyFormatter(bill.value)}
       </TableCell>
       <TableCell className="hidden md:table-cell">{bill.description}</TableCell>

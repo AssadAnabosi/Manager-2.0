@@ -132,7 +132,10 @@ const Cheques = () => {
                 <Coins />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
+                <div
+                  style={{ direction: "ltr" }}
+                  className="text-2xl font-bold rtl:text-right"
+                >
                   {currencyFormatter(chequesData.total)}
                 </div>
 

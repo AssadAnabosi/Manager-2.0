@@ -38,9 +38,11 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.state?.from?.pathname;
-  const from = !["/logout", "/unauthorized"].includes(pathname)
-    ? pathname
-    : "/worksheets";
+  const from =
+    pathname && !["/logout", "/unauthorized"].includes(pathname)
+      ? pathname
+      : "/worksheets";
+  console.log(from);
   const { toast } = useToast();
   const { setTheme } = useTheme();
   const { user, setUser, setAccessToken } = useAuth();
@@ -85,7 +87,6 @@ export default function Login() {
   }
   useEffect(() => {
     if (user) {
-      console.log("user", user);
       navigate("/worksheets", { replace: true });
     }
   }, []);

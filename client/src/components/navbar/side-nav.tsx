@@ -1,24 +1,70 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
-import { SIDENAV_ITEMS, SideNavItem } from "./nav-items";
-import { DashboardIcon } from "@radix-ui/react-icons";
-
 import { useTranslation } from "react-i18next";
 
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { SIDENAV_ITEMS, SideNavItem } from "./nav-items";
+import { useAuth } from "@/providers/auth-provider";
+
+import {
+  ChevronDownIcon,
+  DashboardIcon,
+  IdCardIcon,
+} from "@radix-ui/react-icons";
+
 const SideNav = () => {
+  const { user } = useAuth();
   return (
     <nav className="xl:w-60 bg-background h-screen flex-1 fixed border-border hidden xl:flex ltr:border-r rtl:border-l">
-      <div className="flex flex-col space-y-6 w-full">
-        <div className="flex bg-background flex-row space-x-3 rtl:space-x-reverse items-center justify-center xl:justify-start xl:px-6 border-b border-border h-12 w-full">
+      <div className="flex flex-col space-y-6 w-full h-full">
+        <div className="h-12 flex bg-background flex-row space-x-3 rtl:space-x-reverse items-center justify-center xl:justify-start xl:px-6 border-b border-border w-full">
           <DashboardIcon className="h-7 w-7" />
           <span className="font-bold text-xl hidden xl:flex">Dashboard</span>
         </div>
-
-        <div className="flex flex-col space-y-2  xl:px-6 ">
-          {SIDENAV_ITEMS.map((item, idx) => {
-            return <MenuItem key={idx} item={item} />;
-          })}
+        <div className="flex flex-col justify-between h-[92%]">
+          <div className="flex flex-col space-y-2 xl:px-6 ">
+            {SIDENAV_ITEMS.map((item, idx) => {
+              return <MenuItem key={idx} item={item} />;
+            })}
+          </div>
+          {user && (
+            <div className="w-full">
+              <Card className="mx-3">
+                <CardContent className="my-auto p-5">
+                  <div className="items-center flex">
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage alt="Avatar" />
+                      <AvatarFallback>
+                        <IdCardIcon className="h-5 w-5" />
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="ltr:ml-2 rtl:mr-2 space-y-1">
+                      <p
+                        className="text-sm font-medium leading-none"
+                        aria-label="Full Name"
+                      >
+                        {user.fullName}
+                      </p>
+                      <p
+                        style={{ direction: "ltr" }}
+                        className="text-sm text-muted-foreground rtl:text-right"
+                        aria-label="Username"
+                      >
+                        @{user.username}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              {/* <p
+                style={{ direction: "ltr" }}
+                className="text-xs text-center pt-1"
+              >
+                &copy; {new Date().getFullYear()}
+              </p> */}
+            </div>
+          )}
         </div>
       </div>
     </nav>

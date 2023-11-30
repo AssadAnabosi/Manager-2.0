@@ -27,7 +27,7 @@ const Row = (cheque: ChequeType) => {
           cheque={cheque}
         ></AvatarCombo>
       </TableCell>
-      <TableCell className="table-cell">
+      <TableCell style={{ direction: "ltr" }} className="rtl:text-right">
         {currencyFormatter(cheque.value)}
       </TableCell>
       <TableCell className="hidden md:table-cell">{cheque.remarks}</TableCell>

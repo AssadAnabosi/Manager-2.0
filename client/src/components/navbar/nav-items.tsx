@@ -1,9 +1,8 @@
-import { IdCardIcon } from "@radix-ui/react-icons";
-
 import {
   Archive,
   Receipt,
   Landmark,
+  Users,
   User,
   Settings,
   LogOut,
@@ -39,7 +38,7 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
   {
     title: "Users",
     path: "/users",
-    icon: <IdCardIcon className="h-5 w-5 mr-5" />,
+    icon: <Users className="h-5 w-5 mr-5" />,
     adminOnly: true,
   },
   {
