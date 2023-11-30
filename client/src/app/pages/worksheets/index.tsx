@@ -24,8 +24,8 @@ import NoResults from "@/components/component/no-results";
 import Row from "./row";
 import RowSkeleton from "./row-skeleton";
 
-import CardIcon from "@/components/icons/cardIcon";
-import { BarChartIcon, ClockIcon, DownloadIcon } from "@radix-ui/react-icons";
+import { DownloadIcon } from "@radix-ui/react-icons";
+import { Coins, Clock5, Tally5 } from "lucide-react";
 
 import {
   getFirstDayOfCurrentMonth,
@@ -119,7 +119,7 @@ const Logs = () => {
                 <CardTitle className="text-sm font-medium">
                   {t("Days Worked")}
                 </CardTitle>
-                <BarChartIcon />
+                <Tally5 />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{logsData.daysCount}</div>
@@ -134,7 +134,7 @@ const Logs = () => {
                 <CardTitle className="text-sm font-medium">
                   {t("Received Payments")}
                 </CardTitle>
-                <CardIcon />
+                <Coins />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
@@ -151,7 +151,7 @@ const Logs = () => {
                 <CardTitle className="text-sm font-medium">
                   {t("Workday Variance: Balancing Hours")}
                 </CardTitle>
-                <ClockIcon />
+                <Clock5 />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">

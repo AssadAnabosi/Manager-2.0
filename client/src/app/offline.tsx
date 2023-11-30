@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 import Layout from "./layout";
-import { CloudOff } from "lucide-react";
+import { WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Unauthorized = () => {
@@ -12,7 +12,7 @@ const Unauthorized = () => {
   return (
     <Layout>
       <div className="flex justify-center items-center my-auto flex-col gap-6">
-        <CloudOff
+        <WifiOff
           className="text-[#3ea6ff]"
           size={256}
           strokeWidth={10}

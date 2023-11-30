@@ -1,12 +1,13 @@
+import { IdCardIcon } from "@radix-ui/react-icons";
+
 import {
-  ArchiveIcon,
-  GearIcon,
-  PersonIcon,
-  FileIcon,
-  IdCardIcon,
-  EnvelopeClosedIcon,
-  ExitIcon,
-} from "@radix-ui/react-icons";
+  Archive,
+  Receipt,
+  Landmark,
+  User,
+  Settings,
+  LogOut,
+} from "lucide-react";
 
 export type SideNavItem = {
   title: string;
@@ -21,18 +22,18 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
   {
     title: "Worksheets",
     path: "/worksheets",
-    icon: <ArchiveIcon className="h-5 w-5 mr-5" />,
+    icon: <Archive className="h-5 w-5 mr-5" />,
   },
   {
     title: "Bills",
     path: "/bills",
-    icon: <FileIcon className="h-5 w-5 mr-5" />,
+    icon: <Receipt className="h-5 w-5 mr-5" />,
     adminOnly: true,
   },
   {
     title: "Cheques",
     path: "/cheques",
-    icon: <EnvelopeClosedIcon className="h-5 w-5 mr-5" />,
+    icon: <Landmark className="h-5 w-5 mr-5" />,
     adminOnly: true,
   },
   {
@@ -44,17 +45,17 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
   {
     title: "Payees",
     path: "/payees",
-    icon: <PersonIcon className="h-5 w-5 mr-5" />,
+    icon: <User className="h-5 w-5 mr-5" />,
     adminOnly: true,
   },
   {
     title: "Settings",
     path: "/settings",
-    icon: <GearIcon className="h-5 w-5 mr-5" />,
+    icon: <Settings className="h-5 w-5 mr-5" />,
   },
   {
     title: "Logout",
     path: "/logout",
-    icon: <ExitIcon className="h-5 w-5 mr-5" />,
+    icon: <LogOut className="h-5 w-5 mr-5" />,
   },
 ];

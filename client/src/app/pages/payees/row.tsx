@@ -2,7 +2,8 @@ import { PayeeType } from "@/lib/types";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 
-import { PersonIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
+import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
+import { User } from "lucide-react";
 import DeleteDialog from "@/components/component/delete-dialog";
 
 import AvatarCombo from "./avatar-combo";
@@ -15,7 +16,7 @@ const Row = (payee: PayeeType) => {
       <TableCell>
         <AvatarCombo
           title={payee.name}
-          fallback={<PersonIcon className="h-5 w-5" />}
+          fallback={<User className="h-5 w-5" />}
           payee={payee}
         ></AvatarCombo>
       </TableCell>

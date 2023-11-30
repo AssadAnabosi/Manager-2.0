@@ -26,7 +26,7 @@ import NoResults from "@/components/component/no-results";
 import RowSkeleton from "./row-skeleton";
 import Row from "./row";
 
-import CardIcon from "@/components/icons/cardIcon";
+import { Coins } from "lucide-react";
 import { DownloadIcon } from "@radix-ui/react-icons";
 
 import {
@@ -129,7 +129,7 @@ const Cheques = () => {
                 <CardTitle className="text-sm font-medium">
                   {t("Total Sum")}
                 </CardTitle>
-                <CardIcon />
+                <Coins />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
