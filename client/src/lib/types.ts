@@ -11,6 +11,7 @@ export type UserType = {
   active: boolean;
   theme: string;
   language: string;
+  accessToken?: string;
 };
 
 export type LogType = {

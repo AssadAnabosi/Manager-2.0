@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -35,10 +35,12 @@ type LoginSchemaType = z.infer<typeof loginSchema>;
 
 export default function Login() {
   const { t, i18n } = useTranslation();
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/worksheets";
   const { toast } = useToast();
   const { setTheme } = useTheme();
-  const { user, setUser } = useAuth();
+  const { user, setUser, setAccessToken } = useAuth();
   const [error, setError] = useState<AlertType | undefined>(undefined);
 
   const form = useForm<LoginSchemaType>({
@@ -55,6 +57,7 @@ export default function Login() {
       const { data, message } = response;
 
       setUser(data.user);
+      setAccessToken(data.accessToken);
       setTheme(data.user.theme);
       i18n.changeLanguage(data.user.lang);
 
@@ -62,7 +65,7 @@ export default function Login() {
         variant: "inverse",
         title: t(message),
       });
-      Navigate("/worksheets");
+      navigate(from, { replace: true });
     } catch (error: any) {
       if (error.code === "ERR_NETWORK" || !error?.response) {
         setError({
@@ -79,7 +82,7 @@ export default function Login() {
   useEffect(() => {
     if (user) {
       console.log("user", user);
-      Navigate("/worksheets", { replace: true });
+      navigate("/worksheets", { replace: true });
     }
   }, []);
 
