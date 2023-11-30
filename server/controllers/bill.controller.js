@@ -24,8 +24,8 @@ export const getBills = async (req, res) => {
       bills,
       allTimeTotalValue,
       rangeTotalValue,
-      startDate: startDate.toISOString().substring(0, 10),
-      endDate: endDate.toISOString().substring(0, 10),
+      from: startDate.toISOString().substring(0, 10),
+      to: endDate.toISOString().substring(0, 10),
       search,
     },
   });

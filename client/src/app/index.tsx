@@ -11,8 +11,8 @@ import Settings from "@/app/pages/settings";
 
 import PersistentLogin from "@/components/routing/persistent-login";
 import RequireAuth from "@/components/routing/require-auth";
-
 import NavLayout from "@/components/navbar/layout";
+
 import NotFound from "./not-found";
 import Unauthorized from "./unauthorized";
 import Offline from "./offline";

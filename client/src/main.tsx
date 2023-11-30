@@ -3,6 +3,7 @@ import i18n from "./i18n";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { ThemeProvider } from "@/providers/theme-provider";
 import { AuthProvider } from "@/providers/auth-provider";
@@ -26,17 +27,21 @@ i18n.on("languageChanged", (locale) => {
   document.documentElement.dir = dir;
 });
 
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AuthProvider>
       <ThemeProvider defaultTheme="system">
         <ErrorProvider>
-          <BrowserRouter>
-            <React.Suspense fallback={<Loading />}>
-              <App />
-              <Toaster />
-            </React.Suspense>
-          </BrowserRouter>
+          <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+              <React.Suspense fallback={<Loading />}>
+                <App />
+                <Toaster />
+              </React.Suspense>
+            </BrowserRouter>
+          </QueryClientProvider>
         </ErrorProvider>
       </ThemeProvider>
     </AuthProvider>

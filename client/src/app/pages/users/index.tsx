@@ -1,6 +1,10 @@
-import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+
+import { UserType } from "@/lib/types";
+
+import useAxios from "@/hooks/use-axios";
 
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -18,11 +22,9 @@ import NoResults from "@/components/component/no-results";
 import RowSkeleton from "./row-skeleton";
 import Row from "./row";
 
-import usersData from "@/data/users.json";
 import { DownloadIcon } from "@radix-ui/react-icons";
 
 const Users = () => {
-  // usersData.users=[];
   const dummy = [...Array(8)];
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
@@ -40,13 +42,19 @@ const Users = () => {
       { replace: true }
     );
   };
-
-  // set is loading to true for 1500ms
-  const [isLoading, setIsLoading] = useState(true);
-  setTimeout(() => {
-    setIsLoading(false);
-  }, 1500);
-
+  const axios = useAxios();
+  const { data: usersData, isLoading } = useQuery({
+    queryKey: ["users", search],
+    queryFn: async () => {
+      const { data: response } = await axios.get("/users", {
+        params: {
+          search,
+        },
+      });
+      console.log(response.data);
+      return response.data;
+    },
+  });
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       {/* HEADER */}
@@ -94,7 +102,7 @@ const Users = () => {
           <TableBody>
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
-              : usersData.users.map((user) => Row(user))}
+              : usersData.users.map((user: UserType) => Row(user))}
           </TableBody>
         </Table>
       )}

@@ -1,13 +1,15 @@
-import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 import { DateRange } from "react-day-picker";
+import { useQuery } from "@tanstack/react-query";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { LogType } from "@/lib/types";
+
+import useAxios from "@/hooks/use-axios";
+
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -21,31 +23,27 @@ import DateRangePicker from "@/components/component/date-picker-range";
 import Combobox from "@/components/component/combobox";
 import NoResults from "@/components/component/no-results";
 
+import Cards from "./cards";
 import Row from "./row";
 import RowSkeleton from "./row-skeleton";
 
 import { DownloadIcon } from "@radix-ui/react-icons";
-import { Coins, Clock5, Tally5 } from "lucide-react";
 
 import {
   getFirstDayOfCurrentMonth,
   getLastDayOfCurrentMonth,
   toList,
-  currencyFormatter,
-  numberFormatter,
+  dateToString,
+  stringToDate,
 } from "@/lib/utils";
 
-import logsData from "@/data/logs.json";
-import usersData from "@/data/users.json";
-
 const Logs = () => {
-  // logsData.logs=[];
   const dummy = [...Array(8)];
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
     filter: "",
-    from: getFirstDayOfCurrentMonth().toString(),
-    to: getLastDayOfCurrentMonth().toString(),
+    from: getFirstDayOfCurrentMonth(),
+    to: getLastDayOfCurrentMonth(),
   });
 
   const filter = searchParams.get("filter") || "";
@@ -70,21 +68,38 @@ const Logs = () => {
         prev.delete("from");
         prev.delete("to");
         if (date) {
-          if (date.from) prev.set("from", date.from.getTime().toString());
-          if (date.to) prev.set("to", date.to.getTime().toString());
+          if (date.from) prev.set("from", dateToString(date.from));
+          if (date.to) prev.set("to", dateToString(date.to));
         }
         return prev;
       },
       { replace: true }
     );
   };
-  const workers = toList(usersData.users, "fullName");
+  const axios = useAxios();
+  const { data: logsData, isLoading } = useQuery({
+    queryKey: ["logs", { filter, from: date.from, to: date.to }],
+    queryFn: async () => {
+      const { data: response } = await axios.get("/logs", {
+        params: {
+          filter,
+          from: date.from,
+          to: date.to,
+        },
+      });
+      return response.data;
+    },
+  });
 
-  // set is loading to true for 1500ms
-  const [isLoading, setIsLoading] = useState(true);
-  setTimeout(() => {
-    setIsLoading(false);
-  }, 1500);
+  const { data: usersData, isLoading: filterLoading } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const { data: response } = await axios.get("/users");
+      return response.data;
+    },
+  });
+
+  const workers = toList(usersData?.users || [], "fullName");
 
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
@@ -105,75 +120,12 @@ const Logs = () => {
       </div>
       <Separator />
       {/* CARDS */}
-      <div className="grid gap-4 md:grid-cols-3">
-        {isLoading ? (
-          <>
-            <Skeleton className="h-[146px]" />
-            <Skeleton className="h-[146px]" />
-            <Skeleton className="h-[146px]" />
-          </>
-        ) : (
-          <>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 h-[72px]">
-                <CardTitle className="text-sm font-medium">
-                  {t("Days Worked")}
-                </CardTitle>
-                <Tally5 />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{logsData.daysCount}</div>
-
-                <p className="text-xs text-muted-foreground">
-                  {t("This does include days worked less than 8-hours.")}
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 h-[72px]">
-                <CardTitle className="text-sm font-medium">
-                  {t("Received Payments")}
-                </CardTitle>
-                <Coins />
-              </CardHeader>
-              <CardContent>
-                <div
-                  style={{ direction: "ltr" }}
-                  className="text-2xl font-bold rtl:text-right"
-                >
-                  {currencyFormatter(logsData.paymentsSumValue)}
-                </div>
-
-                <p className="text-xs text-muted-foreground">
-                  {t("Sum of all payments received.")}
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 h-[72px]">
-                <CardTitle className="text-sm font-medium">
-                  {t("Workday Variance: Balancing Hours")}
-                </CardTitle>
-                <Clock5 />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {numberFormatter(logsData.OTVSum)}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  {t(
-                    "Expected 8-hour workday; extra hours receive positive, fewer hours negative."
-                  )}
-                </p>
-              </CardContent>
-            </Card>
-          </>
-        )}
-      </div>
+      <Cards isLoading={isLoading} logsData={logsData} />
       <Separator />
       {/* FILTER */}
-      <div className="flex justify-end flex-wrap">
+      <div className="flex justify-end h-[40px] flex-wrap">
         <Combobox
+          isLoading={filterLoading}
           list={workers}
           search={filter}
           setSearch={setFilter}
@@ -190,18 +142,18 @@ const Logs = () => {
               date.to ? (
                 <>
                   {t("A list of timesheets")} {t("from")}{" "}
-                  {format(Number(date.from), "EEEE, dd/LL/y", {
+                  {format(stringToDate(date.from), "EEEE, dd/LL/y", {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}{" "}
                   {t("to")}{" "}
-                  {format(Number(date.to), "EEEE, dd/LL/y", {
+                  {format(stringToDate(date.to), "EEEE, dd/LL/y", {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}
                 </>
               ) : (
                 <>
                   {t("A list of timesheets")} {t("from")}{" "}
-                  {format(Number(date.from), "EEEE, dd/LL/y", {
+                  {format(stringToDate(date.from), "EEEE, dd/LL/y", {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}
                 </>
@@ -231,7 +183,7 @@ const Logs = () => {
           <TableBody>
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
-              : logsData.logs.map((log) => Row(log))}
+              : logsData.logs.map((log: LogType) => Row(log))}
           </TableBody>
         </Table>
       )}

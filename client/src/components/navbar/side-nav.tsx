@@ -132,7 +132,7 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
           to={item.path}
           className={`border-border flex flex-row space-x-4 rtl:space-x-reverse items-center p-2 rounded-xl hover:bg-primary/90 hover:text-primary-foreground ${
             item.path === pathname ? "bg-primary text-primary-foreground" : ""
-          }`}
+          } ${item.title === "Logout" ? "mt-5" : ""}`}
         >
           {item.icon}
           <span className="font-semibold text-xl flex">{t(item.title)}</span>

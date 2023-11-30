@@ -1,5 +1,5 @@
 export default (query) => {
-  const { start, end } = query;
+  const { from, to } = query;
   let search = query.search || "";
   search = search.trim();
   let filter = query.filter || "";
@@ -8,16 +8,16 @@ export default (query) => {
   let startDate = getFirstDayOfCurrentMonth(new Date());
   let endDate = getLastDayOfCurrentMonth(new Date());
 
-  if (start) {
-    startDate = new Date(start);
+  if (from) {
+    startDate = new Date(from);
     // set the time to 00:00:00
-    startDate.setHours(0, 0, 0, 0);
+    startDate.setUTCHours(0, 0, 0, 0);
   }
 
-  if (end) {
-    endDate = new Date(end);
+  if (to) {
+    endDate = new Date(to);
     // set the time to 23:59:59
-    endDate.setHours(23, 59, 59, 999);
+    endDate.setUTCHours(23, 59, 59, 999);
   }
 
   return { startDate, endDate, search, filter };

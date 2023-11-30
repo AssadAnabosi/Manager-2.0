@@ -17,12 +17,14 @@ import {
 } from "@/components/ui/popover";
 
 import { useTranslation } from "react-i18next";
+import { Skeleton } from "../ui/skeleton";
 
 type ComboboxProps = {
   list: { label: string; value: string }[];
   search: string;
   setSearch: (search: string) => void;
   placeholder?: string;
+  isLoading: boolean;
 };
 
 const Combobox = ({
@@ -30,11 +32,14 @@ const Combobox = ({
   search,
   setSearch,
   placeholder = "Select...",
+  isLoading = false,
 }: ComboboxProps) => {
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
 
-  return (
+  return isLoading ? (
+    <Skeleton className="w-full md:w-[335px]" />
+  ) : (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button

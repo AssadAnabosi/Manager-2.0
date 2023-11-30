@@ -30,8 +30,8 @@ export default function DatePickerWithRange({
 }: DatePickerWithRangeProps) {
   const { t } = useTranslation();
   const date = {
-    from: data.from ? new Date(parseInt(data?.from)) : undefined,
-    to: data.to ? new Date(parseInt(data?.to)) : undefined,
+    from: data.from ? new Date(data?.from) : undefined,
+    to: data.to ? new Date(data?.to) : undefined,
   };
   return (
     <div className={cn("grid gap-2 w-full", className)}>

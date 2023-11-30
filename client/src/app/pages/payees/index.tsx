@@ -1,6 +1,11 @@
-import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+
+import { useQuery } from "@tanstack/react-query";
+
+import useAxios from "@/hooks/use-axios";
+
+import { PayeeType } from "@/lib/types";
 
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -19,8 +24,6 @@ import RowSkeleton from "./row-skeleton";
 import Row from "./row";
 
 import { DownloadIcon } from "@radix-ui/react-icons";
-
-import payeesData from "@/data/payees.json";
 
 const Payees = () => {
   // payeesData.payees=[];
@@ -42,11 +45,18 @@ const Payees = () => {
     );
   };
 
-  // set is loading to true for 1500ms
-  const [isLoading, setIsLoading] = useState(true);
-  setTimeout(() => {
-    setIsLoading(false);
-  }, 1500);
+  const axios = useAxios();
+  const { data: payeesData, isLoading } = useQuery({
+    queryKey: ["payees", { search }],
+    queryFn: async () => {
+      const { data: response } = await axios.get("/payees", {
+        params: {
+          search,
+        },
+      });
+      return response.data;
+    },
+  });
 
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
@@ -92,7 +102,7 @@ const Payees = () => {
           <TableBody>
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
-              : payeesData.payees.map((payee) => Row(payee))}
+              : payeesData.payees.map((payee: PayeeType) => Row(payee))}
           </TableBody>
         </Table>
       )}

@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { format } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -12,7 +13,7 @@ export const getFirstDayOfCurrentMonth = () => {
   const firstDay = new Date(year, month, 1, 12, 0, 0, 0);
   // set time to 00:00:00
   firstDay.setHours(0, 0, 0, 0);
-  return firstDay.getTime();
+  return dateToString(firstDay);
 };
 
 export const getLastDayOfCurrentMonth = () => {
@@ -22,7 +23,15 @@ export const getLastDayOfCurrentMonth = () => {
   const lastDay = new Date(year, month + 1, 0, 12, 0, 0, 0);
   // set time to 23:59:59
   lastDay.setHours(23, 59, 59, 999);
-  return lastDay.getTime();
+  return dateToString(lastDay);
+};
+
+export const dateToString = (date: Date) => {
+  return format(Number(date), "y-LL-dd");
+};
+
+export const stringToDate = (string: string) => {
+  return new Date(string);
 };
 
 export function toList(array: any[], value: string) {

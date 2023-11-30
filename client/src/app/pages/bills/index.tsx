@@ -1,13 +1,15 @@
-import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 import { DateRange } from "react-day-picker";
+import { useQuery } from "@tanstack/react-query";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BillType } from "@/lib/types";
+
+import useAxios from "@/hooks/use-axios";
+
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -23,26 +25,24 @@ import NoResults from "@/components/component/no-results";
 
 import RowSkeleton from "./row-skeleton";
 import Row from "./row";
+import Cards from "./cards";
 
-import { Coins } from "lucide-react";
 import { DownloadIcon } from "@radix-ui/react-icons";
 
 import {
   getFirstDayOfCurrentMonth,
   getLastDayOfCurrentMonth,
-  currencyFormatter,
+  dateToString,
+  stringToDate,
 } from "@/lib/utils";
 
-import billsData from "@/data/bills.json";
-
 const Bills = () => {
-  // billsData.bills=[];
   const dummy = [...Array(8)];
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
     search: "",
-    from: getFirstDayOfCurrentMonth().toString(),
-    to: getLastDayOfCurrentMonth().toString(),
+    from: getFirstDayOfCurrentMonth(),
+    to: getLastDayOfCurrentMonth(),
   });
 
   const search = searchParams.get("search") || "";
@@ -67,20 +67,29 @@ const Bills = () => {
         prev.delete("from");
         prev.delete("to");
         if (date) {
-          if (date.from) prev.set("from", date.from.getTime().toString());
-          if (date.to) prev.set("to", date.to.getTime().toString());
+          if (date.from) prev.set("from", dateToString(date.from));
+          if (date.to) prev.set("to", dateToString(date.to));
         }
         return prev;
       },
       { replace: true }
     );
   };
-
-  // set is loading to true for 1500ms
-  const [isLoading, setIsLoading] = useState(true);
-  setTimeout(() => {
-    setIsLoading(false);
-  }, 1500);
+  const axios = useAxios();
+  const { data: billsData, isLoading } = useQuery({
+    queryKey: ["bills", search, date.from, date.to],
+    queryFn: async () => {
+      const { data: response } = await axios.get("/bills", {
+        params: {
+          search,
+          from: date.from,
+          to: date.to,
+        },
+      });
+      console.log(response.data);
+      return response.data;
+    },
+  });
 
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
@@ -99,57 +108,7 @@ const Bills = () => {
       </div>
       <Separator />
       {/* CARDS */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {isLoading ? (
-          <>
-            <Skeleton className="h-[146px]" />
-            <Skeleton className="h-[146px]" />
-          </>
-        ) : (
-          <>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 h-[72px]">
-                <CardTitle className="text-sm font-medium">
-                  {t("Range Sum")}
-                </CardTitle>
-                <Coins />
-              </CardHeader>
-              <CardContent>
-                <div
-                  style={{ direction: "ltr" }}
-                  className="text-2xl font-bold rtl:text-right"
-                >
-                  {currencyFormatter(billsData.rangeTotalValue)}
-                </div>
-
-                <p className="text-xs text-muted-foreground">
-                  {t("Sum of all bills in the selected range.")}
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 h-[72px]">
-                <CardTitle className="text-sm font-medium">
-                  {t("Total Sum")}
-                </CardTitle>
-                <Coins />
-              </CardHeader>
-              <CardContent>
-                <div
-                  style={{ direction: "ltr" }}
-                  className="text-2xl font-bold rtl:text-right"
-                >
-                  {currencyFormatter(billsData.allTimeTotalValue)}
-                </div>
-
-                <p className="text-xs text-muted-foreground">
-                  {t("Sum of all bills ever.")}
-                </p>
-              </CardContent>
-            </Card>
-          </>
-        )}
-      </div>
+      <Cards billsData={billsData} isLoading={isLoading} />
       <Separator />
       {/* FILTER */}
       <div className="flex justify-end flex-wrap">
@@ -167,18 +126,18 @@ const Bills = () => {
               date.to ? (
                 <>
                   {t("A list of bills")} {t("from")}{" "}
-                  {format(Number(date.from), "EEEE, dd/LL/y", {
+                  {format(stringToDate(date.from), "EEEE, dd/LL/y", {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}{" "}
                   {t("to")}{" "}
-                  {format(Number(date.to), "EEEE, dd/LL/y", {
+                  {format(stringToDate(date.to), "EEEE, dd/LL/y", {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}
                 </>
               ) : (
                 <>
                   {t("A list of bills")} {t("from")}{" "}
-                  {format(Number(date.from), "EEEE, dd/LL/y", {
+                  {format(stringToDate(date.from), "EEEE, dd/LL/y", {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}
                 </>
@@ -205,7 +164,7 @@ const Bills = () => {
           <TableBody>
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
-              : billsData.bills.map((bill) => Row(bill))}
+              : billsData.bills.map((bill: BillType) => Row(bill))}
           </TableBody>
         </Table>
       )}

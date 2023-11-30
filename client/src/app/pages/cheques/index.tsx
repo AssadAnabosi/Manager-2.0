@@ -1,13 +1,15 @@
-import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { ar, enGB } from "date-fns/locale";
 import { DateRange } from "react-day-picker";
+import { useQuery } from "@tanstack/react-query";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChequeType } from "@/lib/types";
+
+import useAxios from "@/hooks/use-axios";
+
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -25,19 +27,17 @@ import NoResults from "@/components/component/no-results";
 
 import RowSkeleton from "./row-skeleton";
 import Row from "./row";
+import Cards from "./cards";
 
-import { Coins } from "lucide-react";
 import { DownloadIcon } from "@radix-ui/react-icons";
 
 import {
   getFirstDayOfCurrentMonth,
   getLastDayOfCurrentMonth,
+  stringToDate,
+  dateToString,
   toList,
-  currencyFormatter,
 } from "@/lib/utils";
-
-import chequesData from "@/data/cheques.json";
-import payeesData from "@/data/payees.json";
 
 const Cheques = () => {
   // chequesData.cheques=[];
@@ -46,8 +46,8 @@ const Cheques = () => {
   const [searchParams, setSearchParams] = useSearchParams({
     search: "",
     filter: "",
-    from: getFirstDayOfCurrentMonth().toString(),
-    to: getLastDayOfCurrentMonth().toString(),
+    from: getFirstDayOfCurrentMonth(),
+    to: getLastDayOfCurrentMonth(),
   });
 
   const filter = searchParams.get("filter") || "";
@@ -84,21 +84,40 @@ const Cheques = () => {
         prev.delete("from");
         prev.delete("to");
         if (date) {
-          if (date.from) prev.set("from", date.from.getTime().toString());
-          if (date.to) prev.set("to", date.to.getTime().toString());
+          if (date.from) prev.set("from", dateToString(date.from));
+          if (date.to) prev.set("to", dateToString(date.to));
         }
         return prev;
       },
       { replace: true }
     );
   };
-  const payees = toList(payeesData.payees, "name");
 
-  // set is loading to true for 1500ms
-  const [isLoading, setIsLoading] = useState(true);
-  setTimeout(() => {
-    setIsLoading(false);
-  }, 1500);
+  const axios = useAxios();
+  const { data: chequesData, isLoading } = useQuery({
+    queryKey: ["cheques", { search, filter, from: date.from, to: date.to }],
+    queryFn: async () => {
+      const { data: response } = await axios.get("/cheques", {
+        params: {
+          search,
+          filter,
+          from: date.from,
+          to: date.to,
+        },
+      });
+      console.log(response.data);
+      return response.data;
+    },
+  });
+  const { data: payeesData, isLoading: filterLoading } = useQuery({
+    queryKey: ["payees"],
+    queryFn: async () => {
+      const { data: response } = await axios.get("/payees");
+      return response.data;
+    },
+  });
+
+  const payees = toList(payeesData?.payees || [], "name");
 
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
@@ -117,42 +136,14 @@ const Cheques = () => {
       </div>
       <Separator />
       {/* CARDS */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {isLoading ? (
-          <>
-            <Skeleton className="h-[146px]" />
-          </>
-        ) : (
-          <>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 h-[72px]">
-                <CardTitle className="text-sm font-medium">
-                  {t("Total Sum")}
-                </CardTitle>
-                <Coins />
-              </CardHeader>
-              <CardContent>
-                <div
-                  style={{ direction: "ltr" }}
-                  className="text-2xl font-bold rtl:text-right"
-                >
-                  {currencyFormatter(chequesData.total)}
-                </div>
-
-                <p className="text-xs text-muted-foreground">
-                  {t("Sum of all cheques in the selected range.")}
-                </p>
-              </CardContent>
-            </Card>
-          </>
-        )}
-      </div>
+      <Cards isLoading={isLoading} chequesData={chequesData} />
       <Separator />
       <div className="flex justify-end gap-3">
         <div className="w-full md:w-[335px]">
           <Searchbox value={search} setValue={setSearch} />
         </div>
         <Combobox
+          isLoading={filterLoading}
           list={payees}
           search={filter}
           setSearch={setFilter}
@@ -169,18 +160,18 @@ const Cheques = () => {
               date.to ? (
                 <>
                   {t("A list of cheques")} {t("from")}{" "}
-                  {format(Number(date.from), "EEEE, dd/LL/y", {
+                  {format(stringToDate(date.from), "EEEE, dd/LL/y", {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}{" "}
                   {t("to")}{" "}
-                  {format(Number(date.to), "EEEE, dd/LL/y", {
+                  {format(stringToDate(date.to), "EEEE, dd/LL/y", {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}
                 </>
               ) : (
                 <>
                   {t("A list of cheques")} {t("from")}{" "}
-                  {format(Number(date.from), "EEEE, dd/LL/y", {
+                  {format(stringToDate(date.from), "EEEE, dd/LL/y", {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}
                 </>
@@ -206,7 +197,7 @@ const Cheques = () => {
           <TableBody>
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
-              : chequesData.cheques.map((cheque) => Row(cheque))}
+              : chequesData.cheques.map((cheque: ChequeType) => Row(cheque))}
           </TableBody>
         </Table>
       )}
