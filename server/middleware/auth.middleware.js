@@ -61,6 +61,7 @@ export const isAuth = async (req, res, next) => {
         )
       );
     }
+    console.log(accessToken);
     return next(error);
   }
 };

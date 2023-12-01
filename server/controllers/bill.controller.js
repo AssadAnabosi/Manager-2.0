@@ -1,5 +1,5 @@
 import Bill from "../models/Bill.model.js";
-import { OK } from "../utils/constants/statusCodes.js";
+import { OK, CREATED } from "../utils/constants/statusCodes.js";
 import ReqQueryHelper from "../helpers/reqQuery.helper.js";
 import * as queryHelper from "../helpers/queries/bills.queries.js";
 

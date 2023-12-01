@@ -51,7 +51,7 @@ const useAxios = () => {
           if (refreshNeeded && !original.refreshed) {
             original.refreshed = true;
             try {
-              const { accessToken: newAccessToken } = await refreshToken();
+              const newAccessToken = await refreshToken();
               original.headers["Authorization"] = `Bearer ${newAccessToken}`;
               setAccessToken(newAccessToken);
               return axios(original);
