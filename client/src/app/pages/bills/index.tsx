@@ -3,9 +3,10 @@ import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 import { DateRange } from "react-day-picker";
-import { useQuery } from "@tanstack/react-query";
+import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 
 import { BillType } from "@/lib/types";
+import { DATE_FORMAT } from "@/lib/constants";
 
 import useAxios from "@/hooks/use-axios";
 
@@ -19,15 +20,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useToast } from "@/components/ui/use-toast";
 import DateRangePicker from "@/components/component/date-picker-range";
 import Searchbox from "@/components/component/searchbox";
 import NoResults from "@/components/component/no-results";
+import FetchError from "@/components/component/fetch-error";
 
 import RowSkeleton from "./row-skeleton";
 import Row from "./row";
 import Cards from "./cards";
+import FormDialog from "./form-dialog";
 
-import { DownloadIcon } from "@radix-ui/react-icons";
+import { DownloadIcon, FilePlusIcon } from "@radix-ui/react-icons";
 
 import {
   getFirstDayOfCurrentMonth,
@@ -39,6 +43,7 @@ import {
 const Bills = () => {
   const dummy = [...Array(8)];
   const { t } = useTranslation();
+  const { toast } = useToast();
   const [searchParams, setSearchParams] = useSearchParams({
     search: "",
     from: getFirstDayOfCurrentMonth(),
@@ -77,7 +82,7 @@ const Bills = () => {
   };
   const axios = useAxios();
   const { data: billsData, isLoading } = useQuery({
-    queryKey: ["bills", search, date.from, date.to],
+    queryKey: ["bills", { search, from: date.from, to: date.to }],
     queryFn: async () => {
       const { data: response } = await axios.get("/bills", {
         params: {
@@ -86,21 +91,46 @@ const Bills = () => {
           to: date.to,
         },
       });
-      console.log(response.data);
       return response.data;
     },
   });
-
+  const queryClient = useQueryClient();
+  const { mutate: deleteBill } = useMutation({
+    mutationFn: (id: string) => axios.delete(`/bills/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["bills"],
+      });
+      toast({
+        variant: "success",
+        title: "Bill deleted",
+        description: `Bill was deleted successfully`,
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error?.response?.data?.message || "Something went wrong",
+      });
+    },
+  });
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       {/* HEADER */}
       <div className="flex space-y-2 flex-col justify-between md:flex-row gap-5">
         <h2 className="text-3xl font-bold tracking-tight">{t("Bills")}</h2>
-        <div className="flex items-center space-x-2 rtl:space-x-reverse">
+        <div className="flex items-center gap-2 flex-col md:flex-row">
           <DateRangePicker date={date} setDate={setDate} />
+          <FormDialog>
+            <Button className="w-full">
+              <FilePlusIcon className="ltr:mr-2 rtl:ml-2 h-7 w-7" />{" "}
+              {t("Add New")}
+            </Button>
+          </FormDialog>
           <div className="hidden md:inline-block">
             <Button>
-              <DownloadIcon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />{" "}
+              <DownloadIcon className="ltr:mr-2 rtl:ml-2 h-6 w-6" />{" "}
               {t("Download")}
             </Button>
           </div>
@@ -117,27 +147,29 @@ const Bills = () => {
         </div>
       </div>
       {/* TABLE */}
-      {!isLoading && !billsData.bills.length ? (
+      {!isLoading && !billsData ? (
+        <FetchError />
+      ) : !billsData?.bills.length ? (
         <NoResults />
       ) : (
         <Table>
           <TableCaption>
-            {date?.from ? (
-              date.to ? (
+            {billsData?.from ? (
+              billsData.to ? (
                 <>
                   {t("A list of bills")} {t("from")}{" "}
-                  {format(stringToDate(date.from), "EEEE, dd/LL/y", {
+                  {format(stringToDate(billsData.from), DATE_FORMAT, {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}{" "}
                   {t("to")}{" "}
-                  {format(stringToDate(date.to), "EEEE, dd/LL/y", {
+                  {format(stringToDate(billsData.to), DATE_FORMAT, {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}
                 </>
               ) : (
                 <>
                   {t("A list of bills")} {t("from")}{" "}
-                  {format(stringToDate(date.from), "EEEE, dd/LL/y", {
+                  {format(stringToDate(billsData.from), DATE_FORMAT, {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}
                 </>
@@ -164,7 +196,7 @@ const Bills = () => {
           <TableBody>
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
-              : billsData.bills.map((bill: BillType) => Row(bill))}
+              : billsData.bills.map((bill: BillType) => Row(bill, deleteBill))}
           </TableBody>
         </Table>
       )}

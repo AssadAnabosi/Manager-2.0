@@ -7,12 +7,14 @@
   "Thursday": "Thursday",
   "Friday": "Friday",
 
+  "Dashboard": "Dashboard",
   "Worksheets": "Worksheets",
   "Bills": "Bills",
   "Cheques": "Cheques",
   "Users": "Users",
   "Payees": "Payees",
   "Settings": "Settings",
+  "Logout": "Logout",
 
   "Adjust your application settings.": "Adjust your application settings.",
   "Preferences": "Preferences",
@@ -27,20 +29,41 @@
   "Are you absolutely sure?": "Are you absolutely sure?",
   "This action cannot be undone. This will permanently delete document from our database.": "This action cannot be undone. This will permanently delete document from our database.",
 
+  "Login": "Login",
+  "Enter your credentials below to login to your account": "Enter your credentials below to login to your account",
+  "Invalid Credentials": "Invalid Credentials",
+  "Login again": "Login again",
+  "Username": "Username",
+
+  "Welcome back, {{name}}": "Welcome back, {{name}}",
+  "Session Expired": "Session expired",
+  "Please login again.": "Please login again.",
+  "Something went wrong": "Something went wrong",
+
   "Password": "Password",
   "Current password": "Current password",
   "New password": "New password",
   "Confirm password": "Confirm password",
   "Change Password": "Change Password",
+  "Password changed successfully": "Password changed successfully",
+  "Invalid current password": "Invalid current password",
+  "Password must be at least 8 characters": "Password must be at least 8 characters",
   "Changing your password will log you out from all devices.": "Changing your password will log you out from all devices.",
 
   "Download": "Download",
   "Add": "Add",
+  "Add New": "Add New",
   "Edit": "Edit",
   "Delete": "Delete",
   "Save": "Save",
+  "Save Changes": "Save Changes",
+  "Create": "Create",
   "Cancel": "Cancel",
   "Close": "Close",
+
+  "Pull down to refresh": "Pull down to refresh",
+  "Release to refresh": "Release to refresh",
+  "Refreshing": "Refreshing",
 
   "Pick a date": "Pick a date",
   "Search": "Search",
@@ -55,6 +78,7 @@
   "Total Sum": "Total Sum",
   "Value": "Value",
   "Contact Details": "Contact Details",
+  "Date": "Date",
 
   "TIMESHEETS": "TIMESHEETS",
 
@@ -71,6 +95,10 @@
   "Payment": "Payment",
 
   "BILLS": "BILLS",
+  "New Bill": "New Bill",
+  "Enter the details for the new bill": "Enter the details for the new bill",
+  "Edit Bill": "Edit Bill",
+  "Edit the bill details.": "Edit the bill details.",
   "A list of bills": "A list of bills",
   "Range Sum": "Range Sum",
   "Sum of all bills in the selected range.": "Sum of all bills in the selected range.",
@@ -95,7 +123,10 @@
   "A list of payees": "A list of payees",
   "Payee Name": "Payee Name",
 
+  "You are offline": "You are offline",
+  "Please check your internet connection": "Please check your internet connection",
   "The page you are looking for does not exist.": "The page you are looking for does not exist.",
+  "You are not authorized to view this page.": "You are not authorized to view this page.",
   "Your adventure ends here, brave traveler.": "Your adventure ends here, brave traveler.",
   "Go back home": "Go back home",
 

@@ -10,10 +10,11 @@ export default defineConfig({
       manifest: {
         name: "Al-Anabosi Management Dashboard",
         short_name: "Al-Anabosi",
-        theme_color: "hsl(0, 72.2%, 50.6%)",
+        theme_color: "hsl(0, 0%, 3.9%)",
         background_color: "hsl(0, 0%, 3.9%)",
         start_url: "/",
         display: "standalone",
+        orientation: "portrait",
         icons: [
           {
             src: "favicon.ico",

@@ -6,6 +6,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const getToday = () => {
+  const date = new Date();
+  // set time to 00:00:00
+  date.setHours(0, 0, 0, 0);
+  return date;
+};
+
 export const getFirstDayOfCurrentMonth = () => {
   const date = new Date();
   const year = date.getFullYear();
@@ -26,11 +33,11 @@ export const getLastDayOfCurrentMonth = () => {
   return dateToString(lastDay);
 };
 
-export const dateToString = (date: Date) => {
+export const dateToString = (date: any) => {
   return format(Number(date), "y-LL-dd");
 };
 
-export const stringToDate = (string: string) => {
+export const stringToDate = (string: any) => {
   return new Date(string);
 };
 

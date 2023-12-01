@@ -75,7 +75,7 @@ const HeaderMobile = () => {
                     onClick={() => toggleOpen()}
                     className={`flex w-full text-2xl text-inverse-foreground ${
                       item.path === pathname ? "font-bold" : ""
-                    }`}
+                    } ${item.title === "Logout" ? "mt-5" : ""}`}
                   >
                     {t(item.title)}
                   </Link>

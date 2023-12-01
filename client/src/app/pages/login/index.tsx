@@ -21,7 +21,6 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import Layout from "./layout";
-import { useTheme } from "@/providers/theme-provider";
 import { useAuth } from "@/providers/auth-provider";
 import { useError } from "@/providers/error-provider";
 import Spinner from "@/components/component/spinner";
@@ -34,7 +33,7 @@ const loginSchema = z.object({
 type LoginSchemaType = z.infer<typeof loginSchema>;
 
 export default function Login() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.state?.from?.pathname;
@@ -42,9 +41,7 @@ export default function Login() {
     pathname && !["/logout", "/unauthorized"].includes(pathname)
       ? pathname
       : "/worksheets";
-  console.log(from);
   const { toast } = useToast();
-  const { setTheme } = useTheme();
   const { user, setUser, setAccessToken } = useAuth();
   const { error, setError } = useError();
 
@@ -59,16 +56,13 @@ export default function Login() {
     setError(undefined);
     try {
       const { data: response } = await axios.post("/auth", values);
-      const { data, message } = response;
+      const { data } = response;
 
       setUser(data.user);
       setAccessToken(data.accessToken);
-      setTheme(data.user.theme);
-      i18n.changeLanguage(data.user.lang);
-
       toast({
         variant: "inverse",
-        title: t(message),
+        title: t("Welcome back, {{name}}", { name: data.user.fullName }),
         duration: 2500,
       });
       navigate(from, { replace: true });

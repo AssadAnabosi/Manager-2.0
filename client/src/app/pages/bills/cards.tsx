@@ -33,7 +33,9 @@ const Cards = ({
                 style={{ direction: "ltr" }}
                 className="text-2xl font-bold rtl:text-right"
               >
-                {currencyFormatter(billsData.rangeTotalValue)}
+                {billsData?.rangeTotalValue
+                  ? currencyFormatter(billsData?.rangeTotalValue)
+                  : "---"}
               </div>
 
               <p className="text-xs text-muted-foreground">
@@ -53,7 +55,9 @@ const Cards = ({
                 style={{ direction: "ltr" }}
                 className="text-2xl font-bold rtl:text-right"
               >
-                {currencyFormatter(billsData.allTimeTotalValue)}
+                {billsData?.allTimeTotalValue
+                  ? currencyFormatter(billsData?.allTimeTotalValue)
+                  : "---"}
               </div>
 
               <p className="text-xs text-muted-foreground">

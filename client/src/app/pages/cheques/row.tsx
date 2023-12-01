@@ -1,6 +1,8 @@
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
+
 import { ChequeType } from "@/lib/types";
+import { DATE_FORMAT } from "@/lib/constants";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -20,7 +22,7 @@ const Row = (cheque: ChequeType) => {
       <TableCell>
         <AvatarCombo
           title={cheque.payee.name}
-          description={format(new Date(cheque.dueDate), "EEEE, dd/LL/y", {
+          description={format(new Date(cheque.dueDate), DATE_FORMAT, {
             locale: document.documentElement.lang === "ar" ? ar : enGB,
           })}
           fallback={cheque.serial}

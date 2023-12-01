@@ -45,7 +45,7 @@ function SettingsGear() {
             </div>
             <div className="grid gap-2">
               <div className="grid grid-cols-3 items-center gap-4 w-full">
-                <Label htmlFor="theme">{t("ThemeType")}</Label>
+                <Label htmlFor="theme">{t("Theme")}</Label>
                 <Select onValueChange={handleThemeChange} defaultValue={theme}>
                   <SelectTrigger className="w-full">
                     <SelectValue />

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import Login from "@/app/pages/login";
 import Logs from "@/app/pages/worksheets";
@@ -20,7 +21,10 @@ import Logout from "./logout";
 
 import { USER } from "@/lib/constants";
 
+import PullToRefresh from "pulltorefreshjs";
+
 function App() {
+  const { t } = useTranslation();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
@@ -41,6 +45,23 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const standalone = window.matchMedia("(display-mode: standalone)").matches;
+    if (!standalone) {
+      PullToRefresh.init({
+        instructionsPullToRefresh: `${t("Pull down to refresh")}`,
+        instructionsReleaseToRefresh: `${t("Release to refresh")}`,
+        instructionsRefreshing: `${t("Refreshing")}...`,
+        onRefresh() {
+          window.location.reload();
+        },
+      });
+    }
+    return () => {
+      PullToRefresh.destroyAll();
+    };
+  }, []);
+
   return (
     (isOnline && (
       <Routes>
@@ -53,6 +74,7 @@ function App() {
           <Route path="/" element={<NavLayout />}>
             <Route element={<RequireAuth />}>
               <Route path="/worksheets" element={<Logs />} />
+              <Route path="/settings" element={<Settings />} />
             </Route>
             <Route element={<RequireAuth restrictedRoles={[USER]} />}>
               <Route path="/bills" element={<Bills />} />
@@ -60,7 +82,6 @@ function App() {
               <Route path="/users" element={<Users />} />
               <Route path="/payees" element={<Payee />} />
             </Route>
-            <Route path="/settings" element={<Settings />} />
           </Route>
         </Route>
         <Route path="*" element={<NotFound />} />

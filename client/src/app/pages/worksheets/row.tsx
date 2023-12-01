@@ -1,6 +1,8 @@
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
+
 import { LogType } from "@/lib/types";
+import { DATE_FORMAT } from "@/lib/constants";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -21,7 +23,7 @@ const Row = (log: LogType) => {
       <TableCell>
         <AvatarCombo
           title={log.worker.fullName}
-          description={format(new Date(log.date), "EEEE, dd/LL/y", {
+          description={format(new Date(log.date), DATE_FORMAT, {
             locale: document.documentElement.lang === "ar" ? ar : enGB,
           })}
           fallback={<CalendarIcon className="h-5 w-5" />}

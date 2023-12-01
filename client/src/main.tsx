@@ -31,8 +31,8 @@ const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <AuthProvider>
-      <ThemeProvider defaultTheme="system">
+    <ThemeProvider defaultTheme="system">
+      <AuthProvider>
         <ErrorProvider>
           <QueryClientProvider client={queryClient}>
             <BrowserRouter>
@@ -43,7 +43,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             </BrowserRouter>
           </QueryClientProvider>
         </ErrorProvider>
-      </ThemeProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </ThemeProvider>
   </React.StrictMode>
 );

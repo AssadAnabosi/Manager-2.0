@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 import axios from "@/api/axios";
 
 import { useAuth, useLogout, useRefreshToken } from "@/providers/auth-provider";
@@ -12,6 +13,7 @@ const useAxios = () => {
   const navigate = useNavigate();
   const logout = useLogout();
   const { setError } = useError();
+  const { toast } = useToast();
 
   useEffect(() => {
     const requestInterceptor = axios.interceptors.request.use(
@@ -31,30 +33,41 @@ const useAxios = () => {
       async (error) => {
         const original = error?.config;
 
-        const refreshNeeded =
-          error.response.status === 403 &&
-          error.response.data.message === "Token Expired, Please Refresh Token";
-
-        if (refreshNeeded && !original.refreshed) {
-          original.refreshed = true;
-          try {
-            const newAccessToken = await refreshToken();
-            original.headers["Authorization"] = `Bearer ${newAccessToken}`;
-            setAccessToken(newAccessToken);
-            return axios(original);
-          } catch (error) {
+        if (error.code === "ERR_NETWORK") {
+          toast({
+            variant: "destructive",
+            title: "Network Error",
+            description: "Cannot connect to server, please try again later.",
+            duration: 5000,
+          });
+        } else {
+          const refreshNeeded =
+            error?.response.status === 403 &&
+            error?.response.data.message ===
+              "Token Expired, Please Refresh Token";
+          if (refreshNeeded && !original.refreshed) {
+            original.refreshed = true;
+            try {
+              const { accessToken: newAccessToken } = await refreshToken();
+              original.headers["Authorization"] = `Bearer ${newAccessToken}`;
+              setAccessToken(newAccessToken);
+              return axios(original);
+            } catch (error) {
+              return Promise.reject(error);
+            }
+          } else if (error.response.status === 401) {
+            navigate("/", {
+              state: { from: location },
+              replace: true,
+            });
+            logout();
+            setError({
+              title: "Session Expired",
+              description: "Please login again.",
+            });
+          } else {
             return Promise.reject(error);
           }
-        } else if (error.response.status === 401) {
-          navigate("/", {
-            state: { from: location },
-            replace: true,
-          });
-          logout();
-          setError({
-            title: "Session Expired",
-            description: "Please login again.",
-          });
         }
       }
     );

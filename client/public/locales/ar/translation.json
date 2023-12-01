@@ -7,12 +7,14 @@
   "Thursday": "الخميس",
   "Friday": "الجمعة",
 
+  "Dashboard": "لوحة التحكم",
   "Worksheets": "السجلات",
   "Bills": "الفواتير",
   "Cheques": "الشيكات",
   "Users": "المستخدمون",
   "Payees": "المستفيدون",
   "Settings": "الاعدادات",
+  "Logout": "تسجيل الخروج",
 
   "Adjust your application settings.": "ضبط اعدادات التطبيق",
   "Preferences": "التفضيلات",
@@ -27,20 +29,41 @@
   "Are you absolutely sure?": "هل انت متأكد؟",
   "This action cannot be undone. This will permanently delete document from our database.": "هذا الاجراء لا يمكن التراجع عنه. سيتم حذف السجل نهائيا من قاعدة البيانات.",
 
+  "Login": "تسجيل الدخول",
+  "Enter your credentials below to login to your account": "ادخل بيانات الدخول الخاصة بك ادناه لتسجيل الدخول الى حسابك",
+  "Invalid Credentials": "بيانات الدخول غير صحيحة",
+  "Login again": "تسجيل الدخول مرة اخرى",
+  "Username": "اسم المستخدم",
+
+  "Welcome back, {{name}}": "مرحبا بعودتك, {{name}}",
+  "Session Expired": "انتهت الجلسة",
+  "Please login again.": "الرجاء تسجيل الدخول مرة اخرى.",
+  "Something went wrong": "حدث خطأ ما",
+
   "Password": "كلمة المرور",
   "Current password": "كلمة المرور الحالية",
   "New password": "كلمة المرور الجديدة",
   "Confirm password": "تأكيد كلمة المرور",
   "Change Password": "تغيير كلمة المرور",
+  "Password changed successfully": "تم تغيير كلمة المرور بنجاح",
+  "Invalid current password": "كلمة المرور الحالية غير صحيحة",
+  "Password must be at least 8 characters": "كلمة المرور يجب ان تكون على الاقل 8 احرف",
   "Changing your password will log you out from all devices.": "سيتم تسجيل الخروج من جميع الاجهزة عند تغيير كلمة المرور",
 
   "Download": "تحميل",
   "Add": "اضافة",
+  "Add New": "اضافة جديد",
   "Edit": "تعديل",
   "Delete": "حذف",
   "Save": "حفظ",
+  "Save Changes": "حفظ التعديلات",
+  "Create": "انشاء",
   "Cancel": "الغاء",
   "Close": "اغلاق",
+
+  "Pull down to refresh": "Pull down to refresh",
+  "Release to refresh": "Release to refresh",
+  "Refreshing": "Refreshing",
 
   "Pick a date": "اختر تاريخ",
   "Search": "البحث",
@@ -55,6 +78,7 @@
   "Total Sum": "المجموع الكلي",
   "Value": "القيمة",
   "Contact Details": "بيانات الاتصال",
+  "Date": "التاريخ",
 
   "TIMESHEETS": "السجلات",
 
@@ -71,6 +95,10 @@
   "Payment": "الدفعة",
 
   "BILLS": "الفواتير",
+  "New Bill": "فاتورة جديدة",
+  "Enter the details for the new bill": "ادخل تفاصيل الفاتورة الجديدة",
+  "Edit Bill": "تعديل الفاتورة",
+  "Edit the bill details": "تعديل تفاصيل الفاتورة",
   "A list of bills": "قائمة الفواتير",
   "Range Sum": "المجموع الجزئي",
   "Sum of all bills in the selected range.": "مجموع الفواتير في الفترة المحددة.",
@@ -95,7 +123,10 @@
   "A list of payees": "قائمة المستفيدون",
   "Payee Name": "اسم المستفيد",
 
+  "You are offline": "انت غير متصل بالانترنت",
+  "Please check your internet connection": "الرجاء التحقق من اتصالك بالانترنت",
   "The page you are looking for does not exist.": "الصفحة التي تبحث عنها غير موجودة.",
+  "You are not authorized to view this page.": "ليس لديك صلاحية لعرض هذه الصفحة.",
   "Your adventure ends here, brave traveler.": "مغامرتك تنتهي هنا أيها المسافر الشجاع.",
   "Go back home": "العودة للصفحة الرئيسية",
 

@@ -16,7 +16,13 @@ import {
 import FormDialog from "./form-dialog";
 import DeleteDialog from "@/components/component/delete-dialog";
 
-export default function ActionDropdownMenu({ bill }: { bill: BillType }) {
+export default function ActionDropdownMenu({
+  bill,
+  deleteBill,
+}: {
+  bill: BillType;
+  deleteBill: any;
+}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -32,7 +38,7 @@ export default function ActionDropdownMenu({ bill }: { bill: BillType }) {
               <span>Edit</span>
             </DropdownMenuItem>
           </FormDialog>
-          <DeleteDialog onAction={() => console.log("123")}>
+          <DeleteDialog onAction={() => deleteBill(bill.id)}>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               <TrashIcon className="mr-2 h-4 w-4" />
               <span>Delete</span>

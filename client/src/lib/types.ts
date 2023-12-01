@@ -30,8 +30,8 @@ export type LogType = {
 
 export type BillType = {
   id: string;
-  date: Date | string;
-  value: number;
+  date: Date | string | any;
+  value: number | string;
   description: string;
   remarks: string;
 };

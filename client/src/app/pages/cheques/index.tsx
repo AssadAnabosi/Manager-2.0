@@ -6,6 +6,7 @@ import { DateRange } from "react-day-picker";
 import { useQuery } from "@tanstack/react-query";
 
 import { ChequeType } from "@/lib/types";
+import { DATE_FORMAT } from "@/lib/constants";
 
 import useAxios from "@/hooks/use-axios";
 
@@ -160,18 +161,18 @@ const Cheques = () => {
               date.to ? (
                 <>
                   {t("A list of cheques")} {t("from")}{" "}
-                  {format(stringToDate(date.from), "EEEE, dd/LL/y", {
+                  {format(stringToDate(date.from), DATE_FORMAT, {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}{" "}
                   {t("to")}{" "}
-                  {format(stringToDate(date.to), "EEEE, dd/LL/y", {
+                  {format(stringToDate(date.to), DATE_FORMAT, {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}
                 </>
               ) : (
                 <>
                   {t("A list of cheques")} {t("from")}{" "}
-                  {format(stringToDate(date.from), "EEEE, dd/LL/y", {
+                  {format(stringToDate(date.from), DATE_FORMAT, {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}
                 </>

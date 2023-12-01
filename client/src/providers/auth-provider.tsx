@@ -1,5 +1,7 @@
 import { createContext, useState, useContext } from "react";
-import { UserType } from "@/lib/types";
+import { useTranslation } from "react-i18next";
+import { useTheme } from "@/providers/theme-provider";
+import { LanguageType, ThemeType, UserType } from "@/lib/types";
 import axios from "@/api/axios";
 
 type AuthProviderState = {
@@ -25,7 +27,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | undefined>(() => {
     return undefined;
   });
-
+  const { setTheme } = useTheme();
+  const { i18n } = useTranslation();
   const value = {
     user,
     setUser: (user: UserType | null) => {
@@ -33,6 +36,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(undefined);
         return;
       }
+      setTheme(user.theme as ThemeType);
+      i18n.changeLanguage(user.language as LanguageType);
       setUser(user);
     },
     accessToken,
@@ -56,7 +61,7 @@ export const useAuth = () => {
   return context;
 };
 
-const getAuth = async (accessToken: string) => {
+export const getAuth = async (accessToken: string) => {
   const { data: response } = await axios.get("/auth", {
     headers: {
       "Content-Type": "application/json",
@@ -68,14 +73,12 @@ const getAuth = async (accessToken: string) => {
 };
 
 export const useRefreshToken = () => {
-  const { setAccessToken, setUser } = useAuth();
+  const { setAccessToken } = useAuth();
   const refresh = async () => {
     const { data: response } = await axios.get("/auth/refresh");
     const { data } = response;
     const accessToken = data.accessToken;
     setAccessToken(accessToken);
-    const user = await getAuth(accessToken);
-    setUser(user);
     return accessToken;
   };
   return refresh;
@@ -83,9 +86,9 @@ export const useRefreshToken = () => {
 
 export const useLogout = () => {
   const { setUser, setAccessToken } = useAuth();
-  const logout = async () => {
+  const logout = async (callEndpoint = true) => {
     try {
-      await axios.post("/auth/logout");
+      if (callEndpoint) await axios.post("/auth/logout");
     } catch (error) {
       console.log(error);
     } finally {

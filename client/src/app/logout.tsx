@@ -20,7 +20,10 @@ const Logout = () => {
     <Layout>
       <div className="flex justify-center items-center my-auto flex-col gap-6">
         <LogOut size={256} strokeWidth={10} absoluteStrokeWidth />
-        <p className="uppercase tracking-[20px] text-red-600 text-3xl">
+        <p
+          style={{ direction: "ltr" }}
+          className="uppercase tracking-[20px] text-red-600 text-3xl"
+        >
           Good Bye!
         </p>
         <Button>

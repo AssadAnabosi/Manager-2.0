@@ -26,21 +26,23 @@ const AvatarCombo = ({
   title,
   description,
   bill,
+  deleteBill,
 }: {
   fallback: React.ReactNode | string;
   title: string;
   description?: string | JSX.Element;
   bill: BillType;
+  deleteBill: (id: string) => void;
 }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-
-  const handleDelete = () => {
-    // request server to delete
-    console.log(bill.id);
-    // if success close
-    setOpen(false);
-    // else toast
+  const handleDelete = async () => {
+    try {
+      deleteBill(bill.id);
+      setOpen(false);
+    } catch (error) {
+      // get rid of error
+    }
   };
 
   return (

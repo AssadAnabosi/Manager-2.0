@@ -35,31 +35,36 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import Spinner from "@/components/component/spinner";
-import { useTheme } from "@/providers/theme-provider";
-import useAxios from "@/hooks/use-axios";
 
+import { useLogout } from "@/providers/auth-provider";
+import { useTheme } from "@/providers/theme-provider";
+import { useError } from "@/providers/error-provider";
+
+import useAxios from "@/hooks/use-axios";
 const updatePasswordSchema = z
   .object({
     current: z.string().min(8, "Password must be at least 8 characters"),
     new: z.string().min(8, "Password must be at least 8 characters"),
   })
-  .refine((data) => data.current === data.new, {
+  .refine((data) => data.current !== data.new, {
     message: "New password must be different from current password",
     path: ["new"],
   });
 type UpdatePasswordSchema = z.infer<typeof updatePasswordSchema>;
 
-const UpdatePreferencesSchemaType = z.object({
+const UpdatePreferencesSchema = z.object({
   theme: z.enum(["dark", "light", "system"]),
   language: z.enum(["en", "ar"]),
 });
 
-type UpdatePreferencesSchema = z.infer<typeof UpdatePreferencesSchemaType>;
+type UpdatePreferencesSchemaType = z.infer<typeof UpdatePreferencesSchema>;
 
 export default function Settings() {
   const { t, i18n } = useTranslation();
   const Navigate = useNavigate();
+  const logout = useLogout();
   const axios = useAxios();
+  const { setError } = useError();
   const [searchParams, setSearchParams] = useSearchParams({
     tab: "password",
   });
@@ -81,14 +86,14 @@ export default function Settings() {
   const lang = document.documentElement.lang.substring(0, 2) as LanguageType;
   const { setTheme, theme } = useTheme();
 
-  const preferencesForm = useForm<UpdatePreferencesSchema>({
-    resolver: zodResolver(UpdatePreferencesSchemaType),
+  const preferencesForm = useForm<UpdatePreferencesSchemaType>({
+    resolver: zodResolver(UpdatePreferencesSchema),
     defaultValues: {
       theme: theme,
       language: lang,
     },
   });
-  const updatePreferences = async (values: UpdatePreferencesSchema) => {
+  const updatePreferences = async (values: UpdatePreferencesSchemaType) => {
     try {
       await axios.patch("/users/preferences", values);
       setTheme(values.theme);
@@ -112,13 +117,12 @@ export default function Settings() {
   const updatePassword = async (values: UpdatePasswordSchema) => {
     try {
       await axios.patch("/users/password", values);
-      toast({
-        title: t("Password changed successfully"),
+      setError({
+        title: "Password changed successfully",
+        description: "Please login again.",
       });
-      // logout after 3 seconds
-      setTimeout(() => {
-        Navigate("/");
-      }, 3000);
+      logout(false);
+      Navigate("/", { replace: true });
     } catch (error: any) {
       const { response } = error;
       if (response.status === 400) {
@@ -182,7 +186,7 @@ export default function Settings() {
                         <FormMessage />
                       </FormItem>
                     )}
-                  ></FormField>
+                  />
                 </CardContent>
                 <CardFooter>
                   <Button

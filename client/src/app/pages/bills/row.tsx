@@ -14,7 +14,7 @@ import { CalendarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
 import { currencyFormatter } from "@/lib/utils";
 
-const Row = (bill: BillType) => {
+const Row = (bill: BillType, deleteBill: any) => {
   return (
     <TableRow key={bill.id} className="h-[73px]">
       <TableCell>
@@ -27,6 +27,7 @@ const Row = (bill: BillType) => {
           })}
           fallback={<CalendarIcon className="h-5 w-5" />}
           bill={bill}
+          deleteBill={deleteBill}
         ></AvatarCombo>
       </TableCell>
       <TableCell style={{ direction: "ltr" }} className="rtl:text-right">
@@ -35,7 +36,7 @@ const Row = (bill: BillType) => {
       <TableCell className="hidden md:table-cell">{bill.description}</TableCell>
       <TableCell className="hidden lg:table-cell">{bill.remarks}</TableCell>
       <TableCell className="text-right hidden md:table-cell lg:hidden">
-        <ActionDropdownMenu bill={bill} />
+        <ActionDropdownMenu bill={bill} deleteBill={deleteBill} />
       </TableCell>
       <TableCell className="text-right hidden lg:table-cell">
         <FormDialog bill={bill}>
@@ -43,7 +44,7 @@ const Row = (bill: BillType) => {
             <Pencil2Icon className="h-4 w-4" />
           </Button>
         </FormDialog>
-        <DeleteDialog onAction={() => console.log(bill.id)}>
+        <DeleteDialog onAction={() => deleteBill(bill.id)}>
           <Button variant="delete" aria-label="Delete">
             <TrashIcon className="h-4 w-4" />
           </Button>
