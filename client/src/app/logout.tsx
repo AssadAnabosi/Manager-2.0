@@ -13,8 +13,11 @@ const Logout = () => {
   const navigate = useNavigate();
   const logout = useLogout();
   useEffect(() => {
-    logout();
-    navigate("/", { replace: true });
+    const logoutUser = async () => {
+      await logout();
+      navigate("/", { replace: true });
+    };
+    logoutUser();
   }, []);
   return (
     <Layout>

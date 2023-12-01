@@ -38,7 +38,12 @@
   "Welcome back, {{name}}": "Welcome back, {{name}}",
   "Session Expired": "Session expired",
   "Please login again.": "Please login again.",
+  "Server unreachable": "Server is unreachable",
+  "Network Error": "Network Error",
+  "Sorry, server unreachable at the moment.": "Sorry, server unreachable at the moment.",
+  "Cannot connect to server, please try again later.": "Cannot connect to server, please try again later.",
   "Something went wrong": "Something went wrong",
+  "Something went wrong, please try again later.": "Something went wrong, please try again later.",
 
   "Password": "Password",
   "Current password": "Current password",

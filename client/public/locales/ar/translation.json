@@ -38,7 +38,12 @@
   "Welcome back, {{name}}": "مرحبا بعودتك, {{name}}",
   "Session Expired": "انتهت الجلسة",
   "Please login again.": "الرجاء تسجيل الدخول مرة اخرى.",
+  "Server unreachable": "الخادم غير متاح",
+  "Network Error": "خطأ في الشبكة",
+  "Sorry, server unreachable at the moment.": "عذرا, الخادم غير متاح حاليا.",
+  "Cannot connect to server, please try again later.": "لا يمكن الاتصال بالخادم, الرجاء المحاولة مرة اخرى لاحقا.",
   "Something went wrong": "حدث خطأ ما",
+  "Something went wrong, please try again later.": "حدث خطأ ما, الرجاء المحاولة مرة اخرى لاحقا.",
 
   "Password": "كلمة المرور",
   "Current password": "كلمة المرور الحالية",
@@ -61,9 +66,9 @@
   "Cancel": "الغاء",
   "Close": "اغلاق",
 
-  "Pull down to refresh": "Pull down to refresh",
-  "Release to refresh": "Release to refresh",
-  "Refreshing": "Refreshing",
+  "Pull down to refresh": "اسحب للتحديث",
+  "Release to refresh": "افلت للتحديث",
+  "Refreshing": "جاري التحديث",
 
   "Pick a date": "اختر تاريخ",
   "Search": "البحث",

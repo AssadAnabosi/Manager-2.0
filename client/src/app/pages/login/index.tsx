@@ -69,8 +69,8 @@ export default function Login() {
     } catch (error: any) {
       if (error.code === "ERR_NETWORK" || !error?.response) {
         setError({
-          title: "Server is down",
-          description: "Network Error, Please try again later",
+          title: "Server unreachable",
+          description: "Sorry, server unreachable at the moment.",
         });
       } else {
         setError({

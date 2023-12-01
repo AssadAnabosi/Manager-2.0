@@ -1,12 +1,15 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
+import { useTranslation } from "react-i18next";
 import axios from "@/api/axios";
+
+import { useToast } from "@/components/ui/use-toast";
 
 import { useAuth, useLogout, useRefreshToken } from "@/providers/auth-provider";
 import { useError } from "@/providers/error-provider";
 
 const useAxios = () => {
+  const { t } = useTranslation();
   const { accessToken, setAccessToken } = useAuth();
   const refreshToken = useRefreshToken();
   const location = useLocation();
@@ -36,8 +39,8 @@ const useAxios = () => {
         if (error.code === "ERR_NETWORK") {
           toast({
             variant: "destructive",
-            title: "Network Error",
-            description: "Cannot connect to server, please try again later.",
+            title: t("Network Error"),
+            description: t("Cannot connect to server, please try again later."),
             duration: 5000,
           });
         } else {
@@ -56,14 +59,14 @@ const useAxios = () => {
               return Promise.reject(error);
             }
           } else if (error.response.status === 401) {
-            navigate("/", {
-              state: { from: location },
-              replace: true,
-            });
-            logout();
+            await logout();
             setError({
               title: "Session Expired",
               description: "Please login again.",
+            });
+            navigate("/", {
+              state: { from: location },
+              replace: true,
             });
           } else {
             return Promise.reject(error);
