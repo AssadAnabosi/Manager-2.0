@@ -37,9 +37,10 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.state?.from?.pathname;
+  const search = location.state?.from?.search;
   const from =
     pathname && !["/logout", "/unauthorized"].includes(pathname)
-      ? pathname
+      ? `${pathname}${search}`
       : "/worksheets";
   const { toast } = useToast();
   const { user, setUser, setAccessToken } = useAuth();
