@@ -27,7 +27,17 @@ i18n.on("languageChanged", (locale) => {
   document.documentElement.dir = dir;
 });
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: true,
+      retry: false,
+      staleTime: 1000 * 15,
+      refetchOnReconnect: true,
+      refetchIntervalInBackground: false,
+    },
+  },
+});
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

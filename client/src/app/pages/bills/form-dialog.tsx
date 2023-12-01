@@ -198,13 +198,13 @@ export default function FormDialog({
                   <FormLabel>{t("Value")}</FormLabel>
                   <FormControl>
                     <div className="relative w-full justify-between">
-                      <span className="absolute top-0 bottom-0 w-6 h-6 my-auto text-muted-foreground ltr:left-3 rtl:right-3">
+                      <span className="absolute top-0 bottom-0 w-6 h-6 my-auto text-muted-foreground left-3">
                         <ShekelIcon />
                       </span>
                       <Input
                         {...field}
                         type="string"
-                        className="input ltr:pl-12 ltr:pr-4 rtl:pr-12 rtl:pl-4"
+                        className="input pl-12 pr-4 text-left"
                       />
                     </div>
                   </FormControl>
