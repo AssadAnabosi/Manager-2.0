@@ -37,12 +37,8 @@ const AvatarCombo = ({
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const handleDelete = async () => {
-    try {
-      deleteBill(bill.id);
-      setOpen(false);
-    } catch (error) {
-      // get rid of error
-    }
+    deleteBill(bill.id);
+    setOpen(false);
   };
 
   return (

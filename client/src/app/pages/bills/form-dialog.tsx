@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -54,14 +54,13 @@ const billFormSchema = z.object({
   date: z.any({
     required_error: "Date is required",
   }),
-  value: z.string(),
-  // .refine(
-  //   (value) => {
-  //     const number = Number(value);
-  //     return !isNaN(number) && value?.length > 0;
-  //   },
-  //   { message: "Invalid number" }
-  // ),
+  value: z.string().refine(
+    (value) => {
+      const number = Number(value);
+      return !isNaN(number) && value?.length > 0;
+    },
+    { message: "Invalid number" }
+  ),
   description: z.string().min(1, "Description is required"),
   remarks: z.string().optional(),
 });
@@ -98,14 +97,21 @@ export default function FormDialog({
       queryClient.invalidateQueries({
         queryKey: ["bills"],
       });
-      toast({
-        variant: "success",
-        title: "Success",
-        description: "Bill was added successfully",
-      });
+      if (!bill)
+        toast({
+          variant: "success",
+          title: t("Success"),
+          description: t("Bill was added successfully"),
+        });
+      else
+        toast({
+          variant: "success",
+          title: t("Success"),
+          description: t("Bill was updated successfully"),
+        });
     },
   });
-
+  const [open, setOpen] = useState(false);
   const axios = useAxios();
   const onSubmit = async (data: billFormSchemaType) => {
     try {
@@ -114,6 +120,8 @@ export default function FormDialog({
       if (!bill) {
         billForm.reset();
       }
+      setOpen(false);
+      onClose?.(false);
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -123,7 +131,7 @@ export default function FormDialog({
     }
   };
   return (
-    <Dialog onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader className="text-left rtl:text-right pt-6">

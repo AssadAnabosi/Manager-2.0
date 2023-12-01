@@ -34,6 +34,7 @@
   "Invalid Credentials": "بيانات الدخول غير صحيحة",
   "Login again": "تسجيل الدخول مرة اخرى",
   "Username": "اسم المستخدم",
+  "Username is required": "اسم المستخدم مطلوب",
 
   "Welcome back, {{name}}": "مرحبا بعودتك, {{name}}",
   "Session Expired": "انتهت الجلسة",
@@ -55,6 +56,7 @@
   "Password must be at least 8 characters": "كلمة المرور يجب ان تكون على الاقل 8 احرف",
   "Changing your password will log you out from all devices.": "سيتم تسجيل الخروج من جميع الاجهزة عند تغيير كلمة المرور",
 
+  "Success": "نجاح",
   "Download": "تحميل",
   "Add": "اضافة",
   "Add New": "اضافة جديد",
@@ -104,6 +106,8 @@
   "Enter the details for the new bill": "ادخل تفاصيل الفاتورة الجديدة",
   "Edit Bill": "تعديل الفاتورة",
   "Edit the bill details": "تعديل تفاصيل الفاتورة",
+  "Bill was added successfully": "تم اضافة الفاتورة بنجاح",
+  "Bill was updated successfully": "تم تعديل الفاتورة بنجاح",
   "A list of bills": "قائمة الفواتير",
   "Range Sum": "المجموع الجزئي",
   "Sum of all bills in the selected range.": "مجموع الفواتير في الفترة المحددة.",
