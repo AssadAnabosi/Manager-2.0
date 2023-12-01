@@ -1,5 +1,5 @@
 import Bill from "../models/Bill.model.js";
-import * as statusCode from "../utils/constants/statusCodes.js";
+import { OK } from "../utils/constants/statusCodes.js";
 import ReqQueryHelper from "../helpers/reqQuery.helper.js";
 import * as queryHelper from "../helpers/queries/bills.queries.js";
 
@@ -18,7 +18,7 @@ export const getBills = async (req, res) => {
   let rangeTotal = (await Bill.aggregate(queryHelper.findValueSum(_id)))[0];
   const rangeTotalValue = rangeTotal ? rangeTotal.total : 0;
 
-  return res.status(statusCode.OK).json({
+  return res.status(OK).json({
     success: true,
     data: {
       bills,
@@ -42,13 +42,15 @@ export const createBill = async (req, res) => {
     description,
     remarks,
   });
-
-  return res.sendStatus(statusCode.CREATED);
+  return res.status(CREATED).json({
+    success: true,
+    message: "Bill was added successfully",
+  });
 };
 
 // @desc    Get a bill
 export const getBill = async (req, res) => {
-  return res.status(statusCode.OK).json({
+  return res.status(OK).json({
     success: true,
     data: {
       bill: req.Bill,
@@ -67,12 +69,18 @@ export const updateBill = async (req, res) => {
     runValidators: true,
   });
 
-  return res.sendStatus(statusCode.NO_CONTENT);
+  return res.status(OK).json({
+    success: true,
+    message: "Bill was updated successfully",
+  });
 };
 
 // @desc    Delete a bill
 export const deleteBill = async (req, res) => {
   await Bill.findByIdAndDelete(req.params.billID);
 
-  return res.sendStatus(statusCode.NO_CONTENT);
+  return res.status(OK).json({
+    success: true,
+    message: "Bill was deleted successfully",
+  });
 };

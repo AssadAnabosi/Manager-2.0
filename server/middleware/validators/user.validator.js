@@ -9,7 +9,7 @@ export const validateRegisterUser = reqBodyIncludes(createRules);
 const updateRules = ["username", "password", "role", "active"];
 export const validateUpdateUser = reqBodyExcludes(updateRules);
 
-const updatePasswordRules = ["currentPassword", "newPassword"];
+const updatePasswordRules = ["current", "new"];
 export const validateUpdatePassword = reqBodyIncludes(updatePasswordRules);
 
 const updatePreferencesRules = ["theme", "language"];

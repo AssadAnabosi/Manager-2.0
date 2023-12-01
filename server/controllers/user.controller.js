@@ -80,7 +80,7 @@ export const deleteUser = async (req, res) => {
 
 // @desc    User changing own password
 export const updatePassword = async (req, res) => {
-  const { currentPassword, newPassword } = req.body;
+  const { current: currentPassword, new: newPassword } = req.body;
 
   const user = await User.findById(req.user.id).select("+password");
 
@@ -91,7 +91,8 @@ export const updatePassword = async (req, res) => {
 
   user.password = newPassword;
   await user.save();
-
+  await Session.deleteMany({ user: req.user.id });
+  res.clearCookie("refreshToken");
   return res.status(statusCode.OK).json({
     success: true,
     message: "Password changed successfully",

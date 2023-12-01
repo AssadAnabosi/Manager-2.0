@@ -107,10 +107,14 @@ UserSchema.methods.matchPassword = async function (password) {
 };
 
 // @desc    Generate an access token
-UserSchema.methods.getAccessToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_ACCESS_SECRET, {
-    expiresIn: process.env.JWT_ACCESS_EXPIRE,
-  });
+UserSchema.methods.getAccessToken = function (sessionId) {
+  return jwt.sign(
+    { id: this._id, sessionId: sessionId },
+    process.env.JWT_ACCESS_SECRET,
+    {
+      expiresIn: process.env.JWT_ACCESS_EXPIRE,
+    }
+  );
 };
 
 // @desc    Generate a refresh token

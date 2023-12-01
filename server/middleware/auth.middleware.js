@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.model.js";
+import Session from "../models/Session.model.js";
 import * as statusCode from "../utils/constants/statusCodes.js";
 import ResponseError from "../utils/responseError.js";
 
@@ -26,6 +27,11 @@ export const isAuth = async (req, res, next) => {
   try {
     const decoded = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
     const user = await User.findById(decoded.id).select("-logs");
+    const session = await Session.findById(decoded.sessionId);
+    if (!session)
+      return next(
+        new ResponseError("Please Login Again", statusCode.NOT_AUTHENTICATED)
+      );
 
     if (!user) {
       return next(
