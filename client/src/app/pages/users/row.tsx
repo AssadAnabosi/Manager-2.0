@@ -5,7 +5,6 @@ import DeleteDialog from "@/components/component/delete-dialog";
 import StatusBadge from "@/components/component/status-badge";
 
 import AvatarCombo from "./avatar-combo";
-import ActionDropdownMenu from "./action-drop-down";
 import FormDialog from "./form-dialog";
 import RoleBadge from "./role-badge";
 
@@ -47,9 +46,6 @@ const Row = (user: UserType) => {
             </a>
           </p>
         </div>
-      </TableCell>
-      <TableCell className="w-max text-right lg:hidden">
-        <ActionDropdownMenu user={user} />
       </TableCell>
       <TableCell className="w-max text-right hidden lg:table-cell">
         <FormDialog user={user}>

@@ -178,7 +178,7 @@ const Logs = () => {
               <TableHead className="hidden lg:table-cell w-max rtl:text-right">
                 {t("Remarks")}
               </TableHead>
-              <TableHead className="hidden md:table-cell md:w-[60px] 2xl:w-[130px] rtl:text-right"></TableHead>
+              <TableHead className="hidden 2xl:table-cell w-[130px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

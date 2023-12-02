@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import DeleteDialog from "@/components/component/delete-dialog";
 
 import AvatarCombo from "./avatar-combo";
-import ActionDropdownMenu from "./action-drop-down";
 import FormDialog from "./form-dialog";
 
 import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
@@ -33,9 +32,6 @@ const Row = (cheque: ChequeType) => {
         {currencyFormatter(cheque.value)}
       </TableCell>
       <TableCell className="hidden md:table-cell">{cheque.remarks}</TableCell>
-      <TableCell className="text-right hidden md:table-cell lg:hidden">
-        <ActionDropdownMenu cheque={cheque} />
-      </TableCell>
       <TableCell className="text-right hidden lg:table-cell">
         <FormDialog cheque={cheque}>
           <Button variant="edit" aria-label="Edit">

@@ -7,7 +7,6 @@ import { User } from "lucide-react";
 import DeleteDialog from "@/components/component/delete-dialog";
 
 import AvatarCombo from "./avatar-combo";
-import ActionDropdownMenu from "./action-drop-down";
 import FormDialog from "./form-dialog";
 
 const Row = (payee: PayeeType) => {
@@ -41,10 +40,7 @@ const Row = (payee: PayeeType) => {
         </div>
       </TableCell>
       <TableCell className="hidden lg:table-cell">{payee.remarks}</TableCell>
-      <TableCell className="w-max text-right rtl:text-left lg:hidden">
-        <ActionDropdownMenu payee={payee} />
-      </TableCell>
-      <TableCell className="w-max ltr:text-right rtl:text-left hidden lg:table-cell">
+      <TableCell className="text-right hidden lg:table-cell">
         <FormDialog payee={payee}>
           <Button variant="edit" aria-label="Edit">
             <Pencil2Icon className="h-4 w-4" />

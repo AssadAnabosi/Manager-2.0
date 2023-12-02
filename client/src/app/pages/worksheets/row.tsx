@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import DeleteDialog from "@/components/component/delete-dialog";
 
 import AvatarCombo from "./avatar-combo";
-import ActionDropdownMenu from "./action-drop-down";
 import FormDialog from "./form-dialog";
 import StatusBadge from "@/components/component/status-badge";
 
@@ -42,9 +41,6 @@ const Row = (log: LogType) => {
         </p>
       </TableCell>
       <TableCell className="hidden lg:table-cell">{log.remarks}</TableCell>
-      <TableCell className="hidden md:table-cell 2xl:hidden">
-        <ActionDropdownMenu log={log} />
-      </TableCell>
       <TableCell className="hidden 2xl:table-cell">
         <FormDialog log={log}>
           <Button variant="edit" aria-label="Edit">

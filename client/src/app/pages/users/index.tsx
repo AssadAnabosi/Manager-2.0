@@ -96,7 +96,7 @@ const Users = () => {
               <TableHead className="w-max hidden lg:table-cell rtl:text-right">
                 {t("Contact Details")}
               </TableHead>
-              <TableHead className="w-max lg:w-[130px]"></TableHead>
+              <TableHead className="w-[130px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

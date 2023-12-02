@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import DeleteDialog from "@/components/component/delete-dialog";
 
 import AvatarCombo from "./avatar-combo";
-import ActionDropdownMenu from "./action-drop-down";
 import FormDialog from "./form-dialog";
 
 import { CalendarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
@@ -35,9 +34,6 @@ const Row = (bill: BillType, deleteBill: any) => {
       </TableCell>
       <TableCell className="hidden md:table-cell">{bill.description}</TableCell>
       <TableCell className="hidden lg:table-cell">{bill.remarks}</TableCell>
-      <TableCell className="text-right hidden md:table-cell lg:hidden">
-        <ActionDropdownMenu bill={bill} deleteBill={deleteBill} />
-      </TableCell>
       <TableCell className="text-right hidden lg:table-cell">
         <FormDialog bill={bill}>
           <Button variant="edit" aria-label="Edit">

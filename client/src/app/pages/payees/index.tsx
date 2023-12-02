@@ -96,7 +96,7 @@ const Payees = () => {
               <TableHead className="hidden lg:table-cell w-max rtl:text-right">
                 {t("Remarks")}
               </TableHead>
-              <TableHead className="w-max lg:w-[130px]"></TableHead>
+              <TableHead className="w-[130px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
