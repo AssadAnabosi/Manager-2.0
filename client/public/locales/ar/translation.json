@@ -108,6 +108,7 @@
   "Edit the bill details": "تعديل تفاصيل الفاتورة",
   "Bill was added successfully": "تم اضافة الفاتورة بنجاح",
   "Bill was updated successfully": "تم تعديل الفاتورة بنجاح",
+  "Bill was deleted successfully": "تم حذف الفاتورة بنجاح",
   "A list of bills": "قائمة الفواتير",
   "Range Sum": "المجموع الجزئي",
   "Sum of all bills in the selected range.": "مجموع الفواتير في الفترة المحددة.",

@@ -94,6 +94,7 @@ const Bills = () => {
       return response.data;
     },
   });
+
   const queryClient = useQueryClient();
   const { mutate: deleteBill } = useMutation({
     mutationFn: (id: string) => axios.delete(`/bills/${id}`),
@@ -103,8 +104,8 @@ const Bills = () => {
       });
       toast({
         variant: "success",
-        title: "Bill deleted",
-        description: `Bill was deleted successfully`,
+        title: t("Success"),
+        description: t("Bill was deleted successfully"),
       });
     },
     onError: (error: any) => {
@@ -115,6 +116,7 @@ const Bills = () => {
       });
     },
   });
+
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       {/* HEADER */}
