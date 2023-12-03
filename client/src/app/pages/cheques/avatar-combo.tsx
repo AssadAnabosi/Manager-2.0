@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
 import FormDialog from "./form-dialog";
+import StatusBadge from "@/components/component/status-badge";
 import DeleteDialog from "@/components/component/delete-dialog";
 
 import { currencyFormatter } from "@/lib/utils";
@@ -26,21 +27,20 @@ const AvatarCombo = ({
   title,
   description,
   cheque,
+  deleteCheque,
 }: {
   fallback: React.ReactNode | string;
   title: string;
   description?: string | JSX.Element;
   cheque: ChequeType;
+  deleteCheque: (id: string) => void;
 }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   const handleDelete = () => {
-    // request server to delete
-    console.log(cheque.id);
-    // if success close
+    deleteCheque(cheque.id);
     setOpen(false);
-    // else toast
   };
 
   return (
@@ -48,7 +48,11 @@ const AvatarCombo = ({
       <div className="items-center hidden lg:flex">
         <Avatar className="h-9 w-9">
           <AvatarImage alt="Avatar" />
-          <AvatarFallback>{fallback}</AvatarFallback>
+          <AvatarFallback
+            className={`${cheque.isCancelled ? "line-through" : ""}`}
+          >
+            {fallback}
+          </AvatarFallback>
         </Avatar>
         <div className="ltr:ml-4 rtl:mr-4 space-y-1">
           <p
@@ -69,7 +73,11 @@ const AvatarCombo = ({
         <div className="flex items-center">
           <Avatar className="h-9 w-9">
             <AvatarImage alt="Avatar" />
-            <AvatarFallback>{fallback}</AvatarFallback>
+            <AvatarFallback
+              className={`${cheque.isCancelled ? "line-through" : ""}`}
+            >
+              {fallback}
+            </AvatarFallback>
           </Avatar>
           <div className="ltr:ml-4 rtl:mr-4 space-y-1">
             <p
@@ -103,6 +111,10 @@ const AvatarCombo = ({
               <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
                 <p>{t("Remarks")}:</p>
                 <p>{cheque.remarks}</p>
+              </div>
+              <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
+                <p>{t("Active: ")}:</p>
+                <StatusBadge status={!cheque.isCancelled} />
               </div>
             </div>
           </AlertDialogDescription>

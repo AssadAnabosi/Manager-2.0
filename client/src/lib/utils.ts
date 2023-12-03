@@ -14,6 +14,16 @@ export const getToday = () => {
   return date;
 };
 
+export const getLastDayOfCurrentMonthDate = () => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const lastDay = new Date(year, month + 1, 0, 12, 0, 0, 0);
+  // set time to 23:59:59
+  lastDay.setHours(0, 0, 0, 0);
+  return lastDay;
+};
+
 export const getFirstDayOfCurrentMonth = () => {
   const date = new Date();
   const year = date.getFullYear();
@@ -29,8 +39,7 @@ export const getLastDayOfCurrentMonth = () => {
   const year = date.getFullYear();
   const month = date.getMonth();
   const lastDay = new Date(year, month + 1, 0, 12, 0, 0, 0);
-  // set time to 23:59:59
-  lastDay.setHours(23, 59, 59, 999);
+  lastDay.setHours(0, 0, 0, 0);
   return dateToString(lastDay);
 };
 

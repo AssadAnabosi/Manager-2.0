@@ -48,8 +48,10 @@ export const createCheque = async (req, res) => {
   dueDate = new Date(dueDate);
   dueDate.setUTCHours(0, 0, 0, 0);
 
-  const payee = await Payee.findById(req.body.payee);
-  if (!payee) throw new ResponseError("Payee not found", statusCode.NOT_FOUND);
+  let payee = await Payee.findById(req.body.payee);
+  if (isCancelled !== true && !payee)
+    throw new ResponseError("Payee not found", statusCode.NOT_FOUND);
+  else if (isCancelled === true && !payee) payee = undefined;
 
   const cheque = new Cheque({
     serial,
@@ -83,8 +85,10 @@ export const updateCheque = async (req, res) => {
   // Check if the payee exists
   if (req.body.payee) {
     const payee = await Payee.findById(req.body.payee);
-    if (!payee)
+    if (req.body.isCancelled !== true && !payee)
       throw new ResponseError("Payee not found", statusCode.NOT_FOUND);
+    else if (req.body.isCancelled === true && !payee)
+      req.body.payee = undefined;
   }
   if (req.body.dueDate) {
     req.body.dueDate = new Date(req.body.dueDate);

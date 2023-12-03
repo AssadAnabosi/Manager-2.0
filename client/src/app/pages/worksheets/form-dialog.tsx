@@ -90,8 +90,6 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
     try {
       data = { ...data, date: dateToString(data.date) };
       if (log) {
-        delete data.date;
-        delete data.worker;
         await mutateAsync({ data, logId: log.id });
       } else {
         await mutateAsync({ data });

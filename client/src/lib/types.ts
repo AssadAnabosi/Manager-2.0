@@ -41,7 +41,7 @@ export type CreateLogType = {
 
 export type BillType = {
   id: string;
-  date: Date | string | any;
+  date: Date | string;
   value: number | string;
   description: string;
   remarks: string;
@@ -49,9 +49,9 @@ export type BillType = {
 
 export type ChequeType = {
   id: string;
-  serial: number;
+  serial: number | string;
   dueDate: Date | string;
-  value: number;
+  value: number | string;
   remarks: string;
   isCancelled: boolean;
   payee: {

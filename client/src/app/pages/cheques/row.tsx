@@ -15,7 +15,7 @@ import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
 import { currencyFormatter } from "@/lib/utils";
 
-const Row = (cheque: ChequeType) => {
+const Row = (cheque: ChequeType, deleteCheque: any) => {
   return (
     <TableRow key={cheque.id} className="h-[73px]">
       <TableCell>
@@ -26,19 +26,29 @@ const Row = (cheque: ChequeType) => {
           })}
           fallback={cheque.serial}
           cheque={cheque}
+          deleteCheque={deleteCheque}
         ></AvatarCombo>
       </TableCell>
-      <TableCell style={{ direction: "ltr" }} className="rtl:text-right">
+      <TableCell
+        style={{ direction: "ltr" }}
+        className={`rtl:text-right ${cheque.isCancelled ? "line-through" : ""}`}
+      >
         {currencyFormatter(cheque.value)}
       </TableCell>
-      <TableCell className="hidden md:table-cell">{cheque.remarks}</TableCell>
+      <TableCell
+        className={`hidden md:table-cell ${
+          cheque.isCancelled ? "line-through" : ""
+        }`}
+      >
+        {cheque.remarks}
+      </TableCell>
       <TableCell className="text-right hidden lg:table-cell">
         <FormDialog cheque={cheque}>
           <Button variant="edit" aria-label="Edit">
             <Pencil2Icon className="h-4 w-4" />
           </Button>
         </FormDialog>
-        <DeleteDialog onAction={() => console.log(cheque.id)}>
+        <DeleteDialog onAction={() => deleteCheque(cheque.id)}>
           <Button variant="delete" aria-label="Delete">
             <TrashIcon className="h-4 w-4" />
           </Button>

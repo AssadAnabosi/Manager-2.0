@@ -7,23 +7,25 @@ import useAxios from "@/hooks/use-axios";
 
 import { useToast } from "@/components/ui/use-toast";
 
-const BASE_URL = "/logs";
+const BASE_URL = "/cheques";
 
-export const useGetLogsQuery = () => {
+export const useGetChequesQuery = () => {
   const axios = useAxios();
   const [searchParams] = useSearchParams();
   const filter = searchParams.get("filter");
   const from = searchParams.get("from");
   const to = searchParams.get("to");
+  const search = searchParams.get("search");
 
   return useQuery({
-    queryKey: ["logs", { filter, from, to }],
+    queryKey: ["cheques", { filter, from, to }],
     queryFn: async () => {
       const { data: response } = await axios.get(`${BASE_URL}`, {
         params: {
           filter,
           from,
           to,
+          search,
         },
       });
       return response.data;
@@ -31,7 +33,7 @@ export const useGetLogsQuery = () => {
   });
 };
 
-export const useDeleteLogMutation = () => {
+export const useDeleteChequeMutation = () => {
   const axios = useAxios();
   const queryClient = useQueryClient();
   const { t } = useTranslation();
@@ -40,12 +42,12 @@ export const useDeleteLogMutation = () => {
     mutationFn: (id: string) => axios.delete(`${BASE_URL}/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["logs"],
+        queryKey: ["cheques"],
       });
       toast({
         variant: "success",
         title: t("Success"),
-        description: t("Log was deleted successfully"),
+        description: t("Cheque was deleted successfully"),
       });
     },
     onError: (error: any) => {
@@ -57,52 +59,46 @@ export const useDeleteLogMutation = () => {
     },
   });
 };
-export const logFormSchema = z
+export const chequeFormSchema = z
   .object({
-    date: z.any({
-      required_error: "Date is required",
+    dueDate: z.any({
+      required_error: "Due Date is required",
     }),
-    worker: z.string({
-      required_error: "Please select a worker.",
-    }),
-    startingTime: z.string({
-      required_error: "Starting time is required.",
-    }),
-    finishingTime: z.string({
-      required_error: "Ending time is required.",
-    }),
-    isAbsent: z.boolean(),
-    payment: z.string().refine(
-      (payment) => {
-        const number = Number(payment);
-        return !isNaN(number) && payment?.length > 0;
+    payee: z
+      .string({
+        required_error: "Please select a payee.",
+      })
+      .optional(),
+    serial: z.string().refine(
+      (value) => {
+        const number = Number(value);
+        return !isNaN(number) && value?.length > 0 && number > 0;
       },
       { message: "Invalid number" }
     ),
+    value: z.string().refine(
+      (value) => {
+        const number = Number(value);
+        return !isNaN(number) && value?.length > 0;
+      },
+      { message: "Invalid number" }
+    ),
+    isCancelled: z.boolean(),
     remarks: z.string().optional(),
   })
   .refine(
     (data) => {
-      return !(!data.isAbsent && data.startingTime === "00:00");
+      return !(!data.isCancelled && !data.payee);
     },
     {
-      path: ["startingTime"],
-      message: "Please Provide a valid time",
-    }
-  )
-  .refine(
-    (data) => {
-      return !(!data.isAbsent && data.finishingTime === "00:00");
-    },
-    {
-      path: ["finishingTime"],
-      message: "Please Provide a valid time",
+      path: ["payee"],
+      message: "Please select a payee.",
     }
   );
 
-export type logFormSchemaType = z.infer<typeof logFormSchema>;
+export type chequeFormSchemaType = z.infer<typeof chequeFormSchema>;
 
-export const useLogFormMutation = () => {
+export const useChequeFormMutation = () => {
   const axios = useAxios();
   const { t } = useTranslation();
   const { toast } = useToast();
@@ -110,36 +106,32 @@ export const useLogFormMutation = () => {
   return useMutation({
     mutationFn: ({
       data,
-      logId,
+      chequeId,
     }: {
-      data: logFormSchemaType;
-      logId?: string;
+      data: chequeFormSchemaType;
+      chequeId?: string;
     }) => {
-      if (!logId) {
+      if (!chequeId) {
         return axios.post(`${BASE_URL}`, data);
       } else {
-        return axios.put(`${BASE_URL}/${logId}`, {
-          ...data,
-          worker: undefined,
-          date: undefined,
-        });
+        return axios.put(`${BASE_URL}/${chequeId}`, data);
       }
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ["logs"],
+        queryKey: ["cheques"],
       });
       if (data.status === 201)
         toast({
           variant: "success",
           title: t("Success"),
-          description: t("Log was added successfully"),
+          description: t("Cheque was added successfully"),
         });
       else
         toast({
           variant: "success",
           title: t("Success"),
-          description: t("Log was updated successfully"),
+          description: t("Cheque was updated successfully"),
         });
     },
     onError: (error: any) => {
