@@ -45,31 +45,7 @@ const AvatarCombo = ({
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <div className="items-center hidden lg:flex">
-        <Avatar className="h-9 w-9">
-          <AvatarImage alt="Avatar" />
-          <AvatarFallback
-            className={`${cheque.isCancelled ? "line-through" : ""}`}
-          >
-            {fallback}
-          </AvatarFallback>
-        </Avatar>
-        <div className="ltr:ml-4 rtl:mr-4 space-y-1">
-          <p
-            className="text-sm font-medium leading-none"
-            aria-label="Payee Name"
-          >
-            {cheque.payee.id ? title : t("Deleted Payee")}
-          </p>
-          <p
-            className="text-sm text-muted-foreground"
-            aria-label="Day and Date"
-          >
-            {description}
-          </p>
-        </div>
-      </div>
-      <AlertDialogTrigger asChild className="lg:hidden">
+      <AlertDialogTrigger asChild>
         <div className="flex items-center">
           <Avatar className="h-9 w-9">
             <AvatarImage alt="Avatar" />
