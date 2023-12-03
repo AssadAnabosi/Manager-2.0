@@ -18,9 +18,10 @@ import {
 
 import { useTranslation } from "react-i18next";
 import { Skeleton } from "../ui/skeleton";
+import { ListType } from "@/lib/types";
 
 type ComboboxProps = {
-  list: { label: string; value: string }[];
+  list: ListType[];
   filter: string;
   setFilter: (filter: string) => void;
   placeholder?: string;
@@ -28,7 +29,7 @@ type ComboboxProps = {
 };
 
 const Combobox = ({
-  list,
+  list = [],
   filter,
   setFilter,
   placeholder = "Select...",

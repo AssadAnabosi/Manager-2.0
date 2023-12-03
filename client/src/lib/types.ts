@@ -67,3 +67,9 @@ export type PayeeType = {
   phoneNumber: string;
   remarks: string;
 };
+
+export type ListType = {
+  value: string;
+  label: string;
+  active?: boolean;
+};

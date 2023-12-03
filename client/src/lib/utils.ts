@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { format } from "date-fns";
+import { ListType } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -41,7 +42,11 @@ export const stringToDate = (string: any) => {
   return new Date(string);
 };
 
-export function toList(array: any[], value: string, active = false) {
+export function toList(
+  array: any[],
+  value: string,
+  active = false
+): ListType[] {
   return array.map((item: any) => {
     return {
       value: item.id,

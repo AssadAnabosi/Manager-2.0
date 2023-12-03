@@ -1,13 +1,17 @@
 import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
-import useAxios from "@/hooks/use-axios";
 import { LogType } from "@/lib/types";
+
+import {
+  logFormSchema,
+  logFormSchemaType,
+  useLogFormMutation,
+} from "@/api/logs";
+import { useGetUsersListQuery } from "@/api/users";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -59,58 +63,11 @@ type ComponentProps = {
   onClose?: (status: boolean) => void;
 };
 
-const billFormSchema = z
-  .object({
-    date: z.any({
-      required_error: "Date is required",
-    }),
-    worker: z
-      .string({
-        required_error: "Please select a worker.",
-      })
-      .optional(),
-    startingTime: z.string({
-      required_error: "Starting time is required.",
-    }),
-    finishingTime: z.string({
-      required_error: "Ending time is required.",
-    }),
-    isAbsent: z.boolean(),
-    payment: z.string().refine(
-      (payment) => {
-        const number = Number(payment);
-        return !isNaN(number) && payment?.length > 0;
-      },
-      { message: "Invalid number" }
-    ),
-    remarks: z.string().optional(),
-  })
-  .refine(
-    (data) => {
-      return !(!data.isAbsent && data.startingTime === "00:00");
-    },
-    {
-      path: ["startingTime"],
-      message: "Please Provide a valid time",
-    }
-  )
-  .refine(
-    (data) => {
-      return !(!data.isAbsent && data.finishingTime === "00:00");
-    },
-    {
-      path: ["finishingTime"],
-      message: "Please Provide a valid time",
-    }
-  );
-
-type billFormSchemaType = z.infer<typeof billFormSchema>;
-
 export default function FormDialog({ children, log, onClose }: ComponentProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const billForm = useForm<billFormSchemaType>({
-    resolver: zodResolver(billFormSchema),
+  const logForm = useForm<logFormSchemaType>({
+    resolver: zodResolver(logFormSchema),
     defaultValues: {
       date: log ? new Date(log?.date) : getToday(),
       worker: log?.worker?.id || undefined,
@@ -121,56 +78,24 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
       remarks: log?.remarks || "",
     },
   });
-  const isLoading = billForm.formState.isSubmitting;
+  const isLoading = logForm.formState.isSubmitting;
 
-  const { data: usersData, isLoading: filterLoading } = useQuery({
-    queryKey: ["users"],
-    queryFn: async () => {
-      const { data: response } = await axios.get("/users");
-      return response.data;
-    },
-  });
+  const { data: usersData, isLoading: filterLoading } = useGetUsersListQuery();
   const workers = toList(usersData?.users || [], "fullName", true);
-  const queryClient = useQueryClient();
-  const { mutateAsync } = useMutation({
-    mutationFn: (data: billFormSchemaType) => {
-      if (!log) {
-        return axios.post("/logs", data);
-      } else {
-        console.log(data);
-        return axios.put(`/logs/${log.id}`, data);
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["logs"],
-      });
-      if (!log)
-        toast({
-          variant: "success",
-          title: t("Success"),
-          description: t("Log was added successfully"),
-        });
-      else
-        toast({
-          variant: "success",
-          title: t("Success"),
-          description: t("Log was updated successfully"),
-        });
-    },
-  });
+
+  const { mutateAsync } = useLogFormMutation();
   const [open, setOpen] = useState(false);
-  const axios = useAxios();
-  const onSubmit = async (data: billFormSchemaType) => {
+
+  const onSubmit = async (data: logFormSchemaType) => {
     try {
       data = { ...data, date: dateToString(data.date) };
       if (log) {
         delete data.date;
         delete data.worker;
-      }
-      await mutateAsync(data);
-      if (!log) {
-        billForm.reset();
+        await mutateAsync({ data, logId: log.id });
+      } else {
+        await mutateAsync({ data });
+        logForm.reset();
       }
       setOpen(false);
       onClose?.(false);
@@ -194,13 +119,10 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
               : t("Enter the details for the new log")}
           </DialogDescription>
         </DialogHeader>
-        <Form {...billForm}>
-          <form
-            onSubmit={billForm.handleSubmit(onSubmit)}
-            className="space-y-4"
-          >
+        <Form {...logForm}>
+          <form onSubmit={logForm.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
-              control={billForm.control}
+              control={logForm.control}
               name="date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
@@ -246,7 +168,7 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
             />
             <div className="grid grid-cols-2 gap-3">
               <FormField
-                control={billForm.control}
+                control={logForm.control}
                 name="startingTime"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
@@ -259,7 +181,7 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
                 )}
               />
               <FormField
-                control={billForm.control}
+                control={logForm.control}
                 name="finishingTime"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
@@ -273,7 +195,7 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
               />
             </div>
             <FormField
-              control={billForm.control}
+              control={logForm.control}
               name="worker"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
@@ -319,10 +241,9 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
                                 key={worker.value}
                                 onSelect={() => {
                                   if (worker.active) {
-                                    billForm.getValues("worker") ===
-                                    worker.value
-                                      ? billForm.setValue("worker", "")
-                                      : billForm.setValue(
+                                    logForm.getValues("worker") === worker.value
+                                      ? logForm.setValue("worker", "")
+                                      : logForm.setValue(
                                           "worker",
                                           worker.value
                                         );
@@ -352,7 +273,7 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
               )}
             />
             <FormField
-              control={billForm.control}
+              control={logForm.control}
               name="payment"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
@@ -374,7 +295,7 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
               )}
             />
             <FormField
-              control={billForm.control}
+              control={logForm.control}
               name="remarks"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
@@ -387,7 +308,7 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
               )}
             />
             <FormField
-              control={billForm.control}
+              control={logForm.control}
               name="isAbsent"
               render={({ field }) => (
                 <FormItem className="flex flex-col">

@@ -1,13 +1,16 @@
 import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
-import useAxios from "@/hooks/use-axios";
 import { BillType } from "@/lib/types";
+
+import {
+  billFormSchema,
+  billFormSchemaType,
+  useBillFormMutation,
+} from "@/api/bills";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,35 +40,18 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import Spinner from "@/components/component/spinner";
+import { useToast } from "@/components/ui/use-toast";
 
 import { CalendarIcon } from "lucide-react";
 import ShekelIcon from "@/components/icons/shekel";
 
 import { getToday } from "@/lib/utils";
-import { useToast } from "@/components/ui/use-toast";
 
 type ComponentProps = {
   children: ReactNode;
   bill?: BillType;
   onClose?: (status: boolean) => void;
 };
-
-const billFormSchema = z.object({
-  date: z.any({
-    required_error: "Date is required",
-  }),
-  value: z.string().refine(
-    (value) => {
-      const number = Number(value);
-      return !isNaN(number) && value?.length > 0;
-    },
-    { message: "Invalid number" }
-  ),
-  description: z.string().min(1, "Description is required"),
-  remarks: z.string().optional(),
-});
-
-type billFormSchemaType = z.infer<typeof billFormSchema>;
 
 export default function FormDialog({
   children,
@@ -84,40 +70,17 @@ export default function FormDialog({
     },
   });
   const isLoading = billForm.formState.isSubmitting;
-  const queryClient = useQueryClient();
-  const { mutateAsync } = useMutation({
-    mutationFn: (data: billFormSchemaType) => {
-      if (!bill) {
-        return axios.post("/bills", data);
-      } else {
-        return axios.put(`/bills/${bill.id}`, data);
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["bills"],
-      });
-      if (!bill)
-        toast({
-          variant: "success",
-          title: t("Success"),
-          description: t("Bill was added successfully"),
-        });
-      else
-        toast({
-          variant: "success",
-          title: t("Success"),
-          description: t("Bill was updated successfully"),
-        });
-    },
-  });
+
+  const { mutateAsync } = useBillFormMutation();
   const [open, setOpen] = useState(false);
-  const axios = useAxios();
+
   const onSubmit = async (data: billFormSchemaType) => {
     try {
       data = { ...data, date: dateToString(data.date) };
-      await mutateAsync(data);
-      if (!bill) {
+      if (bill) {
+        await mutateAsync({ data, billId: bill.id });
+      } else {
+        await mutateAsync({ data });
         billForm.reset();
       }
       setOpen(false);

@@ -3,12 +3,12 @@ import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 import { DateRange } from "react-day-picker";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 
 import { LogType } from "@/lib/types";
 import { DATE_FORMAT } from "@/lib/constants";
 
-import useAxios from "@/hooks/use-axios";
+import { useGetUsersListQuery } from "@/api/users";
+import { useGetLogsQuery, useDeleteLogMutation } from "@/api/logs";
 
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,7 @@ import {
 import DateRangePicker from "@/components/component/date-picker-range";
 import Combobox from "@/components/component/combobox";
 import NoResults from "@/components/component/no-results";
+import FetchError from "@/components/component/fetch-error";
 
 import Cards from "./cards";
 import RowSkeleton from "./row-skeleton";
@@ -31,7 +32,6 @@ import FormDialog from "./form-dialog";
 
 import { DownloadIcon, FilePlusIcon } from "@radix-ui/react-icons";
 
-import { useToast } from "@/components/ui/use-toast";
 import {
   getFirstDayOfCurrentMonth,
   getLastDayOfCurrentMonth,
@@ -43,7 +43,6 @@ import {
 const Logs = () => {
   const dummy = [...Array(8)];
   const { t } = useTranslation();
-  const { toast } = useToast();
   const [searchParams, setSearchParams] = useSearchParams({
     filter: "",
     from: getFirstDayOfCurrentMonth(),
@@ -80,52 +79,12 @@ const Logs = () => {
       { replace: true }
     );
   };
-  const axios = useAxios();
-  const { data: logsData, isLoading } = useQuery({
-    queryKey: ["logs", { filter, from: date.from, to: date.to }],
-    queryFn: async () => {
-      const { data: response } = await axios.get("/logs", {
-        params: {
-          filter,
-          from: date.from,
-          to: date.to,
-        },
-      });
-      return response.data;
-    },
-  });
+  const { data: logsData, isLoading } = useGetLogsQuery();
 
-  const { data: usersData, isLoading: filterLoading } = useQuery({
-    queryKey: ["users"],
-    queryFn: async () => {
-      const { data: response } = await axios.get("/users");
-      return response.data;
-    },
-  });
+  const { data: usersData, isLoading: filterLoading } = useGetUsersListQuery();
+  const workers = toList(usersData?.users || [], "fullName", true);
 
-  const workers = toList(usersData?.users || [], "fullName");
-
-  const queryClient = useQueryClient();
-  const { mutate: deleteLog } = useMutation({
-    mutationFn: (id: string) => axios.delete(`/logs/${id}`),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["logs"],
-      });
-      toast({
-        variant: "success",
-        title: t("Success"),
-        description: t("Bill was deleted successfully"),
-      });
-    },
-    onError: (error: any) => {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
-      });
-    },
-  });
+  const { mutate: deleteLog } = useDeleteLogMutation();
 
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
@@ -165,7 +124,9 @@ const Logs = () => {
         />
       </div>
       {/* TABLE */}
-      {!isLoading && !logsData?.logs?.length ? (
+      {!isLoading && !logsData ? (
+        <FetchError />
+      ) : !isLoading && !logsData?.logs.length ? (
         <NoResults />
       ) : (
         <Table>

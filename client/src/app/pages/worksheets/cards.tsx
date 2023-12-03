@@ -30,7 +30,9 @@ const Cards = ({
               <Tally5 />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{logsData.daysCount}</div>
+              <div className="text-2xl font-bold">
+                {logsData?.daysCount ? logsData.daysCount : "---"}
+              </div>
 
               <p className="text-xs text-muted-foreground">
                 {t("This does include days worked less than 8-hours.")}
@@ -49,7 +51,9 @@ const Cards = ({
                 style={{ direction: "ltr" }}
                 className="text-2xl font-bold rtl:text-right"
               >
-                {currencyFormatter(logsData.paymentsSumValue)}
+                {logsData?.paymentsSumValue
+                  ? currencyFormatter(logsData.paymentsSumValue)
+                  : "---"}
               </div>
 
               <p className="text-xs text-muted-foreground">
@@ -66,7 +70,7 @@ const Cards = ({
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {numberFormatter(logsData.OTVSum)}
+                {logsData?.OTVSum ? numberFormatter(logsData.OTVSum) : "---"}
               </div>
               <p className="text-xs text-muted-foreground">
                 {t(

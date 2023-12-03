@@ -3,12 +3,11 @@ import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 import { DateRange } from "react-day-picker";
-import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 
 import { BillType } from "@/lib/types";
 import { DATE_FORMAT } from "@/lib/constants";
 
-import useAxios from "@/hooks/use-axios";
+import { useGetBillsQuery, useDeleteBillMutation } from "@/api/bills";
 
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -20,7 +19,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useToast } from "@/components/ui/use-toast";
 import DateRangePicker from "@/components/component/date-picker-range";
 import Searchbox from "@/components/component/searchbox";
 import NoResults from "@/components/component/no-results";
@@ -43,7 +41,6 @@ import {
 const Bills = () => {
   const dummy = [...Array(8)];
   const { t } = useTranslation();
-  const { toast } = useToast();
   const [searchParams, setSearchParams] = useSearchParams({
     search: "",
     from: getFirstDayOfCurrentMonth(),
@@ -80,42 +77,9 @@ const Bills = () => {
       { replace: true }
     );
   };
-  const axios = useAxios();
-  const { data: billsData, isLoading } = useQuery({
-    queryKey: ["bills", { search, from: date.from, to: date.to }],
-    queryFn: async () => {
-      const { data: response } = await axios.get("/bills", {
-        params: {
-          search,
-          from: date.from,
-          to: date.to,
-        },
-      });
-      return response.data;
-    },
-  });
+  const { data: billsData, isLoading } = useGetBillsQuery();
 
-  const queryClient = useQueryClient();
-  const { mutate: deleteBill } = useMutation({
-    mutationFn: (id: string) => axios.delete(`/bills/${id}`),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["bills"],
-      });
-      toast({
-        variant: "success",
-        title: t("Success"),
-        description: t("Bill was deleted successfully"),
-      });
-    },
-    onError: (error: any) => {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
-      });
-    },
-  });
+  const { mutate: deleteBill } = useDeleteBillMutation();
 
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
@@ -151,7 +115,7 @@ const Bills = () => {
       {/* TABLE */}
       {!isLoading && !billsData ? (
         <FetchError />
-      ) : !billsData?.bills.length ? (
+      ) : !isLoading && !billsData?.bills.length ? (
         <NoResults />
       ) : (
         <Table>
