@@ -1,7 +1,15 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import axios from "@/api/axios";
+import AXIOS from "axios";
+
+const BASE_URL = "https://api.anabosi.com";
+
+export const axios = AXIOS.create({
+  baseURL: BASE_URL,
+  headers: { "Content-Type": "application/json" },
+  withCredentials: true,
+});
 
 import { useToast } from "@/components/ui/use-toast";
 

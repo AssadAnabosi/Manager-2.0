@@ -38,7 +38,7 @@ const Combobox = ({
   const [open, setOpen] = React.useState(false);
 
   return isLoading ? (
-    <Skeleton className="w-full md:w-[335px]" />
+    <Skeleton className="w-full md:w-[335px]  h-10" />
   ) : (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -54,7 +54,7 @@ const Combobox = ({
           <ChevronsUpDown className="ltr:ml-2 rtl:mr-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="md:w-[335px] p-0">
+      <PopoverContent className="w-full md:w-[335px] p-0">
         <Command>
           <CommandInput placeholder={t("Search...")} />
           <CommandEmpty>{t("No matching results")}</CommandEmpty>

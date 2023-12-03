@@ -70,6 +70,11 @@
   body {
     @apply bg-background text-foreground;
   }
+  input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: brightness(0) saturate(100%) invert(23%) sepia(71%) saturate(3271%)
+      hue-rotate(352deg) brightness(94%) contrast(83%);
+    scale: 1.8;
+  }
 }
 
 /* pull to refresh */

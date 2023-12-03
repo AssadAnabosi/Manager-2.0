@@ -11,6 +11,7 @@ import { BillType } from "@/lib/types";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -25,7 +26,6 @@ import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
-  // FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -232,7 +232,7 @@ export default function FormDialog({
                 <FormItem className="flex flex-col">
                   <FormLabel>{t("Remarks")}</FormLabel>
                   <FormControl>
-                    <Input {...field} type="string" className="input" />
+                    <Textarea {...field} className="input resize-none" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { currencyFormatter, numberFormatter } from "@/lib/utils";
-import { Coins, Clock5, Tally5 } from "lucide-react";
+import { Coins, Clock8, Tally5 } from "lucide-react";
 
 const Cards = ({
   isLoading,
@@ -62,7 +62,7 @@ const Cards = ({
               <CardTitle className="text-sm font-medium">
                 {t("Workday Variance: Balancing Hours")}
               </CardTitle>
-              <Clock5 />
+              <Clock8 />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">

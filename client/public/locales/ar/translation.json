@@ -79,6 +79,8 @@
   "to": "الى",
   "No Matching Results Found": "لا يوجد نتائج مطابقة",
   "No matching results": "لا يوجد نتائج مطابقة",
+  "Invalid number": "رقم غير صحيح",
+  "Description is required": "الوصف مطلوب",
 
   "Remarks": "ملاحظات",
   "Description": "الوصف",
@@ -87,7 +89,7 @@
   "Contact Details": "بيانات الاتصال",
   "Date": "التاريخ",
 
-  "TIMESHEETS": "السجلات",
+  "WORKSHEETS": "السجلات",
 
   "Work Timesheets": "سجلات العمل",
   "Days Worked": "ايام العمل",
@@ -97,7 +99,7 @@
   "Workday Variance: Balancing Hours": "موازنة ساعات العمل",
   "Expected 8-hour workday; extra hours receive positive, fewer hours negative.": "يتوقع 8 ساعات عمل ؛ ساعات اضافية موجبة ، اقل ساعات سالبة.",
   "Filter by worker": "تصفية حسب العامل",
-  "A list of timesheets": "قائمة السجلات",
+  "A list of worksheets": "قائمة السجلات",
   "Status": "الحالة",
   "Payment": "الدفعة",
 

@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import axios from "@/api/axios";
+import { axios } from "@/hooks/use-axios";
 
 import { Button } from "@/components/ui/button";
 import {

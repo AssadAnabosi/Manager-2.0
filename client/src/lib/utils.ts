@@ -41,11 +41,12 @@ export const stringToDate = (string: any) => {
   return new Date(string);
 };
 
-export function toList(array: any[], value: string) {
+export function toList(array: any[], value: string, active = false) {
   return array.map((item: any) => {
     return {
       value: item.id,
       label: item[value],
+      active: active ? item["active"] : true,
     };
   });
 }

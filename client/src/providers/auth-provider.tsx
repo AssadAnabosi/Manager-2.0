@@ -2,7 +2,7 @@ import { createContext, useState, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "@/providers/theme-provider";
 import { LanguageType, ThemeType, UserType } from "@/lib/types";
-import axios from "@/api/axios";
+import { axios } from "@/hooks/use-axios";
 
 type AuthProviderState = {
   user: UserType | undefined;

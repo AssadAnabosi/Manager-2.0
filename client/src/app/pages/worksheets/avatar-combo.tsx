@@ -27,26 +27,25 @@ const AvatarCombo = ({
   title,
   description,
   log,
+  deleteLog,
 }: {
   fallback: React.ReactNode | string;
   title: string;
   description?: string | JSX.Element;
   log: LogType;
+  deleteLog: (id: string) => void;
 }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   const handleDelete = () => {
-    // request server to delete
-    console.log(log.id);
-    // if success close
+    deleteLog(log.id);
     setOpen(false);
-    // else toast
   };
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <div className="items-center hidden lg:flex">
+      <div className="items-center hidden 2xl:flex">
         <Avatar className="h-9 w-9">
           <AvatarImage alt="Avatar" />
           <AvatarFallback>{fallback}</AvatarFallback>
@@ -66,7 +65,7 @@ const AvatarCombo = ({
           </p>
         </div>
       </div>
-      <AlertDialogTrigger asChild className="lg:hidden">
+      <AlertDialogTrigger asChild className="2xl:hidden">
         <div className="flex items-center">
           <Avatar className="h-9 w-9">
             <AvatarImage alt="Avatar" />
@@ -99,7 +98,7 @@ const AvatarCombo = ({
             <div className="flex flex-col gap-2 text-left rtl:text-right">
               <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
                 <p>{t("Status")}:</p>
-                <StatusBadge status={log.isAbsent} />
+                <StatusBadge status={!log.isAbsent} />
               </div>
               <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
                 <p>{t("Balancing Hours")}:</p>

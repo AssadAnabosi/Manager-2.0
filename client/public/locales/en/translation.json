@@ -79,6 +79,8 @@
   "to": "to",
   "No Matching Results Found": "No Matching Results Found",
   "No matching results": "No matching results",
+  "Invalid number": "Invalid number",
+  "Description is required": "Description is required",
 
   "Remarks": "Remarks",
   "Description": "Description",
@@ -87,7 +89,7 @@
   "Contact Details": "Contact Details",
   "Date": "Date",
 
-  "TIMESHEETS": "TIMESHEETS",
+  "WORKSHEETS": "TIMESHEETS",
 
   "Work Timesheets": "Work Timesheets",
   "Days Worked": "Days Worked",
@@ -97,7 +99,7 @@
   "Workday Variance: Balancing Hours": "Workday Variance: Balancing Hours",
   "Expected 8-hour workday; extra hours receive positive, fewer hours negative.": "Expected 8-hour workday; extra hours receive positive, fewer hours negative.",
   "Filter by worker": "Filter by worker",
-  "A list of timesheets": "A list of timesheets",
+  "A list of worksheets": "A list of worksheets",
   "Status": "Status",
   "Payment": "Payment",
 

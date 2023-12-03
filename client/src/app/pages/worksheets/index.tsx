@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 import { DateRange } from "react-day-picker";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 
 import { LogType } from "@/lib/types";
 import { DATE_FORMAT } from "@/lib/constants";
@@ -25,11 +25,13 @@ import Combobox from "@/components/component/combobox";
 import NoResults from "@/components/component/no-results";
 
 import Cards from "./cards";
-import Row from "./row";
 import RowSkeleton from "./row-skeleton";
+import Row from "./row";
+import FormDialog from "./form-dialog";
 
-import { DownloadIcon } from "@radix-ui/react-icons";
+import { DownloadIcon, FilePlusIcon } from "@radix-ui/react-icons";
 
+import { useToast } from "@/components/ui/use-toast";
 import {
   getFirstDayOfCurrentMonth,
   getLastDayOfCurrentMonth,
@@ -41,6 +43,7 @@ import {
 const Logs = () => {
   const dummy = [...Array(8)];
   const { t } = useTranslation();
+  const { toast } = useToast();
   const [searchParams, setSearchParams] = useSearchParams({
     filter: "",
     from: getFirstDayOfCurrentMonth(),
@@ -95,16 +98,34 @@ const Logs = () => {
   const { data: usersData, isLoading: filterLoading } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const { data: response } = await axios.get("/users", {
-        params: {
-          active: true,
-        },
-      });
+      const { data: response } = await axios.get("/users");
       return response.data;
     },
   });
 
   const workers = toList(usersData?.users || [], "fullName");
+
+  const queryClient = useQueryClient();
+  const { mutate: deleteLog } = useMutation({
+    mutationFn: (id: string) => axios.delete(`/logs/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["logs"],
+      });
+      toast({
+        variant: "success",
+        title: t("Success"),
+        description: t("Bill was deleted successfully"),
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error?.response?.data?.message || "Something went wrong",
+      });
+    },
+  });
 
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
@@ -113,11 +134,17 @@ const Logs = () => {
         <h2 className="text-3xl font-bold tracking-tight">
           {t("Work Timesheets")}
         </h2>
-        <div className="flex space-x-2 rtl:space-x-reverse w-full md:w-auto">
+        <div className="flex items-center gap-2 flex-col md:flex-row">
           <DateRangePicker date={date} setDate={setDate} />
+          <FormDialog>
+            <Button className="w-full">
+              <FilePlusIcon className="ltr:mr-2 rtl:ml-2 h-7 w-7" />{" "}
+              {t("Add New")}
+            </Button>
+          </FormDialog>
           <div className="hidden md:inline-block">
             <Button>
-              <DownloadIcon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />{" "}
+              <DownloadIcon className="ltr:mr-2 rtl:ml-2 h-6 w-6" />{" "}
               {t("Download")}
             </Button>
           </div>
@@ -128,7 +155,7 @@ const Logs = () => {
       <Cards isLoading={isLoading} logsData={logsData} />
       <Separator />
       {/* FILTER */}
-      <div className="flex justify-end h-[40px] flex-wrap">
+      <div className="flex justify-end flex-wrap">
         <Combobox
           isLoading={filterLoading}
           list={workers}
@@ -143,28 +170,28 @@ const Logs = () => {
       ) : (
         <Table>
           <TableCaption>
-            {date?.from ? (
-              date.to ? (
+            {logsData?.from ? (
+              logsData.to ? (
                 <>
-                  {t("A list of timesheets")} {t("from")}{" "}
-                  {format(stringToDate(date.from), DATE_FORMAT, {
+                  {t("A list of worksheets")} {t("from")}{" "}
+                  {format(stringToDate(logsData.from), DATE_FORMAT, {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}{" "}
                   {t("to")}{" "}
-                  {format(stringToDate(date.to), DATE_FORMAT, {
+                  {format(stringToDate(logsData.to), DATE_FORMAT, {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}
                 </>
               ) : (
                 <>
-                  {t("A list of timesheets")} {t("from")}{" "}
-                  {format(stringToDate(date.from), DATE_FORMAT, {
+                  {t("A list of worksheets")} {t("from")}{" "}
+                  {format(stringToDate(logsData.from), DATE_FORMAT, {
                     locale: document.documentElement.lang === "ar" ? ar : enGB,
                   })}
                 </>
               )
             ) : (
-              <>{t("A list of timesheets")}</>
+              <>{t("A list of worksheets")}</>
             )}
           </TableCaption>
           <TableHeader>
@@ -188,7 +215,7 @@ const Logs = () => {
           <TableBody>
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
-              : logsData.logs.map((log: LogType) => Row(log))}
+              : logsData.logs.map((log: LogType) => Row(log, deleteLog))}
           </TableBody>
         </Table>
       )}

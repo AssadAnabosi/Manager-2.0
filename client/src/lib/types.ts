@@ -28,6 +28,17 @@ export type LogType = {
   };
 };
 
+export type CreateLogType = {
+  date: Date | string;
+  isAbsent: boolean;
+  startingTime: string;
+  finishingTime: string;
+  OTV: number;
+  payment: number;
+  remarks: string;
+  worker: string;
+};
+
 export type BillType = {
   id: string;
   date: Date | string | any;

@@ -16,7 +16,7 @@ import { CalendarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
 import { currencyFormatter, numberFormatter } from "@/lib/utils";
 
-const Row = (log: LogType) => {
+const Row = (log: LogType, deleteLog: any) => {
   return (
     <TableRow key={log.id} className="h-[73px]">
       <TableCell>
@@ -27,6 +27,7 @@ const Row = (log: LogType) => {
           })}
           fallback={<CalendarIcon className="h-5 w-5" />}
           log={log}
+          deleteLog={deleteLog}
         ></AvatarCombo>
       </TableCell>
       <TableCell className="text-center">
@@ -47,7 +48,7 @@ const Row = (log: LogType) => {
             <Pencil2Icon className="h-4 w-4" />
           </Button>
         </FormDialog>
-        <DeleteDialog onAction={() => console.log(log.id)}>
+        <DeleteDialog onAction={() => deleteLog(log.id)}>
           <Button variant="delete" aria-label="Delete">
             <TrashIcon className="h-4 w-4" />
           </Button>
