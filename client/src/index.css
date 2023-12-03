@@ -71,3 +71,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* pull to refresh */
+div[class^="ptr--"],
+div[class*=" ptr--"] {
+  color: hsl(var(--primary));
+}
