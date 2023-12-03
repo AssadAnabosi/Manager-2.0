@@ -111,10 +111,7 @@ export const updateLog = async (req, res) => {
       statusCode.BAD_REQUEST
     );
   }
-  if (req.body.date) {
-    req.body.date = new Date(req.body.date);
-    req.body.date.setUTCHours(0, 0, 0, 0);
-  }
+
   await Log.findByIdAndUpdate(req.params.logID, req.body, {
     new: true,
     runValidators: true,
