@@ -17,15 +17,16 @@ export const getBills = async (req, res) => {
 
   let rangeTotal = (await Bill.aggregate(queryHelper.findValueSum(_id)))[0];
   const rangeTotalValue = rangeTotal ? rangeTotal.total : 0;
-
+  const from = startDate ? startDate.toISOString().substring(0, 10) : "";
+  const to = endDate ? endDate.toISOString().substring(0, 10) : "";
   return res.status(OK).json({
     success: true,
     data: {
       bills,
       allTimeTotalValue,
       rangeTotalValue,
-      from: startDate.toISOString().substring(0, 10),
-      to: endDate.toISOString().substring(0, 10),
+      from,
+      to,
       search,
     },
   });

@@ -30,7 +30,8 @@ export const getLogs = async (req, res) => {
   )[0];
   const daysCount = attendanceSums ? attendanceSums.daysCount : 0;
   const OTVSum = attendanceSums ? attendanceSums.OTVSum : 0;
-
+  const from = startDate ? startDate.toISOString().substring(0, 10) : "";
+  const to = endDate ? endDate.toISOString().substring(0, 10) : "";
   return res.status(statusCode.OK).json({
     success: true,
     data: {
@@ -38,8 +39,8 @@ export const getLogs = async (req, res) => {
       paymentsSumValue,
       daysCount,
       OTVSum,
-      from: startDate.toISOString().substring(0, 10),
-      to: endDate.toISOString().substring(0, 10),
+      from,
+      to,
       filter: worker || "",
     },
   });

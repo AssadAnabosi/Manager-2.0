@@ -27,14 +27,17 @@ export const getCheques = async (req, res) => {
   let ValueSum = (await Cheque.aggregate(queryHelper.findValueSum(_id)))[0];
   const total = ValueSum ? ValueSum.total : 0;
 
+  const from = startDate ? startDate.toISOString().substring(0, 10) : "";
+  const to = endDate ? endDate.toISOString().substring(0, 10) : "";
   return res.status(statusCode.OK).json({
     success: true,
     data: {
       cheques,
       total,
-      from: startDate.toISOString().substring(0, 10),
-      to: endDate.toISOString().substring(0, 10),
+      from,
+      to,
       search,
+      filter: payee || "",
     },
   });
 };
