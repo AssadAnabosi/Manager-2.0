@@ -25,6 +25,7 @@ import DateRangePicker from "@/components/component/date-picker-range";
 import Combobox from "@/components/component/combobox";
 import Searchbox from "@/components/component/searchbox";
 import NoResults from "@/components/component/no-results";
+import FetchError from "@/components/component/fetch-error";
 
 import RowSkeleton from "./row-skeleton";
 import Row from "./row";
@@ -41,7 +42,6 @@ import {
 } from "@/lib/utils";
 
 const Cheques = () => {
-  // chequesData.cheques=[];
   const dummy = [...Array(8)];
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
@@ -155,7 +155,9 @@ const Cheques = () => {
         />
       </div>
       {/* TABLE */}
-      {!isLoading && !chequesData?.cheques?.length ? (
+      {!isLoading && !chequesData ? (
+        <FetchError />
+      ) : !isLoading && !chequesData?.cheques?.length ? (
         <NoResults />
       ) : (
         <Table>

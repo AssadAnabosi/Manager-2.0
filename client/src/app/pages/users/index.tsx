@@ -15,8 +15,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import Searchbox from "@/components/component/searchbox";
 import NoResults from "@/components/component/no-results";
+import FetchError from "@/components/component/fetch-error";
 
 import RowSkeleton from "./row-skeleton";
 import Row from "./row";
@@ -65,7 +67,9 @@ const Users = () => {
         </div>
       </div>
       {/* TABLE */}
-      {!isLoading && !usersData.users.length ? (
+      {!isLoading && !usersData ? (
+        <FetchError />
+      ) : !isLoading && !usersData?.users?.length ? (
         <NoResults />
       ) : (
         <Table>

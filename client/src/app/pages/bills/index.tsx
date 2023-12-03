@@ -19,6 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import DateRangePicker from "@/components/component/date-picker-range";
 import Searchbox from "@/components/component/searchbox";
 import NoResults from "@/components/component/no-results";
@@ -115,7 +116,7 @@ const Bills = () => {
       {/* TABLE */}
       {!isLoading && !billsData ? (
         <FetchError />
-      ) : !isLoading && !billsData?.bills.length ? (
+      ) : !isLoading && !billsData?.bills?.length ? (
         <NoResults />
       ) : (
         <Table>

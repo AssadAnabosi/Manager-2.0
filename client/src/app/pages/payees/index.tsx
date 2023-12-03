@@ -16,14 +16,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import Searchbox from "@/components/component/searchbox";
 import NoResults from "@/components/component/no-results";
+import FetchError from "@/components/component/fetch-error";
 
 import RowSkeleton from "./row-skeleton";
 import Row from "./row";
 
 const Payees = () => {
-  // payeesData.payees=[];
   const dummy = [...Array(8)];
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
@@ -69,7 +70,9 @@ const Payees = () => {
         </div>
       </div>
       {/* TABLE */}
-      {!isLoading && !payeesData.payees.length ? (
+      {!isLoading && !payeesData ? (
+        <FetchError />
+      ) : !isLoading && !payeesData?.payees?.length ? (
         <NoResults />
       ) : (
         <Table>

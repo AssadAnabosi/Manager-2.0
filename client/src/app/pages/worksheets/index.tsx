@@ -126,7 +126,7 @@ const Logs = () => {
       {/* TABLE */}
       {!isLoading && !logsData ? (
         <FetchError />
-      ) : !isLoading && !logsData?.logs.length ? (
+      ) : !isLoading && !logsData?.logs?.length ? (
         <NoResults />
       ) : (
         <Table>
