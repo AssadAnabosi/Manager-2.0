@@ -32,7 +32,9 @@ const Cards = ({
                 style={{ direction: "ltr" }}
                 className="text-2xl font-bold rtl:text-right"
               >
-                {currencyFormatter(chequesData.total)}
+                {chequesData?.total
+                  ? currencyFormatter(chequesData?.total)
+                  : "---"}
               </div>
 
               <p className="text-xs text-muted-foreground">

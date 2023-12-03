@@ -106,7 +106,6 @@ const Cheques = () => {
           to: date.to,
         },
       });
-      console.log(response.data);
       return response.data;
     },
   });
@@ -141,18 +140,22 @@ const Cheques = () => {
       <Separator />
       <div className="flex justify-end gap-3">
         <div className="w-full md:w-[335px]">
-          <Searchbox value={search} setValue={setSearch} />
+          <Searchbox
+            value={search}
+            setValue={setSearch}
+            placeholder={"Serial No."}
+          />
         </div>
         <Combobox
           isLoading={filterLoading}
           list={payees}
-          search={filter}
-          setSearch={setFilter}
+          filter={filter}
+          setFilter={setFilter}
           placeholder={t("Filter by payee")}
         />
       </div>
       {/* TABLE */}
-      {!isLoading && !chequesData.cheques.length ? (
+      {!isLoading && !chequesData?.cheques?.length ? (
         <NoResults />
       ) : (
         <Table>

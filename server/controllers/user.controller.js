@@ -25,14 +25,16 @@ export const registerUser = async (req, res) => {
 
 // @desc    Get all users
 export const getUsers = async (req, res) => {
+  const active = req.query.active;
   const search = req.query.search || "";
 
-  const users = await User.find({
-    $or: [
-      { firstName: { $regex: search, $options: "i" } },
-      { lastName: { $regex: search, $options: "i" } },
-    ],
-  });
+  const filter = {};
+  filter.$or = [
+    { firstName: { $regex: search, $options: "i" } },
+    { lastName: { $regex: search, $options: "i" } },
+  ];
+  if (active) filter.active = active;
+  const users = await User.find(filter);
 
   return res.status(statusCode.OK).json({
     success: true,

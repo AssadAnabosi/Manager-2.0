@@ -17,7 +17,7 @@ export const getCheques = async (req, res) => {
     search,
     startDate,
     endDate,
-    filter: payee,
+    payee,
   });
 
   const cheques = await Cheque.aggregate(filter);

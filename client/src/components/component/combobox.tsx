@@ -21,16 +21,16 @@ import { Skeleton } from "../ui/skeleton";
 
 type ComboboxProps = {
   list: { label: string; value: string }[];
-  search: string;
-  setSearch: (search: string) => void;
+  filter: string;
+  setFilter: (filter: string) => void;
   placeholder?: string;
   isLoading: boolean;
 };
 
 const Combobox = ({
   list,
-  search,
-  setSearch,
+  filter,
+  setFilter,
   placeholder = "Select...",
   isLoading = false,
 }: ComboboxProps) => {
@@ -48,8 +48,8 @@ const Combobox = ({
           aria-expanded={open}
           className="w-full md:w-[335px] justify-between text-muted-foreground font-semibold"
         >
-          {search
-            ? list.find((framework) => framework.value === search)?.label
+          {filter
+            ? list.find((list) => list.value === filter)?.label
             : placeholder}
           <ChevronsUpDown className="ltr:ml-2 rtl:mr-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -61,17 +61,17 @@ const Combobox = ({
           <CommandGroup>
             {list.map((item) => (
               <CommandItem
+                value={item.label}
                 key={item.value}
-                value={item.value}
-                onSelect={(currentValue) => {
-                  setSearch(currentValue === search ? "" : currentValue);
+                onSelect={() => {
+                  setFilter(item.value === filter ? "" : item.value);
                   setOpen(false);
                 }}
               >
                 <Check
                   className={cn(
                     "ltr:mr-2 rtl:ml-2 h-4 w-4",
-                    search === item.value ? "opacity-100" : "opacity-0"
+                    filter === item.value ? "opacity-100" : "opacity-0"
                   )}
                 />
                 {item.label}

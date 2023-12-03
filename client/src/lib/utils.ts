@@ -44,7 +44,7 @@ export const stringToDate = (string: any) => {
 export function toList(array: any[], value: string) {
   return array.map((item: any) => {
     return {
-      value: item[value].toLowerCase(),
+      value: item.id,
       label: item[value],
     };
   });

@@ -95,7 +95,11 @@ const Logs = () => {
   const { data: usersData, isLoading: filterLoading } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const { data: response } = await axios.get("/users");
+      const { data: response } = await axios.get("/users", {
+        params: {
+          active: true,
+        },
+      });
       return response.data;
     },
   });
@@ -128,13 +132,13 @@ const Logs = () => {
         <Combobox
           isLoading={filterLoading}
           list={workers}
-          search={filter}
-          setSearch={setFilter}
+          filter={filter}
+          setFilter={setFilter}
           placeholder={t("Filter by worker")}
         />
       </div>
       {/* TABLE */}
-      {!isLoading && !logsData.logs.length ? (
+      {!isLoading && !logsData?.logs?.length ? (
         <NoResults />
       ) : (
         <Table>

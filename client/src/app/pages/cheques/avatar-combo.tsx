@@ -45,7 +45,7 @@ const AvatarCombo = ({
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <div className="items-center hidden md:flex">
+      <div className="items-center hidden lg:flex">
         <Avatar className="h-9 w-9">
           <AvatarImage alt="Avatar" />
           <AvatarFallback>{fallback}</AvatarFallback>
@@ -55,7 +55,7 @@ const AvatarCombo = ({
             className="text-sm font-medium leading-none"
             aria-label="Payee Name"
           >
-            {title}
+            {cheque.payee.id ? title : t("Deleted Payee")}
           </p>
           <p
             className="text-sm text-muted-foreground"
@@ -65,7 +65,7 @@ const AvatarCombo = ({
           </p>
         </div>
       </div>
-      <AlertDialogTrigger asChild className="md:hidden">
+      <AlertDialogTrigger asChild className="lg:hidden">
         <div className="flex items-center">
           <Avatar className="h-9 w-9">
             <AvatarImage alt="Avatar" />

@@ -8,12 +8,12 @@ import { USER } from "../utils/constants/userRoles.js";
 
 // @desc    Get all logs
 export const getLogs = async (req, res) => {
-  const { startDate, endDate, search } = ReqQueryHelper(req.query);
+  const { startDate, endDate, filter: worker } = ReqQueryHelper(req.query);
   const filter = queryHelper.findLogs({
     userRole: req.user.role,
     startDate,
     endDate,
-    search,
+    worker,
   });
 
   const logs = await Log.aggregate(filter);
@@ -40,7 +40,7 @@ export const getLogs = async (req, res) => {
       OTVSum,
       from: startDate.toISOString().substring(0, 10),
       to: endDate.toISOString().substring(0, 10),
-      search,
+      filter: worker || "",
     },
   });
 };
@@ -55,11 +55,9 @@ export const createLog = async (req, res) => {
     (isAbsent === undefined || isAbsent === null) &&
     (!startingTime || !finishingTime)
   ) {
-    return next(
-      new ResponseError(
-        "Please provide a starting time and finishing time",
-        statusCode.BAD_REQUEST
-      )
+    throw new ResponseError(
+      "Please provide a starting time and finishing time",
+      statusCode.BAD_REQUEST
     );
   }
 
@@ -107,11 +105,9 @@ export const updateLog = async (req, res) => {
     (isAbsent === undefined || isAbsent === null) &&
     (!startingTime || !finishingTime)
   ) {
-    return next(
-      new ResponseError(
-        "Please provide a starting time and finishing time",
-        statusCode.BAD_REQUEST
-      )
+    throw new ResponseError(
+      "Please provide a starting time and finishing time",
+      statusCode.BAD_REQUEST
     );
   }
   if (req.body.date) {

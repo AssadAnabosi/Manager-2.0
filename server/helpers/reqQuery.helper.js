@@ -1,12 +1,24 @@
+import IsValidID from "../utils/IsValidID.js";
+
 export default (query) => {
   const { from, to } = query;
   let search = query.search || "";
   search = search.trim();
-  let filter = query.filter || "";
-  filter = filter.trim();
+  const filter = query.filter;
+  if (filter && !IsValidID(filter)) {
+    throw new ResponseError(
+      "Please provide a valid filter",
+      statusCode.BAD_REQUEST
+    );
+  }
 
-  let startDate = getFirstDayOfCurrentMonth(new Date());
-  let endDate = getLastDayOfCurrentMonth(new Date());
+  let startDate = null;
+  let endDate = null;
+
+  if (!from && !to) {
+    startDate = getFirstDayOfCurrentMonth(new Date());
+    endDate = getLastDayOfCurrentMonth(new Date());
+  }
 
   if (from) {
     startDate = new Date(from);
@@ -28,7 +40,7 @@ const getFirstDayOfCurrentMonth = (date) => {
   const month = date.getMonth();
   const firstDay = new Date(year, month, 1, 12, 0, 0, 0);
   // set time to 00:00:00
-  firstDay.setHours(0, 0, 0, 0);
+  firstDay.setUTCHours(0, 0, 0, 0);
   return firstDay;
 };
 
@@ -37,6 +49,6 @@ const getLastDayOfCurrentMonth = (date) => {
   const month = date.getMonth();
   const lastDay = new Date(year, month + 1, 0, 12, 0, 0, 0);
   // set time to 23:59:59
-  lastDay.setHours(23, 59, 59, 999);
+  lastDay.setUTCHours(23, 59, 59, 999);
   return lastDay;
 };
