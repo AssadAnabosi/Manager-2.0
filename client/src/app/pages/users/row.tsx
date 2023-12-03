@@ -31,7 +31,7 @@ const Row = (user: UserType) => {
         <div className="flex flex-col space-y-1">
           <p>
             <a
-              className="font-bold hover:cursor-pointer"
+              className="text-blue-500 font-bold hover:cursor-pointer"
               href={`mailto:${user.email}`}
             >
               {user.email}
@@ -39,7 +39,7 @@ const Row = (user: UserType) => {
           </p>
           <p style={{ direction: "ltr" }} className="rtl:text-right">
             <a
-              className="text-muted-foreground hover:cursor-pointer"
+              className="text-blue-500 hover:cursor-pointer"
               href={`tel:${user.phoneNumber}`}
             >
               {user.phoneNumber}

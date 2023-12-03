@@ -103,7 +103,7 @@ const AvatarCombo = ({
               <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
                 <p>{t("Email")}:</p>
                 <a
-                  className="text-primary text-md font-semibold"
+                  className="text-blue-500 text-md font-semibold"
                   href={`mailto:${user.email}`}
                 >
                   {user.email}
@@ -113,7 +113,7 @@ const AvatarCombo = ({
                 <p>{t("Phone Number")}:</p>
                 <a
                   style={{ direction: "ltr" }}
-                  className="text-primary text-md font-semibold"
+                  className="text-blue-500 text-md font-semibold"
                   href={`tel:${user.phoneNumber}`}
                 >
                   {user.phoneNumber}

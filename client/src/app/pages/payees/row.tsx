@@ -23,7 +23,8 @@ const Row = (payee: PayeeType) => {
         <div className="flex flex-col space-y-1">
           <p>
             <a
-              className="font-bold hover:cursor-pointer"
+              aria-label="Email"
+              className="text-blue-500 font-bold hover:cursor-pointer"
               href={`mailto:${payee.email}`}
             >
               {payee.email}
@@ -31,7 +32,8 @@ const Row = (payee: PayeeType) => {
           </p>
           <p style={{ direction: "ltr" }} className="rtl:text-right">
             <a
-              className="text-muted-foreground hover:cursor-pointer"
+              aria-label="Email"
+              className="text-blue-500 hover:cursor-pointer"
               href={`tel:${payee.phoneNumber}`}
             >
               {payee.phoneNumber}

@@ -22,12 +22,10 @@ import DeleteDialog from "@/components/component/delete-dialog";
 const AvatarCombo = ({
   fallback,
   title,
-  description,
   payee,
 }: {
   fallback: React.ReactNode | string;
   title: string;
-  description?: string | JSX.Element;
   payee: PayeeType;
 }) => {
   const { t } = useTranslation();
@@ -49,15 +47,7 @@ const AvatarCombo = ({
           <AvatarFallback>{fallback}</AvatarFallback>
         </Avatar>
         <div className="ltr:ml-4 rtl:mr-4 space-y-1">
-          <p className="text-sm font-medium leading-none" aria-label="Email">
-            {title}
-          </p>
-          <p
-            className="text-sm text-muted-foreground"
-            aria-label="Phone Number"
-          >
-            {description}
-          </p>
+          <p className="text-sm font-medium leading-none">{title}</p>
         </div>
       </div>
       <AlertDialogTrigger asChild className="lg:hidden">
@@ -67,15 +57,7 @@ const AvatarCombo = ({
             <AvatarFallback>{fallback}</AvatarFallback>
           </Avatar>
           <div className="ltr:ml-4 rtl:mr-4 space-y-1">
-            <p className="text-sm font-medium leading-none" aria-label="Email">
-              {title}
-            </p>
-            <p
-              className="text-sm text-muted-foreground"
-              aria-label="Phone Number"
-            >
-              {description}
-            </p>
+            <p className="text-sm font-medium leading-none">{title}</p>
           </div>
         </div>
       </AlertDialogTrigger>
@@ -89,7 +71,8 @@ const AvatarCombo = ({
               <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
                 <p>{t("Email")}:</p>
                 <a
-                  className="text-primary text-md font-semibold"
+                  aria-label="Email"
+                  className="text-blue-500 text-md font-semibold"
                   href={`mailto:${payee.email}`}
                 >
                   {payee.email}
@@ -99,7 +82,8 @@ const AvatarCombo = ({
                 <p>{t("Phone Number")}:</p>
                 <a
                   style={{ direction: "ltr" }}
-                  className="text-primary text-md font-semibold"
+                  aria-label="Phone Number"
+                  className="text-blue-500 text-md font-semibold"
                   href={`tel:${payee.phoneNumber}`}
                 >
                   {payee.phoneNumber}

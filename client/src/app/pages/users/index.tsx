@@ -7,7 +7,6 @@ import { UserType } from "@/lib/types";
 import useAxios from "@/hooks/use-axios";
 
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -21,8 +20,6 @@ import NoResults from "@/components/component/no-results";
 
 import RowSkeleton from "./row-skeleton";
 import Row from "./row";
-
-import { DownloadIcon } from "@radix-ui/react-icons";
 
 const Users = () => {
   const dummy = [...Array(8)];
@@ -59,14 +56,6 @@ const Users = () => {
       {/* HEADER */}
       <div className="flex space-y-2 flex-col justify-between md:flex-row gap-5">
         <h2 className="text-3xl font-bold tracking-tight">{t("Users")}</h2>
-        <div className="flex items-center space-x-2 rtl:space-x-reverse">
-          <div className="hidden md:inline-block">
-            <Button>
-              <DownloadIcon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />{" "}
-              {t("Download")}
-            </Button>
-          </div>
-        </div>
       </div>
       <Separator />
       {/* FILTER */}
@@ -95,7 +84,7 @@ const Users = () => {
               <TableHead className="w-max hidden lg:table-cell rtl:text-right">
                 {t("Contact Details")}
               </TableHead>
-              <TableHead className="w-[130px]"></TableHead>
+              <TableHead className="w-[130px] hidden lg:table-cell"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
