@@ -35,16 +35,18 @@ const Row = (bill: BillType, deleteBill: any) => {
       <TableCell className="hidden md:table-cell">{bill.description}</TableCell>
       <TableCell className="hidden lg:table-cell">{bill.remarks}</TableCell>
       <TableCell className="text-right hidden lg:table-cell">
-        <FormDialog bill={bill}>
-          <Button variant="edit" aria-label="Edit">
-            <Pencil2Icon className="h-4 w-4" />
-          </Button>
-        </FormDialog>
-        <DeleteDialog onAction={() => deleteBill(bill.id)}>
-          <Button variant="delete" aria-label="Delete">
-            <TrashIcon className="h-4 w-4" />
-          </Button>
-        </DeleteDialog>
+        <div className="grid grid-cols-2">
+          <FormDialog bill={bill}>
+            <Button size="icon" variant="edit" aria-label="Edit">
+              <Pencil2Icon />
+            </Button>
+          </FormDialog>
+          <DeleteDialog onAction={() => deleteBill(bill.id)}>
+            <Button size="icon" variant="delete" aria-label="Delete">
+              <TrashIcon />
+            </Button>
+          </DeleteDialog>
+        </div>
       </TableCell>
     </TableRow>
   );

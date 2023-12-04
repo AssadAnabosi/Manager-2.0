@@ -44,13 +44,13 @@ const Row = (payee: PayeeType) => {
       <TableCell className="hidden lg:table-cell">{payee.remarks}</TableCell>
       <TableCell className="text-right hidden lg:table-cell">
         <FormDialog payee={payee}>
-          <Button variant="edit" aria-label="Edit">
-            <Pencil2Icon className="h-4 w-4" />
+          <Button size="icon" variant="edit" aria-label="Edit">
+            <Pencil2Icon />
           </Button>
         </FormDialog>
         <DeleteDialog onAction={() => console.log(payee.id)}>
-          <Button variant="delete" aria-label="Delete">
-            <TrashIcon className="h-4 w-4" />
+          <Button size="icon" variant="delete" aria-label="Delete">
+            <TrashIcon />
           </Button>
         </DeleteDialog>
       </TableCell>

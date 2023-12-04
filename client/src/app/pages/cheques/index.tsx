@@ -187,7 +187,7 @@ const Cheques = () => {
               <TableHead className="hidden md:table-cell rtl:text-right">
                 {t("Description")}
               </TableHead>
-              <TableHead className="hidden lg:table-cell w-[130px]"></TableHead>
+              <TableHead className="hidden lg:table-cell w-[120px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

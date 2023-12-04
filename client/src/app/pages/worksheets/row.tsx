@@ -44,13 +44,13 @@ const Row = (log: LogType, deleteLog: any) => {
       <TableCell className="hidden lg:table-cell">{log.remarks}</TableCell>
       <TableCell className="hidden 2xl:table-cell">
         <FormDialog log={log}>
-          <Button variant="edit" aria-label="Edit">
-            <Pencil2Icon className="h-4 w-4" />
+          <Button size="icon" variant="edit" aria-label="Edit">
+            <Pencil2Icon />
           </Button>
         </FormDialog>
         <DeleteDialog onAction={() => deleteLog(log.id)}>
-          <Button variant="delete" aria-label="Delete">
-            <TrashIcon className="h-4 w-4" />
+          <Button size="icon" variant="delete" aria-label="Delete">
+            <TrashIcon />
           </Button>
         </DeleteDialog>
       </TableCell>

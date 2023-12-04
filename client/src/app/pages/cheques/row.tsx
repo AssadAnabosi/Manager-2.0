@@ -44,13 +44,13 @@ const Row = (cheque: ChequeType, deleteCheque: any) => {
       </TableCell>
       <TableCell className="text-right hidden lg:table-cell">
         <FormDialog cheque={cheque}>
-          <Button variant="edit" aria-label="Edit">
-            <Pencil2Icon className="h-4 w-4" />
+          <Button size="icon" variant="edit" aria-label="Edit">
+            <Pencil2Icon />
           </Button>
         </FormDialog>
         <DeleteDialog onAction={() => deleteCheque(cheque.id)}>
-          <Button variant="delete" aria-label="Delete">
-            <TrashIcon className="h-4 w-4" />
+          <Button size="icon" variant="delete" aria-label="Delete">
+            <TrashIcon />
           </Button>
         </DeleteDialog>
       </TableCell>

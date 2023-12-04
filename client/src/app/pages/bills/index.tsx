@@ -157,7 +157,7 @@ const Bills = () => {
               <TableHead className="hidden lg:table-cell rtl:text-right">
                 {t("Remarks")}
               </TableHead>
-              <TableHead className="hidden lg:table-cell w-[130px]"></TableHead>
+              <TableHead className="hidden lg:table-cell w-[120px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
