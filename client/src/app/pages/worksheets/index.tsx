@@ -7,7 +7,7 @@ import { DateRange } from "react-day-picker";
 import { LogType } from "@/lib/types";
 import { DATE_FORMAT } from "@/lib/constants";
 
-import { useGetUsersListQuery } from "@/api/users";
+import { useGetUsersQuery } from "@/api/users";
 import { useGetLogsQuery, useDeleteLogMutation } from "@/api/logs";
 
 import { Separator } from "@/components/ui/separator";
@@ -81,7 +81,7 @@ const Logs = () => {
   };
   const { data: logsData, isLoading } = useGetLogsQuery();
 
-  const { data: usersData, isLoading: filterLoading } = useGetUsersListQuery();
+  const { data: usersData, isLoading: filterLoading } = useGetUsersQuery();
   const workers = toList(usersData?.users || [], "fullName", true);
 
   const { mutate: deleteLog } = useDeleteLogMutation();

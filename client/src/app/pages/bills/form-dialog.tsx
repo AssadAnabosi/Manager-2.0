@@ -24,7 +24,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { cn, stringToDate, dateToString } from "@/lib/utils";
+import { cn, stringToDate } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
@@ -76,7 +76,6 @@ export default function FormDialog({
 
   const onSubmit = async (data: billFormSchemaType) => {
     try {
-      data = { ...data, date: dateToString(data.date) };
       if (bill) {
         await mutateAsync({ data, billId: bill.id });
       } else {

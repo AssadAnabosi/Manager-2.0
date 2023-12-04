@@ -56,7 +56,6 @@ import ShekelIcon from "@/components/icons/shekel";
 import {
   cn,
   stringToDate,
-  dateToString,
   toList,
   getLastDayOfCurrentMonthDate,
 } from "@/lib/utils";
@@ -100,7 +99,6 @@ export default function FormDialog({
 
   const onSubmit = async (data: chequeFormSchemaType) => {
     try {
-      data = { ...data, dueDate: dateToString(data.dueDate) };
       if (cheque) {
         await mutateAsync({ data, chequeId: cheque.id });
       } else {

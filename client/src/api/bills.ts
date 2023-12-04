@@ -7,6 +7,8 @@ import useAxios from "@/hooks/use-axios";
 
 import { useToast } from "@/components/ui/use-toast";
 
+import { dateToString } from "@/lib/utils";
+
 const BASE_URL = "/bills";
 
 export const useGetBillsQuery = () => {
@@ -89,9 +91,15 @@ export const useBillFormMutation = () => {
       billId?: string;
     }) => {
       if (!billId) {
-        return axios.post("${BASE_URL}", data);
+        return axios.post("${BASE_URL}", {
+          ...data,
+          date: dateToString(data.date),
+        });
       } else {
-        return axios.put(`${BASE_URL}/${billId}`, data);
+        return axios.put(`${BASE_URL}/${billId}`, {
+          ...data,
+          date: dateToString(data.date),
+        });
       }
     },
     onSuccess: (data) => {

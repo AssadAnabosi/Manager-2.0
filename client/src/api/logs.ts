@@ -7,6 +7,8 @@ import useAxios from "@/hooks/use-axios";
 
 import { useToast } from "@/components/ui/use-toast";
 
+import { dateToString } from "@/lib/utils";
+
 const BASE_URL = "/logs";
 
 export const useGetLogsQuery = () => {
@@ -116,7 +118,10 @@ export const useLogFormMutation = () => {
       logId?: string;
     }) => {
       if (!logId) {
-        return axios.post(`${BASE_URL}`, data);
+        return axios.post(`${BASE_URL}`, {
+          ...data,
+          date: dateToString(data.date),
+        });
       } else {
         return axios.put(`${BASE_URL}/${logId}`, {
           ...data,

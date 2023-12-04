@@ -11,7 +11,7 @@ import {
   logFormSchemaType,
   useLogFormMutation,
 } from "@/api/logs";
-import { useGetUsersListQuery } from "@/api/users";
+import { useGetUsersQuery } from "@/api/users";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -53,7 +53,7 @@ import Spinner from "@/components/component/spinner";
 import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
 import ShekelIcon from "@/components/icons/shekel";
 
-import { cn, stringToDate, dateToString, getToday, toList } from "@/lib/utils";
+import { cn, stringToDate, getToday, toList } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -80,7 +80,7 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
   });
   const isLoading = logForm.formState.isSubmitting;
 
-  const { data: usersData, isLoading: filterLoading } = useGetUsersListQuery();
+  const { data: usersData, isLoading: filterLoading } = useGetUsersQuery();
   const workers = toList(usersData?.users || [], "fullName", true);
 
   const { mutateAsync } = useLogFormMutation();
@@ -88,7 +88,6 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
 
   const onSubmit = async (data: logFormSchemaType) => {
     try {
-      data = { ...data, date: dateToString(data.date) };
       if (log) {
         await mutateAsync({ data, logId: log.id });
       } else {

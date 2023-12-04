@@ -7,6 +7,8 @@ import useAxios from "@/hooks/use-axios";
 
 import { useToast } from "@/components/ui/use-toast";
 
+import { dateToString } from "@/lib/utils";
+
 const BASE_URL = "/cheques";
 
 export const useGetChequesQuery = () => {
@@ -112,9 +114,15 @@ export const useChequeFormMutation = () => {
       chequeId?: string;
     }) => {
       if (!chequeId) {
-        return axios.post(`${BASE_URL}`, data);
+        return axios.post(`${BASE_URL}`, {
+          ...data,
+          dueDate: dateToString(data.dueDate),
+        });
       } else {
-        return axios.put(`${BASE_URL}/${chequeId}`, data);
+        return axios.put(`${BASE_URL}/${chequeId}`, {
+          ...data,
+          dueDate: dateToString(data.dueDate),
+        });
       }
     },
     onSuccess: (data) => {
