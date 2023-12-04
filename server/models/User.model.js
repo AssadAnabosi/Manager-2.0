@@ -94,8 +94,6 @@ UserSchema.pre("save", async function (next) {
 UserSchema.set("toJSON", {
   virtuals: true,
   transform: function (doc, ret) {
-    delete ret.firstName;
-    delete ret.lastName;
     delete ret._id;
     delete ret.__v;
   },

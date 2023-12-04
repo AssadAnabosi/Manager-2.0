@@ -1,14 +1,13 @@
+import { Link } from "react-router-dom";
 import { UserType } from "@/lib/types";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import DeleteDialog from "@/components/component/delete-dialog";
 import StatusBadge from "@/components/component/status-badge";
 
 import AvatarCombo from "./avatar-combo";
-import FormDialog from "./form-dialog";
 import RoleBadge from "./role-badge";
 
-import { AvatarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
+import { AvatarIcon, Pencil2Icon } from "@radix-ui/react-icons";
 
 const Row = (user: UserType) => {
   return (
@@ -31,7 +30,7 @@ const Row = (user: UserType) => {
         <div className="flex flex-col space-y-1">
           <p>
             <a
-              className="text-blue-500 font-bold hover:cursor-pointer"
+              className="text-blue-400 font-bold hover:cursor-pointer"
               href={`mailto:${user.email}`}
             >
               {user.email}
@@ -39,7 +38,7 @@ const Row = (user: UserType) => {
           </p>
           <p style={{ direction: "ltr" }} className="rtl:text-right">
             <a
-              className="text-blue-500 hover:cursor-pointer"
+              className="text-blue-400 hover:cursor-pointer"
               href={`tel:${user.phoneNumber}`}
             >
               {user.phoneNumber}
@@ -48,16 +47,11 @@ const Row = (user: UserType) => {
         </div>
       </TableCell>
       <TableCell className="w-max text-right hidden lg:table-cell">
-        <FormDialog user={user}>
-          <Button variant="edit" aria-label="Edit">
-            <Pencil2Icon className="h-4 w-4" />
-          </Button>
-        </FormDialog>
-        <DeleteDialog onAction={() => console.log(user.id)}>
-          <Button variant="delete" aria-label="Delete">
-            <TrashIcon className="h-4 w-4" />
-          </Button>
-        </DeleteDialog>
+        <Button asChild size="icon" variant="edit" aria-label="Edit">
+          <Link to={`/users/${user.id}`}>
+            <Pencil2Icon />
+          </Link>
+        </Button>
       </TableCell>
     </TableRow>
   );

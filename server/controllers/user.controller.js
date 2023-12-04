@@ -161,21 +161,17 @@ export const resetPassword = async (req, res) => {
 // @desc   Update a user's role
 export const updateUserRole = async (req, res) => {
   if (req.params.userID === req.user.id) {
-    return next(
-      new ResponseError(
-        "You are not authorized to change your role",
-        statusCode.BAD_REQUEST
-      )
+    throw new ResponseError(
+      "You are not authorized to change your role",
+      statusCode.BAD_REQUEST
     );
   }
 
   const { role } = req.body;
   if (!userRoles.includes(role))
-    return next(
-      new ResponseError(
-        `Invalid User Role [${userRoles.toString()}]`,
-        statusCode.BAD_REQUEST
-      )
+    throw new ResponseError(
+      `Invalid User Role [${userRoles.toString()}]`,
+      statusCode.BAD_REQUEST
     );
 
   const user = await User.findById(req.params.userID);
@@ -189,20 +185,15 @@ export const updateUserRole = async (req, res) => {
 // @desc    Deactivate or Activate a user account
 export const setActiveStatus = async (req, res) => {
   if (req.params.userID === req.user.id) {
-    return next(
-      new ResponseError(
-        "You are not authorized to deactivate your own account",
-        statusCode.BAD_REQUEST
-      )
+    throw new ResponseError(
+      "You are not authorized to deactivate your own account",
+      statusCode.BAD_REQUEST
     );
   }
 
   const { active } = req.body;
-  const status = ["true", "false"];
-  if (!status.includes(active))
-    return next(
-      new ResponseError("Invalid active status", statusCode.BAD_REQUEST)
-    );
+  if (typeof active !== "boolean")
+    throw new ResponseError("Invalid active status", statusCode.BAD_REQUEST);
 
   await User.findByIdAndUpdate(
     req.params.userID,

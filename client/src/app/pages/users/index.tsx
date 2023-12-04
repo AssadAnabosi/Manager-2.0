@@ -1,11 +1,9 @@
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
 
 import { UserType } from "@/lib/types";
 
-import useAxios from "@/hooks/use-axios";
-
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
   Table,
@@ -19,9 +17,12 @@ import {
 import Searchbox from "@/components/component/searchbox";
 import NoResults from "@/components/component/no-results";
 import FetchError from "@/components/component/fetch-error";
+import FormDialog from "./form-dialog";
 
 import RowSkeleton from "./row-skeleton";
 import Row from "./row";
+import { useGetUsersQuery } from "@/api/users";
+import { FilePlusIcon } from "lucide-react";
 
 const Users = () => {
   const dummy = [...Array(8)];
@@ -41,23 +42,22 @@ const Users = () => {
       { replace: true }
     );
   };
-  const axios = useAxios();
-  const { data: usersData, isLoading } = useQuery({
-    queryKey: ["users", search],
-    queryFn: async () => {
-      const { data: response } = await axios.get("/users", {
-        params: {
-          search,
-        },
-      });
-      return response.data;
-    },
-  });
+
+  const { data: usersData, isLoading } = useGetUsersQuery();
+
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       {/* HEADER */}
       <div className="flex space-y-2 flex-col justify-between md:flex-row gap-5">
         <h2 className="text-3xl font-bold tracking-tight">{t("Users")}</h2>
+        <div className="flex items-center gap-2 flex-col md:flex-row">
+          <FormDialog>
+            <Button className="w-full">
+              <FilePlusIcon className="ltr:mr-2 rtl:ml-2 h-7 w-7" />{" "}
+              {t("Add New")}
+            </Button>
+          </FormDialog>
+        </div>
       </div>
       <Separator />
       {/* FILTER */}
@@ -88,7 +88,7 @@ const Users = () => {
               <TableHead className="w-max hidden lg:table-cell rtl:text-right">
                 {t("Contact Details")}
               </TableHead>
-              <TableHead className="w-[130px] hidden lg:table-cell"></TableHead>
+              <TableHead className="w-[60px] hidden lg:table-cell"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

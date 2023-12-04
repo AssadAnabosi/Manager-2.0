@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { UserType } from "@/lib/types";
 import {
@@ -14,12 +15,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import StatusBadge from "@/components/component/status-badge";
-import DeleteDialog from "@/components/component/delete-dialog";
 
-import FormDialog from "./form-dialog";
 import RoleBadge from "./role-badge";
 
-import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
+import { Pencil2Icon } from "@radix-ui/react-icons";
 
 const AvatarCombo = ({
   fallback,
@@ -34,14 +33,7 @@ const AvatarCombo = ({
 }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-
-  const handleDelete = () => {
-    // request server to delete
-    console.log(user.id);
-    // if success close
-    setOpen(false);
-    // else toast
-  };
+  const Navigate = useNavigate();
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -82,7 +74,7 @@ const AvatarCombo = ({
               <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
                 <p>{t("Email")}:</p>
                 <a
-                  className="text-blue-500 text-md font-semibold"
+                  className="text-blue-400 text-md font-semibold"
                   href={`mailto:${user.email}`}
                 >
                   {user.email}
@@ -92,7 +84,7 @@ const AvatarCombo = ({
                 <p>{t("Phone Number")}:</p>
                 <a
                   style={{ direction: "ltr" }}
-                  className="text-blue-500 text-md font-semibold"
+                  className="text-blue-400 text-md font-semibold"
                   href={`tel:${user.phoneNumber}`}
                 >
                   {user.phoneNumber}
@@ -104,23 +96,10 @@ const AvatarCombo = ({
         <AlertDialogFooter className="gap-3">
           <AlertDialogCancel>{t("Cancel")}</AlertDialogCancel>
           <div className="flex flex-col gap-3 md:flex-row">
-            <FormDialog
-              user={user}
-              onClose={(status) => {
-                if (status == false) setOpen(false);
-              }}
-            >
-              <Button>
-                <Pencil2Icon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
-                <span>{t("Edit")}</span>
-              </Button>
-            </FormDialog>
-            <DeleteDialog onAction={handleDelete}>
-              <Button variant={"secondary"}>
-                <TrashIcon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
-                <span>{t("Delete")}</span>
-              </Button>
-            </DeleteDialog>
+            <Button onClick={() => Navigate(`/users/${user.id}`)}>
+              <Pencil2Icon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
+              <span>{t("Edit")}</span>
+            </Button>
           </div>
         </AlertDialogFooter>
       </AlertDialogContent>

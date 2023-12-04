@@ -7,6 +7,7 @@ import Logs from "@/app/pages/worksheets";
 import Bills from "@/app/pages/bills";
 import Cheques from "@/app/pages/cheques";
 import Users from "@/app/pages/users";
+import ManageUser from "@/app/pages/users/edit";
 import Payee from "@/app/pages/payees";
 import Settings from "@/app/pages/settings";
 
@@ -46,17 +47,14 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const standalone = window.matchMedia("(display-mode: standalone)").matches;
-    if (!standalone) {
-      PullToRefresh.init({
-        instructionsPullToRefresh: `${t("Pull down to refresh")}`,
-        instructionsReleaseToRefresh: `${t("Release to refresh")}`,
-        instructionsRefreshing: `${t("Refreshing")}...`,
-        onRefresh() {
-          window.location.reload();
-        },
-      });
-    }
+    PullToRefresh.init({
+      instructionsPullToRefresh: `${t("Pull down to refresh")}`,
+      instructionsReleaseToRefresh: `${t("Release to refresh")}`,
+      instructionsRefreshing: `${t("Refreshing")}...`,
+      onRefresh() {
+        window.location.reload();
+      },
+    });
     return () => {
       PullToRefresh.destroyAll();
     };
@@ -80,6 +78,7 @@ function App() {
               <Route path="/bills" element={<Bills />} />
               <Route path="/cheques" element={<Cheques />} />
               <Route path="/users" element={<Users />} />
+              <Route path="/users/:userId" element={<ManageUser />} />
               <Route path="/payees" element={<Payee />} />
             </Route>
           </Route>

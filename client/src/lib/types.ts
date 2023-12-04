@@ -4,6 +4,8 @@ export type LanguageType = "en" | "ar";
 export type UserType = {
   id: string;
   fullName: string;
+  firstName?: string;
+  lastName?: string;
   username: string;
   email: string;
   phoneNumber: string;
