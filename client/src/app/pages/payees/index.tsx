@@ -1,12 +1,10 @@
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-
-import { useQuery } from "@tanstack/react-query";
-
-import useAxios from "@/hooks/use-axios";
-
 import { PayeeType } from "@/lib/types";
 
+import { useGetPayeesQuery, useDeletePayeeMutation } from "@/api/payees";
+
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
   Table,
@@ -20,9 +18,12 @@ import {
 import Searchbox from "@/components/component/searchbox";
 import NoResults from "@/components/component/no-results";
 import FetchError from "@/components/component/fetch-error";
+import FormDialog from "./form-dialog";
 
 import RowSkeleton from "./row-skeleton";
 import Row from "./row";
+
+import { FilePlusIcon } from "lucide-react";
 
 const Payees = () => {
   const dummy = [...Array(8)];
@@ -43,24 +44,22 @@ const Payees = () => {
     );
   };
 
-  const axios = useAxios();
-  const { data: payeesData, isLoading } = useQuery({
-    queryKey: ["payees", { search }],
-    queryFn: async () => {
-      const { data: response } = await axios.get("/payees", {
-        params: {
-          search,
-        },
-      });
-      return response.data;
-    },
-  });
+  const { data: payeesData, isLoading } = useGetPayeesQuery();
+  const { mutate: deletePayee } = useDeletePayeeMutation();
 
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       {/* HEADER */}
       <div className="flex space-y-2 flex-col justify-between md:flex-row gap-5">
         <h2 className="text-3xl font-bold tracking-tight">{t("Payees")}</h2>
+        <div className="flex items-center gap-2 flex-col md:flex-row">
+          <FormDialog>
+            <Button className="w-full">
+              <FilePlusIcon className="ltr:mr-2 rtl:ml-2 h-7 w-7" />{" "}
+              {t("Add New")}
+            </Button>
+          </FormDialog>
+        </div>
       </div>
       <Separator />
       {/* FILTER */}
@@ -94,7 +93,9 @@ const Payees = () => {
           <TableBody>
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
-              : payeesData.payees.map((payee: PayeeType) => Row(payee))}
+              : payeesData.payees.map((payee: PayeeType) =>
+                  Row(payee, deletePayee)
+                )}
           </TableBody>
         </Table>
       )}

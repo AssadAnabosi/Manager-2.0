@@ -23,20 +23,19 @@ const AvatarCombo = ({
   fallback,
   title,
   payee,
+  deletePayee,
 }: {
   fallback: React.ReactNode | string;
   title: string;
   payee: PayeeType;
+  deletePayee: (id: string) => void;
 }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
-  const handleDelete = () => {
-    // request server to delete
-    console.log(payee.id);
-    // if success close
+  const handleDelete = async () => {
+    deletePayee(payee.id);
     setOpen(false);
-    // else toast
   };
 
   return (

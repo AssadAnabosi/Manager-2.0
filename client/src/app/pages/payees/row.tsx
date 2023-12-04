@@ -9,7 +9,7 @@ import DeleteDialog from "@/components/component/delete-dialog";
 import AvatarCombo from "./avatar-combo";
 import FormDialog from "./form-dialog";
 
-const Row = (payee: PayeeType) => {
+const Row = (payee: PayeeType, deletePayee: any) => {
   return (
     <TableRow key={payee.id} className="h-[73px]">
       <TableCell>
@@ -17,6 +17,7 @@ const Row = (payee: PayeeType) => {
           title={payee.name}
           fallback={<User className="h-5 w-5" />}
           payee={payee}
+          deletePayee={deletePayee}
         ></AvatarCombo>
       </TableCell>
       <TableCell className="hidden md:table-cell">
@@ -48,7 +49,7 @@ const Row = (payee: PayeeType) => {
             <Pencil2Icon />
           </Button>
         </FormDialog>
-        <DeleteDialog onAction={() => console.log(payee.id)}>
+        <DeleteDialog onAction={() => deletePayee(payee.id)}>
           <Button size="icon" variant="delete" aria-label="Delete">
             <TrashIcon />
           </Button>

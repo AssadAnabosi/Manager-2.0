@@ -2,6 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { UserType } from "@/lib/types";
+import { useGetUsersQuery } from "@/api/users";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -21,7 +22,7 @@ import FormDialog from "./form-dialog";
 
 import RowSkeleton from "./row-skeleton";
 import Row from "./row";
-import { useGetUsersQuery } from "@/api/users";
+
 import { FilePlusIcon } from "lucide-react";
 
 const Users = () => {

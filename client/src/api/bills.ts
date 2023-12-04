@@ -91,7 +91,7 @@ export const useBillFormMutation = () => {
       billId?: string;
     }) => {
       if (!billId) {
-        return axios.post("${BASE_URL}", {
+        return axios.post(`${BASE_URL}`, {
           ...data,
           date: dateToString(data.date),
         });

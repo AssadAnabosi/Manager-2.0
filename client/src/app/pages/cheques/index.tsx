@@ -7,7 +7,7 @@ import { DateRange } from "react-day-picker";
 import { ChequeType } from "@/lib/types";
 import { DATE_FORMAT } from "@/lib/constants";
 
-import { useGetPayeesListQuery } from "@/api/payees";
+import { useGetPayeesQuery } from "@/api/payees";
 import { useGetChequesQuery, useDeleteChequeMutation } from "@/api/cheques";
 
 import { Separator } from "@/components/ui/separator";
@@ -97,8 +97,7 @@ const Cheques = () => {
 
   const { data: chequesData, isLoading } = useGetChequesQuery();
 
-  const { data: payeesData, isLoading: filterLoading } =
-    useGetPayeesListQuery();
+  const { data: payeesData, isLoading: filterLoading } = useGetPayeesQuery();
   const payees = toList(payeesData?.payees || [], "name");
 
   const { mutate: deleteCheque } = useDeleteChequeMutation();

@@ -11,7 +11,7 @@ import {
   chequeFormSchemaType,
   useChequeFormMutation,
 } from "@/api/cheques";
-import { useGetPayeesListQuery } from "@/api/payees";
+import { useGetPayeesQuery } from "@/api/payees";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -90,8 +90,7 @@ export default function FormDialog({
   });
   const isLoading = chequeForm.formState.isSubmitting;
 
-  const { data: payeesData, isLoading: filterLoading } =
-    useGetPayeesListQuery();
+  const { data: payeesData, isLoading: filterLoading } = useGetPayeesQuery();
   const payees = toList(payeesData?.payees || [], "name");
 
   const { mutateAsync } = useChequeFormMutation();
