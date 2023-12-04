@@ -119,7 +119,7 @@ export default function Login() {
                       <FormItem>
                         <FormLabel>{t("Username")}</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input {...field} autoComplete="username" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -132,7 +132,11 @@ export default function Login() {
                       <FormItem>
                         <FormLabel>{t("Password")}</FormLabel>
                         <FormControl>
-                          <Input type="password" {...field} />
+                          <Input
+                            type="password"
+                            {...field}
+                            autoComplete="current-password"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

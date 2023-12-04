@@ -39,10 +39,12 @@ import Spinner from "@/components/component/spinner";
 import { useLogout } from "@/providers/auth-provider";
 import { useTheme } from "@/providers/theme-provider";
 import { useError } from "@/providers/error-provider";
+import { useAuth } from "@/providers/auth-provider";
 
 import useAxios from "@/hooks/use-axios";
 const updatePasswordSchema = z
   .object({
+    username: z.string(),
     current: z.string().min(8, "Password must be at least 8 characters"),
     new: z.string().min(8, "Password must be at least 8 characters"),
   })
@@ -64,6 +66,7 @@ export default function Settings() {
   const Navigate = useNavigate();
   const logout = useLogout();
   const axios = useAxios();
+  const { user } = useAuth();
   const { setError } = useError();
   const [searchParams, setSearchParams] = useSearchParams({
     tab: "password",
@@ -110,6 +113,7 @@ export default function Settings() {
   const passwordForm = useForm<UpdatePasswordSchema>({
     resolver: zodResolver(updatePasswordSchema),
     defaultValues: {
+      username: user?.username,
       current: "",
       new: "",
     },
@@ -163,12 +167,31 @@ export default function Settings() {
                 <CardContent className="space-y-2">
                   <FormField
                     control={passwordForm.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem className="hidden">
+                        <FormControl>
+                          <Input
+                            autoComplete="username"
+                            type="text"
+                            {...field}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={passwordForm.control}
                     name="current"
                     render={({ field }) => (
                       <FormItem className="space-y-1 rtl:text-right">
                         <FormLabel>{t("Current password")}</FormLabel>
                         <FormControl>
-                          <Input type="password" {...field} />
+                          <Input
+                            autoComplete="current-password"
+                            type="password"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -181,7 +204,11 @@ export default function Settings() {
                       <FormItem className="space-y-1 rtl:text-right">
                         <FormLabel>{t("New password")}</FormLabel>
                         <FormControl>
-                          <Input type="password" {...field} />
+                          <Input
+                            autoComplete="new-password"
+                            type="password"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
