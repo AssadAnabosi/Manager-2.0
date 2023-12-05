@@ -1,6 +1,8 @@
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
+import { useAuth } from "@/providers/auth-provider";
+
 import { UserType } from "@/lib/types";
 import { useGetUsersQuery } from "@/api/users";
 
@@ -27,6 +29,7 @@ import { FilePlusIcon } from "lucide-react";
 
 const Users = () => {
   const dummy = [...Array(8)];
+  const { user: authUser } = useAuth();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
     search: "",
@@ -95,7 +98,9 @@ const Users = () => {
           <TableBody>
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
-              : usersData.users.map((user: UserType) => Row(user))}
+              : usersData.users.map((user: UserType) =>
+                  Row(user, authUser?.role)
+                )}
           </TableBody>
         </Table>
       )}

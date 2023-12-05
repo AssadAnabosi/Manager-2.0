@@ -10,10 +10,15 @@ const RequireAuth = ({
 }) => {
   const { user } = useAuth();
   const location = useLocation();
+  let authorized = true;
+  if (allowedRoles) {
+    authorized = allowedRoles?.includes(user?.role as any);
+  } else if (restrictedRoles) {
+    authorized = !restrictedRoles?.includes(user?.role as any);
+  }
   return user ? (
     // logged in? Check role
-    !restrictedRoles?.includes(user?.role) ||
-    allowedRoles?.includes(user?.role) ? (
+    authorized ? (
       // YES? Render route
       <Outlet />
     ) : (

@@ -4,8 +4,10 @@ import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 import { DateRange } from "react-day-picker";
 
+import { useAuth } from "@/providers/auth-provider";
+
 import { BillType } from "@/lib/types";
-import { DATE_FORMAT } from "@/lib/constants";
+import { DATE_FORMAT, SPECTATOR } from "@/lib/constants";
 
 import { useGetBillsQuery, useDeleteBillMutation } from "@/api/bills";
 
@@ -41,6 +43,7 @@ import {
 
 const Bills = () => {
   const dummy = [...Array(8)];
+  const { user } = useAuth();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
     search: "",
@@ -89,12 +92,14 @@ const Bills = () => {
         <h2 className="text-3xl font-bold tracking-tight">{t("Bills")}</h2>
         <div className="flex items-center gap-2 flex-col md:flex-row">
           <DateRangePicker date={date} setDate={setDate} />
-          <FormDialog>
-            <Button className="w-full">
-              <FilePlusIcon className="ltr:mr-2 rtl:ml-2 h-7 w-7" />{" "}
-              {t("Add New")}
-            </Button>
-          </FormDialog>
+          {user?.role !== SPECTATOR && (
+            <FormDialog>
+              <Button className="w-full">
+                <FilePlusIcon className="ltr:mr-2 rtl:ml-2 h-7 w-7" />{" "}
+                {t("Add New")}
+              </Button>
+            </FormDialog>
+          )}
           <div className="hidden md:inline-block">
             <Button>
               <DownloadIcon className="ltr:mr-2 rtl:ml-2 h-6 w-6" />{" "}
@@ -163,7 +168,9 @@ const Bills = () => {
           <TableBody>
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
-              : billsData.bills.map((bill: BillType) => Row(bill, deleteBill))}
+              : billsData.bills.map((bill: BillType) =>
+                  Row(bill, deleteBill, user?.role)
+                )}
           </TableBody>
         </Table>
       )}

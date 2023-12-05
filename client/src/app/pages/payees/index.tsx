@@ -2,6 +2,8 @@ import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { PayeeType } from "@/lib/types";
 
+import { useAuth } from "@/providers/auth-provider";
+
 import { useGetPayeesQuery, useDeletePayeeMutation } from "@/api/payees";
 
 import { Button } from "@/components/ui/button";
@@ -27,6 +29,7 @@ import { FilePlusIcon } from "lucide-react";
 
 const Payees = () => {
   const dummy = [...Array(8)];
+  const { user } = useAuth();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
     search: "",
@@ -94,7 +97,7 @@ const Payees = () => {
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
               : payeesData.payees.map((payee: PayeeType) =>
-                  Row(payee, deletePayee)
+                  Row(payee, deletePayee, user?.role)
                 )}
           </TableBody>
         </Table>

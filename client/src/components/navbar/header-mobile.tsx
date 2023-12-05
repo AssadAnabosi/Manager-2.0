@@ -7,6 +7,7 @@ import { motion, useCycle } from "framer-motion";
 
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { t } from "i18next";
+import { useAuth } from "@/providers/auth-provider";
 
 type MenuItemWithSubMenuProps = {
   item: SideNavItem;
@@ -42,6 +43,7 @@ const HeaderMobile = () => {
   const containerRef = useRef(null);
   const { height } = useDimensions(containerRef);
   const [isOpen, toggleOpen] = useCycle(false, true);
+  const { user } = useAuth();
 
   return (
     <motion.nav
@@ -64,7 +66,7 @@ const HeaderMobile = () => {
         {SIDENAV_ITEMS.map((item, idx) => {
           const isLastItem = idx === SIDENAV_ITEMS.length - 1; // Check if it's the last item
 
-          return (
+          return !item.allowedRoles.includes(user?.role as string) ? null : (
             <div key={idx}>
               {item.submenu ? (
                 <MenuItemWithSubMenu item={item} toggleOpen={toggleOpen} />

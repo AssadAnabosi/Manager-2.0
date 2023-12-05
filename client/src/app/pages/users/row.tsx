@@ -8,8 +8,9 @@ import AvatarCombo from "./avatar-combo";
 import RoleBadge from "./role-badge";
 
 import { AvatarIcon, Pencil2Icon } from "@radix-ui/react-icons";
+import { MODERATOR } from "@/lib/constants";
 
-const Row = (user: UserType) => {
+const Row = (user: UserType, userRole: string | undefined) => {
   return (
     <TableRow key={user.id} className="h-[73px]">
       <TableCell>
@@ -18,6 +19,7 @@ const Row = (user: UserType) => {
           description={`@${user.username}`}
           fallback={<AvatarIcon className="h-7 w-7" />}
           user={user}
+          userRole={userRole}
         ></AvatarCombo>
       </TableCell>
       <TableCell className="hidden md:table-cell">
@@ -47,11 +49,13 @@ const Row = (user: UserType) => {
         </div>
       </TableCell>
       <TableCell className="w-max text-right hidden lg:table-cell">
-        <Button asChild size="icon" variant="edit" aria-label="Edit">
-          <Link to={`/users/${user.id}`}>
-            <Pencil2Icon />
-          </Link>
-        </Button>
+        {userRole !== MODERATOR && (
+          <Button asChild size="icon" variant="edit" aria-label="Edit">
+            <Link to={`/users/${user.id}`}>
+              <Pencil2Icon />
+            </Link>
+          </Button>
+        )}
       </TableCell>
     </TableRow>
   );

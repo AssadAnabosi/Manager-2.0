@@ -8,8 +8,13 @@ import DeleteDialog from "@/components/component/delete-dialog";
 
 import AvatarCombo from "./avatar-combo";
 import FormDialog from "./form-dialog";
+import { MODERATOR } from "@/lib/constants";
 
-const Row = (payee: PayeeType, deletePayee: any) => {
+const Row = (
+  payee: PayeeType,
+  deletePayee: any,
+  userRole: string | undefined
+) => {
   return (
     <TableRow key={payee.id} className="h-[73px]">
       <TableCell>
@@ -18,6 +23,7 @@ const Row = (payee: PayeeType, deletePayee: any) => {
           fallback={<User className="h-5 w-5" />}
           payee={payee}
           deletePayee={deletePayee}
+          userRole={userRole}
         ></AvatarCombo>
       </TableCell>
       <TableCell className="hidden md:table-cell">
@@ -43,17 +49,19 @@ const Row = (payee: PayeeType, deletePayee: any) => {
         </div>
       </TableCell>
       <TableCell className="hidden lg:table-cell">{payee.remarks}</TableCell>
-      <TableCell className="text-right hidden lg:table-cell">
+      <TableCell className="w-max text-right hidden lg:table-cell">
         <FormDialog payee={payee}>
           <Button size="icon" variant="edit" aria-label="Edit">
             <Pencil2Icon />
           </Button>
         </FormDialog>
-        <DeleteDialog onAction={() => deletePayee(payee.id)}>
-          <Button size="icon" variant="delete" aria-label="Delete">
-            <TrashIcon />
-          </Button>
-        </DeleteDialog>
+        {userRole !== MODERATOR && (
+          <DeleteDialog onAction={() => deletePayee(payee.id)}>
+            <Button size="icon" variant="delete" aria-label="Delete">
+              <TrashIcon />
+            </Button>
+          </DeleteDialog>
+        )}
       </TableCell>
     </TableRow>
   );

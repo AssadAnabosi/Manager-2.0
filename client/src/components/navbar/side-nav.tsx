@@ -25,7 +25,7 @@ const SideNav = () => {
         <div className="flex flex-col justify-between h-[92%]">
           <div className="flex flex-col space-y-2 xl:px-6 ">
             {SIDENAV_ITEMS.map((item, idx) => {
-              return <MenuItem key={idx} item={item} />;
+              return <MenuItem role={user?.role} key={idx} item={item} />;
             })}
           </div>
           {user && (
@@ -73,7 +73,13 @@ const SideNav = () => {
 
 export default SideNav;
 
-const MenuItem = ({ item }: { item: SideNavItem }) => {
+const MenuItem = ({
+  item,
+  role,
+}: {
+  item: SideNavItem;
+  role: string | undefined;
+}) => {
   const { t } = useTranslation();
   const pathname = useLocation().pathname;
   const [subMenuOpen, setSubMenuOpen] = useState(false);
@@ -81,7 +87,7 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
     setSubMenuOpen(!subMenuOpen);
   };
 
-  return (
+  return !item.allowedRoles.includes(role as string) ? null : (
     <div className="">
       {item.submenu ? (
         <>

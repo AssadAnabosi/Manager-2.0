@@ -15,8 +15,9 @@ import StatusBadge from "@/components/component/status-badge";
 import { CalendarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
 import { currencyFormatter, numberFormatter } from "@/lib/utils";
+import { USER, SPECTATOR } from "@/lib/constants";
 
-const Row = (log: LogType, deleteLog: any) => {
+const Row = (log: LogType, deleteLog: any, userRole: string | undefined) => {
   return (
     <TableRow key={log.id} className="h-[73px]">
       <TableCell>
@@ -28,6 +29,7 @@ const Row = (log: LogType, deleteLog: any) => {
           fallback={<CalendarIcon className="h-5 w-5" />}
           log={log}
           deleteLog={deleteLog}
+          userRole={userRole}
         ></AvatarCombo>
       </TableCell>
       <TableCell className="text-center">
@@ -43,16 +45,20 @@ const Row = (log: LogType, deleteLog: any) => {
       </TableCell>
       <TableCell className="hidden lg:table-cell">{log.remarks}</TableCell>
       <TableCell className="hidden 2xl:table-cell">
-        <FormDialog log={log}>
-          <Button size="icon" variant="edit" aria-label="Edit">
-            <Pencil2Icon />
-          </Button>
-        </FormDialog>
-        <DeleteDialog onAction={() => deleteLog(log.id)}>
-          <Button size="icon" variant="delete" aria-label="Delete">
-            <TrashIcon />
-          </Button>
-        </DeleteDialog>
+        {![USER, SPECTATOR].includes(userRole as string) && (
+          <div className="grid grid-cols-2">
+            <FormDialog log={log}>
+              <Button size="icon" variant="edit" aria-label="Edit">
+                <Pencil2Icon />
+              </Button>
+            </FormDialog>
+            <DeleteDialog onAction={() => deleteLog(log.id)}>
+              <Button size="icon" variant="delete" aria-label="Delete">
+                <TrashIcon />
+              </Button>
+            </DeleteDialog>
+          </div>
+        )}
       </TableCell>
     </TableRow>
   );

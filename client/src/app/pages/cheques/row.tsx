@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 
 import { ChequeType } from "@/lib/types";
-import { DATE_FORMAT } from "@/lib/constants";
+import { DATE_FORMAT, SPECTATOR } from "@/lib/constants";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,11 @@ import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
 import { currencyFormatter } from "@/lib/utils";
 
-const Row = (cheque: ChequeType, deleteCheque: any) => {
+const Row = (
+  cheque: ChequeType,
+  deleteCheque: any,
+  userRole: string | undefined
+) => {
   return (
     <TableRow key={cheque.id} className="h-[73px]">
       <TableCell>
@@ -27,6 +31,7 @@ const Row = (cheque: ChequeType, deleteCheque: any) => {
           fallback={cheque.serial}
           cheque={cheque}
           deleteCheque={deleteCheque}
+          userRole={userRole}
         ></AvatarCombo>
       </TableCell>
       <TableCell
@@ -43,16 +48,20 @@ const Row = (cheque: ChequeType, deleteCheque: any) => {
         {cheque.remarks}
       </TableCell>
       <TableCell className="text-right hidden lg:table-cell">
-        <FormDialog cheque={cheque}>
-          <Button size="icon" variant="edit" aria-label="Edit">
-            <Pencil2Icon />
-          </Button>
-        </FormDialog>
-        <DeleteDialog onAction={() => deleteCheque(cheque.id)}>
-          <Button size="icon" variant="delete" aria-label="Delete">
-            <TrashIcon />
-          </Button>
-        </DeleteDialog>
+        {userRole !== SPECTATOR && (
+          <div className="grid grid-cols-2">
+            <FormDialog cheque={cheque}>
+              <Button size="icon" variant="edit" aria-label="Edit">
+                <Pencil2Icon />
+              </Button>
+            </FormDialog>
+            <DeleteDialog onAction={() => deleteCheque(cheque.id)}>
+              <Button size="icon" variant="delete" aria-label="Delete">
+                <TrashIcon />
+              </Button>
+            </DeleteDialog>
+          </div>
+        )}
       </TableCell>
     </TableRow>
   );

@@ -18,17 +18,20 @@ import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
 import FormDialog from "./form-dialog";
 import DeleteDialog from "@/components/component/delete-dialog";
+import { MODERATOR } from "@/lib/constants";
 
 const AvatarCombo = ({
   fallback,
   title,
   payee,
   deletePayee,
+  userRole,
 }: {
   fallback: React.ReactNode | string;
   title: string;
   payee: PayeeType;
   deletePayee: (id: string) => void;
+  userRole: string | undefined;
 }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -100,12 +103,14 @@ const AvatarCombo = ({
                 <span>{t("Edit")}</span>
               </Button>
             </FormDialog>
-            <DeleteDialog onAction={handleDelete}>
-              <Button variant={"secondary"}>
-                <TrashIcon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
-                <span>{t("Delete")}</span>
-              </Button>
-            </DeleteDialog>
+            {userRole !== MODERATOR && (
+              <DeleteDialog onAction={handleDelete}>
+                <Button variant={"secondary"}>
+                  <TrashIcon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
+                  <span>{t("Delete")}</span>
+                </Button>
+              </DeleteDialog>
+            )}
           </div>
         </AlertDialogFooter>
       </AlertDialogContent>

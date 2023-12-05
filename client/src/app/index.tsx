@@ -20,7 +20,7 @@ import Unauthorized from "./unauthorized";
 import Offline from "./offline";
 import Logout from "./logout";
 
-import { USER } from "@/lib/constants";
+import { USER, ADMIN, MODERATOR } from "@/lib/constants";
 
 import PullToRefresh from "pulltorefreshjs";
 
@@ -77,9 +77,13 @@ function App() {
             <Route element={<RequireAuth restrictedRoles={[USER]} />}>
               <Route path="/bills" element={<Bills />} />
               <Route path="/cheques" element={<Cheques />} />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={[ADMIN, MODERATOR]} />}>
               <Route path="/users" element={<Users />} />
-              <Route path="/users/:userId" element={<ManageUser />} />
               <Route path="/payees" element={<Payee />} />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={[ADMIN]} />}>
+              <Route path="/users/:userId" element={<ManageUser />} />
             </Route>
           </Route>
         </Route>

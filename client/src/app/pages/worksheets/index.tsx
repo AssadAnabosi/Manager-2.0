@@ -4,8 +4,10 @@ import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 import { DateRange } from "react-day-picker";
 
+import { useAuth } from "@/providers/auth-provider";
+
 import { LogType } from "@/lib/types";
-import { DATE_FORMAT } from "@/lib/constants";
+import { DATE_FORMAT, SPECTATOR, USER } from "@/lib/constants";
 
 import { useGetUsersQuery } from "@/api/users";
 import { useGetLogsQuery, useDeleteLogMutation } from "@/api/logs";
@@ -42,9 +44,10 @@ import {
 
 const Logs = () => {
   const dummy = [...Array(8)];
+  const { user } = useAuth();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
-    filter: "",
+    filter: user?.role === USER ? user.id : "",
     from: getFirstDayOfCurrentMonth(),
     to: getLastDayOfCurrentMonth(),
   });
@@ -96,10 +99,12 @@ const Logs = () => {
         <div className="flex items-center gap-2 flex-col md:flex-row">
           <DateRangePicker date={date} setDate={setDate} />
           <FormDialog>
-            <Button className="w-full">
-              <FilePlusIcon className="ltr:mr-2 rtl:ml-2 h-7 w-7" />{" "}
-              {t("Add New")}
-            </Button>
+            {![USER, SPECTATOR].includes(user?.role as string) && (
+              <Button className="w-full">
+                <FilePlusIcon className="ltr:mr-2 rtl:ml-2 h-7 w-7" />{" "}
+                {t("Add New")}
+              </Button>
+            )}
           </FormDialog>
           <div className="hidden md:inline-block">
             <Button>
@@ -115,13 +120,15 @@ const Logs = () => {
       <Separator />
       {/* FILTER */}
       <div className="flex justify-end flex-wrap">
-        <Combobox
-          isLoading={filterLoading}
-          list={workers}
-          filter={filter}
-          setFilter={setFilter}
-          placeholder={t("Filter by worker")}
-        />
+        {user?.role !== USER && (
+          <Combobox
+            isLoading={filterLoading}
+            list={workers}
+            filter={filter}
+            setFilter={setFilter}
+            placeholder={t("Filter by worker")}
+          />
+        )}
       </div>
       {/* TABLE */}
       {!isLoading && !logsData ? (
@@ -176,7 +183,9 @@ const Logs = () => {
           <TableBody>
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
-              : logsData.logs.map((log: LogType) => Row(log, deleteLog))}
+              : logsData.logs.map((log: LogType) =>
+                  Row(log, deleteLog, user?.role)
+                )}
           </TableBody>
         </Table>
       )}

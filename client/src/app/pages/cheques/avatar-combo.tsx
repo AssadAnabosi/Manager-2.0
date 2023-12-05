@@ -21,6 +21,7 @@ import StatusBadge from "@/components/component/status-badge";
 import DeleteDialog from "@/components/component/delete-dialog";
 
 import { currencyFormatter } from "@/lib/utils";
+import { SPECTATOR } from "@/lib/constants";
 
 const AvatarCombo = ({
   fallback,
@@ -28,12 +29,14 @@ const AvatarCombo = ({
   description,
   cheque,
   deleteCheque,
+  userRole,
 }: {
   fallback: React.ReactNode | string;
   title: string;
   description?: string | JSX.Element;
   cheque: ChequeType;
   deleteCheque: (id: string) => void;
+  userRole: string | undefined;
 }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -97,25 +100,27 @@ const AvatarCombo = ({
         </AlertDialogHeader>
         <AlertDialogFooter className="gap-3">
           <AlertDialogCancel>{t("Cancel")}</AlertDialogCancel>
-          <div className="flex flex-col gap-3 md:flex-row">
-            <FormDialog
-              cheque={cheque}
-              onClose={(status) => {
-                if (status == false) setOpen(false);
-              }}
-            >
-              <Button>
-                <Pencil2Icon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
-                <span>{t("Edit")}</span>
-              </Button>
-            </FormDialog>
-            <DeleteDialog onAction={handleDelete}>
-              <Button variant={"secondary"}>
-                <TrashIcon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
-                <span>{t("Delete")}</span>
-              </Button>
-            </DeleteDialog>
-          </div>
+          {userRole !== SPECTATOR && (
+            <div className="flex flex-col gap-3 md:flex-row">
+              <FormDialog
+                cheque={cheque}
+                onClose={(status) => {
+                  if (status == false) setOpen(false);
+                }}
+              >
+                <Button>
+                  <Pencil2Icon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
+                  <span>{t("Edit")}</span>
+                </Button>
+              </FormDialog>
+              <DeleteDialog onAction={handleDelete}>
+                <Button variant={"secondary"}>
+                  <TrashIcon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
+                  <span>{t("Delete")}</span>
+                </Button>
+              </DeleteDialog>
+            </div>
+          )}
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

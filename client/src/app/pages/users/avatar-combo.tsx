@@ -19,17 +19,20 @@ import StatusBadge from "@/components/component/status-badge";
 import RoleBadge from "./role-badge";
 
 import { Pencil2Icon } from "@radix-ui/react-icons";
+import { MODERATOR } from "@/lib/constants";
 
 const AvatarCombo = ({
   fallback,
   title,
   description,
   user,
+  userRole,
 }: {
   fallback: React.ReactNode | string;
   title: string;
   description?: string | JSX.Element;
   user: UserType;
+  userRole: string | undefined;
 }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -95,12 +98,14 @@ const AvatarCombo = ({
         </AlertDialogHeader>
         <AlertDialogFooter className="gap-3">
           <AlertDialogCancel>{t("Cancel")}</AlertDialogCancel>
-          <div className="flex flex-col gap-3 md:flex-row">
-            <Button onClick={() => Navigate(`/users/${user.id}`)}>
-              <Pencil2Icon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
-              <span>{t("Edit")}</span>
-            </Button>
-          </div>
+          {userRole !== MODERATOR && (
+            <div className="flex flex-col gap-3 md:flex-row">
+              <Button onClick={() => Navigate(`/users/${user.id}`)}>
+                <Pencil2Icon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
+                <span>{t("Edit")}</span>
+              </Button>
+            </div>
+          )}
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
