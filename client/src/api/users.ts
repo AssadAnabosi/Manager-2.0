@@ -47,7 +47,7 @@ export const useDeleteUserMutation = () => {
         title: t("Success"),
         description: t("User was deleted successfully"),
       });
-      Navigate("/users");
+      Navigate("/users", { replace: true });
     },
     onError: (error: any) => {
       toast({
@@ -62,6 +62,7 @@ export const useDeleteUserMutation = () => {
 export const useGetUserQuery = () => {
   const axios = useAxios();
   const { userId } = useParams();
+  const Navigate = useNavigate();
   return useQuery({
     queryKey: [
       "users",
@@ -70,8 +71,13 @@ export const useGetUserQuery = () => {
       },
     ],
     queryFn: async () => {
-      const { data: response } = await axios.get(`${BASE_URL}/${userId}`);
-      return response.data;
+      try {
+        const { data: response } = await axios.get(`${BASE_URL}/${userId}`);
+        return response.data;
+      } catch (error: any) {
+        if (error?.response?.status === 404)
+          Navigate("/404", { replace: true });
+      }
     },
   });
 };
