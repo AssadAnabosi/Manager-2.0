@@ -82,7 +82,7 @@ export default function FormDialog({
         ? new Date(cheque?.dueDate)
         : getLastDayOfCurrentMonthDate(),
       payee: cheque?.payee?.id || undefined,
-      serial: cheque?.serial.toString() || undefined,
+      serial: cheque?.serial.toString() || "",
       value: cheque?.value.toString() || "",
       isCancelled: cheque?.isCancelled || false,
       remarks: cheque?.remarks || "",
@@ -107,11 +107,27 @@ export default function FormDialog({
       setOpen(false);
       onClose?.(false);
     } catch (error: any) {
-      console.log(error);
+      const message = error?.response?.data?.message;
+      if (message)
+        switch (message) {
+          case "Serial already exists":
+            chequeForm.setError("serial", {
+              type: "manual",
+              message: "Cheque with this serial already exists.",
+            });
+            return;
+          case "Payee not found":
+            chequeForm.setError("payee", {
+              type: "manual",
+              message: "Payee not found",
+            });
+            return;
+        }
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
+        title: t("Error"),
+        description:
+          t(error?.response?.data?.message) || t("Something went wrong"),
       });
     }
   };
@@ -121,7 +137,11 @@ export default function FormDialog({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader className="text-left rtl:text-right pt-6">
           <DialogTitle>
-            {cheque ? t(`Edit Cheque #${cheque.serial}`) : t("New Cheque")}
+            {cheque
+              ? t(`Edit Cheque #{{serial}}`, {
+                  serial: cheque.serial,
+                })
+              : t("New Cheque")}
           </DialogTitle>
           <DialogDescription>
             {cheque
@@ -140,7 +160,7 @@ export default function FormDialog({
                 name="dueDate"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>{t("Date")}</FormLabel>
+                    <FormLabel>{t("Due Date")}</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -218,14 +238,14 @@ export default function FormDialog({
                               ? payees.find(
                                   (payee) => payee.value === field.value
                                 )?.label
-                              : "Select payee"}
+                              : t("Select a payee")}
                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
                       <PopoverContent className="w-[280px] p-0">
                         <Command>
-                          <CommandInput placeholder="Search payee..." />
+                          <CommandInput placeholder={t("Search...")} />
                           <CommandEmpty>
                             {t("No matching results")}
                           </CommandEmpty>
@@ -313,7 +333,7 @@ export default function FormDialog({
               control={chequeForm.control}
               name="isCancelled"
               render={({ field }) => (
-                <FormItem className="flex flex-col">
+                <FormItem className="flex flex-col" dir="ltr">
                   <FormControl>
                     <label className="flex items-center">
                       <Switch

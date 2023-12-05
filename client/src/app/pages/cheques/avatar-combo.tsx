@@ -77,12 +77,22 @@ const AvatarCombo = ({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="space-x-3 rtl:space-x-reverse">
-            <span>{title}</span>
-            <span>-</span>
-            <span>{description}</span>
+            <span>
+              {t("Cheque #{{serial}}", {
+                serial: cheque.serial,
+              })}
+            </span>
           </AlertDialogTitle>
           <AlertDialogDescription asChild>
             <div className="flex flex-col gap-2 text-left rtl:text-right">
+              <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
+                <p>{t("Payee")}:</p>
+                <p>{title}</p>
+              </div>
+              <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
+                <p>{t("Due Date")}:</p>
+                <p>{description}</p>
+              </div>
               <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
                 <p>{t("Value")}:</p>
                 <p>{currencyFormatter(cheque.value)}</p>
@@ -92,7 +102,7 @@ const AvatarCombo = ({
                 <p>{cheque.remarks}</p>
               </div>
               <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
-                <p>{t("Active: ")}:</p>
+                <p>{t("Status")}:</p>
                 <StatusBadge status={!cheque.isCancelled} />
               </div>
             </div>

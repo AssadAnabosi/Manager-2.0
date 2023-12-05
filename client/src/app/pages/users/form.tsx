@@ -77,6 +77,18 @@ const UserForm = ({
         message: "Passwords do not match.",
         path: ["confirmPassword"],
       }
+    )
+    .refine(
+      (data) => {
+        if (!user && data.password) {
+          return data.password.length >= 8;
+        }
+        return true;
+      },
+      {
+        message: "Password must be at least 8 characters",
+        path: ["password"],
+      }
     );
 
   type userFormSchemaType = z.infer<typeof userFormSchema>;
@@ -108,10 +120,21 @@ const UserForm = ({
         await mutateAsync({ data, userId: user.id });
       }
     } catch (error: any) {
+      const message = error?.response?.data?.message;
+      if (message)
+        switch (message) {
+          case "Please provide a valid email":
+            userForm.setError("email", {
+              type: "manual",
+              message: "Please provide a valid email",
+            });
+            return;
+        }
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
+        title: t("Error"),
+        description:
+          t(error?.response?.data?.message) || t("Something went wrong"),
       });
     }
   };

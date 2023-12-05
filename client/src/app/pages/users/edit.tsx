@@ -105,8 +105,10 @@ export default function Edit() {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
+        title: t("Error"),
+        description: error?.response?.data?.message
+          ? t(error?.response?.data?.message)
+          : t("Something went wrong"),
       });
     }
   };
@@ -114,7 +116,7 @@ export default function Edit() {
   const { mutateAsync: updateStatusMut } = useUpdateUserStatusMutation();
   const { mutateAsync: updateRoleMut } = useUpdateUserRoleMutation();
 
-  const { mutate: deleteUser } = useDeleteUserMutation();
+  const { mutateAsync: deleteUser } = useDeleteUserMutation();
 
   const updateStatus = async (value: boolean) => {
     const prev = active;
@@ -129,8 +131,10 @@ export default function Edit() {
       setActive(prev);
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
+        title: t("Error"),
+        description: error?.response?.data?.message
+          ? t(error?.response?.data?.message)
+          : t("Something went wrong"),
       });
     }
   };
@@ -148,8 +152,10 @@ export default function Edit() {
       setRole(prev);
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
+        title: t("Error"),
+        description: error?.response?.data?.message
+          ? t(error?.response?.data?.message)
+          : t("Something went wrong"),
       });
     }
   };
@@ -202,7 +208,7 @@ export default function Edit() {
                     name="password"
                     render={({ field }) => (
                       <FormItem className="space-y-1 rtl:text-right">
-                        <FormLabel>{t("Current password")}</FormLabel>
+                        <FormLabel>{t("New password")}</FormLabel>
                         <FormControl>
                           <Input
                             autoComplete="new-password"
@@ -219,7 +225,7 @@ export default function Edit() {
                     name="confirmPassword"
                     render={({ field }) => (
                       <FormItem className="space-y-1 rtl:text-right">
-                        <FormLabel>{t("New password")}</FormLabel>
+                        <FormLabel>{t("Confirm password")}</FormLabel>
                         <FormControl>
                           <Input
                             autoComplete="new-password"
@@ -240,7 +246,7 @@ export default function Edit() {
                     {passwordForm.formState.isSubmitting ? (
                       <Spinner className="h-4 w-4" />
                     ) : (
-                      t("Update Password")
+                      t("Reset Password")
                     )}
                   </Button>
                 </CardFooter>
@@ -290,7 +296,7 @@ export default function Edit() {
                   <SelectContent>
                     {ROLES.map((role) => (
                       <SelectItem key={role} value={role}>
-                        {role}
+                        {t(role)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -299,7 +305,7 @@ export default function Edit() {
               <Separator />
             </CardContent>
             <CardFooter>
-              <DeleteDialog onAction={() => deleteUser(user.id)}>
+              <DeleteDialog onAction={async () => await deleteUser(user.id)}>
                 <Button
                   variant={"delete"}
                   className="w-[50%] border border-border hover:border-none"

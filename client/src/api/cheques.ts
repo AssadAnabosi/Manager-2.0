@@ -55,48 +55,49 @@ export const useDeleteChequeMutation = () => {
     onError: (error: any) => {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
+        title: t("Error"),
+        description: error?.response?.data?.message
+          ? t(error?.response?.data?.message)
+          : t("Something went wrong"),
       });
     },
   });
 };
-export const chequeFormSchema = z
-  .object({
-    dueDate: z.any({
-      required_error: "Due Date is required",
-    }),
-    payee: z
-      .string({
-        required_error: "Please select a payee.",
-      })
-      .optional(),
-    serial: z.string().refine(
-      (value) => {
-        const number = Number(value);
-        return !isNaN(number) && value?.length > 0 && number > 0;
-      },
-      { message: "Invalid number" }
-    ),
-    value: z.string().refine(
-      (value) => {
-        const number = Number(value);
-        return !isNaN(number) && value?.length > 0;
-      },
-      { message: "Invalid number" }
-    ),
-    isCancelled: z.boolean(),
-    remarks: z.string().optional(),
-  })
-  .refine(
-    (data) => {
-      return !(!data.isCancelled && !data.payee);
+export const chequeFormSchema = z.object({
+  dueDate: z.any({
+    required_error: "Due Date is required",
+  }),
+  payee: z
+    .string({
+      required_error: "Please select a payee.",
+    })
+    .optional(),
+  serial: z.string().refine(
+    (value) => {
+      const number = Number(value);
+      return !isNaN(number) && value?.length > 0 && number > 0;
     },
-    {
-      path: ["payee"],
-      message: "Please select a payee.",
-    }
-  );
+    { message: "Invalid number" }
+  ),
+  value: z.string().refine(
+    (value) => {
+      const number = Number(value);
+      return !isNaN(number) && value?.length > 0;
+    },
+    { message: "Invalid number" }
+  ),
+  isCancelled: z.boolean(),
+  remarks: z.string().optional(),
+});
+// .refine(
+//   (data) => {
+//     return !(!data.isCancelled && !data.payee);
+//   },
+//   {
+//     path: ["payee"],
+//     message: "Please select a payee.",
+//   }
+// );
 
 export type chequeFormSchemaType = z.infer<typeof chequeFormSchema>;
 
@@ -145,8 +146,10 @@ export const useChequeFormMutation = () => {
     onError: (error: any) => {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
+        title: t("Error"),
+        description: error?.response?.data?.message
+          ? t(error?.response?.data?.message)
+          : t("Something went wrong"),
       });
     },
   });

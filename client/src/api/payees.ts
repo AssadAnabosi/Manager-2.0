@@ -50,8 +50,10 @@ export const useDeletePayeeMutation = () => {
     onError: (error: any) => {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
+        title: t("Error"),
+        description: error?.response?.data?.message
+          ? t(error?.response?.data?.message)
+          : t("Something went wrong"),
       });
     },
   });
@@ -105,8 +107,10 @@ export const usePayeeFormMutation = () => {
     onError: (error: any) => {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
+        title: t("Error"),
+        description: error?.response?.data?.message
+          ? t(error?.response?.data?.message)
+          : t("Something went wrong"),
       });
     },
   });

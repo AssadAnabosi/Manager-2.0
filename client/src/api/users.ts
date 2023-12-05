@@ -52,8 +52,10 @@ export const useDeleteUserMutation = () => {
     onError: (error: any) => {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
+        title: t("Error"),
+        description: error?.response?.data?.message
+          ? t(error?.response?.data?.message)
+          : t("Something went wrong"),
       });
     },
   });
@@ -64,19 +66,14 @@ export const useGetUserQuery = () => {
   const { userId } = useParams();
   const Navigate = useNavigate();
   return useQuery({
-    queryKey: [
-      "users",
-      {
-        userId,
-      },
-    ],
+    queryKey: [{ userId }],
     queryFn: async () => {
       try {
         const { data: response } = await axios.get(`${BASE_URL}/${userId}`);
         return response.data;
       } catch (error: any) {
         if (error?.response?.status === 404)
-          Navigate("/404", { replace: true });
+          Navigate("/users", { replace: true });
       }
     },
   });
@@ -119,14 +116,16 @@ export const useUpdatePasswordMutation = () => {
       toast({
         variant: "success",
         title: t("Success"),
-        description: t("User's Password was updated successfully"),
+        description: t("User's Password was reset successfully"),
       });
     },
     onError: (error: any) => {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
+        title: t("Error"),
+        description: error?.response?.data?.message
+          ? t(error?.response?.data?.message)
+          : t("Something went wrong"),
       });
     },
   });
@@ -156,8 +155,10 @@ export const useUpdateUserStatusMutation = () => {
     onError: (error: any) => {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
+        title: t("Error"),
+        description: error?.response?.data?.message
+          ? t(error?.response?.data?.message)
+          : t("Something went wrong"),
       });
     },
   });
@@ -181,14 +182,16 @@ export const useUpdateUserRoleMutation = () => {
       toast({
         variant: "success",
         title: t("Success"),
-        description: t("User's Status was updated successfully"),
+        description: t("User's Role was updated successfully"),
       });
     },
     onError: (error: any) => {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
+        title: t("Error"),
+        description: error?.response?.data?.message
+          ? t(error?.response?.data?.message)
+          : t("Something went wrong"),
       });
     },
   });
@@ -235,8 +238,10 @@ export const useUserFormMutation = () => {
     onError: (error: any) => {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
+        title: t("Error"),
+        description: error?.response?.data?.message
+          ? t(error?.response?.data?.message)
+          : t("Something went wrong"),
       });
     },
   });

@@ -136,7 +136,9 @@ export default function Settings() {
       }
       toast({
         title: t("Something went wrong"),
-        description: t(error.response.data.message),
+        description: error?.response?.data?.message
+          ? t(error?.response?.data?.message)
+          : t("Something went wrong"),
         variant: "destructive",
       });
     }

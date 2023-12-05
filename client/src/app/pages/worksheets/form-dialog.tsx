@@ -74,7 +74,7 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
       startingTime: log?.startingTime || "08:30",
       finishingTime: log?.finishingTime || "16:30",
       isAbsent: log?.isAbsent || false,
-      payment: log?.payment.toString() || "",
+      payment: log?.payment.toString() || "0",
       remarks: log?.remarks || "",
     },
   });
@@ -97,10 +97,22 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
       setOpen(false);
       onClose?.(false);
     } catch (error: any) {
+      const message = error?.response?.data?.message;
+      if (message)
+        switch (message) {
+          case "There is a record of this log already":
+            logForm.setError("date", {
+              type: "manual",
+              message: "This log already exists",
+            });
+            return;
+        }
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
+        title: t("Error"),
+        description: error?.response?.data?.message
+          ? t(error?.response?.data?.message)
+          : t("Something went wrong"),
       });
     }
   };
@@ -169,7 +181,7 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
                 name="startingTime"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>{t("Starting Time")}</FormLabel>
+                    <FormLabel>{t("Start Time")}</FormLabel>
                     <FormControl>
                       <Input {...field} className="input" type="time" />
                     </FormControl>
@@ -182,7 +194,7 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
                 name="finishingTime"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>{t("Finishing Time")}</FormLabel>
+                    <FormLabel>{t("End Time")}</FormLabel>
                     <FormControl>
                       <Input {...field} className="input" type="time" />
                     </FormControl>
@@ -214,7 +226,7 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
                               ? workers.find(
                                   (worker) => worker.value === field.value
                                 )?.label
-                              : "Select worker"}
+                              : t("Select a worker")}
                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
                         </FormControl>
@@ -308,7 +320,7 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
               control={logForm.control}
               name="isAbsent"
               render={({ field }) => (
-                <FormItem className="flex flex-col">
+                <FormItem className="flex flex-col" dir="ltr">
                   <FormControl>
                     <label className="flex items-center">
                       <Switch

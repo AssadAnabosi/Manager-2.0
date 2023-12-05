@@ -84,7 +84,7 @@ const AvatarCombo = ({
                 <StatusBadge status={!log.isAbsent} />
               </div>
               <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
-                <p>{t("Balancing Hours")}:</p>
+                <p>{t("Work Hours")}:</p>
                 <p>
                   {log.startingTime} - {log.finishingTime} (
                   {numberFormatter(log.OTV)})

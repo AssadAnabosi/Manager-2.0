@@ -53,8 +53,10 @@ export const useDeleteLogMutation = () => {
     onError: (error: any) => {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
+        title: t("Error"),
+        description: error?.response?.data?.message
+          ? t(error?.response?.data?.message)
+          : t("Something went wrong"),
       });
     },
   });
@@ -68,10 +70,10 @@ export const logFormSchema = z
       required_error: "Please select a worker.",
     }),
     startingTime: z.string({
-      required_error: "Starting time is required.",
+      required_error: "Start time is required.",
     }),
     finishingTime: z.string({
-      required_error: "Ending time is required.",
+      required_error: "End time is required.",
     }),
     isAbsent: z.boolean(),
     payment: z.string().refine(
@@ -89,7 +91,7 @@ export const logFormSchema = z
     },
     {
       path: ["startingTime"],
-      message: "Please Provide a valid time",
+      message: "Please provide a valid time",
     }
   )
   .refine(
@@ -98,7 +100,7 @@ export const logFormSchema = z
     },
     {
       path: ["finishingTime"],
-      message: "Please Provide a valid time",
+      message: "Please provide a valid time",
     }
   );
 
@@ -150,8 +152,10 @@ export const useLogFormMutation = () => {
     onError: (error: any) => {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
+        title: t("Error"),
+        description: error?.response?.data?.message
+          ? t(error?.response?.data?.message)
+          : t("Something went wrong"),
       });
     },
   });

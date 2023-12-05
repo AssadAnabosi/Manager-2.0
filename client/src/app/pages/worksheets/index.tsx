@@ -166,7 +166,7 @@ const Logs = () => {
             <TableRow>
               <TableHead className="w-[270px]"></TableHead>
               <TableHead className="w-[80px] text-center">
-                {t("Status")}
+                {t("Attended")}
               </TableHead>
               <TableHead className="hidden md:table-cell w-[150px] md:w-[280px] rtl:text-right">
                 {t("Workday Variance: Balancing Hours")}
