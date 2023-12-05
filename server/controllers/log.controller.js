@@ -14,6 +14,7 @@ export const getLogs = async (req, res) => {
     startDate,
     endDate,
     worker,
+    user: req.user,
   });
 
   const logs = await Log.aggregate(filter);

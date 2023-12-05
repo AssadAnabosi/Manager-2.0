@@ -1,10 +1,10 @@
 import ObjectID from "../../utils/ObjectID.js";
 import { USER } from "../../utils/constants/userRoles.js";
 
-export const findLogs = ({ userRole, worker, startDate, endDate }) => {
+export const findLogs = ({ userRole, worker, startDate, endDate, user }) => {
   const filter = [];
   if (userRole === USER) {
-    filter.push({ $match: { worker: ObjectID(req.user.id) } });
+    filter.push({ $match: { worker: ObjectID(user.id) } });
   }
   if (startDate) {
     filter.push({ $match: { date: { $gte: startDate } } });
