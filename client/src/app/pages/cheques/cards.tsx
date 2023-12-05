@@ -32,7 +32,7 @@ const Cards = ({
                 style={{ direction: "ltr" }}
                 className="text-2xl font-bold rtl:text-right"
               >
-                {chequesData?.total
+                {typeof chequesData?.total !== "undefined"
                   ? currencyFormatter(chequesData?.total)
                   : "---"}
               </div>

@@ -33,7 +33,7 @@ const Cards = ({
                 style={{ direction: "ltr" }}
                 className="text-2xl font-bold rtl:text-right"
               >
-                {billsData?.rangeTotalValue
+                {typeof billsData?.rangeTotalValue !== "undefined"
                   ? currencyFormatter(billsData?.rangeTotalValue)
                   : "---"}
               </div>
@@ -55,7 +55,7 @@ const Cards = ({
                 style={{ direction: "ltr" }}
                 className="text-2xl font-bold rtl:text-right"
               >
-                {billsData?.allTimeTotalValue
+                {typeof billsData?.allTimeTotalValue !== "undefined"
                   ? currencyFormatter(billsData?.allTimeTotalValue)
                   : "---"}
               </div>

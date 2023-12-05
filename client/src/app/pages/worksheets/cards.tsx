@@ -31,7 +31,9 @@ const Cards = ({
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {logsData?.daysCount ? logsData.daysCount : "---"}
+                {typeof logsData?.daysCount !== "undefined"
+                  ? logsData.daysCount
+                  : "---"}
               </div>
 
               <p className="text-xs text-muted-foreground">
@@ -51,7 +53,7 @@ const Cards = ({
                 style={{ direction: "ltr" }}
                 className="text-2xl font-bold rtl:text-right"
               >
-                {logsData?.paymentsSumValue
+                {typeof logsData?.paymentsSumValue !== "undefined"
                   ? currencyFormatter(logsData.paymentsSumValue)
                   : "---"}
               </div>
@@ -70,7 +72,9 @@ const Cards = ({
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {logsData?.OTVSum ? numberFormatter(logsData.OTVSum) : "---"}
+                {typeof logsData?.OTVSum !== "undefined"
+                  ? numberFormatter(logsData.OTVSum)
+                  : "---"}
               </div>
               <p className="text-xs text-muted-foreground">
                 {t(
