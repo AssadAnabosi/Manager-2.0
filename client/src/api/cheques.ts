@@ -17,17 +17,17 @@ export const useGetChequesQuery = () => {
   const filter = searchParams.get("filter");
   const from = searchParams.get("from");
   const to = searchParams.get("to");
-  const search = searchParams.get("search");
+  const serial = searchParams.get("serial");
 
   return useQuery({
-    queryKey: ["cheques", { filter, from, to }],
+    queryKey: ["cheques", { filter, from, to, serial }],
     queryFn: async () => {
       const { data: response } = await axios.get(`${BASE_URL}`, {
         params: {
           filter,
           from,
           to,
-          search,
+          serial,
         },
       });
       return response.data;
