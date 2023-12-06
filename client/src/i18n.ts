@@ -12,7 +12,7 @@ i18n
     interpolation: {
       escapeValue: false,
     },
-    debug: true,
+    debug: import.meta.env.NODE_ENV === "development" ? true : false,
   });
 
 export default i18n;
