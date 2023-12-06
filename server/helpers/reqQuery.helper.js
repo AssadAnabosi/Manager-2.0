@@ -32,7 +32,13 @@ export default (query) => {
     endDate.setUTCHours(23, 59, 59, 999);
   }
 
-  return { startDate, endDate, search, filter };
+  return {
+    startDate,
+    endDate,
+    search,
+    filter,
+    serial: query.serial ? query.serial.trim() : null,
+  };
 };
 
 const getFirstDayOfCurrentMonth = (date) => {

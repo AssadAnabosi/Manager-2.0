@@ -49,7 +49,7 @@ const Cheques = () => {
   const { user } = useAuth();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
-    search: "",
+    serial: "",
     filter: "",
     from: getFirstDayOfCurrentMonth(),
     to: getLastDayOfCurrentMonth(),
@@ -67,12 +67,12 @@ const Cheques = () => {
     );
   };
 
-  const search = searchParams.get("search") || "";
-  const setSearch = (value: string) => {
+  const serial = searchParams.get("serial") || "";
+  const setSerial = (value: string) => {
     setSearchParams(
       (prev) => {
-        prev.delete("search");
-        if (value) prev.set("search", value);
+        prev.delete("serial");
+        if (value) prev.set("serial", value);
         return prev;
       },
       { replace: true }
@@ -136,8 +136,8 @@ const Cheques = () => {
       <div className="flex justify-end gap-3">
         <div className="w-full md:w-[335px]">
           <Searchbox
-            value={search}
-            setValue={setSearch}
+            value={serial}
+            setValue={setSerial}
             placeholder={"Serial No."}
           />
         </div>

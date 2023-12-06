@@ -1,6 +1,6 @@
 import ObjectID from "../../utils/ObjectID.js";
 
-export const findCheques = ({ search, startDate, endDate, payee }) => {
+export const findCheques = ({ serial: search, startDate, endDate, payee }) => {
   const filter = [];
   const serial = parseInt(search) | 0;
   const dueDateFilter = {};
