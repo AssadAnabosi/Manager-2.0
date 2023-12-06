@@ -1,7 +1,6 @@
 # Manager
-
 ##### Version: 2.0.0
-
+2nd Version of the [Manager App](https://github.com/AssadAnabosi/Manager) with a much cleaner code base, and higher coding standards.
 ## About
 
 PWA that helps digitalize my family's workshop data, like bills, workers logs and more.
