@@ -35,16 +35,18 @@ const Row = (log: LogType, deleteLog: any, userRole: string | undefined) => {
       <TableCell className="text-center">
         <StatusBadge status={!log.isAbsent} />
       </TableCell>
-      <TableCell className="hidden md:table-cell">
+      <TableCell className="print:table-cell hidden md:table-cell">
         {log.startingTime} - {log.finishingTime} ({numberFormatter(log.OTV)})
       </TableCell>
-      <TableCell className="hidden md:table-cell">
+      <TableCell className="print:table-cell hidden md:table-cell">
         <p style={{ direction: "ltr" }} className="rtl:text-right">
           {currencyFormatter(log.payment)}
         </p>
       </TableCell>
-      <TableCell className="hidden lg:table-cell">{log.remarks}</TableCell>
-      <TableCell className="hidden 2xl:table-cell">
+      <TableCell className="print:table-cell hidden lg:table-cell">
+        {log.remarks}
+      </TableCell>
+      <TableCell className="print:hidden hidden 2xl:table-cell 2xl:print:hidden">
         {![USER, SPECTATOR].includes(userRole as string) && (
           <div className="grid grid-cols-2">
             <FormDialog log={log}>

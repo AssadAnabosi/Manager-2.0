@@ -50,7 +50,7 @@ const AvatarCombo = ({
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <div className="flex items-center">
-          <Avatar className="h-9 w-9">
+          <Avatar className="print:hidden h-9 w-9">
             <AvatarImage alt="Avatar" />
             <AvatarFallback>{fallback}</AvatarFallback>
           </Avatar>
