@@ -25,7 +25,7 @@ import FormDialog from "./form-dialog";
 import RowSkeleton from "./row-skeleton";
 import Row from "./row";
 
-import { FilePlusIcon } from "lucide-react";
+import { FilePlus } from "lucide-react";
 
 const Users = () => {
   const dummy = [...Array(8)];
@@ -57,8 +57,7 @@ const Users = () => {
         <div className="flex items-center gap-2 flex-col md:flex-row">
           <FormDialog>
             <Button className="w-full">
-              <FilePlusIcon className="ltr:mr-2 rtl:ml-2 h-7 w-7" />{" "}
-              {t("Add New")}
+              <FilePlus className="ltr:mr-2 rtl:ml-2 h-7 w-7" /> {t("Add New")}
             </Button>
           </FormDialog>
         </div>

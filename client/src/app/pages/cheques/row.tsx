@@ -47,7 +47,7 @@ const Row = (
       >
         {cheque.remarks}
       </TableCell>
-      <TableCell className="text-right hidden lg:table-cell">
+      <TableCell className="print:hidden lg:print:hidden text-right hidden lg:table-cell">
         {userRole !== SPECTATOR && (
           <div className="grid grid-cols-2">
             <FormDialog cheque={cheque}>

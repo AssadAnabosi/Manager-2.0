@@ -10,7 +10,7 @@ const Layout = () => {
   const { t } = useTranslation();
   return (
     <>
-      <aside className="flex">
+      <aside className="flex print:hidden">
         <SideNav />
       </aside>
 
@@ -21,7 +21,7 @@ const Layout = () => {
           <PageWrapper>
             <Outlet />
           </PageWrapper>
-          <footer className="footer text-sm mx-auto">
+          <footer className="footer text-sm mx-auto print:hidden">
             {t("Made with ❤️ by")} <FooterHoverCard />
           </footer>
         </MarginWidthWrapper>

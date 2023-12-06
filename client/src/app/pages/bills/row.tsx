@@ -34,9 +34,13 @@ const Row = (bill: BillType, deleteBill: any, userRole: string | undefined) => {
       <TableCell style={{ direction: "ltr" }} className="rtl:text-right">
         {currencyFormatter(bill.value)}
       </TableCell>
-      <TableCell className="hidden md:table-cell">{bill.description}</TableCell>
-      <TableCell className="hidden lg:table-cell">{bill.remarks}</TableCell>
-      <TableCell className="text-right hidden lg:table-cell">
+      <TableCell className="print:table-cell hidden md:table-cell">
+        {bill.description}
+      </TableCell>
+      <TableCell className="print:table-cell hidden lg:table-cell">
+        {bill.remarks}
+      </TableCell>
+      <TableCell className="print:hidden lg:print:hidden text-right hidden lg:table-cell">
         {userRole !== SPECTATOR && (
           <div className="grid grid-cols-2">
             <FormDialog bill={bill}>

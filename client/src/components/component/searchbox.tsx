@@ -20,7 +20,7 @@ const Searchbox = ({
   };
 
   return (
-    <div className="relative w-full justify-between">
+    <div className="relative w-full justify-between print:hidden">
       <MagnifyingGlassIcon className="absolute top-0 bottom-0 w-6 h-6 my-auto text-muted-foreground ltr:left-3 rtl:right-3" />
       <Input
         type="text"

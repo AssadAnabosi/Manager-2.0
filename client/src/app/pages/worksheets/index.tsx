@@ -32,8 +32,7 @@ import RowSkeleton from "./row-skeleton";
 import Row from "./row";
 import FormDialog from "./form-dialog";
 
-import { DownloadIcon, FilePlusIcon } from "@radix-ui/react-icons";
-
+import { Printer, FilePlus } from "lucide-react";
 import {
   getFirstDayOfCurrentMonth,
   getLastDayOfCurrentMonth,
@@ -90,7 +89,7 @@ const Logs = () => {
   const { mutate: deleteLog } = useDeleteLogMutation();
 
   return (
-    <div className="flex-1 space-y-4 p-8 pt-6">
+    <div className="flex-1 space-y-4 p-8 pt-6 print:px-4">
       {/* HEADER */}
       <div className="flex space-y-2 flex-col justify-between md:flex-row gap-5">
         <h2 className="text-3xl font-bold tracking-tight">
@@ -100,18 +99,19 @@ const Logs = () => {
           <DateRangePicker date={date} setDate={setDate} />
           <FormDialog>
             {![USER, SPECTATOR].includes(user?.role as string) && (
-              <Button className="w-full">
-                <FilePlusIcon className="ltr:mr-2 rtl:ml-2 h-7 w-7" />{" "}
+              <Button className="w-full print:hidden">
+                <FilePlus className="ltr:mr-2 rtl:ml-2 h-7 w-7" />{" "}
                 {t("Add New")}
               </Button>
             )}
           </FormDialog>
-          <div className="hidden md:inline-block">
-            <Button>
-              <DownloadIcon className="ltr:mr-2 rtl:ml-2 h-6 w-6" />{" "}
-              {t("Download")}
-            </Button>
-          </div>
+          <Button
+            disabled={isLoading}
+            className="w-full print:hidden"
+            onClick={() => window.print()}
+          >
+            <Printer className="ltr:mr-2 rtl:ml-2 h-6 w-6" /> {t("Print")}
+          </Button>
         </div>
       </div>
       <Separator />
@@ -164,20 +164,20 @@ const Logs = () => {
           </TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[270px]"></TableHead>
+              <TableHead className="w-[270px] print:w-[190px]"></TableHead>
               <TableHead className="w-[80px] text-center">
                 {t("Attended")}
               </TableHead>
-              <TableHead className="hidden md:table-cell w-[150px] md:w-[280px] rtl:text-right">
+              <TableHead className="print:table-cell hidden md:table-cell w-[150px] md:w-[280px] md:print:w-[150px] rtl:text-right">
                 {t("Workday Variance: Balancing Hours")}
               </TableHead>
-              <TableHead className="hidden md:table-cell w-[120px] rtl:text-right">
+              <TableHead className="print:table-cell hidden md:table-cell w-[120px] rtl:text-right">
                 {t("Payment")}
               </TableHead>
-              <TableHead className="hidden lg:table-cell w-max rtl:text-right">
+              <TableHead className="print:table-cell hidden lg:table-cell w-max rtl:text-right">
                 {t("Remarks")}
               </TableHead>
-              <TableHead className="hidden 2xl:table-cell w-[120px]"></TableHead>
+              <TableHead className="print:hidden 2xl:print:hidden hidden 2xl:table-cell w-[120px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

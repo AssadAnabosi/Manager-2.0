@@ -32,7 +32,7 @@ import Row from "./row";
 import RowSkeleton from "./row-skeleton";
 import FormDialog from "./form-dialog";
 
-import { DownloadIcon, FilePlusIcon } from "@radix-ui/react-icons";
+import { Printer, FilePlus } from "lucide-react";
 
 import {
   getFirstDayOfCurrentMonth,
@@ -94,18 +94,19 @@ const Bills = () => {
           <DateRangePicker date={date} setDate={setDate} />
           {user?.role !== SPECTATOR && (
             <FormDialog>
-              <Button className="w-full">
-                <FilePlusIcon className="ltr:mr-2 rtl:ml-2 h-7 w-7" />{" "}
+              <Button className="print:hidden w-full">
+                <FilePlus className="ltr:mr-2 rtl:ml-2 h-7 w-7" />{" "}
                 {t("Add New")}
               </Button>
             </FormDialog>
           )}
-          <div className="hidden md:inline-block">
-            <Button>
-              <DownloadIcon className="ltr:mr-2 rtl:ml-2 h-6 w-6" />{" "}
-              {t("Download")}
-            </Button>
-          </div>
+          <Button
+            disabled={isLoading}
+            className="w-full print:hidden"
+            onClick={() => window.print()}
+          >
+            <Printer className="ltr:mr-2 rtl:ml-2 h-6 w-6" /> {t("Print")}
+          </Button>
         </div>
       </div>
       <Separator />
@@ -156,13 +157,13 @@ const Bills = () => {
               <TableHead className="table-cell w-[120px] rtl:text-right">
                 {t("Value")}
               </TableHead>
-              <TableHead className="hidden md:table-cell rtl:text-right">
+              <TableHead className="print:table-cell hidden md:table-cell rtl:text-right">
                 {t("Description")}
               </TableHead>
-              <TableHead className="hidden lg:table-cell rtl:text-right">
+              <TableHead className="print:table-cell hidden lg:table-cell rtl:text-right w-max">
                 {t("Remarks")}
               </TableHead>
-              <TableHead className="hidden lg:table-cell w-[120px]"></TableHead>
+              <TableHead className="print:hidden lg:print:hidden hidden lg:table-cell w-[120px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
