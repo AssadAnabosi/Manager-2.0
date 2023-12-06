@@ -9,7 +9,7 @@ import { ADMIN, MODERATOR } from "../utils/constants/userRoles.js";
 import * as validator from "../middleware/validators/log.validator.js";
 import { validateParamID } from "../middleware/reqValidators.middleware.js";
 
-//  @routes  api/logs
+//  @routes  apiPrefix/logs
 
 router
   .route("/")
@@ -22,7 +22,7 @@ router
     catchError(controller.createLog)
   );
 
-// @routes  api/logs/:logID
+// @routes  apiPrefix/logs/:logID
 
 router
   .route("/:logID")

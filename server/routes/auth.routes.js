@@ -8,7 +8,7 @@ import { authorize, isAuth } from "../middleware/auth.middleware.js";
 import * as validator from "../middleware/validators/auth.validator.js";
 import limiter from "../middleware/limiter.middleware.js";
 
-//  @routes  api/auth
+//  @routes  apiPrefix/auth
 
 // @desc    Retrieve current authenticated user info
 router.get("/", authorize(), catchError(controller.getMe));

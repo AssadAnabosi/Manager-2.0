@@ -9,7 +9,7 @@ import { ADMIN, MODERATOR, SPECTATOR } from "../utils/constants/userRoles.js";
 import * as validator from "../middleware/validators/user.validator.js";
 import { validateParamID } from "../middleware/reqValidators.middleware.js";
 
-//  @routes  api/users
+//  @routes  apiPrefix/users
 
 router
   .route("/")
@@ -42,14 +42,14 @@ router.patch(
   catchError(controller.updatePreferences)
 );
 
-// @routes api/users/:userID
+// @routes apiPrefix/users/:userID
 
 router
   .route("/:userID")
   .all(validateParamID("userID"))
   .get(authorize([SPECTATOR, MODERATOR, ADMIN]), catchError(controller.getUser))
   .put(
-    authorize([MODERATOR, ADMIN]),
+    authorize([ADMIN]),
     validator.validateUpdateUser,
     catchError(controller.updateUser)
   )

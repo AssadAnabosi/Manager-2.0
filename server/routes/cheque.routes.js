@@ -9,7 +9,7 @@ import { ADMIN, MODERATOR } from "../utils/constants/userRoles.js";
 import * as validator from "../middleware/validators/cheque.validator.js";
 import { validateParamID } from "../middleware/reqValidators.middleware.js";
 
-//  @routes  api/cheques
+//  @routes  apiPrefix/cheques
 
 router
   .route("/")
@@ -22,7 +22,7 @@ router
     catchError(controller.createCheque)
   );
 
-// @routes  api/cheques/:chequeID
+// @routes  apiPrefix/cheques/:chequeID
 
 router
   .route("/:chequeID")

@@ -9,7 +9,7 @@ import { ADMIN, MODERATOR } from "../utils/constants/userRoles.js";
 import * as validator from "../middleware/validators/bill.validator.js";
 import { validateParamID } from "../middleware/reqValidators.middleware.js";
 
-//  @routes  api/bills
+//  @routes  apiPrefix/bills
 
 router
   .route("/")
@@ -22,7 +22,7 @@ router
     catchError(controller.createBill)
   );
 
-// @routes  api/bills/:billID
+// @routes  apiPrefix/bills/:billID
 
 router
   .route("/:billID")

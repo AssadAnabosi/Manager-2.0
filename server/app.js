@@ -15,8 +15,10 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
+const baseUrl = process.env.API_PREFIX || "/";
+
 // @desc    Serving API routes
-app.use("/", APIRoutes);
+app.use(baseUrl, APIRoutes);
 
 // @desc    Error Handler
 // @warn    Must be the last middleware
