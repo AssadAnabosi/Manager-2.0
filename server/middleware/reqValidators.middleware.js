@@ -9,7 +9,7 @@ export const reqBodyIncludes = (rules) => {
   return function validateBody(req, res, next) {
     rules = typeof rules === "string" ? [rules] : rules;
     for (const rule of rules) {
-      if (!req.body[rule]) {
+      if (typeof req.body[rule] === "undefined") {
         return next(
           new ResponseError(
             `Please provide ${rule} in your request's body`,

@@ -4,6 +4,7 @@ import ResponseError from "../utils/responseError.js";
 import userRoles from "../utils/constants/userRoles.js";
 import * as statusCode from "../utils/constants/statusCodes.js";
 import Log from "../models/Log.model.js";
+import { THEMES, LANGUAGES } from "../utils/constants/preferences.js";
 
 // @desc    Register a new user
 export const registerUser = async (req, res) => {
@@ -24,14 +25,16 @@ export const registerUser = async (req, res) => {
 
 // @desc    Get all users
 export const getUsers = async (req, res) => {
+  const active = req.query.active;
   const search = req.query.search || "";
 
-  const users = await User.find({
-    $or: [
-      { firstName: { $regex: search, $options: "i" } },
-      { lastName: { $regex: search, $options: "i" } },
-    ],
-  });
+  const filter = {};
+  filter.$or = [
+    { firstName: { $regex: search, $options: "i" } },
+    { lastName: { $regex: search, $options: "i" } },
+  ];
+  if (active) filter.active = active;
+  const users = await User.find(filter);
 
   return res.status(statusCode.OK).json({
     success: true,
@@ -78,22 +81,57 @@ export const deleteUser = async (req, res) => {
 };
 
 // @desc    User changing own password
-export const changePassword = async (req, res) => {
-  const { currentPassword, newPassword } = req.body;
+export const updatePassword = async (req, res) => {
+  const { current: currentPassword, new: newPassword } = req.body;
 
   const user = await User.findById(req.user.id).select("+password");
 
   const isMatch = await user.matchPassword(currentPassword);
   if (!isMatch) {
-    throw new ResponseError("Wrong current password", statusCode.BAD_REQUEST);
+    throw new ResponseError("Invalid current password", statusCode.BAD_REQUEST);
   }
 
   user.password = newPassword;
   await user.save();
-
+  await Session.deleteMany({ user: req.user.id });
+  res.clearCookie("refreshToken");
   return res.status(statusCode.OK).json({
     success: true,
     message: "Password changed successfully",
+  });
+};
+
+// @desc    User updating own preferences
+export const updatePreferences = async (req, res) => {
+  const { theme, language } = req.body;
+
+  if (!THEMES.includes(theme))
+    throw new ResponseError(
+      `Invalid theme [${THEMES.toString()}]`,
+      statusCode.BAD_REQUEST
+    );
+  if (!LANGUAGES.includes(language))
+    throw new ResponseError(
+      `Invalid language [${LANGUAGES.toString()}]`,
+      statusCode.BAD_REQUEST
+    );
+
+  await User.findByIdAndUpdate(
+    req.user.id,
+    { theme, language },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  return res.status(statusCode.OK).json({
+    success: true,
+    message: "Preferences updated successfully",
+    data: {
+      theme,
+      language,
+    },
   });
 };
 
@@ -123,21 +161,17 @@ export const resetPassword = async (req, res) => {
 // @desc   Update a user's role
 export const updateUserRole = async (req, res) => {
   if (req.params.userID === req.user.id) {
-    return next(
-      new ResponseError(
-        "You are not authorized to change your role",
-        statusCode.BAD_REQUEST
-      )
+    throw new ResponseError(
+      "You are not authorized to change your role",
+      statusCode.BAD_REQUEST
     );
   }
 
   const { role } = req.body;
   if (!userRoles.includes(role))
-    return next(
-      new ResponseError(
-        `Invalid User Role [${userRoles.toString()}]`,
-        statusCode.BAD_REQUEST
-      )
+    throw new ResponseError(
+      `Invalid User Role [${userRoles.toString()}]`,
+      statusCode.BAD_REQUEST
     );
 
   const user = await User.findById(req.params.userID);
@@ -151,20 +185,15 @@ export const updateUserRole = async (req, res) => {
 // @desc    Deactivate or Activate a user account
 export const setActiveStatus = async (req, res) => {
   if (req.params.userID === req.user.id) {
-    return next(
-      new ResponseError(
-        "You are not authorized to deactivate your own account",
-        statusCode.BAD_REQUEST
-      )
+    throw new ResponseError(
+      "You are not authorized to deactivate your own account",
+      statusCode.BAD_REQUEST
     );
   }
 
   const { active } = req.body;
-  const status = ["true", "false"];
-  if (!status.includes(active))
-    return next(
-      new ResponseError("Invalid active status", statusCode.BAD_REQUEST)
-    );
+  if (typeof active !== "boolean")
+    throw new ResponseError("Invalid active status", statusCode.BAD_REQUEST);
 
   await User.findByIdAndUpdate(
     req.params.userID,

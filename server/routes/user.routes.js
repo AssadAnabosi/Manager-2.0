@@ -9,7 +9,7 @@ import { ADMIN, MODERATOR, SPECTATOR } from "../utils/constants/userRoles.js";
 import * as validator from "../middleware/validators/user.validator.js";
 import { validateParamID } from "../middleware/reqValidators.middleware.js";
 
-//  @routes  api/users
+//  @routes  apiPrefix/users
 
 router
   .route("/")
@@ -31,19 +31,25 @@ router.post(
 );
 
 router.patch(
-  "/change-password",
-  validator.validateChangePassword,
-  catchError(controller.changePassword)
+  "/password",
+  validator.validateUpdatePassword,
+  catchError(controller.updatePassword)
 );
 
-// @routes api/users/:userID
+router.patch(
+  "/preferences",
+  validator.validateUpdatePreferences,
+  catchError(controller.updatePreferences)
+);
+
+// @routes apiPrefix/users/:userID
 
 router
   .route("/:userID")
   .all(validateParamID("userID"))
   .get(authorize([SPECTATOR, MODERATOR, ADMIN]), catchError(controller.getUser))
   .put(
-    authorize([MODERATOR, ADMIN]),
+    authorize([ADMIN]),
     validator.validateUpdateUser,
     catchError(controller.updateUser)
   )
@@ -52,7 +58,7 @@ router
 router.route("/:userID/*").all(validateParamID("userID"), authorize([ADMIN]));
 
 router.patch(
-  "/:userID/reset-password",
+  "/:userID/password",
   validator.validateResetPassword,
   catchError(controller.resetPassword)
 );
@@ -64,7 +70,7 @@ router.patch(
 );
 
 router.patch(
-  "/:userID/active-status",
+  "/:userID/status",
   validator.validateSetActiveStatus,
   catchError(controller.setActiveStatus)
 );

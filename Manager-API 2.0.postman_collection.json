@@ -18,7 +18,7 @@
                 "exec": [
                   "pm.test(\"Save accessToken as variable\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
-                  "    pm.collectionVariables.set(\"accessToken\", jsonData.accessToken);\r",
+                  "    pm.collectionVariables.set(\"accessToken\", jsonData.data.accessToken);\r",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -39,203 +39,13 @@
               "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"12345678\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/auth",
+              "raw": "{{baseURL}}/auth",
               "host": ["{{baseURL}}"],
-              "path": ["api", "auth"]
+              "path": ["auth"]
             },
             "description": "#### Everyone can access this route\n\n###### Request object is expected to be like this:\n\n``` json\n{\n    \"firstName\": \"\",\n{\n    \"username\": \"\",\n    \"password\": \"\"\n}\n\n\n```\n\n- username and password are mandatory."
           },
-          "response": [
-            {
-              "name": "Successful Login",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"username\": \"sam_johnson\",\r\n    \"password\": \"password123\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/auth/login",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "auth", "login"]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json; charset=utf-8"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "238"
-                },
-                {
-                  "key": "ETag",
-                  "value": "W/\"ee-VBLUdQz7NNC9qK8Xv4KHog8800U\""
-                },
-                {
-                  "key": "Date",
-                  "value": "Wed, 25 Jan 2023 17:53:02 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": true,\n    \"message\": \"User logged in successfully\",\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzY2FmYjlkMTY5YmUyNjEzNzhhMjc5NyIsImlhdCI6MTY3NDY2OTE4MiwiZXhwIjoxNjc0NjcyNzgyfQ.eWQ1ZIAYO0Hi-sdvHZQr1dUKN2ywgLTskouJqOxfRqg\"\n}"
-            },
-            {
-              "name": "Invalid Credentials",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"username\": \"sam_johnson\",\r\n    \"password\": \"password1234\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/auth/login",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "auth", "login"]
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json; charset=utf-8"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "47"
-                },
-                {
-                  "key": "ETag",
-                  "value": "W/\"2f-XSf5vxVMGbzV3XFF+nj3Vg/S+zA\""
-                },
-                {
-                  "key": "Date",
-                  "value": "Wed, 25 Jan 2023 17:54:06 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": false,\n    \"error\": \"Invalid Credentials\"\n}"
-            },
-            {
-              "name": "Missing Body Arg",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"username\": \"sam_johnson\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/auth/login",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "auth", "login"]
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json; charset=utf-8"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "64"
-                },
-                {
-                  "key": "ETag",
-                  "value": "W/\"40-t91nW03WlM4BBPCX0MkqGAjZNzQ\""
-                },
-                {
-                  "key": "Date",
-                  "value": "Wed, 25 Jan 2023 17:55:26 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": false,\n    \"error\": \"Please provide an email and password\"\n}"
-            }
-          ]
+          "response": []
         },
         {
           "name": "Get Current Auth",
@@ -254,129 +64,12 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/auth/me",
+              "raw": "{{baseURL}}/auth",
               "host": ["{{baseURL}}"],
-              "path": ["api", "auth", "me"]
+              "path": ["auth"]
             }
           },
-          "response": [
-            {
-              "name": "Valid",
-              "originalRequest": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseURL}}/api/auth/me",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "auth", "me"]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json; charset=utf-8"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "219"
-                },
-                {
-                  "key": "ETag",
-                  "value": "W/\"db-zZwKbdAv6SAtVBFybdif9Q0W0AI\""
-                },
-                {
-                  "key": "Date",
-                  "value": "Wed, 25 Jan 2023 17:56:27 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": true,\n    \"data\": {\n        \"_id\": \"63d16b4000ef6fe64dbc32fc\",\n        \"username\": \"sam_johnson\",\n        \"email\": \"sam.johnson@email.com\",\n        \"phoneNumber\": \"+440000000000\",\n        \"accessLevel\": \"User\",\n        \"__v\": 0,\n        \"logs\": [],\n        \"fullName\": \"Sam Johnson\"\n    }\n}"
-            },
-            {
-              "name": "Invalid",
-              "originalRequest": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseURL}}/api/auth/me",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "auth", "me"]
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json; charset=utf-8"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "66"
-                },
-                {
-                  "key": "ETag",
-                  "value": "W/\"42-YovCuKZPqSQTAomhpcMULD++1sM\""
-                },
-                {
-                  "key": "Date",
-                  "value": "Wed, 25 Jan 2023 17:58:30 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": false,\n    \"error\": \"Not Authenticated To Access This Route\"\n}"
-            }
-          ]
+          "response": []
         },
         {
           "name": "Refresh Access Token",
@@ -398,124 +91,12 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseURL}}/api/auth/refresh",
+              "raw": "{{baseURL}}/auth/refresh",
               "host": ["{{baseURL}}"],
-              "path": ["api", "auth", "refresh"]
+              "path": ["auth", "refresh"]
             }
           },
-          "response": [
-            {
-              "name": "Refreshed Access Token",
-              "originalRequest": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseURL}}/api/auth/refresh",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "auth", "refresh"]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "Access-Control-Allow-Origin",
-                  "value": "http://localhost:3000"
-                },
-                {
-                  "key": "Vary",
-                  "value": "Origin"
-                },
-                {
-                  "key": "Access-Control-Allow-Credentials",
-                  "value": "true"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json; charset=utf-8"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "252"
-                },
-                {
-                  "key": "ETag",
-                  "value": "W/\"fc-/+Zi+s1qqzRgvMXLmdyM8N/Chkg\""
-                },
-                {
-                  "key": "Date",
-                  "value": "Sat, 28 Jan 2023 21:35:21 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": true,\n    \"message\": \"Refreshed Access Token Successfully\",\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZDU4NTcyYjE2NTI3YTY2ZjVhYzMyNSIsImlhdCI6MTY3NDk0MTcyMSwiZXhwIjoxNjc0OTQxOTAxfQ.gEIJ_RLatkLHbk4A0yH6_ZdmnH0WYQMIEawJK2-DlsE\"\n}"
-            },
-            {
-              "name": "Expired Session",
-              "originalRequest": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseURL}}/api/auth/refresh",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "auth", "refresh"]
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json",
-                  "name": "Content-Type",
-                  "description": "",
-                  "type": "text"
-                }
-              ],
-              "cookie": [],
-              "body": "{\r\n    \"success\": false,\r\n    \"message\": \"Session Expired\"\r\n}"
-            },
-            {
-              "name": "Not Logged In",
-              "originalRequest": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseURL}}/api/auth/refresh",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "auth", "refresh"]
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json",
-                  "name": "Content-Type",
-                  "description": "",
-                  "type": "text"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": false,\n    \"message\": \"You Are Not Logged In\"\n}"
-            }
-          ]
+          "response": []
         },
         {
           "name": "Logout",
@@ -523,65 +104,12 @@
             "method": "POST",
             "header": [],
             "url": {
-              "raw": "{{baseURL}}/api/auth/logout",
+              "raw": "{{baseURL}}/auth/logout",
               "host": ["{{baseURL}}"],
-              "path": ["api", "auth", "logout"]
+              "path": ["auth", "logout"]
             }
           },
-          "response": [
-            {
-              "name": "Successful Logout",
-              "originalRequest": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseURL}}/api/auth/refresh",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "auth", "refresh"]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json",
-                  "name": "Content-Type",
-                  "description": "",
-                  "type": "text"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": false,\n    \"message\": \"Logged Out Successfully\"\n}"
-            },
-            {
-              "name": "Not Logged In",
-              "originalRequest": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseURL}}/api/auth/refresh",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "auth", "refresh"]
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json",
-                  "name": "Content-Type",
-                  "description": "",
-                  "type": "text"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": false,\n    \"message\": \"You Are Not Logged In\"\n}"
-            }
-          ]
+          "response": []
         }
       ],
       "description": "Authenticaition related routes.",
@@ -626,337 +154,16 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"firstName\": \"Sam\",\r\n    \"lastName\": \"Johnson\",\r\n    \"username\": \"AsaAm_johnson1\",\r\n    \"email\": \"Asam.johnson1@email.com\",\r\n    \"phoneNumber\": \"+440000000000\",\r\n    \"password\": \"12345678\"\r\n}"
+              "raw": "{\r\n    \"firstName\": \"Sam2\",\r\n    \"lastName\": \"Johnson2\",\r\n    \"username\": \"AsaAm_johnson12\",\r\n    \"email\": \"Asam.johnson12@email.com\",\r\n    \"phoneNumber\": \"+440000000000\",\r\n    \"password\": \"12345678\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/users",
+              "raw": "{{baseURL}}/users",
               "host": ["{{baseURL}}"],
-              "path": ["api", "users"]
+              "path": ["users"]
             },
             "description": "#### Only Supervisors and Administrtors can access this route\n\n###### Request object is expected to be like this:\n\n``` json\n{\n    \"firstName\": \"\",\n    \"lastName\": \"\",\n    \"username\": \"\",\n    \"email\": \"\",\n    \"phoneNumber\": \"\",\n    \"password\": \"\"\n}\n\n```\n\n- firstName, lastName, username, and password are mandatory.\n- email and phoneNumber are optional to provide.\n- username is a unique keys."
           },
-          "response": [
-            {
-              "name": "Successful Register",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"firstName\": \"Sam\",\r\n    \"lastName\": \"Johnson\",\r\n    \"username\": \"sam_johnson\",\r\n    \"email\": \"sam.johnson@email.com\",\r\n    \"phoneNumber\": \"+440000000000\",\r\n    \"password\": \"password123\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/auth/register",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "auth", "register"],
-                  "query": [
-                    {
-                      "key": "",
-                      "value": "",
-                      "disabled": true
-                    },
-                    {
-                      "key": "",
-                      "value": "assad.anab",
-                      "disabled": true
-                    },
-                    {
-                      "key": "",
-                      "value": "",
-                      "disabled": true
-                    }
-                  ]
-                }
-              },
-              "status": "Created",
-              "code": 201,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json",
-                  "name": "Content-Type",
-                  "description": "",
-                  "type": "text"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": true,\n    \"message\": \"User created successfully\"\n}"
-            },
-            {
-              "name": "Missing Body Arg",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"firstName\": \"Sam\",\r\n    \"lastName\": \"Johnson\",\r\n    \"email\": \"sam.johnson@email.com\",\r\n    \"phoneNumber\": \"+440000000000\",\r\n    \"password\": \"password123\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/auth/register",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "auth", "register"],
-                  "query": [
-                    {
-                      "key": "",
-                      "value": "",
-                      "disabled": true
-                    },
-                    {
-                      "key": "",
-                      "value": "assad.anab",
-                      "disabled": true
-                    },
-                    {
-                      "key": "",
-                      "value": "",
-                      "disabled": true
-                    }
-                  ]
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json",
-                  "name": "Content-Type",
-                  "description": "",
-                  "type": "text"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": false,\n    \"error\": \"Please provide first and last names, username, email, and password\"\n}"
-            },
-            {
-              "name": "Taken Username",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"firstName\": \"Sam\",\r\n    \"lastName\": \"Johnson\",\r\n    \"username\": \"sam_johnson\",\r\n    \"email\": \"sam.johnson@email.com\",\r\n    \"phoneNumber\": \"+440000000000\",\r\n    \"password\": \"password123\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/auth/register",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "auth", "register"],
-                  "query": [
-                    {
-                      "key": "",
-                      "value": "",
-                      "disabled": true
-                    },
-                    {
-                      "key": "",
-                      "value": "assad.anab",
-                      "disabled": true
-                    },
-                    {
-                      "key": "",
-                      "value": "",
-                      "disabled": true
-                    }
-                  ]
-                }
-              },
-              "status": "Conflict",
-              "code": 409,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json",
-                  "name": "Content-Type",
-                  "description": "",
-                  "type": "text"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": false,\n    \"error\": \"Username is already taken\"\n}"
-            },
-            {
-              "name": "Taken Email",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"firstName\": \"Sam\",\r\n    \"lastName\": \"Johnson\",\r\n    \"username\": \"sam_johnson\",\r\n    \"email\": \"sam.johnson@email.com\",\r\n    \"phoneNumber\": \"+440000000000\",\r\n    \"password\": \"password123\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/auth/register",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "auth", "register"],
-                  "query": [
-                    {
-                      "key": "",
-                      "value": "",
-                      "disabled": true
-                    },
-                    {
-                      "key": "",
-                      "value": "assad.anab",
-                      "disabled": true
-                    },
-                    {
-                      "key": "",
-                      "value": "",
-                      "disabled": true
-                    }
-                  ]
-                }
-              },
-              "status": "Conflict",
-              "code": 409,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json",
-                  "name": "Content-Type",
-                  "description": "",
-                  "type": "text"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": false,\n    \"error\": \"Email is already registered\"\n}"
-            },
-            {
-              "name": "Short Password",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"firstName\": \"Sam\",\r\n    \"lastName\": \"Johnson\",\r\n    \"username\": \"sam_johnson\",\r\n    \"email\": \"sam.johnson@email.com\",\r\n    \"phoneNumber\": \"+440000000000\",\r\n    \"password\": \"1234567\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/auth/register",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "auth", "register"],
-                  "query": [
-                    {
-                      "key": "",
-                      "value": "",
-                      "disabled": true
-                    },
-                    {
-                      "key": "",
-                      "value": "assad.anab",
-                      "disabled": true
-                    },
-                    {
-                      "key": "",
-                      "value": "",
-                      "disabled": true
-                    }
-                  ]
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json",
-                  "name": "Content-Type",
-                  "description": "",
-                  "type": "text"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": false,\n    \"error\": \"Path `password` (`123`) is shorter than the minimum allowed length (8).\"\n}"
-            }
-          ]
+          "response": []
         },
         {
           "name": "Get All Users",
@@ -970,93 +177,25 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/users",
+              "raw": "{{baseURL}}/users",
               "host": ["{{baseURL}}"],
-              "path": ["api", "users"],
+              "path": ["users"],
               "query": [
                 {
                   "key": "search",
-                  "value": "assa",
+                  "value": "ad",
+                  "disabled": true
+                },
+                {
+                  "key": "active",
+                  "value": "false",
                   "disabled": true
                 }
               ]
             },
             "description": "#### Only Supervisors and Administrtors can access this route\n\n###### Response object is expected to be like this:\n\nJSON\n\n``` json\n{\n    \"success\": true,\n    \"data\": [\n        {\n            \"_id\": \"\",\n            \"username\": \"\",\n            \"email\": \"\",\n            \"phoneNumber\": \"\",\n            \"accessLevel\": \"\",\n            \"active\": ,\n            \"fullName\": \"\"\n        },\n    ]\n}\n\n```\n\nQuery Params\n\n- search: regex search for user full name"
           },
-          "response": [
-            {
-              "name": "Get All Users",
-              "originalRequest": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseURL}}/api/users",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "users"],
-                  "query": [
-                    {
-                      "key": "search",
-                      "value": "assa",
-                      "disabled": true
-                    }
-                  ]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "Access-Control-Allow-Origin",
-                  "value": "http://localhost:3000"
-                },
-                {
-                  "key": "Vary",
-                  "value": "Origin"
-                },
-                {
-                  "key": "Access-Control-Allow-Credentials",
-                  "value": "true"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json; charset=utf-8"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "559"
-                },
-                {
-                  "key": "ETag",
-                  "value": "W/\"22f-kzeMNp/NW75NGFaStJrCelrWbqg\""
-                },
-                {
-                  "key": "Date",
-                  "value": "Sat, 28 Jan 2023 22:45:51 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"_id\": \"63d58572b16527a66f5ac325\",\n            \"username\": \"admin\",\n            \"email\": \"\",\n            \"phoneNumber\": \"\",\n            \"accessLevel\": \"Administrator\",\n            \"active\": true,\n            \"fullName\": \"Administrator Alpha\"\n        },\n        {\n            \"_id\": \"63d586029a4635a6a1cac471\",\n            \"username\": \"sam_johnson1\",\n            \"email\": \"sam.johnson1@email.com\",\n            \"phoneNumber\": \"+440000000000\",\n            \"accessLevel\": \"Moderator\",\n            \"active\": true,\n            \"fullName\": \"Sam Johnson\"\n        },\n        {\n            \"_id\": \"63d591990abae991c4f2bf2c\",\n            \"username\": \"sam_johnson12\",\n            \"email\": \"sam.johnson1@email.com\",\n            \"phoneNumber\": \"+440000000000\",\n            \"accessLevel\": \"User\",\n            \"active\": true,\n            \"fullName\": \"Jack Johnson\"\n        }\n    ]\n}"
-            }
-          ]
+          "response": []
         },
         {
           "name": "Get User By ID",
@@ -1070,9 +209,9 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/users/:userID",
+              "raw": "{{baseURL}}/users/:userID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "users", ":userID"],
+              "path": ["users", ":userID"],
               "variable": [
                 {
                   "key": "userID",
@@ -1081,150 +220,7 @@
               ]
             }
           },
-          "response": [
-            {
-              "name": "User found",
-              "originalRequest": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseURL}}/api/users/:id",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "users", ":id"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "63d58572b16527a66f5ac325"
-                    }
-                  ]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "Access-Control-Allow-Origin",
-                  "value": "http://localhost:3000"
-                },
-                {
-                  "key": "Vary",
-                  "value": "Origin"
-                },
-                {
-                  "key": "Access-Control-Allow-Credentials",
-                  "value": "true"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json; charset=utf-8"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "192"
-                },
-                {
-                  "key": "ETag",
-                  "value": "W/\"c0-ocUXoWljrz8Rb4gdG+P5oMHCpOg\""
-                },
-                {
-                  "key": "Date",
-                  "value": "Sat, 28 Jan 2023 22:44:48 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": true,\n    \"data\": {\n        \"_id\": \"63d58572b16527a66f5ac325\",\n        \"username\": \"admin\",\n        \"email\": \"\",\n        \"phoneNumber\": \"\",\n        \"accessLevel\": \"Administrator\",\n        \"active\": true,\n        \"logs\": [],\n        \"fullName\": \"Administrator Alpha\"\n    }\n}"
-            },
-            {
-              "name": "User not found",
-              "originalRequest": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseURL}}/api/users/:id",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "users", ":id"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "63d2ae764039464f1a8aeb97"
-                    }
-                  ]
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "Access-Control-Allow-Origin",
-                  "value": "http://localhost:3000"
-                },
-                {
-                  "key": "Vary",
-                  "value": "Origin"
-                },
-                {
-                  "key": "Access-Control-Allow-Credentials",
-                  "value": "true"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json; charset=utf-8"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "42"
-                },
-                {
-                  "key": "ETag",
-                  "value": "W/\"2a-FQG5794dbhTyRwgytQ7rokul7mM\""
-                },
-                {
-                  "key": "Date",
-                  "value": "Sat, 28 Jan 2023 22:43:52 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": false,\n    \"error\": \"User not found\"\n}"
-            }
-          ]
+          "response": []
         },
         {
           "name": "Update User By ID",
@@ -1242,93 +238,18 @@
               "raw": "{\r\n    \"firstName\": \"Jack\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/users/:userID",
+              "raw": "{{baseURL}}/users/:userID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "users", ":userID"],
+              "path": ["users", ":userID"],
               "variable": [
                 {
                   "key": "userID",
-                  "value": "654f891d516606556ea8df0f"
+                  "value": "656c7f22632f9b770a40ffd5"
                 }
               ]
             }
           },
-          "response": [
-            {
-              "name": "Successful",
-              "originalRequest": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"firstName\": \"Jack\"\r\n}"
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/users/:id",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "users", ":id"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "63d591990abae991c4f2bf2c"
-                    }
-                  ]
-                }
-              },
-              "status": "No Content",
-              "code": 204,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "Access-Control-Allow-Origin",
-                  "value": "http://localhost:3000"
-                },
-                {
-                  "key": "Vary",
-                  "value": "Origin"
-                },
-                {
-                  "key": "Access-Control-Allow-Credentials",
-                  "value": "true"
-                },
-                {
-                  "key": "ETag",
-                  "value": "W/\"a-bAsFyilMr4Ra1hIU5PyoyFRunpI\""
-                },
-                {
-                  "key": "Date",
-                  "value": "Sat, 28 Jan 2023 22:45:44 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json",
-                  "name": "Content-Type",
-                  "description": "",
-                  "type": "text"
-                }
-              ],
-              "cookie": [],
-              "body": ""
-            }
-          ]
+          "response": []
         },
         {
           "name": "Delete User By ID",
@@ -1342,9 +263,9 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/users/:userID",
+              "raw": "{{baseURL}}/users/:userID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "users", ":userID"],
+              "path": ["users", ":userID"],
               "variable": [
                 {
                   "key": "userID",
@@ -1371,9 +292,9 @@
               "raw": "{\r\n    \"username\": \"aanabosi\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/users/check-username",
+              "raw": "{{baseURL}}/users/check-username",
               "host": ["{{baseURL}}"],
-              "path": ["api", "users", "check-username"],
+              "path": ["users", "check-username"],
               "query": [
                 {
                   "key": "",
@@ -1393,168 +314,7 @@
               ]
             }
           },
-          "response": [
-            {
-              "name": "Available",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"username\": \"\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/users/check-username",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "users", "check-username"],
-                  "query": [
-                    {
-                      "key": "",
-                      "value": "",
-                      "disabled": true
-                    },
-                    {
-                      "key": "",
-                      "value": "assad.anab",
-                      "disabled": true
-                    },
-                    {
-                      "key": "",
-                      "value": "",
-                      "disabled": true
-                    }
-                  ]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json; charset=utf-8"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "28"
-                },
-                {
-                  "key": "ETag",
-                  "value": "W/\"1c-Vt/6TvvrO9SE5YmGKzP/ETOJLzw\""
-                },
-                {
-                  "key": "Date",
-                  "value": "Thu, 26 Jan 2023 22:45:48 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": true,\n    \"data\": true\n}"
-            },
-            {
-              "name": "Unavailable",
-              "originalRequest": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"username\": \"\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/users/check-username",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "users", "check-username"],
-                  "query": [
-                    {
-                      "key": "",
-                      "value": "",
-                      "disabled": true
-                    },
-                    {
-                      "key": "",
-                      "value": "assad.anab",
-                      "disabled": true
-                    },
-                    {
-                      "key": "",
-                      "value": "",
-                      "disabled": true
-                    }
-                  ]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json; charset=utf-8"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "29"
-                },
-                {
-                  "key": "ETag",
-                  "value": "W/\"1d-e+nIlHTk+FJjlXA6rMMRZaSPbH8\""
-                },
-                {
-                  "key": "Date",
-                  "value": "Thu, 26 Jan 2023 22:46:30 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": true,\n    \"data\": false\n}"
-            }
-          ]
+          "response": []
         },
         {
           "name": "change-password",
@@ -1574,153 +334,16 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"currentPassword\": \"56348967\",\r\n    \"newPassword\": \"01234567890\"\r\n}"
+              "raw": "{\r\n    \"current\": \"01234567890\",\r\n    \"new\": \"01234567890\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/users/change-password",
+              "raw": "{{baseURL}}/users/password",
               "host": ["{{baseURL}}"],
-              "path": ["api", "users", "change-password"]
+              "path": ["users", "password"]
             },
             "description": "Only Administrtors can access this route"
           },
-          "response": [
-            {
-              "name": "Wrong Current Password",
-              "originalRequest": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"currentPassword\": \"\",\r\n    \"newPassword\": \"\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/users/change-password",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "users", "change-password"]
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json; charset=utf-8"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "50"
-                },
-                {
-                  "key": "ETag",
-                  "value": "W/\"32-uEDKGvT6oLuHBqTT0nLLxnEwmhA\""
-                },
-                {
-                  "key": "Date",
-                  "value": "Thu, 26 Jan 2023 22:42:35 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": false,\n    \"error\": \"Wrong current password\"\n}"
-            },
-            {
-              "name": "Successful Change",
-              "originalRequest": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"currentPassword\": \"\",\r\n    \"newPassword\": \"\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/users/change-password",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "users", "change-password"]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json; charset=utf-8"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "58"
-                },
-                {
-                  "key": "ETag",
-                  "value": "W/\"3a-q68W5NWhqX5poAtHZphYySdDRQ8\""
-                },
-                {
-                  "key": "Date",
-                  "value": "Thu, 26 Jan 2023 22:44:33 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": true,\n    \"message\": \"Password changed successfully\"\n}"
-            }
-          ]
+          "response": []
         },
         {
           "name": "reset-password",
@@ -1738,9 +361,9 @@
               "raw": "{\r\n    \"password\" : \"12345678\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/users/:userID/reset-password",
+              "raw": "{{baseURL}}/users/:userID/password",
               "host": ["{{baseURL}}"],
-              "path": ["api", "users", ":userID", "reset-password"],
+              "path": ["users", ":userID", "password"],
               "variable": [
                 {
                   "key": "userID",
@@ -1749,69 +372,7 @@
               ]
             }
           },
-          "response": [
-            {
-              "name": "Successful Reset",
-              "originalRequest": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"password\" : \"\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/users/:id/reset-password",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "users", ":id", "reset-password"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": ""
-                    }
-                  ]
-                }
-              },
-              "status": "No Content",
-              "code": 204,
-              "_postman_previewlanguage": "plain",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "ETag",
-                  "value": "W/\"a-bAsFyilMr4Ra1hIU5PyoyFRunpI\""
-                },
-                {
-                  "key": "Date",
-                  "value": "Thu, 26 Jan 2023 22:30:41 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                }
-              ],
-              "cookie": [],
-              "body": null
-            }
-          ]
+          "response": []
         },
         {
           "name": "role",
@@ -1829,9 +390,9 @@
               "raw": "{\r\n    \"role\" : \"Moderator\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/users/:userID/role",
+              "raw": "{{baseURL}}/users/:userID/role",
               "host": ["{{baseURL}}"],
-              "path": ["api", "users", ":userID", "role"],
+              "path": ["users", ":userID", "role"],
               "variable": [
                 {
                   "key": "userID",
@@ -1840,231 +401,7 @@
               ]
             }
           },
-          "response": [
-            {
-              "name": "Level 1 (User)",
-              "originalRequest": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"accessLevel\" : \"User\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/users/:id/access-level",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "users", ":id", "access-level"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": ""
-                    }
-                  ]
-                }
-              },
-              "status": "No Content",
-              "code": 204,
-              "_postman_previewlanguage": null,
-              "header": null,
-              "cookie": [],
-              "body": null
-            },
-            {
-              "name": "Level 2 (Spectator)",
-              "originalRequest": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"accessLevel\" : \"Spectator\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/users/:id/access-level",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "users", ":id", "access-level"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": ""
-                    }
-                  ]
-                }
-              },
-              "status": "No Content",
-              "code": 204,
-              "_postman_previewlanguage": null,
-              "header": null,
-              "cookie": [],
-              "body": null
-            },
-            {
-              "name": "Level 3 (Supervisor)",
-              "originalRequest": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"accessLevel\" : \"Supervisor\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/users/:id/access-level",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "users", ":id", "access-level"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": ""
-                    }
-                  ]
-                }
-              },
-              "status": "No Content",
-              "code": 204,
-              "_postman_previewlanguage": null,
-              "header": null,
-              "cookie": [],
-              "body": null
-            },
-            {
-              "name": "Administrator",
-              "originalRequest": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"accessLevel\" : \"Administrator\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/users/:id/access-level",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "users", ":id", "access-level"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": ""
-                    }
-                  ]
-                }
-              },
-              "status": "No Content",
-              "code": 204,
-              "_postman_previewlanguage": null,
-              "header": null,
-              "cookie": [],
-              "body": null
-            },
-            {
-              "name": "Invalid access level",
-              "originalRequest": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"accessLevel\" : \"Spectator1\"\r\n}"
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/users/:id/access-level",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "users", ":id", "access-level"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": ""
-                    }
-                  ]
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json; charset=utf-8"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "48"
-                },
-                {
-                  "key": "ETag",
-                  "value": "W/\"30-CuiQTbhBTb7TaWMqezArPHb7Ago\""
-                },
-                {
-                  "key": "Date",
-                  "value": "Thu, 26 Jan 2023 22:28:13 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": false,\n    \"error\": \"Invalid access level\"\n}"
-            }
-          ]
+          "response": []
         },
         {
           "name": "active-status",
@@ -2082,162 +419,18 @@
               "raw": "{\r\n    \"active\" : \"false\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/users/:userID/active-status",
+              "raw": "{{baseURL}}/users/:userID/status",
               "host": ["{{baseURL}}"],
-              "path": ["api", "users", ":userID", "active-status"],
+              "path": ["users", ":userID", "status"],
               "variable": [
                 {
                   "key": "userID",
-                  "value": "654f891d516606556ea8df0f"
+                  "value": "656c7f22632f9b770a40ffd5"
                 }
               ]
             }
           },
-          "response": [
-            {
-              "name": "Deactivate",
-              "originalRequest": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"active\" : false\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/users/:id/active-status",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "users", ":id", "active-status"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": ""
-                    }
-                  ]
-                }
-              },
-              "status": "No Content",
-              "code": 204,
-              "_postman_previewlanguage": null,
-              "header": null,
-              "cookie": [],
-              "body": null
-            },
-            {
-              "name": "Activate",
-              "originalRequest": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"active\" : true\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/users/:id/active-status",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "users", ":id", "active-status"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": ""
-                    }
-                  ]
-                }
-              },
-              "status": "No Content",
-              "code": 204,
-              "_postman_previewlanguage": "text",
-              "header": [],
-              "cookie": [],
-              "body": ""
-            },
-            {
-              "name": "Bad Request",
-              "originalRequest": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": ""
-                },
-                "url": {
-                  "raw": "{{baseURL}}/api/users/:id/active-status",
-                  "host": ["{{baseURL}}"],
-                  "path": ["api", "users", ":id", "active-status"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": ""
-                    }
-                  ]
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json; charset=utf-8"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "56"
-                },
-                {
-                  "key": "ETag",
-                  "value": "W/\"38-K9Vwgwwr7ee+8/2nizRifTbrxS0\""
-                },
-                {
-                  "key": "Date",
-                  "value": "Thu, 26 Jan 2023 22:29:55 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"success\": false,\n    \"error\": \"Please provide active status\"\n}"
-            }
-          ]
+          "response": []
         }
       ]
     },
@@ -2257,12 +450,12 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"date\": \"2023-03-28\",\r\n    \"startingTime\": \"08:30\",\r\n    \"finishingTime\": \"14:30\",\r\n    \"payment\": \"0\",\r\n    \"extraNotes\": \"Baqa Al-Gharbia\",\r\n    \"worker\": \"654f891d516606556ea8df0f\",\r\n    \"isAbsence\": false\r\n}"
+              "raw": "{\r\n    \"date\": \"2023-12-8\",\r\n    \"startingTime\": \"08:30\",\r\n    \"finishingTime\": \"18:30\",\r\n    \"payment\": \"0\",\r\n    \"extraNotes\": \"\",\r\n    \"worker\": \"655e7a25f102be2510294f94\",\r\n    \"isAbsent\": false\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/logs",
+              "raw": "{{baseURL}}/logs",
               "host": ["{{baseURL}}"],
-              "path": ["api", "logs"]
+              "path": ["logs"]
             }
           },
           "response": []
@@ -2279,22 +472,23 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/logs?start=2020-11-01&end=2025-11-01",
+              "raw": "{{baseURL}}/logs?filter=655a96121bfafe210a770a4a",
               "host": ["{{baseURL}}"],
-              "path": ["api", "logs"],
+              "path": ["logs"],
               "query": [
                 {
-                  "key": "search",
-                  "value": "John",
-                  "disabled": true
+                  "key": "filter",
+                  "value": "655a96121bfafe210a770a4a"
                 },
                 {
                   "key": "start",
-                  "value": "2020-11-01"
+                  "value": "2020-11-01",
+                  "disabled": true
                 },
                 {
                   "key": "end",
-                  "value": "2025-11-01"
+                  "value": "2025-11-01",
+                  "disabled": true
                 }
               ]
             }
@@ -2313,9 +507,9 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/logs/:logID",
+              "raw": "{{baseURL}}/logs/:logID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "logs", ":logID"],
+              "path": ["logs", ":logID"],
               "variable": [
                 {
                   "key": "logID",
@@ -2339,16 +533,16 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"isAbsent\": false,\r\n    \"payment\": 750\r\n}"
+              "raw": "{\r\n    \"payment\": 750\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/logs/:logID",
+              "raw": "{{baseURL}}/logs/:logID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "logs", ":logID"],
+              "path": ["logs", ":logID"],
               "variable": [
                 {
                   "key": "logID",
-                  "value": "654f8d0fec52bd2d39ce6baf"
+                  "value": "656c7cfb0d9384455fca5686"
                 }
               ]
             }
@@ -2371,9 +565,9 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{baseURL}}/api/logs/:logID",
+              "raw": "{{baseURL}}/logs/:logID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "logs", ":logID"],
+              "path": ["logs", ":logID"],
               "variable": [
                 {
                   "key": "logID",
@@ -2402,12 +596,12 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"name\": \"شمالي\",\r\n    \"email\": \"\",\r\n    \"phoneNumber\": \"+970000000000\",\r\n    \"extraNotes\": \"عرابة\"\r\n}"
+              "raw": "{\r\n    \"name\": \"test123\",\r\n    \"email\": \"\",\r\n    \"phoneNumber\": \"+970000000000\",\r\n    \"extraNotes\": \"عرابة\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/payees",
+              "raw": "{{baseURL}}/payees",
               "host": ["{{baseURL}}"],
-              "path": ["api", "payees"]
+              "path": ["payees"]
             }
           },
           "response": []
@@ -2424,9 +618,9 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/payees?search",
+              "raw": "{{baseURL}}/payees?search",
               "host": ["{{baseURL}}"],
-              "path": ["api", "payees"],
+              "path": ["payees"],
               "query": [
                 {
                   "key": "search",
@@ -2449,9 +643,9 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/payees/:payeeID",
+              "raw": "{{baseURL}}/payees/:payeeID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "payees", ":payeeID"],
+              "path": ["payees", ":payeeID"],
               "variable": [
                 {
                   "key": "payeeID",
@@ -2478,9 +672,9 @@
               "raw": "{\r\n    \"name\": \"Sample Payee 1\",\r\n    \"extraNotes\": \"Jenin, West Bank\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/payees/:payeeID",
+              "raw": "{{baseURL}}/payees/:payeeID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "payees", ":payeeID"],
+              "path": ["payees", ":payeeID"],
               "variable": [
                 {
                   "key": "payeeID",
@@ -2507,13 +701,13 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{baseURL}}/api/payees/:payeeID",
+              "raw": "{{baseURL}}/payees/:payeeID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "payees", ":payeeID"],
+              "path": ["payees", ":payeeID"],
               "variable": [
                 {
                   "key": "payeeID",
-                  "value": "654f9949baa272c8616c193d"
+                  "value": "65601041395957aa45a16ab7"
                 }
               ]
             }
@@ -2538,12 +732,12 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"serial\": \"561\",\r\n    \"dueDate\": \"2023-02-15\",\r\n    \"value\": \"2300\",\r\n    \"description\": \"This is a tset\",\r\n    \"payee\": \"654f9949baa272c8616c193d\"\r\n}"
+              "raw": "{\r\n    \"serial\": \"662\",\r\n    \"dueDate\": \"2023-02-1\",\r\n    \"value\": \"2800\",\r\n    \"description\": \"This is a tset\",\r\n    \"payee\": \"65601041395957aa45a16ab7\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/cheques",
+              "raw": "{{baseURL}}/cheques",
               "host": ["{{baseURL}}"],
-              "path": ["api", "cheques"]
+              "path": ["cheques"]
             }
           },
           "response": []
@@ -2560,22 +754,26 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/cheques?start=2020-11-01&end=2025-11-01",
+              "raw": "{{baseURL}}/cheques?filter=654f92bc31dce4a9a0c507cd&from=2020-11-01&to=2025-11-01",
               "host": ["{{baseURL}}"],
-              "path": ["api", "cheques"],
+              "path": ["cheques"],
               "query": [
                 {
-                  "key": "search",
-                  "value": "James",
-                  "disabled": true
+                  "key": "filter",
+                  "value": "654f92bc31dce4a9a0c507cd"
                 },
                 {
-                  "key": "start",
+                  "key": "from",
                   "value": "2020-11-01"
                 },
                 {
-                  "key": "end",
+                  "key": "to",
                   "value": "2025-11-01"
+                },
+                {
+                  "key": "search",
+                  "value": "662",
+                  "disabled": true
                 }
               ]
             }
@@ -2594,9 +792,9 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/cheques/:chequeID",
+              "raw": "{{baseURL}}/cheques/:chequeID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "cheques", ":chequeID"],
+              "path": ["cheques", ":chequeID"],
               "variable": [
                 {
                   "key": "chequeID",
@@ -2623,9 +821,9 @@
               "raw": "{\r\n    \"isCancelled\": false,\r\n    \"payee\": \"654f92bc31dce4a9a0c507cd\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/cheques/:chequeID",
+              "raw": "{{baseURL}}/cheques/:chequeID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "cheques", ":chequeID"],
+              "path": ["cheques", ":chequeID"],
               "variable": [
                 {
                   "key": "chequeID",
@@ -2652,9 +850,9 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{baseURL}}/api/cheques/:chequeID",
+              "raw": "{{baseURL}}/cheques/:chequeID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "cheques", ":chequeID"],
+              "path": ["cheques", ":chequeID"],
               "variable": [
                 {
                   "key": "chequeID",
@@ -2683,12 +881,12 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"date\": \"2023-02-28\",\r\n    \"value\": \"500\",\r\n    \"description\": \"Sample Bill\",\r\n    \"extraNotes\": \"\"\r\n}"
+              "raw": "{\r\n    \"date\": \"2023-11-22\",\r\n    \"value\": \"-150\",\r\n    \"description\": \"Sample Bill\",\r\n    \"extraNotes\": \"Recived Payment\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/bills",
+              "raw": "{{baseURL}}/bills",
               "host": ["{{baseURL}}"],
-              "path": ["api", "bills"]
+              "path": ["bills"]
             }
           },
           "response": []
@@ -2705,9 +903,9 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/bills?start=2020-11-01&end=2025-11-01",
+              "raw": "{{baseURL}}/bills?start=2020-11-01&end=2025-11-01",
               "host": ["{{baseURL}}"],
-              "path": ["api", "bills"],
+              "path": ["bills"],
               "query": [
                 {
                   "key": "search",
@@ -2739,13 +937,13 @@
               }
             ],
             "url": {
-              "raw": "{{baseURL}}/api/bills/:billID",
+              "raw": "{{baseURL}}/bills/:billID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "bills", ":billID"],
+              "path": ["bills", ":billID"],
               "variable": [
                 {
                   "key": "billID",
-                  "value": "654fa04d33fb1d4f7d7b1a29"
+                  "value": "654fa04d33fb1d4f7d7b1a23"
                 }
               ]
             }
@@ -2768,9 +966,9 @@
               "raw": "{\r\n    \"extraNotes\": \"from ATM\"\r\n}"
             },
             "url": {
-              "raw": "{{baseURL}}/api/bills/:id",
+              "raw": "{{baseURL}}/bills/:id",
               "host": ["{{baseURL}}"],
-              "path": ["api", "bills", ":id"],
+              "path": ["bills", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -2797,9 +995,9 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{baseURL}}/api/bills/:billID",
+              "raw": "{{baseURL}}/bills/:billID",
               "host": ["{{baseURL}}"],
-              "path": ["api", "bills", ":billID"],
+              "path": ["bills", ":billID"],
               "variable": [
                 {
                   "key": "billID",
@@ -2818,9 +1016,9 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseURL}}/healthcheck",
+          "raw": "{{baseURL}}/health",
           "host": ["{{baseURL}}"],
-          "path": ["healthcheck"]
+          "path": ["health"]
         }
       },
       "response": []

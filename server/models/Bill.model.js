@@ -13,7 +13,7 @@ const BillSchema = new Schema({
     type: String,
     required: [true, "Please provide a description"],
   },
-  extraNotes: {
+  remarks: {
     type: String,
     required: false,
   },

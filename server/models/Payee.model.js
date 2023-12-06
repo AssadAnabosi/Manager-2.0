@@ -14,7 +14,7 @@ const PayeeSchema = new Schema({
     type: String,
     required: false,
   },
-  extraNotes: {
+  remarks: {
     type: String,
     required: false,
   },

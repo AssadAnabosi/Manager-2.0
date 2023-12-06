@@ -1,4 +1,4 @@
-export const allowedOrigins = [process.env.CLIENT_URL];
+export const allowedOrigins = [process.env.CLIENT_URL.split(" ")];
 
 const corsOptions = {
   origin: allowedOrigins,

@@ -9,7 +9,7 @@ import { ADMIN, MODERATOR } from "../utils/constants/userRoles.js";
 import * as validator from "../middleware/validators/payee.validator.js";
 import { validateParamID } from "../middleware/reqValidators.middleware.js";
 
-//  @routes  api/payees
+//  @routes  apiPrefix/payees
 
 router
   .route("/")
@@ -22,7 +22,7 @@ router
     catchError(controller.createPayee)
   );
 
-// @routes  api/payees/:payeeID
+// @routes  apiPrefix/payees/:payeeID
 
 router
   .route("/:payeeID")

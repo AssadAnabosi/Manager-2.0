@@ -1,5 +1,5 @@
 import Bill from "../models/Bill.model.js";
-import * as statusCode from "../utils/constants/statusCodes.js";
+import { OK, CREATED } from "../utils/constants/statusCodes.js";
 import ReqQueryHelper from "../helpers/reqQuery.helper.js";
 import * as queryHelper from "../helpers/queries/bills.queries.js";
 
@@ -8,7 +8,7 @@ export const getBills = async (req, res) => {
   const { startDate, endDate, search } = ReqQueryHelper(req.query);
   const bills = await Bill.aggregate(
     queryHelper.findBills(startDate, endDate, search)
-  ).sort({ date: -1 });
+  );
 
   const _id = bills.map(({ id }) => id);
 
@@ -17,15 +17,16 @@ export const getBills = async (req, res) => {
 
   let rangeTotal = (await Bill.aggregate(queryHelper.findValueSum(_id)))[0];
   const rangeTotalValue = rangeTotal ? rangeTotal.total : 0;
-
-  return res.status(statusCode.OK).json({
+  const from = startDate ? startDate.toISOString().substring(0, 10) : "";
+  const to = endDate ? endDate.toISOString().substring(0, 10) : "";
+  return res.status(OK).json({
     success: true,
     data: {
       bills,
       allTimeTotalValue,
       rangeTotalValue,
-      startDate: startDate.toISOString().substring(0, 10),
-      endDate: endDate.toISOString().substring(0, 10),
+      from,
+      to,
       search,
     },
   });
@@ -33,22 +34,24 @@ export const getBills = async (req, res) => {
 
 // @desc    Create a bill
 export const createBill = async (req, res) => {
-  let { date, value, description, extraNotes } = req.body;
+  let { date, value, description, remarks } = req.body;
   date = new Date(date);
   date.setUTCHours(0, 0, 0, 0);
   await Bill.create({
     date,
     value,
     description,
-    extraNotes,
+    remarks,
   });
-
-  return res.sendStatus(statusCode.CREATED);
+  return res.status(CREATED).json({
+    success: true,
+    message: "Bill was added successfully",
+  });
 };
 
 // @desc    Get a bill
 export const getBill = async (req, res) => {
-  return res.status(statusCode.OK).json({
+  return res.status(OK).json({
     success: true,
     data: {
       bill: req.Bill,
@@ -67,12 +70,18 @@ export const updateBill = async (req, res) => {
     runValidators: true,
   });
 
-  return res.sendStatus(statusCode.NO_CONTENT);
+  return res.status(OK).json({
+    success: true,
+    message: "Bill was updated successfully",
+  });
 };
 
 // @desc    Delete a bill
 export const deleteBill = async (req, res) => {
   await Bill.findByIdAndDelete(req.params.billID);
 
-  return res.sendStatus(statusCode.NO_CONTENT);
+  return res.status(OK).json({
+    success: true,
+    message: "Bill was deleted successfully",
+  });
 };

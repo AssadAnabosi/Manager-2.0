@@ -9,7 +9,7 @@ import { ADMIN, MODERATOR } from "../utils/constants/userRoles.js";
 import * as validator from "../middleware/validators/cheque.validator.js";
 import { validateParamID } from "../middleware/reqValidators.middleware.js";
 
-//  @routes  api/cheques
+//  @routes  apiPrefix/cheques
 
 router
   .route("/")
@@ -22,7 +22,7 @@ router
     catchError(controller.createCheque)
   );
 
-// @routes  api/cheques/:chequeID
+// @routes  apiPrefix/cheques/:chequeID
 
 router
   .route("/:chequeID")
@@ -30,11 +30,7 @@ router
   // @access  Spec, Mod, Admin
   .get(catchError(controller.getCheque))
   // @access  Mod, Admin
-  .put(
-    authorize([MODERATOR, ADMIN]),
-    validator.validateUpdateCheque,
-    catchError(controller.updateCheque)
-  )
+  .put(authorize([MODERATOR, ADMIN]), catchError(controller.updateCheque))
   // @access  Mod, Admin
   .delete(authorize([MODERATOR, ADMIN]), catchError(controller.deleteCheque));
 

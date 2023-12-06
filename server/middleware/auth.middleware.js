@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.model.js";
+import Session from "../models/Session.model.js";
 import * as statusCode from "../utils/constants/statusCodes.js";
 import ResponseError from "../utils/responseError.js";
 
@@ -26,6 +27,11 @@ export const isAuth = async (req, res, next) => {
   try {
     const decoded = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
     const user = await User.findById(decoded.id).select("-logs");
+    const session = await Session.findById(decoded.sessionId);
+    if (!session)
+      return next(
+        new ResponseError("Please Login Again", statusCode.NOT_AUTHENTICATED)
+      );
 
     if (!user) {
       return next(
@@ -51,10 +57,11 @@ export const isAuth = async (req, res, next) => {
       return next(
         new ResponseError(
           "Token Expired, Please Refresh Token",
-          statusCode.NOT_AUTHENTICATED
+          statusCode.NOT_AUTHORIZED
         )
       );
     }
+    console.log(accessToken);
     return next(error);
   }
 };
@@ -64,7 +71,8 @@ export const authorize = (userRoles = []) => {
   userRoles = typeof userRoles === "string" ? [userRoles] : userRoles;
 
   return async (req, res, next) => {
-    await isAuth(req, res, () => {
+    await isAuth(req, res, (error) => {
+      if (error) return next(error);
       if (userRoles.length && !userRoles.includes(req.user.role)) {
         return next(
           new ResponseError(
@@ -84,7 +92,8 @@ export const notAuthorized = (userRoles = []) => {
   userRoles = typeof userRoles === "string" ? [userRoles] : userRoles;
 
   return async (req, res, next) => {
-    await isAuth(req, res, () => {
+    await isAuth(req, res, (error) => {
+      if (error) return next(error);
       if (userRoles.length && userRoles.includes(req.user.role)) {
         return next(
           new ResponseError(

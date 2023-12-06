@@ -1,7 +1,6 @@
 import Log from "../models/Log.model.js";
 import Worker from "../models/User.model.js";
 import ResponseError from "../utils/responseError.js";
-import ObjectID from "../utils/ObjectID.js";
 import * as statusCode from "../utils/constants/statusCodes.js";
 import ReqQueryHelper from "../helpers/reqQuery.helper.js";
 import * as queryHelper from "../helpers/queries/logs.queries.js";
@@ -9,15 +8,16 @@ import { USER } from "../utils/constants/userRoles.js";
 
 // @desc    Get all logs
 export const getLogs = async (req, res) => {
-  const { startDate, endDate, search } = ReqQueryHelper(req.query);
-  const filter = queryHelper.findLogs({ search, startDate, endDate });
+  const { startDate, endDate, filter: worker } = ReqQueryHelper(req.query);
+  const filter = queryHelper.findLogs({
+    userRole: req.user.role,
+    startDate,
+    endDate,
+    worker,
+    user: req.user,
+  });
 
-  //  Filter logs by requested user if the user role is USER
-  if (req.user.role === USER) {
-    filter.unshift({ $match: { worker: ObjectID(req.user.id) } });
-  }
-
-  const logs = await Log.aggregate(filter).sort({ date: -1 });
+  const logs = await Log.aggregate(filter);
 
   const _id = logs.map(({ id }) => id);
 
@@ -31,7 +31,8 @@ export const getLogs = async (req, res) => {
   )[0];
   const daysCount = attendanceSums ? attendanceSums.daysCount : 0;
   const OTVSum = attendanceSums ? attendanceSums.OTVSum : 0;
-
+  const from = startDate ? startDate.toISOString().substring(0, 10) : "";
+  const to = endDate ? endDate.toISOString().substring(0, 10) : "";
   return res.status(statusCode.OK).json({
     success: true,
     data: {
@@ -39,16 +40,16 @@ export const getLogs = async (req, res) => {
       paymentsSumValue,
       daysCount,
       OTVSum,
-      startDate: startDate.toISOString().substring(0, 10),
-      endDate: endDate.toISOString().substring(0, 10),
-      search,
+      from,
+      to,
+      filter: worker || "",
     },
   });
 };
 
 // @desc    Create a log
 export const createLog = async (req, res) => {
-  let { date, isAbsent, startingTime, finishingTime, payment, extraNotes } =
+  let { date, isAbsent, startingTime, finishingTime, payment, remarks } =
     req.body;
   date = new Date(date);
   date.setUTCHours(0, 0, 0, 0);
@@ -56,11 +57,9 @@ export const createLog = async (req, res) => {
     (isAbsent === undefined || isAbsent === null) &&
     (!startingTime || !finishingTime)
   ) {
-    return next(
-      new ResponseError(
-        "Please provide a starting time and finishing time",
-        statusCode.BAD_REQUEST
-      )
+    throw new ResponseError(
+      "Please provide a starting time and finishing time",
+      statusCode.BAD_REQUEST
     );
   }
 
@@ -75,7 +74,7 @@ export const createLog = async (req, res) => {
     startingTime,
     finishingTime,
     payment,
-    extraNotes,
+    remarks,
   });
   await log.save();
 
@@ -108,17 +107,12 @@ export const updateLog = async (req, res) => {
     (isAbsent === undefined || isAbsent === null) &&
     (!startingTime || !finishingTime)
   ) {
-    return next(
-      new ResponseError(
-        "Please provide a starting time and finishing time",
-        statusCode.BAD_REQUEST
-      )
+    throw new ResponseError(
+      "Please provide a starting time and finishing time",
+      statusCode.BAD_REQUEST
     );
   }
-  if (req.body.date) {
-    req.body.date = new Date(req.body.date);
-    req.body.date.setUTCHours(0, 0, 0, 0);
-  }
+
   await Log.findByIdAndUpdate(req.params.logID, req.body, {
     new: true,
     runValidators: true,

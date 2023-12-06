@@ -58,7 +58,7 @@ export const refresh = async (req, res, next) => {
     if (!user) {
       res.clearCookie("refreshToken");
       return next(
-        new ResponseError("User Can Not Be Found", statusCode.NOT_FOUND)
+        new ResponseError("User account deleted", statusCode.NOT_FOUND)
       );
     }
 
@@ -74,7 +74,7 @@ export const refresh = async (req, res, next) => {
       success: true,
       message: "Refreshed Access Token Successfully",
       data: {
-        accessToken: user.getAccessToken(),
+        accessToken: user.getAccessToken(session._id),
       },
     });
   } catch (error) {
@@ -121,18 +121,18 @@ export const getMe = async (req, res, next) => {
 
 // @desc   Tokens Generator
 const sendTokens = async (user, ipAddress, statusCode, res) => {
-  const accessToken = user.getAccessToken();
   const refreshToken = user.getRefreshToken();
 
   const secure = process.env.SECURE_COOKIE === "true" ? true : false;
   const maxAge = ms(process.env.MAX_AGE);
 
-  await Session.create({
+  const session = await Session.create({
     refreshToken,
     ipAddress: ipAddress,
     user: user._id,
     expiresAt: Date.now() + maxAge,
   });
+  const accessToken = user.getAccessToken(session._id);
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
@@ -145,7 +145,7 @@ const sendTokens = async (user, ipAddress, statusCode, res) => {
   user.active = undefined;
   return res.status(statusCode).json({
     success: true,
-    message: "User logged in successfully",
+    message: `Welcome back, ${user.fullName}`,
     data: {
       user,
       accessToken,

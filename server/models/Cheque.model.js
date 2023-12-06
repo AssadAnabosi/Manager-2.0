@@ -15,7 +15,7 @@ const ChequeSchema = new Schema({
     required: [true, "Please provide a value"],
     min: [0, "Value must be greater than 0"],
   },
-  description: {
+  remarks: {
     type: String,
     required: false,
   },

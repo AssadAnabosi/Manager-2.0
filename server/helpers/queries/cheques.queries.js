@@ -1,13 +1,40 @@
 import ObjectID from "../../utils/ObjectID.js";
 
-export const findCheques = ({ search, startDate, endDate }) => {
+export const findCheques = ({ search, startDate, endDate, payee }) => {
   const filter = [];
+  const serial = parseInt(search) | 0;
+  const dueDateFilter = {};
   if (startDate) {
-    filter.push({ $match: { dueDate: { $gte: startDate } } });
+    dueDateFilter.$gte = startDate;
   }
   if (endDate) {
-    filter.push({ $match: { dueDate: { $lte: endDate } } });
+    dueDateFilter.$lte = endDate;
   }
+
+  if (serial && serial !== 0) {
+    filter.push({
+      $match: {
+        serial: { $eq: serial },
+      },
+    });
+  } else {
+    const and = [
+      {
+        dueDate: dueDateFilter,
+      },
+    ];
+    if (payee && payee !== "") {
+      and.push({
+        payee: ObjectID(payee),
+      });
+    }
+    filter.push({
+      $match: {
+        $and: and,
+      },
+    });
+  }
+
   filter.push({
     $lookup: {
       from: "payees",
@@ -22,16 +49,6 @@ export const findCheques = ({ search, startDate, endDate }) => {
       preserveNullAndEmptyArrays: true,
     },
   });
-  if (search) {
-    filter.push({
-      $match: {
-        $or: [
-          { "payee.name": { $regex: search, $options: "i" } },
-          { serial: { $eq: parseInt(search) } },
-        ],
-      },
-    });
-  }
   filter.push({
     $project: {
       _id: 0,
@@ -39,7 +56,7 @@ export const findCheques = ({ search, startDate, endDate }) => {
       serial: 1,
       dueDate: 1,
       value: 1,
-      description: 1,
+      remarks: 1,
       "payee.id": {
         $ifNull: ["$payee._id", null],
       },
@@ -103,7 +120,7 @@ export const findChequeByID = (id) => {
         serial: 1,
         dueDate: 1,
         value: 1,
-        description: 1,
+        remarks: 1,
         "payee.id": {
           $ifNull: ["$payee._id", null],
         },

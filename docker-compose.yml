@@ -21,4 +21,15 @@ services:
     # from the config.env file
     env_file:
       - ./server/config/config.env
-    command: npm start
+
+  manager-web:
+    container_name: manager-web
+    # Build the image from the Dockerfile in the client folder
+    build:
+      context: ./client
+    # Run on startup and restart if it crashes
+    restart: always
+    # Expose the port to the host machine
+    ports:
+      # "HOST_PORT:CONTAINER_PORT"
+      - "8088:8080"

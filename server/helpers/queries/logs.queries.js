@@ -1,12 +1,21 @@
 import ObjectID from "../../utils/ObjectID.js";
+import { USER } from "../../utils/constants/userRoles.js";
 
-export const findLogs = ({ search, startDate, endDate }) => {
+export const findLogs = ({ userRole, worker, startDate, endDate, user }) => {
   const filter = [];
+  if (userRole === USER) {
+    filter.push({ $match: { worker: ObjectID(user.id) } });
+  }
   if (startDate) {
     filter.push({ $match: { date: { $gte: startDate } } });
   }
   if (endDate) {
     filter.push({ $match: { date: { $lte: endDate } } });
+  }
+  if (userRole !== USER && worker && worker !== "") {
+    filter.push({
+      $match: { worker: ObjectID(worker) },
+    });
   }
   filter.push(
     {
@@ -22,17 +31,17 @@ export const findLogs = ({ search, startDate, endDate }) => {
     },
     {
       $addFields: {
-        "worker.name": {
+        "worker.fullName": {
           $concat: ["$worker.firstName", " ", "$worker.lastName"],
         },
       },
     }
   );
-  if (search) {
-    filter.push({
-      $match: { "worker.name": { $regex: search, $options: "i" } },
-    });
-  }
+  filter.push({
+    $sort: {
+      date: -1,
+    },
+  });
   filter.push({
     $project: {
       _id: 0,
@@ -43,9 +52,9 @@ export const findLogs = ({ search, startDate, endDate }) => {
       finishingTime: 1,
       OTV: 1,
       payment: 1,
-      extraNotes: 1,
+      remarks: 1,
       "worker.id": "$worker._id",
-      "worker.name": 1,
+      "worker.fullName": 1,
     },
   });
   return filter;
@@ -120,7 +129,7 @@ export const findLogByID = (id) => {
         finishingTime: 1,
         OTV: 1,
         payment: 1,
-        extraNotes: 1,
+        remarks: 1,
         "worker.id": "$worker._id",
         "worker.fullName": 1,
       },

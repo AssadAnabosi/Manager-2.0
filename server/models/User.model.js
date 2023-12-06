@@ -3,6 +3,12 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
 import userRoles, { USER } from "../utils/constants/userRoles.js";
+import {
+  THEMES,
+  LANGUAGES,
+  SYSTEM,
+  AR,
+} from "../utils/constants/preferences.js";
 
 const UserSchema = new Schema({
   firstName: {
@@ -48,6 +54,16 @@ const UserSchema = new Schema({
     type: Boolean,
     default: true,
   },
+  theme: {
+    type: String,
+    enum: THEMES,
+    default: SYSTEM,
+  },
+  language: {
+    type: String,
+    enum: LANGUAGES,
+    default: AR,
+  },
 });
 
 // @desc    Create a virtual field "fullName" that combines the first and last name
@@ -78,8 +94,6 @@ UserSchema.pre("save", async function (next) {
 UserSchema.set("toJSON", {
   virtuals: true,
   transform: function (doc, ret) {
-    delete ret.firstName;
-    delete ret.lastName;
     delete ret._id;
     delete ret.__v;
   },
@@ -91,10 +105,14 @@ UserSchema.methods.matchPassword = async function (password) {
 };
 
 // @desc    Generate an access token
-UserSchema.methods.getAccessToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_ACCESS_SECRET, {
-    expiresIn: process.env.JWT_ACCESS_EXPIRE,
-  });
+UserSchema.methods.getAccessToken = function (sessionId) {
+  return jwt.sign(
+    { id: this._id, sessionId: sessionId },
+    process.env.JWT_ACCESS_SECRET,
+    {
+      expiresIn: process.env.JWT_ACCESS_EXPIRE,
+    }
+  );
 };
 
 // @desc    Generate a refresh token

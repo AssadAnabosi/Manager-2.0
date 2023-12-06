@@ -7,8 +7,18 @@ import * as queryHelper from "../helpers/queries/cheques.queries.js";
 
 // @desc    Get all Cheques
 export const getCheques = async (req, res) => {
-  const { startDate, endDate, search } = ReqQueryHelper(req.query);
-  const filter = queryHelper.findCheques({ search, startDate, endDate });
+  const {
+    startDate,
+    endDate,
+    filter: payee,
+    search,
+  } = ReqQueryHelper(req.query);
+  const filter = queryHelper.findCheques({
+    search,
+    startDate,
+    endDate,
+    payee,
+  });
 
   const cheques = await Cheque.aggregate(filter);
 
@@ -17,32 +27,37 @@ export const getCheques = async (req, res) => {
   let ValueSum = (await Cheque.aggregate(queryHelper.findValueSum(_id)))[0];
   const total = ValueSum ? ValueSum.total : 0;
 
+  const from = startDate ? startDate.toISOString().substring(0, 10) : "";
+  const to = endDate ? endDate.toISOString().substring(0, 10) : "";
   return res.status(statusCode.OK).json({
     success: true,
     data: {
       cheques,
       total,
-      startDate: startDate.toISOString().substring(0, 10),
-      endDate: endDate.toISOString().substring(0, 10),
+      from,
+      to,
       search,
+      filter: payee || "",
     },
   });
 };
 
 // @desc    Create a Cheque
 export const createCheque = async (req, res) => {
-  let { serial, dueDate, value, description, isCancelled } = req.body;
+  let { serial, dueDate, value, remarks, isCancelled } = req.body;
   dueDate = new Date(dueDate);
   dueDate.setUTCHours(0, 0, 0, 0);
 
-  const payee = await Payee.findById(req.body.payee);
-  if (!payee) throw new ResponseError("Payee not found", statusCode.NOT_FOUND);
+  let payee = await Payee.findById(req.body.payee);
+  if (isCancelled !== true && !payee)
+    throw new ResponseError("Payee not found", statusCode.NOT_FOUND);
+  else if (isCancelled === true && !payee) payee = undefined;
 
   const cheque = new Cheque({
     serial,
     dueDate,
     value,
-    description,
+    remarks,
     payee,
     isCancelled,
   });
@@ -70,8 +85,10 @@ export const updateCheque = async (req, res) => {
   // Check if the payee exists
   if (req.body.payee) {
     const payee = await Payee.findById(req.body.payee);
-    if (!payee)
+    if (req.body.isCancelled !== true && !payee)
       throw new ResponseError("Payee not found", statusCode.NOT_FOUND);
+    else if (req.body.isCancelled === true && !payee)
+      req.body.payee = undefined;
   }
   if (req.body.dueDate) {
     req.body.dueDate = new Date(req.body.dueDate);
