@@ -20,8 +20,8 @@ router.post(
   catchError(controller.login)
 );
 
-router.get("/refresh", catchError(controller.refresh));
+router.post("/refresh", catchError(controller.refresh));
 
-router.post("/logout", catchError(controller.logout));
+router.delete("/logout", catchError(controller.logout));
 
 export default router;

@@ -88,7 +88,7 @@
             }
           ],
           "request": {
-            "method": "GET",
+            "method": "POST",
             "header": [],
             "url": {
               "raw": "{{baseURL}}/auth/refresh",
@@ -101,7 +101,7 @@
         {
           "name": "Logout",
           "request": {
-            "method": "POST",
+            "method": "DELETE",
             "header": [],
             "url": {
               "raw": "{{baseURL}}/auth/logout",

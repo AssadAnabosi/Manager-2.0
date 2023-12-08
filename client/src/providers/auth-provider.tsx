@@ -75,7 +75,7 @@ export const getAuth = async (accessToken: string) => {
 export const useRefreshToken = () => {
   const { setAccessToken } = useAuth();
   const refresh = async () => {
-    const { data: response } = await axios.get("/auth/refresh");
+    const { data: response } = await axios.post("/auth/refresh");
     const { data } = response;
     const accessToken = data.accessToken;
     setAccessToken(accessToken);
@@ -88,7 +88,7 @@ export const useLogout = () => {
   const { setUser, setAccessToken } = useAuth();
   const logout = async (callEndpoint = true) => {
     try {
-      if (callEndpoint) await axios.post("/auth/logout");
+      if (callEndpoint) await axios.delete("/auth/logout");
     } catch (error) {
       console.log(error);
     } finally {

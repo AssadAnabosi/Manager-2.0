@@ -161,10 +161,10 @@ This app is built upon the need for a database for my family's own workshop, so 
 
 | Method | Route         |
 | ------ | ------------- |
-| POST   | /auth         |
-| GET    | /auth/refresh |
-| POST   | /auth/logout  |
 | GET    | /auth         |
+| POST   | /auth         |
+| POST   | /auth/refresh |
+| DELETE | /auth/logout  |
 
 ### Users
 
