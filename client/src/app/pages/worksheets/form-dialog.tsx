@@ -85,6 +85,7 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
 
   const { mutateAsync } = useLogFormMutation();
   const [open, setOpen] = useState(false);
+  const [popoverOpen, setPopoverOpen] = useState(false);
 
   const onSubmit = async (data: logFormSchemaType) => {
     try {
@@ -210,7 +211,7 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
                 <FormItem className="flex flex-col">
                   <FormLabel>{t("Worker")}</FormLabel>
                   {!filterLoading ? (
-                    <Popover>
+                    <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
@@ -257,6 +258,7 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
                                           worker.value
                                         );
                                   }
+                                  setPopoverOpen(false);
                                 }}
                               >
                                 <Check
