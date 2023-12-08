@@ -95,6 +95,7 @@ export default function FormDialog({
 
   const { mutateAsync } = useChequeFormMutation();
   const [open, setOpen] = useState(false);
+  const [popoverOpen, setPopoverOpen] = useState(false);
 
   const onSubmit = async (data: chequeFormSchemaType) => {
     try {
@@ -120,6 +121,12 @@ export default function FormDialog({
             chequeForm.setError("payee", {
               type: "manual",
               message: "Payee not found",
+            });
+            return;
+          case "Please select a payee":
+            chequeForm.setError("payee", {
+              type: "manual",
+              message: "Please select a payee",
             });
             return;
         }
@@ -206,12 +213,12 @@ export default function FormDialog({
                 control={chequeForm.control}
                 name="serial"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col">
+                  <FormItem className="flex flex-col relative">
                     <FormLabel>{t("Serial No.")}</FormLabel>
                     <FormControl>
                       <Input {...field} type="string" className="input" />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="absolute top-[60px]" />
                   </FormItem>
                 )}
               />
@@ -221,9 +228,9 @@ export default function FormDialog({
               name="payee"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>{t("Worker")}</FormLabel>
+                  <FormLabel>{t("Payee")}</FormLabel>
                   {!filterLoading ? (
-                    <Popover>
+                    <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
@@ -270,6 +277,7 @@ export default function FormDialog({
                                           payee.value
                                         );
                                   }
+                                  setPopoverOpen(false);
                                 }}
                               >
                                 <Check
@@ -299,7 +307,7 @@ export default function FormDialog({
               name="value"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>{t("Payment")}</FormLabel>
+                  <FormLabel>{t("Value")}</FormLabel>
                   <FormControl>
                     <div className="relative w-full justify-between">
                       <span className="absolute top-0 bottom-0 w-6 h-6 my-auto text-muted-foreground left-3">

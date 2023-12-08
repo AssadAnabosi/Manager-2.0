@@ -67,11 +67,7 @@ export const chequeFormSchema = z.object({
   dueDate: z.any({
     required_error: "Due Date is required",
   }),
-  payee: z
-    .string({
-      required_error: "Please select a payee.",
-    })
-    .optional(),
+  payee: z.string().optional(),
   serial: z.string().refine(
     (value) => {
       const number = Number(value);
@@ -89,15 +85,6 @@ export const chequeFormSchema = z.object({
   isCancelled: z.boolean(),
   remarks: z.string().optional(),
 });
-// .refine(
-//   (data) => {
-//     return !(!data.isCancelled && !data.payee);
-//   },
-//   {
-//     path: ["payee"],
-//     message: "Please select a payee.",
-//   }
-// );
 
 export type chequeFormSchemaType = z.infer<typeof chequeFormSchema>;
 
