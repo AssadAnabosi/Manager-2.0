@@ -1,6 +1,9 @@
 # Manager
+
 ##### Version: 2.0.0
+
 2nd Version of the [Manager App](https://github.com/AssadAnabosi/Manager) with a much cleaner code base, and higher coding standards.
+
 ## About
 
 PWA that helps digitalize my family's workshop data, like bills, workers logs and more.
@@ -133,6 +136,7 @@ This app is built upon the need for a database for my family's own workshop, so 
     - `ADMIN_PHONE_NUMBER`: is the phone number of the admin account.
 - In `/client/` Fill the `.env.template` file with the needed information and rename it to `.env`
   - `VITE_API_URL`: is the URL of the server and the prefix e.g: https://api.example.com/api/v2.
+  - `VITE_APP_TITLE`: is the name of the app, it will be displayed in the title of the page, and different meta tags.
 - Run directly on your machine
   - Backend:
     - Run `npm install` to install all the needed dependencies
