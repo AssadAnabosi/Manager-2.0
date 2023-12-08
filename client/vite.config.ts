@@ -9,6 +9,7 @@ export default ({ mode }) => {
     plugins: [
       react(),
       VitePWA({
+        registerType: "autoUpdate",
         manifest: {
           name: `${process.env.VITE_APP_TITLE} Management Dashboard`,
           short_name: `${process.env.VITE_APP_TITLE}`,
