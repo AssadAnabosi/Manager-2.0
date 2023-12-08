@@ -73,6 +73,7 @@ export default function FormDialog({
 
   const { mutateAsync } = useBillFormMutation();
   const [open, setOpen] = useState(false);
+  const [calendarOpen, setCalenderOpen] = useState(false);
 
   const onSubmit = async (data: billFormSchemaType) => {
     try {
@@ -116,7 +117,7 @@ export default function FormDialog({
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>{t("Date")}</FormLabel>
-                  <Popover>
+                  <Popover open={calendarOpen} onOpenChange={setCalenderOpen}>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
@@ -144,7 +145,10 @@ export default function FormDialog({
                       <Calendar
                         mode="single"
                         selected={stringToDate(field.value)}
-                        onSelect={field.onChange}
+                        onSelect={(e) => {
+                          field.onChange(e);
+                          setCalenderOpen(false);
+                        }}
                         initialFocus
                       />
                     </PopoverContent>

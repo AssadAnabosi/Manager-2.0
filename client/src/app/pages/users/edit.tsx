@@ -54,6 +54,7 @@ import { ROLES } from "@/lib/constants";
 
 import { Trash2Icon } from "lucide-react";
 import { UserType } from "@/lib/types";
+import { useAuth } from "@/providers/auth-provider";
 
 export default function Edit() {
   const [isLoading, setIsLoading] = useState(true);
@@ -160,6 +161,8 @@ export default function Edit() {
     }
   };
 
+  const { user: authUser } = useAuth();
+
   return isLoading ? (
     <Loading />
   ) : (
@@ -173,7 +176,9 @@ export default function Edit() {
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="password">{t("Password")}</TabsTrigger>
           <TabsTrigger value="profile">{t("Profile")}</TabsTrigger>
-          <TabsTrigger value="settings">{t("Settings")}</TabsTrigger>
+          <TabsTrigger value="settings" disabled={user.id === authUser?.id}>
+            {t("Settings")}
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="password" className="h-[500px]">
           <Card>

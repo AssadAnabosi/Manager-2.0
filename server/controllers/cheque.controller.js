@@ -47,11 +47,16 @@ export const createCheque = async (req, res) => {
   let { serial, dueDate, value, remarks, isCancelled } = req.body;
   dueDate = new Date(dueDate);
   dueDate.setUTCHours(0, 0, 0, 0);
+  if (isCancelled === false && (req.body.payee === "" || !req.body.payee)) {
+    throw new ResponseError("Please select a payee", statusCode.BAD_REQUEST);
+  }
 
-  let payee = await Payee.findById(req.body.payee);
-  if (isCancelled !== true && !payee)
-    throw new ResponseError("Payee not found", statusCode.NOT_FOUND);
-  else if (isCancelled === true && !payee) payee = undefined;
+  let payee = null;
+  if (req.body.payee && req.body.payee !== "") {
+    payee = await Payee.findById(req.body.payee);
+    if (!payee)
+      throw new ResponseError("Payee not found", statusCode.NOT_FOUND);
+  }
 
   const cheque = new Cheque({
     serial,
@@ -82,13 +87,13 @@ export const getCheque = async (req, res) => {
 
 // @desc    Update a Cheque
 export const updateCheque = async (req, res) => {
-  // Check if the payee exists
-  if (req.body.payee) {
+  if (req.body.payee === "") {
+    req.body.payee = null;
+  } else {
     const payee = await Payee.findById(req.body.payee);
-    if (req.body.isCancelled !== true && !payee)
+    if (!payee)
       throw new ResponseError("Payee not found", statusCode.NOT_FOUND);
-    else if (req.body.isCancelled === true && !payee)
-      req.body.payee = undefined;
+    req.body.payee = payee;
   }
   if (req.body.dueDate) {
     req.body.dueDate = new Date(req.body.dueDate);
