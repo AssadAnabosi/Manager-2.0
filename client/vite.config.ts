@@ -73,6 +73,22 @@ export default ({ mode }) => {
             },
           ],
         },
+        workbox: {
+          runtimeCaching: [
+            {
+              urlPattern: ({ url }) => {
+                return url.pathname.startsWith("/locales");
+              },
+              handler: "StaleWhileRevalidate" as const,
+              options: {
+                cacheName: "locales-cache",
+                cacheableResponse: {
+                  statuses: [0, 200],
+                },
+              },
+            },
+          ],
+        },
       }),
     ],
     resolve: {
