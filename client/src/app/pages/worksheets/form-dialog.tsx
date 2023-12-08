@@ -86,6 +86,7 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
   const { mutateAsync } = useLogFormMutation();
   const [open, setOpen] = useState(false);
   const [popoverOpen, setPopoverOpen] = useState(false);
+  const [calendarOpen, setCalenderOpen] = useState(false);
 
   const onSubmit = async (data: logFormSchemaType) => {
     try {
@@ -137,7 +138,7 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>{t("Date")}</FormLabel>
-                  <Popover>
+                  <Popover open={calendarOpen} onOpenChange={setCalenderOpen}>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
@@ -167,7 +168,10 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
                         disabled={log ? true : false}
                         mode="single"
                         selected={stringToDate(field.value)}
-                        onSelect={field.onChange}
+                        onSelect={(e) => {
+                          field.onChange(e);
+                          setCalenderOpen(false);
+                        }}
                         initialFocus
                       />
                     </PopoverContent>
