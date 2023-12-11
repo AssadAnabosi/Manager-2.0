@@ -221,6 +221,7 @@
   "The page you are looking for does not exist.": "The page you are looking for does not exist.",
   "You are not authorized to view this page.": "You are not authorized to view this page.",
   "Your adventure ends here, brave traveler.": "Your adventure ends here, brave traveler.",
+  "Too many requests from this IP, please try again in a while": "Too many requests from this IP, please try again in a while",
   "Go back home": "Go back home",
   "Retry": "Retry",
 

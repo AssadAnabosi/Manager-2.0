@@ -221,6 +221,7 @@
   "The page you are looking for does not exist.": "الصفحة التي تبحث عنها غير موجودة.",
   "You are not authorized to view this page.": "ليس لديك صلاحية لعرض هذه الصفحة.",
   "Your adventure ends here, brave traveler.": "مغامرتك تنتهي هنا أيها المسافر الشجاع.",
+  "Too many requests from this IP, please try again in a while": "تجازت عدد المحاولات المسموح بها، يرجى المحاولة لاحقاً",
   "Go back home": "العودة للصفحة الرئيسية",
   "Retry": "اعادة المحاولة",
 
