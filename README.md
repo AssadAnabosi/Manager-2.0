@@ -27,6 +27,8 @@ This app is built upon the need for a database for my family's own workshop, so 
     2. **Spectator**: can view all the bills, workers, logs, payees and cheques, but can't edit anything besides his own password.
     3. **Moderator**: can do what a **Spectator** can do, and can add new records, but with restricted deletion and editing abilities, where he can't delete a worker, or update a worker.
     4. **Administrator**: Highest level of access can do anything.
+  - **theme**: is the preferred theme that the user is using.
+  - **language**: is the preferred language that the user is using.
 - **Log**: is the record of the work that is done by the worker.
   - **date**`*`: is the date that the work was done.
   - **isAbsent**: is a flag that is set to true when the worker is absent.
@@ -177,6 +179,7 @@ This app is built upon the need for a database for my family's own workshop, so 
 | DELETE | /users/:userID          |
 | POST   | /users/check-username   |
 | PATCH  | /users/password         |
+| PATCH  | /users/preferences      |
 | PATCH  | /users/:userID/password |
 | PATCH  | /users/:userID/role     |
 | PATCH  | /users/:userID/status   |

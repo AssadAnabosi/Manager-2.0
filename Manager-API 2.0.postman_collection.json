@@ -346,6 +346,29 @@
           "response": []
         },
         {
+          "name": "preferences",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"active\" : \"false\"\r\n}"
+            },
+            "url": {
+              "raw": "{{baseURL}}/users/preferences",
+              "host": ["{{baseURL}}"],
+              "path": ["users", "preferences"]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "reset-password",
           "request": {
             "method": "PATCH",
