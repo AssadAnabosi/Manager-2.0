@@ -1,9 +1,17 @@
 import { Link } from "react-router-dom";
+import i18next from "i18next";
+
 import { UserType } from "@/lib/types";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import StatusBadge from "@/components/component/status-badge";
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
+import StatusBadge from "@/components/component/status-badge";
 import AvatarCombo from "./avatar-combo";
 import RoleBadge from "./role-badge";
 
@@ -50,11 +58,20 @@ const Row = (user: UserType, userRole: string | undefined) => {
       </TableCell>
       <TableCell className="w-max text-right hidden lg:table-cell">
         {userRole !== MODERATOR && (
-          <Button asChild size="icon" variant="edit" aria-label="Edit">
-            <Link to={`/users/${user.id}`}>
-              <Pencil2Icon />
-            </Link>
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button asChild size="icon" variant="edit" aria-label="Edit">
+                  <Link to={`/users/${user.id}`}>
+                    <Pencil2Icon />
+                  </Link>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{i18next.t("Edit")}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         )}
       </TableCell>
     </TableRow>
