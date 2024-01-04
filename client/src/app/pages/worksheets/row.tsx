@@ -1,13 +1,20 @@
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
+import i18next from "i18next";
 
 import { LogType } from "@/lib/types";
 import { DATE_FORMAT } from "@/lib/constants";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import DeleteDialog from "@/components/component/delete-dialog";
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
+import DeleteDialog from "@/components/component/delete-dialog";
 import AvatarCombo from "./avatar-combo";
 import FormDialog from "./form-dialog";
 import StatusBadge from "@/components/component/status-badge";
@@ -49,16 +56,34 @@ const Row = (log: LogType, deleteLog: any, userRole: string | undefined) => {
       <TableCell className="print:hidden hidden 2xl:table-cell 2xl:print:hidden">
         {![USER, SPECTATOR].includes(userRole as string) && (
           <div className="grid grid-cols-2">
-            <FormDialog log={log}>
-              <Button size="icon" variant="edit" aria-label="Edit">
-                <Pencil2Icon />
-              </Button>
-            </FormDialog>
-            <DeleteDialog onAction={() => deleteLog(log.id)}>
-              <Button size="icon" variant="delete" aria-label="Delete">
-                <TrashIcon />
-              </Button>
-            </DeleteDialog>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <FormDialog log={log}>
+                    <Button size="icon" variant="edit" aria-label="Edit">
+                      <Pencil2Icon />
+                    </Button>
+                  </FormDialog>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{i18next.t("Edit")}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <DeleteDialog onAction={() => deleteLog(log.id)}>
+                    <Button size="icon" variant="delete" aria-label="Delete">
+                      <TrashIcon />
+                    </Button>
+                  </DeleteDialog>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{i18next.t("Delete")}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         )}
       </TableCell>

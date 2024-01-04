@@ -1,6 +1,14 @@
+import i18next from "i18next";
 import { PayeeType } from "@/lib/types";
+
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 import { User } from "lucide-react";
@@ -50,17 +58,35 @@ const Row = (
       </TableCell>
       <TableCell className="hidden lg:table-cell">{payee.remarks}</TableCell>
       <TableCell className="w-max text-right hidden lg:table-cell">
-        <FormDialog payee={payee}>
-          <Button size="icon" variant="edit" aria-label="Edit">
-            <Pencil2Icon />
-          </Button>
-        </FormDialog>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <FormDialog payee={payee}>
+                <Button size="icon" variant="edit" aria-label="Edit">
+                  <Pencil2Icon />
+                </Button>
+              </FormDialog>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{i18next.t("Edit")}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
         {userRole !== MODERATOR && (
-          <DeleteDialog onAction={() => deletePayee(payee.id)}>
-            <Button size="icon" variant="delete" aria-label="Delete">
-              <TrashIcon />
-            </Button>
-          </DeleteDialog>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <DeleteDialog onAction={() => deletePayee(payee.id)}>
+                  <Button size="icon" variant="delete" aria-label="Delete">
+                    <TrashIcon />
+                  </Button>
+                </DeleteDialog>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{i18next.t("Delete")}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         )}
       </TableCell>
     </TableRow>
