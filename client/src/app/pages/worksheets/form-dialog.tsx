@@ -238,7 +238,7 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
                       </PopoverTrigger>
                       <PopoverContent className="w-[280px] p-0">
                         <Command>
-                          <CommandInput placeholder="Search worker..." />
+                          <CommandInput placeholder={t("Search...")} />
                           <CommandEmpty>
                             {t("No matching results")}
                           </CommandEmpty>
