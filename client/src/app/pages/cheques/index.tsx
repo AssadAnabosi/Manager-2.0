@@ -133,7 +133,7 @@ const Cheques = () => {
       {/* CARDS */}
       <Cards isLoading={isLoading} chequesData={chequesData} />
       <Separator />
-      <div className="flex justify-end gap-3">
+      <div className="flex flex-col md:flex-row justify-end gap-3">
         <div className="w-full md:w-[335px]">
           <Searchbox
             value={serial}
