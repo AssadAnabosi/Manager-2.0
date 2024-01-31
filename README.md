@@ -10,7 +10,13 @@ PWA that helps digitalize my family's workshop data, like bills, workers logs an
 
 ## Backstory
 
+#### V1.0
+
 This app is built upon the need for a database for my family's own workshop, so it was designed to fit the purposes of those needs, at first as a Highschool kid (back in 2018-2019) all I was able to do is a Microsoft Office Access database, and it worked mostly fine for a few years, but the need for a database that can be accessed from different locations by different people started to appear, all of that and the sudden DB file corruption (can't say I didn't expect that the day I designed it on MS Access) made me realize that I need to finally do an upgrade and move it be an Online web app, so Jun. 2022 started working on that with zero background on how to do it, fast forward Dec. 2022 my very first web app, is up and running, and all the old data that survived the corruption have been ported over via a custom app that was specifically created to do this job. I't s double win for me, I learned how to make a Web App Service, and i have a better DB for the workshop.
+
+#### V2.0
+
+The V1.0 had a lot of issues that was discovered in a later stage, where the codebase was not moduler or clean, and the UI was anything but responsive so It was not usable at all on mobile phones and any screen that isn't 1920*1080. So for V2.0 it was built again from scratch with responsivity in mind for FE, As for BE I made sure that I have a much cleaner code base, and more secure (a better Auth system and more strict validations)
 
 ## Definitions
 
@@ -23,13 +29,13 @@ This app is built upon the need for a database for my family's own workshop, so 
   - **password**`*`: is the password of the user.
   - **active**: is a flag that is set to decide whether the user is allowed to login or not.
   - **role**: are the different roles that a **Worker** can have, different roles gives the ability to do more or less actions they can perform.
-    1. **User**: can only view his own logs and change his password.
-    2. **Spectator**: can view all the bills, workers, logs, payees and cheques, but can't edit anything besides his own password.
-    3. **Moderator**: can do what a **Spectator** can do, and can add new records, but with restricted deletion and editing abilities, where he can't delete a worker, or update a worker.
+    1. **User**: can only view his own logs and change his password and preferences.
+    2. **Spectator**: can view all the bills, workers, logs, payees and cheques, but can't edit anything besides his password and preferences.
+    3. **Moderator**: can do what a **Spectator** can do, and can add new records, but with restricted deletion and editing abilities, where he can't update or delete a worker.
     4. **Administrator**: Highest level of access can do anything.
   - **theme**: is the preferred theme that the user is using.
   - **language**: is the preferred language that the user is using.
-- **Log**: is the record of the work that is done by the worker.
+- **Log**: is the record of the work(Worksheet/Timesheet) that is done by the worker.
   - **date**`*`: is the date that the work was done.
   - **isAbsent**: is a flag that is set to true when the worker is absent.
   - **description**: is the description of the work that was done.
@@ -38,7 +44,7 @@ This app is built upon the need for a database for my family's own workshop, so 
   - **OTV**: is the amount of overtime that the worker worked.
   - **payment**: is the amount of money that the worker got paid.
   - **remarks**: is an optional extra notes about the log.
-  - **worker**`*`: is the worker who this log is associated with.
+  - **worker**`*`: is the user/worker who this log is associated with.
 - **Payee**: is the person or company that the **Cheque** is made out to.
   - **name**`*`: is the name of the payee.
   - **email**: is the email of the payee.
@@ -62,7 +68,7 @@ This app is built upon the need for a database for my family's own workshop, so 
   - **expiresAt**`*`: is the date that the refresh token expires.
 - `*`Required field
 - When a worker gets deleted, all the logs that are associated with that worker are also deleted.
-- When a payee gets deleted, all the cheques that are associated with that payee are has payee set to null.
+- When a payee gets deleted, all the cheques that are associated with that payee will have its payee set to null.
 - When a user logout his refresh token is revoked.
 
 ### Restrictions
@@ -77,12 +83,12 @@ This app is built upon the need for a database for my family's own workshop, so 
 
 - Log
   - Log worker and date both can't be changed.
-  - Log updating or creation can either have a startingTime and a finishingTime, or isAbsent = true. but you can't have both or neither.
+  - Log updating or creation can either have a startingTime and a finishingTime, or isAbsent = true. but you can't have both at the same time or none at all.
 
 ### Authentication
 
 - The authentication is done using JWT and cookies
-  - When user sign in he gets a refresh token and an access token, the refresh token is stored in the httpOnly cookies
+  - When the user sign-in he gets a refresh token and an access token, the refresh token is stored in the httpOnly cookies
   - The access token is used to authenticate the user, and the refresh token is used to generate new access tokens.
   - Any request that is made to the server must have the access token in the Authorization header. (Bearer Token)
 
@@ -151,7 +157,7 @@ This app is built upon the need for a database for my family's own workshop, so 
   Note that you need to have docker and docker-compose installed on your machine
   </br>
   - Run `make compose`
-    - Or Run `docker-compose up --build -d` if you don't have make installed on your machine.
+    - Or Run `docker-compose up --build -d` if you don't have "make" installed on your machine.
 
 </br>
 </br>
