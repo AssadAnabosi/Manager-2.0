@@ -199,6 +199,10 @@ export default function FormDialog({
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
+                          captionLayout="dropdown-buttons"
+                          fromYear={2019}
+                          toYear={new Date().getFullYear() + 10}
+                          defaultMonth={stringToDate(field.value)}
                           mode="single"
                           selected={stringToDate(field.value)}
                           onSelect={(e) => {
