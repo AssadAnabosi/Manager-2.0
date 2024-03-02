@@ -166,6 +166,10 @@ export default function FormDialog({ children, log, onClose }: ComponentProps) {
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         disabled={log ? true : false}
+                        captionLayout="dropdown-buttons"
+                        fromYear={2024}
+                        toYear={new Date().getFullYear() + 5}
+                        defaultMonth={stringToDate(field.value)}
                         mode="single"
                         selected={stringToDate(field.value)}
                         onSelect={(e) => {
