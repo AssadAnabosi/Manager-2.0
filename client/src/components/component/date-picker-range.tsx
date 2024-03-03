@@ -71,10 +71,13 @@ export default function DatePickerWithRange({
           <Calendar
             initialFocus
             mode="range"
+            captionLayout="dropdown-buttons"
             defaultMonth={date?.from}
             selected={date}
             onSelect={setDate}
             numberOfMonths={2}
+            fromYear={2019}
+            toYear={new Date().getFullYear() + 10}
           />
         </PopoverContent>
       </Popover>
