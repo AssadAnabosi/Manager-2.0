@@ -4,6 +4,7 @@ import { BillType } from "@/lib/types";
 import i18next from "i18next";
 
 import { TableCell, TableRow } from "@/components/ui/table";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   TooltipProvider,
@@ -14,7 +15,7 @@ import {
 import DeleteDialog from "@/components/component/delete-dialog";
 
 import AvatarCombo from "./avatar-combo";
-import FormDialog from "./form-dialog";
+import FormDialogDrawer from "./form-dialog-drawer";
 
 import { CalendarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
@@ -22,21 +23,39 @@ import { currencyFormatter } from "@/lib/utils";
 import { SPECTATOR } from "@/lib/constants";
 
 const Row = (bill: BillType, deleteBill: any, userRole: string | undefined) => {
+  const title = format(new Date(bill.date), "EEEE", {
+    locale: document.documentElement.lang === "ar" ? ar : enGB,
+  });
+  const description = format(new Date(bill.date), "dd/LL/y", {
+    locale: document.documentElement.lang === "ar" ? ar : enGB,
+  });
   return (
     <TableRow key={bill.id} className="h-[73px]">
       <TableCell>
         <AvatarCombo
-          title={format(new Date(bill.date), "EEEE", {
-            locale: document.documentElement.lang === "ar" ? ar : enGB,
-          })}
-          description={format(new Date(bill.date), "dd/LL/y", {
-            locale: document.documentElement.lang === "ar" ? ar : enGB,
-          })}
-          fallback={<CalendarIcon className="h-5 w-5" />}
+          title={title}
+          description={description}
           bill={bill}
           deleteBill={deleteBill}
           userRole={userRole}
-        ></AvatarCombo>
+        >
+          <div className="flex items-center">
+            <Avatar className="print:hidden h-9 w-9">
+              <AvatarImage alt="Avatar" />
+              <AvatarFallback>
+                <CalendarIcon className="h-5 w-5" />
+              </AvatarFallback>
+            </Avatar>
+            <div className="ltr:ml-4 rtl:mr-4 space-y-1">
+              <p className="text-sm font-medium leading-none" aria-label="Day">
+                {title}
+              </p>
+              <p className="text-sm text-muted-foreground" aria-label="Date">
+                {description}
+              </p>
+            </div>
+          </div>
+        </AvatarCombo>
       </TableCell>
       <TableCell style={{ direction: "ltr" }} className="rtl:text-right">
         {currencyFormatter(bill.value)}
@@ -52,12 +71,12 @@ const Row = (bill: BillType, deleteBill: any, userRole: string | undefined) => {
           <div className="grid grid-cols-2">
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger>
-                  <FormDialog bill={bill}>
+                <TooltipTrigger asChild>
+                  <FormDialogDrawer bill={bill}>
                     <Button size="icon" variant="edit" aria-label="Edit">
                       <Pencil2Icon />
                     </Button>
-                  </FormDialog>
+                  </FormDialogDrawer>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>{i18next.t("Edit")}</p>
@@ -66,7 +85,7 @@ const Row = (bill: BillType, deleteBill: any, userRole: string | undefined) => {
             </TooltipProvider>
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger>
+                <TooltipTrigger asChild>
                   <DeleteDialog onAction={() => deleteBill(bill.id)}>
                     <Button size="icon" variant="delete" aria-label="Delete">
                       <TrashIcon />

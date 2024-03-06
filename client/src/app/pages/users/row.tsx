@@ -3,6 +3,8 @@ import i18next from "i18next";
 
 import { UserType } from "@/lib/types";
 import { TableCell, TableRow } from "@/components/ui/table";
+
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   TooltipProvider,
@@ -19,16 +21,35 @@ import { AvatarIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { MODERATOR } from "@/lib/constants";
 
 const Row = (user: UserType, userRole: string | undefined) => {
+  const title = user.fullName;
+  const description = `@${user.username}`;
   return (
     <TableRow key={user.id} className="h-[73px]">
       <TableCell>
-        <AvatarCombo
-          title={user.fullName}
-          description={`@${user.username}`}
-          fallback={<AvatarIcon className="h-7 w-7" />}
-          user={user}
-          userRole={userRole}
-        ></AvatarCombo>
+        <AvatarCombo title={user.fullName} user={user} userRole={userRole}>
+          <div className="flex items-center">
+            <Avatar className="h-9 w-9">
+              <AvatarImage alt="Avatar" />
+              <AvatarFallback>
+                <AvatarIcon className="h-7 w-7" />
+              </AvatarFallback>
+            </Avatar>
+            <div className="ltr:ml-4 rtl:mr-4 space-y-1">
+              <p
+                className="text-sm font-medium leading-none"
+                aria-label="Full Name"
+              >
+                {title}
+              </p>
+              <p
+                className="text-sm text-muted-foreground"
+                aria-label="Username"
+              >
+                {description}
+              </p>
+            </div>
+          </div>
+        </AvatarCombo>
       </TableCell>
       <TableCell className="hidden md:table-cell">
         <RoleBadge role={user.role} />
@@ -60,7 +81,7 @@ const Row = (user: UserType, userRole: string | undefined) => {
         {userRole !== MODERATOR && (
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger>
+              <TooltipTrigger asChild>
                 <Button asChild size="icon" variant="edit" aria-label="Edit">
                   <Link to={`/users/${user.id}`}>
                     <Pencil2Icon />

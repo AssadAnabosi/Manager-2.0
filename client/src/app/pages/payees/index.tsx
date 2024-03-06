@@ -20,7 +20,7 @@ import {
 import Searchbox from "@/components/component/searchbox";
 import NoResults from "@/components/component/no-results";
 import FetchError from "@/components/component/fetch-error";
-import FormDialog from "./form-dialog";
+import FormDialogDrawer from "./form-dialog-drawer";
 
 import RowSkeleton from "./row-skeleton";
 import Row from "./row";
@@ -56,11 +56,11 @@ const Payees = () => {
       <div className="flex space-y-2 flex-col justify-between md:flex-row gap-5">
         <h2 className="text-3xl font-bold tracking-tight">{t("Payees")}</h2>
         <div className="flex items-center gap-2 flex-col md:flex-row">
-          <FormDialog>
+          <FormDialogDrawer>
             <Button className="w-full">
               <FilePlus className="ltr:mr-2 rtl:ml-2 h-7 w-7" /> {t("Add New")}
             </Button>
-          </FormDialog>
+          </FormDialogDrawer>
         </div>
       </div>
       <Separator />
