@@ -6,6 +6,7 @@ import { LogType } from "@/lib/types";
 import { DATE_FORMAT } from "@/lib/constants";
 
 import { TableCell, TableRow } from "@/components/ui/table";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   TooltipProvider,
@@ -16,7 +17,7 @@ import {
 
 import DeleteDialog from "@/components/component/delete-dialog";
 import AvatarCombo from "./avatar-combo";
-import FormDialog from "./form-dialog";
+import FormDialogDrawer from "./form-dialog-drawer";
 import StatusBadge from "@/components/component/status-badge";
 
 import { CalendarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
@@ -25,19 +26,43 @@ import { currencyFormatter, numberFormatter } from "@/lib/utils";
 import { USER, SPECTATOR } from "@/lib/constants";
 
 const Row = (log: LogType, deleteLog: any, userRole: string | undefined) => {
+  const title = log.worker.fullName;
+  const description = format(new Date(log.date), DATE_FORMAT, {
+    locale: document.documentElement.lang === "ar" ? ar : enGB,
+  });
   return (
     <TableRow key={log.id} className="h-[73px]">
       <TableCell>
         <AvatarCombo
-          title={log.worker.fullName}
-          description={format(new Date(log.date), DATE_FORMAT, {
-            locale: document.documentElement.lang === "ar" ? ar : enGB,
-          })}
-          fallback={<CalendarIcon className="h-5 w-5" />}
+          title={title}
+          description={description}
           log={log}
           deleteLog={deleteLog}
           userRole={userRole}
-        ></AvatarCombo>
+        >
+          <div className="flex items-center">
+            <Avatar className="print:hidden h-9 w-9">
+              <AvatarImage alt="Avatar" />
+              <AvatarFallback>
+                <CalendarIcon className="h-5 w-5" />
+              </AvatarFallback>
+            </Avatar>
+            <div className="ltr:ml-4 rtl:mr-4 space-y-1">
+              <p
+                className="text-sm font-medium leading-none"
+                ria-label="Day and Date"
+              >
+                {title}
+              </p>
+              <p
+                className="text-sm text-muted-foreground"
+                aria-label="Day and Date"
+              >
+                {description}
+              </p>
+            </div>
+          </div>
+        </AvatarCombo>
       </TableCell>
       <TableCell className="text-center">
         <StatusBadge status={!log.isAbsent} />
@@ -58,12 +83,12 @@ const Row = (log: LogType, deleteLog: any, userRole: string | undefined) => {
           <div className="grid grid-cols-2">
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger>
-                  <FormDialog log={log}>
+                <TooltipTrigger asChild>
+                  <FormDialogDrawer log={log}>
                     <Button size="icon" variant="edit" aria-label="Edit">
                       <Pencil2Icon />
                     </Button>
-                  </FormDialog>
+                  </FormDialogDrawer>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>{i18next.t("Edit")}</p>
@@ -72,7 +97,7 @@ const Row = (log: LogType, deleteLog: any, userRole: string | undefined) => {
             </TooltipProvider>
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger>
+                <TooltipTrigger asChild>
                   <DeleteDialog onAction={() => deleteLog(log.id)}>
                     <Button size="icon" variant="delete" aria-label="Delete">
                       <TrashIcon />

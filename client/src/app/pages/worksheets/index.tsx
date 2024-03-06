@@ -30,7 +30,7 @@ import FetchError from "@/components/component/fetch-error";
 import Cards from "./cards";
 import RowSkeleton from "./row-skeleton";
 import Row from "./row";
-import FormDialog from "./form-dialog";
+import FormDialogDrawer from "./form-dialog-drawer";
 
 import { Printer, FilePlus } from "lucide-react";
 import {
@@ -97,14 +97,14 @@ const Logs = () => {
         </h2>
         <div className="flex items-center gap-2 flex-col md:flex-row">
           <DateRangePicker date={date} setDate={setDate} />
-          <FormDialog>
+          <FormDialogDrawer>
             {![USER, SPECTATOR].includes(user?.role as string) && (
               <Button className="w-full print:hidden">
                 <FilePlus className="ltr:mr-2 rtl:ml-2 h-7 w-7" />{" "}
                 {t("Add New")}
               </Button>
             )}
-          </FormDialog>
+          </FormDialogDrawer>
           <Button
             disabled={isLoading}
             className="w-full print:hidden"

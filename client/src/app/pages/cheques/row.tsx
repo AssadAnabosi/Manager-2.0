@@ -3,9 +3,11 @@ import { enGB, ar } from "date-fns/locale";
 import i18next from "i18next";
 
 import { ChequeType } from "@/lib/types";
+import { currencyFormatter } from "@/lib/utils";
 import { DATE_FORMAT, SPECTATOR } from "@/lib/constants";
 
 import { TableCell, TableRow } from "@/components/ui/table";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   TooltipProvider,
@@ -15,31 +17,55 @@ import {
 } from "@/components/ui/tooltip";
 import DeleteDialog from "@/components/component/delete-dialog";
 
-import AvatarCombo from "./avatar-combo";
-import FormDialog from "./form-dialog";
-
 import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
-import { currencyFormatter } from "@/lib/utils";
+import AvatarCombo from "./avatar-combo";
+import FormDialogDrawer from "./form-dialog-drawer";
 
 const Row = (
   cheque: ChequeType,
   deleteCheque: any,
   userRole: string | undefined
 ) => {
+  const title = cheque.payee.name;
+  const description = format(new Date(cheque.dueDate), DATE_FORMAT, {
+    locale: document.documentElement.lang === "ar" ? ar : enGB,
+  });
   return (
     <TableRow key={cheque.id} className="h-[73px]">
       <TableCell>
         <AvatarCombo
-          title={cheque.payee.name}
-          description={format(new Date(cheque.dueDate), DATE_FORMAT, {
-            locale: document.documentElement.lang === "ar" ? ar : enGB,
-          })}
-          fallback={cheque.serial}
+          title={title}
+          description={description}
           cheque={cheque}
           deleteCheque={deleteCheque}
           userRole={userRole}
-        ></AvatarCombo>
+        >
+          <div className="flex items-center">
+            <Avatar className="h-9 w-9">
+              <AvatarImage alt="Avatar" />
+              <AvatarFallback
+                className={`${cheque.isCancelled ? "line-through" : ""}`}
+              >
+                {cheque.serial}
+              </AvatarFallback>
+            </Avatar>
+            <div className="ltr:ml-4 rtl:mr-4 space-y-1">
+              <p
+                className="text-sm font-medium leading-none"
+                aria-label="Payee Name"
+              >
+                {title}
+              </p>
+              <p
+                className="text-sm text-muted-foreground"
+                aria-label="Day and Date"
+              >
+                {description}
+              </p>
+            </div>
+          </div>
+        </AvatarCombo>
       </TableCell>
       <TableCell
         style={{ direction: "ltr" }}
@@ -59,12 +85,12 @@ const Row = (
           <div className="grid grid-cols-2">
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger>
-                  <FormDialog cheque={cheque}>
+                <TooltipTrigger asChild>
+                  <FormDialogDrawer cheque={cheque}>
                     <Button size="icon" variant="edit" aria-label="Edit">
                       <Pencil2Icon />
                     </Button>
-                  </FormDialog>
+                  </FormDialogDrawer>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>{i18next.t("Edit")}</p>
@@ -73,7 +99,7 @@ const Row = (
             </TooltipProvider>
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger>
+                <TooltipTrigger asChild>
                   <DeleteDialog onAction={() => deleteCheque(cheque.id)}>
                     <Button size="icon" variant="delete" aria-label="Delete">
                       <TrashIcon />

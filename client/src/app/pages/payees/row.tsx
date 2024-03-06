@@ -2,6 +2,7 @@ import i18next from "i18next";
 import { PayeeType } from "@/lib/types";
 
 import { TableCell, TableRow } from "@/components/ui/table";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   TooltipProvider,
@@ -15,7 +16,7 @@ import { User } from "lucide-react";
 import DeleteDialog from "@/components/component/delete-dialog";
 
 import AvatarCombo from "./avatar-combo";
-import FormDialog from "./form-dialog";
+import FormDialogDrawer from "./form-dialog-drawer";
 import { MODERATOR } from "@/lib/constants";
 
 const Row = (
@@ -23,16 +24,28 @@ const Row = (
   deletePayee: any,
   userRole: string | undefined
 ) => {
+  const title = payee.name;
   return (
     <TableRow key={payee.id} className="h-[73px]">
       <TableCell>
         <AvatarCombo
-          title={payee.name}
-          fallback={<User className="h-5 w-5" />}
+          title={title}
           payee={payee}
           deletePayee={deletePayee}
           userRole={userRole}
-        ></AvatarCombo>
+        >
+          <div className="flex items-center">
+            <Avatar className="h-9 w-9">
+              <AvatarImage alt="Avatar" />
+              <AvatarFallback>
+                <User className="h-5 w-5" />
+              </AvatarFallback>
+            </Avatar>
+            <div className="ltr:ml-4 rtl:mr-4 space-y-1">
+              <p className="text-sm font-medium leading-none">{title}</p>
+            </div>
+          </div>
+        </AvatarCombo>
       </TableCell>
       <TableCell className="hidden md:table-cell">
         <div className="flex flex-col space-y-1">
@@ -60,12 +73,12 @@ const Row = (
       <TableCell className="w-max text-right hidden lg:table-cell">
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger>
-              <FormDialog payee={payee}>
+            <TooltipTrigger asChild>
+              <FormDialogDrawer payee={payee}>
                 <Button size="icon" variant="edit" aria-label="Edit">
                   <Pencil2Icon />
                 </Button>
-              </FormDialog>
+              </FormDialogDrawer>
             </TooltipTrigger>
             <TooltipContent>
               <p>{i18next.t("Edit")}</p>
@@ -75,7 +88,7 @@ const Row = (
         {userRole !== MODERATOR && (
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger>
+              <TooltipTrigger asChild>
                 <DeleteDialog onAction={() => deletePayee(payee.id)}>
                   <Button size="icon" variant="delete" aria-label="Delete">
                     <TrashIcon />

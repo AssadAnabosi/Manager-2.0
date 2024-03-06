@@ -2,6 +2,8 @@ import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { UserType } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 import useAxios from "@/hooks/use-axios";
 import { useUserFormMutation } from "@/api/users";
@@ -20,21 +22,25 @@ import {
 
 import { CardContent, CardFooter } from "@/components/ui/card";
 import { DialogFooter } from "@/components/ui/dialog";
+import { DrawerFooter } from "@/components/ui/drawer";
 
 import Spinner from "@/components/component/spinner";
 import { useToast } from "@/components/ui/use-toast";
-import { UserType } from "@/lib/types";
 
 const BASE_URL = "/users";
 
 const UserForm = ({
+  className,
   user,
   onClose,
   setOpen,
+  isDesktop,
 }: {
+  className?: string;
   user?: UserType;
   onClose?: (status: boolean) => void;
   setOpen?: (status: boolean) => void;
+  isDesktop?: boolean;
 }) => {
   const { t } = useTranslation();
   const { toast } = useToast();
@@ -143,7 +149,7 @@ const UserForm = ({
     <Form {...userForm}>
       <form
         onSubmit={userForm.handleSubmit(onSubmit)}
-        className={user ? "space-y-2" : "space-y-4"}
+        className={user ? "space-y-2" : cn(className, "space-y-4")}
       >
         <CardWrapper user={user}>
           <FormField
@@ -252,7 +258,7 @@ const UserForm = ({
             </>
           )}
         </CardWrapper>
-        <ButtonWrapper user={user}>
+        <ButtonWrapper user={user} isDesktop={isDesktop}>
           <Button type="submit" disabled={isLoading} className="w-[50%]">
             {isLoading ? (
               <Spinner className="h-4 w-4" />
@@ -285,14 +291,18 @@ const CardWrapper = ({
 const ButtonWrapper = ({
   children,
   user,
+  isDesktop,
 }: {
   children: React.ReactNode;
   user?: UserType;
+  isDesktop?: boolean;
 }) => {
   return user ? (
     <CardFooter className="">{children}</CardFooter>
-  ) : (
+  ) : isDesktop ? (
     <DialogFooter>{children}</DialogFooter>
+  ) : (
+    <DrawerFooter className="pt-2">{children}</DrawerFooter>
   );
 };
 

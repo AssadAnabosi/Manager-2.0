@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 
 import Login from "@/app/pages/login";
 import Logs from "@/app/pages/worksheets";
@@ -22,10 +21,7 @@ import Logout from "./logout";
 
 import { USER, ADMIN, MODERATOR } from "@/lib/constants";
 
-import PullToRefresh from "pulltorefreshjs";
-
 function App() {
-  const { t } = useTranslation();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
@@ -43,20 +39,6 @@ function App() {
     return () => {
       window.removeEventListener("online", onlineHandler);
       window.removeEventListener("offline", offlineHandler);
-    };
-  }, []);
-
-  useEffect(() => {
-    PullToRefresh.init({
-      instructionsPullToRefresh: `${t("Pull down to refresh")}`,
-      instructionsReleaseToRefresh: `${t("Release to refresh")}`,
-      instructionsRefreshing: `${t("Refreshing")}...`,
-      onRefresh() {
-        window.location.reload();
-      },
-    });
-    return () => {
-      PullToRefresh.destroyAll();
     };
   }, []);
 
