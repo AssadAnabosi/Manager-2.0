@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { LogType } from "@/lib/types";
 import { cn, numberFormatter, currencyFormatter } from "@/lib/utils";
 import { USER, SPECTATOR } from "@/lib/constants";
-import { useMediaQuery } from "@/hooks/use-media-query";
+// import { useMediaQuery } from "@/hooks/use-media-query";
 
 import {
   AlertDialog,
@@ -53,7 +53,8 @@ const AvatarCombo = ({
     deleteLog(log.id);
     setOpen(false);
   };
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  // const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = true;
   return isDesktop ? (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>

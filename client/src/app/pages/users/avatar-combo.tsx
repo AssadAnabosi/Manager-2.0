@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { UserType } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { MODERATOR } from "@/lib/constants";
-import { useMediaQuery } from "@/hooks/use-media-query";
+// import { useMediaQuery } from "@/hooks/use-media-query";
 
 import {
   AlertDialog,
@@ -46,7 +46,8 @@ const AvatarCombo = ({
   const [open, setOpen] = useState(false);
   const Navigate = useNavigate();
 
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  // const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = true;
   return isDesktop ? (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>

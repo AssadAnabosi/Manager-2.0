@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { ChequeType } from "@/lib/types";
 import { toList, getLastDayOfCurrentMonthDate } from "@/lib/utils";
-import { useMediaQuery } from "@/hooks/use-media-query";
+// import { useMediaQuery } from "@/hooks/use-media-query";
 
 import {
   chequeFormSchema,
@@ -110,7 +110,8 @@ export default function FormDialogDrawer({
       });
     }
   };
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  // const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = true;
   const title = cheque
     ? t(`Edit Cheque #{{serial}}`, {
         serial: cheque.serial,

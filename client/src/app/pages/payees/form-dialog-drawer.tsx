@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { PayeeType } from "@/lib/types";
-import { useMediaQuery } from "@/hooks/use-media-query";
+// import { useMediaQuery } from "@/hooks/use-media-query";
 
 import {
   payeeFormSchema,
@@ -77,7 +77,8 @@ export default function FormDialogDrawer({
       });
     }
   };
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  // const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = true;
   const title = payee ? t("Edit Payee") : t("New Payee");
   const description = payee
     ? t("Edit the payee details")
