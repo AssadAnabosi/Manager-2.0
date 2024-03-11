@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { BillType } from "@/lib/types";
 import { getToday } from "@/lib/utils";
-import { useMediaQuery } from "@/hooks/use-media-query";
+// import { useMediaQuery } from "@/hooks/use-media-query";
 
 import {
   billFormSchema,
@@ -79,7 +79,8 @@ export default function FormDialogDrawer({
       });
     }
   };
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  // const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = true;
   const title = bill ? t("Edit Bill") : t("New Bill");
   const description = bill
     ? t("Edit the bill details")

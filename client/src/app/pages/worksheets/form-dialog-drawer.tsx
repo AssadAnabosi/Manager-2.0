@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { LogType } from "@/lib/types";
 import { getToday, toList } from "@/lib/utils";
-import { useMediaQuery } from "@/hooks/use-media-query";
+// import { useMediaQuery } from "@/hooks/use-media-query";
 
 import {
   logFormSchema,
@@ -98,7 +98,8 @@ export default function FormDialogDrawer({
       });
     }
   };
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  // const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = true;
   const title = log ? t("Edit Log") : t("New Log");
   const description = log
     ? t("Edit the log details")

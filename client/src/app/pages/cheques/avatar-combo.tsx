@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ChequeType } from "@/lib/types";
 import { cn, currencyFormatter } from "@/lib/utils";
 import { SPECTATOR } from "@/lib/constants";
-import { useMediaQuery } from "@/hooks/use-media-query";
+// import { useMediaQuery } from "@/hooks/use-media-query";
 
 import {
   AlertDialog,
@@ -53,7 +53,8 @@ const AvatarCombo = ({
     deleteCheque(cheque.id);
     setOpen(false);
   };
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  // const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = true;
   return isDesktop ? (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
