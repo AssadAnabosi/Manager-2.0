@@ -74,6 +74,7 @@ export default function Login() {
           description: "Sorry, server unreachable at the moment.",
         });
       } else {
+        form.setValue("password", "");
         setError({
           description: error.response.data.message,
         });
