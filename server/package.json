@@ -33,7 +33,8 @@
     "express-rate-limit": "^6.7.0",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.8.4",
-    "ms": "^2.1.3"
+    "ms": "^2.1.3",
+    "semver": ">=7.5.2"
   },
   "devDependencies": {
     "concurrently": "^7.6.0",
