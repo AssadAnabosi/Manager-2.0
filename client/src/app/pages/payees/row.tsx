@@ -71,35 +71,35 @@ const Row = (
       </TableCell>
       <TableCell className="hidden lg:table-cell">{payee.remarks}</TableCell>
       <TableCell className="w-max text-right hidden lg:table-cell">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <FormDialogDrawer payee={payee}>
-                <Button size="icon" variant="edit" aria-label="Edit">
-                  <Pencil2Icon />
-                </Button>
-              </FormDialogDrawer>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{i18next.t("Edit")}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        {userRole !== MODERATOR && (
+        <FormDialogDrawer payee={payee}>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <DeleteDialog onAction={() => deletePayee(payee.id)}>
-                  <Button size="icon" variant="delete" aria-label="Delete">
-                    <TrashIcon />
-                  </Button>
-                </DeleteDialog>
+                <Button size="icon" variant="edit" aria-label="Edit">
+                  <Pencil2Icon />
+                </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>{i18next.t("Delete")}</p>
+                <p>{i18next.t("Edit")}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
+        </FormDialogDrawer>
+        {userRole !== MODERATOR && (
+          <DeleteDialog onAction={() => deletePayee(payee.id)}>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button size="icon" variant="delete" aria-label="Delete">
+                    <TrashIcon />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{i18next.t("Delete")}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </DeleteDialog>
         )}
       </TableCell>
     </TableRow>

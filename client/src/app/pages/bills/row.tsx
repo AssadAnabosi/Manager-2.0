@@ -69,34 +69,34 @@ const Row = (bill: BillType, deleteBill: any, userRole: string | undefined) => {
       <TableCell className="print:hidden lg:print:hidden text-right hidden lg:table-cell">
         {userRole !== SPECTATOR && (
           <div className="grid grid-cols-2">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <FormDialogDrawer bill={bill}>
+            <FormDialogDrawer bill={bill}>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
                     <Button size="icon" variant="edit" aria-label="Edit">
                       <Pencil2Icon />
                     </Button>
-                  </FormDialogDrawer>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{i18next.t("Edit")}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <DeleteDialog onAction={() => deleteBill(bill.id)}>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{i18next.t("Edit")}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </FormDialogDrawer>
+            <DeleteDialog onAction={() => deleteBill(bill.id)}>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
                     <Button size="icon" variant="delete" aria-label="Delete">
                       <TrashIcon />
                     </Button>
-                  </DeleteDialog>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{i18next.t("Delete")}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{i18next.t("Delete")}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </DeleteDialog>
           </div>
         )}
       </TableCell>

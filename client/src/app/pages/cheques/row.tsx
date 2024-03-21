@@ -83,34 +83,34 @@ const Row = (
       <TableCell className="print:hidden lg:print:hidden text-right hidden lg:table-cell">
         {userRole !== SPECTATOR && (
           <div className="grid grid-cols-2">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <FormDialogDrawer cheque={cheque}>
+            <FormDialogDrawer cheque={cheque}>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
                     <Button size="icon" variant="edit" aria-label="Edit">
                       <Pencil2Icon />
                     </Button>
-                  </FormDialogDrawer>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{i18next.t("Edit")}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <DeleteDialog onAction={() => deleteCheque(cheque.id)}>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{i18next.t("Edit")}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </FormDialogDrawer>
+            <DeleteDialog onAction={() => deleteCheque(cheque.id)}>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
                     <Button size="icon" variant="delete" aria-label="Delete">
                       <TrashIcon />
                     </Button>
-                  </DeleteDialog>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{i18next.t("Delete")}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{i18next.t("Delete")}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </DeleteDialog>
           </div>
         )}
       </TableCell>
