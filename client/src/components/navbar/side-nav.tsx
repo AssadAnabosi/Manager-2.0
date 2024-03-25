@@ -2,16 +2,10 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { SIDENAV_ITEMS, SideNavItem } from "./nav-items";
 import { useAuth } from "@/providers/auth-provider";
 
-import {
-  ChevronDownIcon,
-  DashboardIcon,
-  IdCardIcon,
-} from "@radix-ui/react-icons";
+import { ChevronDownIcon, DashboardIcon } from "@radix-ui/react-icons";
 
 const SideNav = () => {
   const { user } = useAuth();
@@ -22,49 +16,10 @@ const SideNav = () => {
           <DashboardIcon className="h-7 w-7" />
           <span className="font-bold text-xl hidden xl:flex">Dashboard</span>
         </div>
-        <div className="flex flex-col justify-between h-full">
-          <div className="flex flex-col space-y-2 xl:px-6 ">
-            {SIDENAV_ITEMS.map((item, idx) => {
-              return <MenuItem role={user?.role} key={idx} item={item} />;
-            })}
-          </div>
-          {user && (
-            <div className="w-full">
-              <Card className="m-3">
-                <CardContent className="my-auto p-5">
-                  <div className="items-center flex">
-                    <Avatar className="h-9 w-9">
-                      <AvatarImage alt="Avatar" />
-                      <AvatarFallback>
-                        <IdCardIcon className="h-5 w-5" />
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="ltr:ml-2 rtl:mr-2 space-y-1">
-                      <p
-                        className="text-sm font-medium leading-none"
-                        aria-label="Full Name"
-                      >
-                        {user.fullName}
-                      </p>
-                      <p
-                        style={{ direction: "ltr" }}
-                        className="text-sm text-muted-foreground rtl:text-right"
-                        aria-label="Username"
-                      >
-                        @{user.username}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              {/* <p
-                style={{ direction: "ltr" }}
-                className="text-xs text-center pt-1"
-              >
-                &copy; {new Date().getFullYear()}
-              </p> */}
-            </div>
-          )}
+        <div className="flex flex-col space-y-2 xl:px-6 ">
+          {SIDENAV_ITEMS.map((item, idx) => {
+            return <MenuItem role={user?.role} key={idx} item={item} />;
+          })}
         </div>
       </div>
     </nav>

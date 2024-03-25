@@ -42,6 +42,7 @@ const Row = (user: UserType, userRole: string | undefined) => {
                 {title}
               </p>
               <p
+                style={{ direction: "ltr" }}
                 className="text-sm text-muted-foreground"
                 aria-label="Username"
               >
