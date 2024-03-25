@@ -1,10 +1,14 @@
+import { useAuth } from "@/providers/auth-provider";
+
 import { DashboardIcon } from "@radix-ui/react-icons";
 
 import useScroll from "@/hooks/use-scroll";
 import { cn } from "@/lib/utils";
-// import SettingsGear from "@/components/component/settings-gear";
+import { CircleUser } from "lucide-react";
 
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 const Header = () => {
+  const { user } = useAuth();
   const scrolled = useScroll(5);
 
   return (
@@ -23,9 +27,32 @@ const Header = () => {
             <span className="font-bold text-xl flex ">Dashboard</span>
           </div>
         </div>
-        {/* <div className="hidden xl:block">
-          <SettingsGear />
-        </div> */}
+        <div className="hidden xl:block">
+          {user ? (
+            <div className="flex items-center flex-row-reverse">
+              <Avatar className="h-9 w-9">
+                <AvatarFallback>
+                  <CircleUser className="h-7 w-7" />
+                </AvatarFallback>
+              </Avatar>
+              <div className="rtl:ml-4 ltr:mr-4 space-y-1">
+                <p
+                  className="text-sm font-medium leading-none"
+                  aria-label="Full Name"
+                >
+                  {user.fullName}
+                </p>
+                <p
+                  style={{ direction: "ltr" }}
+                  className="text-sm text-muted-foreground"
+                  aria-label="Username"
+                >
+                  @{user.username}
+                </p>
+              </div>
+            </div>
+          ) : null}
+        </div>
       </div>
     </div>
   );
