@@ -17,7 +17,7 @@ export default function FooterHoverCard() {
   return (
     <HoverCard>
       <HoverCardTrigger asChild className="px-0">
-        <Button variant="link" asChild>
+        <Button variant="link" asChild style={{ direction: "ltr" }}>
           <a href="https://assad.anabosi.com" target="_blank">
             @assadanabosi
           </a>
