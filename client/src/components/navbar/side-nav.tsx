@@ -22,7 +22,7 @@ const SideNav = () => {
           <DashboardIcon className="h-7 w-7" />
           <span className="font-bold text-xl hidden xl:flex">Dashboard</span>
         </div>
-        <div className="flex flex-col justify-between h-[92%]">
+        <div className="flex flex-col justify-between h-full">
           <div className="flex flex-col space-y-2 xl:px-6 ">
             {SIDENAV_ITEMS.map((item, idx) => {
               return <MenuItem role={user?.role} key={idx} item={item} />;
@@ -30,7 +30,7 @@ const SideNav = () => {
           </div>
           {user && (
             <div className="w-full">
-              <Card className="mx-3">
+              <Card className="m-3">
                 <CardContent className="my-auto p-5">
                   <div className="items-center flex">
                     <Avatar className="h-9 w-9">
