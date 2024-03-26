@@ -70,32 +70,32 @@ const Row = (bill: BillType, deleteBill: any, userRole: string | undefined) => {
         {userRole !== SPECTATOR && (
           <div className="grid grid-cols-2">
             <FormDialogDrawer bill={bill}>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button size="icon" variant="edit" aria-label="Edit">
+              <Button size="icon" variant="edit" aria-label="Edit">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
                       <Pencil2Icon />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{i18next.t("Edit")}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{i18next.t("Edit")}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </Button>
             </FormDialogDrawer>
             <DeleteDialog onAction={() => deleteBill(bill.id)}>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button size="icon" variant="delete" aria-label="Delete">
+              <Button size="icon" variant="delete" aria-label="Delete">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
                       <TrashIcon />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{i18next.t("Delete")}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{i18next.t("Delete")}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </Button>
             </DeleteDialog>
           </div>
         )}
