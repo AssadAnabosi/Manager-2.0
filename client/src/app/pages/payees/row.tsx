@@ -72,33 +72,33 @@ const Row = (
       <TableCell className="hidden lg:table-cell">{payee.remarks}</TableCell>
       <TableCell className="w-max text-right hidden lg:table-cell">
         <FormDialogDrawer payee={payee}>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button size="icon" variant="edit" aria-label="Edit">
-                  <Pencil2Icon />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{i18next.t("Edit")}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </FormDialogDrawer>
-        {userRole !== MODERATOR && (
-          <DeleteDialog onAction={() => deletePayee(payee.id)}>
+          <Button size="icon" variant="edit" aria-label="Edit">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button size="icon" variant="delete" aria-label="Delete">
-                    <TrashIcon />
-                  </Button>
+                  <Pencil2Icon />
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{i18next.t("Delete")}</p>
+                  <p>{i18next.t("Edit")}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
+          </Button>
+        </FormDialogDrawer>
+        {userRole !== MODERATOR && (
+          <DeleteDialog onAction={() => deletePayee(payee.id)}>
+            <Button size="icon" variant="delete" aria-label="Delete">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <TrashIcon />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{i18next.t("Delete")}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </Button>
           </DeleteDialog>
         )}
       </TableCell>
