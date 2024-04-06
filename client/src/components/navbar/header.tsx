@@ -27,7 +27,7 @@ const Header = () => {
             <span className="font-bold text-xl flex ">Dashboard</span>
           </div>
         </div>
-        <div className="hidden xl:block">
+        <div className="block ltr:pr-8 rtl:pl-8 xl:ltr:pr-0 xl:rtl:pl-0">
           {user ? (
             <div className="flex items-center flex-row-reverse">
               <Avatar className="h-9 w-9">
