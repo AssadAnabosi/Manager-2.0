@@ -2,6 +2,12 @@ import mongoose from "mongoose";
 import User from "../models/User.model.js";
 import { ADMIN } from "../utils/constants/userRoles.js";
 
+import dotenv from "dotenv";
+if (process.env.NODE_ENV !== "production")
+  dotenv.config({
+    path: "./config/config.env",
+  });
+
 const connectDB = async () => {
   // @desc: Connection string
   const MONGO_URI = process.env.MONGO_URI;
