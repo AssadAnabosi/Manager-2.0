@@ -36,6 +36,7 @@ process.on("SIGTERM", () => {
   console.log("⚠️  SIGTERM received. Shutting down gracefully");
   server.close(() => {
     console.log(`☢️  Server Closed`);
+    process.exit(1);
   });
 });
 
@@ -43,6 +44,7 @@ process.on("SIGINT", () => {
   console.log("⚠️  SIGINT received. Shutting down gracefully");
   server.close(() => {
     console.log(`☢️  Server Closed`);
+    process.exit(1);
   });
 });
 
@@ -50,10 +52,10 @@ process.on("SIGUSR2", () => {
   console.log("⚠️  SIGUSR2 received. Shutting down gracefully");
   server.close(() => {
     console.log(`☢️  Server Closed`);
+    process.exit(1);
   });
 });
 
 process.on("exit", () => {
-  console.log(`☢️  Server Closed`);
   console.log(`☢️  Process Exited`);
 });
