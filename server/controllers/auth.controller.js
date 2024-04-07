@@ -137,7 +137,7 @@ const sendTokens = async (user, ipAddress, statusCode, res) => {
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
     maxAge,
-    sameSite: false,
+    sameSite: "Strict",
     secure,
   });
 
