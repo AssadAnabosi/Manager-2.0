@@ -16,38 +16,34 @@ process.on("unhandledRejection", (reason, promise) => {
   console.log(`⚠️  Unhandled Rejection`);
   console.log(`📌  Reason: ${reason}`);
   console.log(`📌  Promise(at): ${JSON.stringify(promise)}`);
-  server.close(() => process.exit(1));
+  server.close(() => console.log(`☢️  Server Closed`));
+  process.exit(1);
 });
 
 process.on("uncaughtException", (exception, origin) => {
   console.log(`⚠️  Uncaught Exception`);
   console.log(`📌  Caught exception: ${exception}`);
   console.log(`📌  Exception origin: ${origin}`);
-  server.close(() => process.exit(1));
+  server.close(() => console.log(`☢️  Server Closed`));
+  process.exit(1);
 });
 
 process.on("SIGTERM", () => {
   console.log("⚠️  SIGTERM received. Shutting down gracefully");
-  server.close(() => {
-    console.log(`☢️  Server Closed`);
-    process.exit(1);
-  });
+  server.close(() => console.log(`☢️  Server Closed`));
+  process.exit(1);
 });
 
 process.on("SIGINT", () => {
   console.log("⚠️  SIGINT received. Shutting down gracefully");
-  server.close(() => {
-    console.log(`☢️  Server Closed`);
-    process.exit(1);
-  });
+  server.close(() => console.log(`☢️  Server Closed`));
+  process.exit(1);
 });
 
 process.on("SIGUSR2", () => {
   console.log("⚠️  SIGUSR2 received. Shutting down gracefully");
-  server.close(() => {
-    console.log(`☢️  Server Closed`);
-    process.exit(1);
-  });
+  server.close(() => console.log(`☢️  Server Closed`));
+  process.exit(1);
 });
 
 process.on("exit", () => {
