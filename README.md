@@ -16,7 +16,7 @@ This app is built upon the need for a database for my family's own workshop, so 
 
 #### V2.0
 
-The V1.0 had a lot of issues that was discovered in a later stage, where the codebase was not moduler or clean, and the UI was anything but responsive so It was not usable at all on mobile phones and any screen that isn't 1920*1080. So for V2.0 it was built again from scratch with responsivity in mind for FE, As for BE I made sure that I have a much cleaner code base, and more secure (a better Auth system and more strict validations)
+The V1.0 had a lot of issues that was discovered in a later stage, where the codebase was not moduler or clean, and the UI was anything but responsive so It was not usable at all on mobile phones and any screen that isn't 1920\*1080. So for V2.0 it was built again from scratch with responsivity in mind for FE, As for BE I made sure that I have a much cleaner code base, and more secure (a better Auth system and more strict validations)
 
 ## Definitions
 
@@ -123,6 +123,7 @@ The V1.0 had a lot of issues that was discovered in a later stage, where the cod
 
 - In `/server/config` Fill the `config.env.template` file with the needed information, and rename it to `config.env`
   - `NODE_ENV`: is the environment that the server will run on. [development, production]
+  - `DOMAIN_URL`: is the URL of the server (used to set the jwt issuer).
   - `API_PREFIX`: is the prefix of the API routes e.g: /api/v2.
   - `PORT`: is the port that the server will run on.
   - `MONGO_URI`: is the URI of the MongoDB database.
