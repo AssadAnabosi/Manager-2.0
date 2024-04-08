@@ -111,6 +111,7 @@ UserSchema.methods.getAccessToken = function (sessionId) {
     process.env.JWT_ACCESS_SECRET,
     {
       expiresIn: process.env.JWT_ACCESS_EXPIRE,
+      issuer: process.env.DOMAIN_URL,
     }
   );
 };
@@ -119,6 +120,7 @@ UserSchema.methods.getAccessToken = function (sessionId) {
 UserSchema.methods.getRefreshToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_REFRESH_SECRET, {
     expiresIn: process.env.MAX_AGE,
+    issuer: process.env.DOMAIN_URL,
   });
 };
 
