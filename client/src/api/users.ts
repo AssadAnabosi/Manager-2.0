@@ -72,8 +72,7 @@ export const useGetUserQuery = () => {
         const { data: response } = await axios.get(`${BASE_URL}/${userId}`);
         return response.data;
       } catch (error: any) {
-        if (error?.response?.status === 404)
-          Navigate("/users", { replace: true });
+        Navigate("/users", { replace: true });
       }
     },
   });
