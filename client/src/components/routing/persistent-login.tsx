@@ -9,6 +9,7 @@ import { useError } from "@/providers/error-provider";
 const PersistentLogin = () => {
   const [isLoading, setIsLoading] = useState(true);
   const refresh = useRefreshToken();
+  const isLoggedIn = localStorage.getItem("isLoggedIn")?.toString() === "true";
   const { accessToken, setUser } = useAuth();
   const { setError } = useError();
   useEffect(() => {
@@ -33,7 +34,7 @@ const PersistentLogin = () => {
         setIsLoading(false);
       }
     };
-    !accessToken ? verifyRefreshToken() : setIsLoading(false);
+    !isLoggedIn || !accessToken ? verifyRefreshToken() : setIsLoading(false);
   }, []);
 
   return isLoading ? <Loading /> : <Outlet />;

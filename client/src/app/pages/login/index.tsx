@@ -61,6 +61,7 @@ export default function Login() {
 
       setUser(data.user);
       setAccessToken(data.accessToken);
+      localStorage.setItem("isLoggedIn", "true");
       toast({
         variant: "inverse",
         title: t("Welcome back, {{name}}", { name: data.user.fullName }),

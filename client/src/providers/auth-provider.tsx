@@ -94,6 +94,7 @@ export const useLogout = () => {
     } finally {
       setUser(null);
       setAccessToken("");
+      localStorage.removeItem("isLoggedIn");
     }
   };
   return logout;
