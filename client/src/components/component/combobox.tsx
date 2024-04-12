@@ -39,7 +39,7 @@ const Combobox = ({
   const [open, setOpen] = React.useState(false);
 
   return isLoading ? (
-    <Skeleton className="w-full md:w-[335px]  h-10" />
+    <Skeleton className="h-10 w-full  md:w-[335px]" />
   ) : (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -47,15 +47,15 @@ const Combobox = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full md:w-[335px] justify-between text-muted-foreground font-semibold print:hidden"
+          className="w-full justify-between font-semibold text-muted-foreground md:w-[335px] print:hidden"
         >
           {filter
             ? list.find((list) => list.value === filter)?.label
             : placeholder}
-          <ChevronsUpDown className="ltr:ml-2 rtl:mr-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50 ltr:ml-2 rtl:mr-2" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full md:w-[335px] p-0 min-w-[var(--radix-popper-anchor-width)]">
+      <PopoverContent className="scrolling-auto max-h-[var(--radix-popper-available-height);] w-full min-w-[var(--radix-popper-anchor-width)] overflow-y-auto p-0 md:w-[335px]">
         <Command>
           <CommandInput placeholder={t("Search...")} />
           <CommandEmpty>{t("No matching results")}</CommandEmpty>
@@ -68,11 +68,12 @@ const Combobox = ({
                   setFilter(item.value === filter ? "" : item.value);
                   setOpen(false);
                 }}
+                className="min-w-[var(--radix-popper-anchor-width)]"
               >
                 <Check
                   className={cn(
-                    "ltr:mr-2 rtl:ml-2 h-4 w-4",
-                    filter === item.value ? "opacity-100" : "opacity-0"
+                    "h-4 w-4 ltr:mr-2 rtl:ml-2",
+                    filter === item.value ? "opacity-100" : "opacity-0",
                   )}
                 />
                 {item.label}
