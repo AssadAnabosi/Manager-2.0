@@ -8,12 +8,12 @@ import { USER } from "../utils/constants/userRoles.js";
 
 // @desc    Get all logs
 export const getLogs = async (req, res) => {
-  const { startDate, endDate, filter: worker } = ReqQueryHelper(req.query);
+  const { startDate, endDate, filter: workers } = ReqQueryHelper(req.query);
   const filter = queryHelper.findLogs({
     userRole: req.user.role,
     startDate,
     endDate,
-    worker,
+    workers,
     user: req.user,
   });
 
@@ -42,7 +42,7 @@ export const getLogs = async (req, res) => {
       OTVSum,
       from,
       to,
-      filter: worker || "",
+      filter: workers || "",
     },
   });
 };

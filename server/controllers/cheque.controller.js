@@ -10,14 +10,14 @@ export const getCheques = async (req, res) => {
   const {
     startDate,
     endDate,
-    filter: payee,
+    filter: payees,
     serial,
   } = ReqQueryHelper(req.query);
   const filter = queryHelper.findCheques({
     serial,
     startDate,
     endDate,
-    payee,
+    payees,
   });
 
   const cheques = await Cheque.aggregate(filter);
@@ -37,7 +37,7 @@ export const getCheques = async (req, res) => {
       from,
       to,
       serial,
-      filter: payee || "",
+      filter: payees || "",
     },
   });
 };
