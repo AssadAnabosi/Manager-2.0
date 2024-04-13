@@ -78,7 +78,7 @@ const MultiSelectFormField = React.forwardRef<
     );
 
     return isLoading ? (
-      <Skeleton className="h-10 w-full  md:w-[335px]" />
+      <Skeleton className="h-10 w-full  md:w-[33%] md:min-w-[335px]" />
     ) : (
       <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
         <PopoverTrigger asChild>
