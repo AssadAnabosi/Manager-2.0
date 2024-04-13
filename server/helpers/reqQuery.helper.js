@@ -1,16 +1,21 @@
 import IsValidID from "../utils/IsValidID.js";
+import ResponseError from "../utils/responseError.js";
+import * as statusCode from "../utils/constants/statusCodes.js";
 
 export default (query) => {
   const { from, to } = query;
   let search = query.search || "";
   search = search.trim();
-  const filter = query.filter;
-  if (filter && !IsValidID(filter)) {
-    throw new ResponseError(
-      "Please provide a valid filter",
-      statusCode.BAD_REQUEST
-    );
-  }
+  const filter = query.filter ? query.filter.split(",") : undefined;
+  filter && filter.map((f) => {
+    if (!IsValidID(f)) {
+      throw new ResponseError(
+        "Please provide a valid filter",
+        statusCode.BAD_REQUEST
+      );
+    }
+    return f;
+  });
 
   let startDate = null;
   let endDate = null;

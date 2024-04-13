@@ -23,7 +23,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import DateRangePicker from "@/components/component/date-picker-range";
-import Combobox from "@/components/component/combobox";
+import MultiSelectFormField from "@/components/component/multi-select";
 import NoResults from "@/components/component/no-results";
 import FetchError from "@/components/component/fetch-error";
 
@@ -59,7 +59,7 @@ const Logs = () => {
         if (value) prev.set("filter", value);
         return prev;
       },
-      { replace: true }
+      { replace: true },
     );
   };
 
@@ -78,7 +78,7 @@ const Logs = () => {
         }
         return prev;
       },
-      { replace: true }
+      { replace: true },
     );
   };
   const { data: logsData, isLoading } = useGetLogsQuery();
@@ -91,16 +91,16 @@ const Logs = () => {
   return (
     <div className="flex-1 space-y-4 p-8 pt-6 print:px-4">
       {/* HEADER */}
-      <div className="flex space-y-2 flex-col justify-between md:flex-row gap-5">
+      <div className="flex flex-col justify-between gap-5 space-y-2 md:flex-row">
         <h2 className="text-3xl font-bold tracking-tight">
           {t("Work Timesheets")}
         </h2>
-        <div className="flex items-center gap-2 flex-col md:flex-row">
+        <div className="flex flex-col items-center gap-2 md:flex-row">
           <DateRangePicker date={date} setDate={setDate} />
           <FormDialogDrawer>
             {![USER, SPECTATOR].includes(user?.role as string) && (
               <Button className="w-full print:hidden">
-                <FilePlus className="ltr:mr-2 rtl:ml-2 h-7 w-7" />{" "}
+                <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" />{" "}
                 {t("Add New")}
               </Button>
             )}
@@ -110,7 +110,7 @@ const Logs = () => {
             className="w-full print:hidden"
             onClick={() => window.print()}
           >
-            <Printer className="ltr:mr-2 rtl:ml-2 h-6 w-6" /> {t("Print")}
+            <Printer className="h-6 w-6 ltr:mr-2 rtl:ml-2" /> {t("Print")}
           </Button>
         </div>
       </div>
@@ -119,14 +119,18 @@ const Logs = () => {
       <Cards isLoading={isLoading} logsData={logsData} />
       <Separator />
       {/* FILTER */}
-      <div className="flex justify-end flex-wrap">
+      <div className="flex flex-wrap justify-end">
         {user?.role !== USER && (
-          <Combobox
+          <MultiSelectFormField
             isLoading={filterLoading}
             list={workers}
-            filter={filter}
-            setFilter={setFilter}
+            // filter={filter}
+            // setFilter={setFilter}
             placeholder={t("Filter by worker")}
+            onValueChange={(value) => {
+              setFilter(value.toString());
+            }}
+            defaultValue={filter ? filter.split(",") : []}
           />
         )}
       </div>
@@ -168,23 +172,23 @@ const Logs = () => {
               <TableHead className="w-[80px] text-center">
                 {t("Attended")}
               </TableHead>
-              <TableHead className="print:table-cell hidden md:table-cell w-[150px] md:w-[280px] md:print:w-[150px] rtl:text-right">
+              <TableHead className="hidden w-[150px] md:table-cell md:w-[280px] rtl:text-right print:table-cell md:print:w-[150px]">
                 {t("Workday Variance: Balancing Hours")}
               </TableHead>
-              <TableHead className="print:table-cell hidden md:table-cell w-[120px] rtl:text-right">
+              <TableHead className="hidden w-[120px] md:table-cell rtl:text-right print:table-cell">
                 {t("Payment")}
               </TableHead>
-              <TableHead className="print:table-cell hidden lg:table-cell w-max rtl:text-right">
+              <TableHead className="hidden w-max lg:table-cell rtl:text-right print:table-cell">
                 {t("Remarks")}
               </TableHead>
-              <TableHead className="print:hidden 2xl:print:hidden hidden 2xl:table-cell w-[120px]"></TableHead>
+              <TableHead className="hidden w-[120px] 2xl:table-cell print:hidden 2xl:print:hidden"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
               : logsData.logs.map((log: LogType) =>
-                  Row(log, deleteLog, user?.role)
+                  Row(log, deleteLog, user?.role),
                 )}
           </TableBody>
         </Table>

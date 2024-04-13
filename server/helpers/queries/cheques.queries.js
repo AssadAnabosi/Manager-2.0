@@ -1,6 +1,6 @@
 import ObjectID from "../../utils/ObjectID.js";
 
-export const findCheques = ({ serial: search, startDate, endDate, payee }) => {
+export const findCheques = ({ serial: search, startDate, endDate, payees }) => {
   const filter = [];
   const serial = parseInt(search) | 0;
   const dueDateFilter = {};
@@ -23,9 +23,11 @@ export const findCheques = ({ serial: search, startDate, endDate, payee }) => {
         dueDate: dueDateFilter,
       },
     ];
-    if (payee && payee !== "") {
+    if (payees && payees.length > 0) {
       and.push({
-        payee: ObjectID(payee),
+        payee: {
+          $in: payees.map((payee) => ObjectID(payee)),
+        },
       });
     }
     filter.push({
