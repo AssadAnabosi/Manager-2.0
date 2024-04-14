@@ -205,7 +205,7 @@ const MultiSelectFormField = React.forwardRef<
                       }}
                       className="justify-center text-center"
                     >
-                      Clear filters
+                      {t("Clear filters")}
                     </CommandItem>
                   </CommandGroup>
                 </>
