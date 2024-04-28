@@ -46,22 +46,11 @@ const MultiSelectFormField = React.forwardRef<
     const [selectedValues, setSelectedValues] = useState(
       new Set(defaultValue || []),
     );
-    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+    const [open, setOpen] = React.useState(false);
 
     useEffect(() => {
       setSelectedValues(new Set(defaultValue));
     }, [defaultValue]);
-
-    const handleInputKeyDown = (event: any) => {
-      if (event.key === "Enter") {
-        setIsPopoverOpen(true);
-      } else if (event.key === "Backspace" && !event.target.value) {
-        const values = Array.from(selectedValues);
-        values.pop();
-        setSelectedValues(new Set(values));
-        onValueChange(values);
-      }
-    };
 
     const toggleOption = useCallback(
       (value: string) => {
@@ -80,12 +69,11 @@ const MultiSelectFormField = React.forwardRef<
     return isLoading ? (
       <Skeleton className="h-10 w-full  md:w-[33%] md:min-w-[335px]" />
     ) : (
-      <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+      <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             ref={ref}
             {...props}
-            onClick={() => setIsPopoverOpen(!isPopoverOpen)}
             className="flex h-auto min-h-10 w-full items-center justify-between rounded-md border bg-inherit hover:bg-card md:w-[33%] md:min-w-[335px] print:hidden"
           >
             {Array.from(selectedValues).length > 0 ? (
@@ -144,18 +132,9 @@ const MultiSelectFormField = React.forwardRef<
         <PopoverContent
           className="scrolling-auto max-h-[var(--radix-popper-available-height);] w-[200px] min-w-[var(--radix-popper-anchor-width)] overflow-y-auto p-0 drop-shadow-xl md:w-[335px]"
           align="start"
-          onEscapeKeyDown={() => setIsPopoverOpen(false)}
-          onInteractOutside={(event) => {
-            if (!event.defaultPrevented) {
-              setIsPopoverOpen(false);
-            }
-          }}
         >
           <Command>
-            <CommandInput
-              placeholder={t("Search...")}
-              onKeyDown={handleInputKeyDown}
-            />
+            <CommandInput placeholder={t("Search...")} />
             <CommandList>
               <CommandEmpty>{t("No matching results")}</CommandEmpty>
               <CommandGroup>
