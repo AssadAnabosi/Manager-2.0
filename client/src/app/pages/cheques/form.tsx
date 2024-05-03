@@ -17,6 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Calendar } from "@/components/ui/calendar";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -109,7 +110,7 @@ const ChequeForm = ({
                         ) : (
                           <span>{t("Pick a date")}</span>
                         )}
-                        <CalendarIcon className="ltr:ml-auto rtl:mr-auto h-4 w-4 opacity-50" />
+                        <CalendarIcon className="h-4 w-4 opacity-50 ltr:ml-auto rtl:mr-auto" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -137,7 +138,7 @@ const ChequeForm = ({
             control={chequeForm.control}
             name="serial"
             render={({ field }) => (
-              <FormItem className="flex flex-col relative">
+              <FormItem className="relative flex flex-col">
                 <FormLabel>{t("Serial No.")}</FormLabel>
                 <FormControl>
                   <Input {...field} type="string" className="input" />
@@ -154,7 +155,7 @@ const ChequeForm = ({
             <FormItem className="flex flex-col">
               <FormLabel>{t("Payee")}</FormLabel>
               {!filterLoading ? (
-                <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+                <Popover open={popoverOpen} onOpenChange={setPopoverOpen} modal>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
@@ -177,43 +178,46 @@ const ChequeForm = ({
                     <Command>
                       <CommandInput placeholder={t("Search...")} />
                       <CommandEmpty>{t("No matching results")}</CommandEmpty>
-                      <CommandGroup>
-                        {payees.map((payee) => (
-                          <CommandItem
-                            className={
-                              !payee.active
-                                ? "opacity-50 text-muted-foregroundF"
-                                : ""
-                            }
-                            disabled={!payee.active}
-                            value={payee.label}
-                            key={payee.value}
-                            onSelect={() => {
-                              if (payee.active) {
-                                chequeForm.getValues("payee") === payee.value
-                                  ? chequeForm.setValue("payee", "")
-                                  : chequeForm.setValue("payee", payee.value);
-                              }
-                              setPopoverOpen(false);
-                            }}
-                          >
-                            <Check
+                      <ScrollArea>
+                        <CommandGroup>
+                          {payees.map((payee) => (
+                            <CommandItem
                               className={cn(
-                                "mr-2 h-4 w-4",
-                                payee.value === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
+                                "w-[98%]",
+                                !payee.active
+                                  ? "text-muted-foregroundF opacity-50"
+                                  : ""
                               )}
-                            />
-                            {payee.label}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
+                              disabled={!payee.active}
+                              value={payee.label}
+                              key={payee.value}
+                              onSelect={() => {
+                                if (payee.active) {
+                                  chequeForm.getValues("payee") === payee.value
+                                    ? chequeForm.setValue("payee", "")
+                                    : chequeForm.setValue("payee", payee.value);
+                                }
+                                setPopoverOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  payee.value === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {payee.label}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </ScrollArea>
                     </Command>
                   </PopoverContent>
                 </Popover>
               ) : (
-                <Skeleton className="w-[280px] h-10" />
+                <Skeleton className="h-10 w-[280px]" />
               )}
               <FormMessage />
             </FormItem>
@@ -227,7 +231,7 @@ const ChequeForm = ({
               <FormLabel>{t("Value")}</FormLabel>
               <FormControl>
                 <div className="relative w-full justify-between">
-                  <span className="absolute top-0 bottom-0 w-6 h-6 my-auto text-muted-foreground left-3">
+                  <span className="absolute bottom-0 left-3 top-0 my-auto h-6 w-6 text-muted-foreground">
                     <ShekelIcon />
                   </span>
                   <Input

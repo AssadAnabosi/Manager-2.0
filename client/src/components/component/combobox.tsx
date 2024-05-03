@@ -15,6 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { useTranslation } from "react-i18next";
 import { Skeleton } from "../ui/skeleton";
@@ -55,31 +56,34 @@ const Combobox = ({
           <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50 ltr:ml-2 rtl:mr-2" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="scrolling-auto max-h-[var(--radix-popper-available-height);] w-full min-w-[var(--radix-popper-anchor-width)] overflow-y-auto p-0 md:w-[335px]">
+      <PopoverContent className="w-full min-w-[var(--radix-popper-anchor-width)] p-0 md:w-[335px]">
         <Command>
           <CommandInput placeholder={t("Search...")} />
           <CommandEmpty>{t("No matching results")}</CommandEmpty>
-          <CommandGroup>
-            {list.map((item) => (
-              <CommandItem
-                value={item.label}
-                key={item.value}
-                onSelect={() => {
-                  setFilter(item.value === filter ? "" : item.value);
-                  setOpen(false);
-                }}
-                className="min-w-[var(--radix-popper-anchor-width)]"
-              >
-                <Check
-                  className={cn(
-                    "h-4 w-4 ltr:mr-2 rtl:ml-2",
-                    filter === item.value ? "opacity-100" : "opacity-0",
-                  )}
-                />
-                {item.label}
-              </CommandItem>
-            ))}
-          </CommandGroup>
+          <ScrollArea className="h-72">
+            <CommandGroup>
+              <h4 className="mb-4 text-sm font-medium leading-none">Tags</h4>
+              {list.map((item) => (
+                <CommandItem
+                  value={item.label}
+                  key={item.value}
+                  onSelect={() => {
+                    setFilter(item.value === filter ? "" : item.value);
+                    setOpen(false);
+                  }}
+                  className="min-w-[var(--radix-popper-anchor-width)]"
+                >
+                  <Check
+                    className={cn(
+                      "h-4 w-4 ltr:mr-2 rtl:ml-2",
+                      filter === item.value ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                  {item.label}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </ScrollArea>
         </Command>
       </PopoverContent>
     </Popover>
