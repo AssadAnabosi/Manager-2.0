@@ -17,6 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Calendar } from "@/components/ui/calendar";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -108,7 +109,7 @@ const LogForm = ({
                       ) : (
                         <span>{t("Pick a date")}</span>
                       )}
-                      <CalendarIcon className="ltr:ml-auto rtl:mr-auto h-4 w-4 opacity-50" />
+                      <CalendarIcon className="h-4 w-4 opacity-50 ltr:ml-auto rtl:mr-auto" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
@@ -168,7 +169,7 @@ const LogForm = ({
             <FormItem className="flex flex-col">
               <FormLabel>{t("Worker")}</FormLabel>
               {!filterLoading ? (
-                <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+                <Popover open={popoverOpen} onOpenChange={setPopoverOpen} modal>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
@@ -193,43 +194,46 @@ const LogForm = ({
                     <Command>
                       <CommandInput placeholder={t("Search...")} />
                       <CommandEmpty>{t("No matching results")}</CommandEmpty>
-                      <CommandGroup>
-                        {workers.map((worker) => (
-                          <CommandItem
-                            className={
-                              !worker.active
-                                ? "opacity-50 text-muted-foregroundF"
-                                : ""
-                            }
-                            disabled={!worker.active}
-                            value={worker.label}
-                            key={worker.value}
-                            onSelect={() => {
-                              if (worker.active) {
-                                logForm.getValues("worker") === worker.value
-                                  ? logForm.setValue("worker", "")
-                                  : logForm.setValue("worker", worker.value);
-                              }
-                              setPopoverOpen(false);
-                            }}
-                          >
-                            <Check
+                      <ScrollArea>
+                        <CommandGroup>
+                          {workers.map((worker) => (
+                            <CommandItem
                               className={cn(
-                                "mr-2 h-4 w-4",
-                                worker.value === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
+                                "w-[98%]",
+                                !worker.active
+                                  ? "text-muted-foregroundF opacity-50"
+                                  : ""
                               )}
-                            />
-                            {worker.label}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
+                              disabled={!worker.active}
+                              value={worker.label}
+                              key={worker.value}
+                              onSelect={() => {
+                                if (worker.active) {
+                                  logForm.getValues("worker") === worker.value
+                                    ? logForm.setValue("worker", "")
+                                    : logForm.setValue("worker", worker.value);
+                                }
+                                setPopoverOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  worker.value === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {worker.label}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </ScrollArea>
                     </Command>
                   </PopoverContent>
                 </Popover>
               ) : (
-                <Skeleton className="w-[280px] h-10" />
+                <Skeleton className="h-10 w-[280px]" />
               )}
               <FormMessage />
             </FormItem>
@@ -243,7 +247,7 @@ const LogForm = ({
               <FormLabel>{t("Payment")}</FormLabel>
               <FormControl>
                 <div className="relative w-full justify-between">
-                  <span className="absolute top-0 bottom-0 w-6 h-6 my-auto text-muted-foreground left-3">
+                  <span className="absolute bottom-0 left-3 top-0 my-auto h-6 w-6 text-muted-foreground">
                     <ShekelIcon />
                   </span>
                   <Input

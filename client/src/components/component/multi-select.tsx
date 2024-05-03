@@ -21,6 +21,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
+import { ScrollArea } from "../ui/scroll-area";
 
 interface MultiSelectFormFieldProps {
   list: {
@@ -40,11 +41,11 @@ const MultiSelectFormField = React.forwardRef<
 >(
   (
     { list, defaultValue, onValueChange, placeholder, isLoading, ...props },
-    ref,
+    ref
   ) => {
     const { t } = useTranslation();
     const [selectedValues, setSelectedValues] = useState(
-      new Set(defaultValue || []),
+      new Set(defaultValue || [])
     );
     const [open, setOpen] = React.useState(false);
 
@@ -63,7 +64,7 @@ const MultiSelectFormField = React.forwardRef<
         setSelectedValues(newSelectedValues);
         onValueChange(Array.from(newSelectedValues));
       },
-      [selectedValues, onValueChange],
+      [selectedValues, onValueChange]
     );
 
     return isLoading ? (
@@ -137,64 +138,66 @@ const MultiSelectFormField = React.forwardRef<
             <CommandInput placeholder={t("Search...")} />
             <CommandList>
               <CommandEmpty>{t("No matching results")}</CommandEmpty>
-              <CommandGroup>
-                {list.map((option) => {
-                  const isSelected = selectedValues.has(option.value);
-                  return (
-                    <CommandItem
-                      key={option.value}
-                      onSelect={() => {
-                        toggleOption(option.value);
-                      }}
-                      style={{
-                        pointerEvents: "auto",
-                        opacity: 1,
-                      }}
-                    >
-                      <div
-                        className={cn(
-                          "flex h-4 w-4 items-center justify-center rounded-sm border border-primary ltr:mr-2 rtl:ml-2",
-                          isSelected
-                            ? "bg-primary text-primary-foreground"
-                            : "opacity-50 [&_svg]:invisible",
-                        )}
+              <ScrollArea>
+                <CommandGroup>
+                  {list.map((option) => {
+                    const isSelected = selectedValues.has(option.value);
+                    return (
+                      <CommandItem
+                        key={option.value}
+                        onSelect={() => {
+                          toggleOption(option.value);
+                        }}
+                        style={{
+                          pointerEvents: "auto",
+                          opacity: 1,
+                        }}
                       >
-                        <CheckIcon className={cn("h-4 w-4")} />
-                      </div>
-                      {option.icon && (
-                        <option.icon className="h-4 w-4 text-muted-foreground ltr:mr-2 rtl:ml-2" />
-                      )}
-                      <span>{option.label}</span>
-                    </CommandItem>
-                  );
-                })}
-              </CommandGroup>
-              {selectedValues.size > 0 && (
-                <>
-                  <CommandSeparator />
-                  <CommandGroup>
-                    <CommandItem
-                      onSelect={() => {
-                        setSelectedValues(new Set([]));
-                        onValueChange(Array.from(new Set([])));
-                      }}
-                      style={{
-                        pointerEvents: "auto",
-                        opacity: 1,
-                      }}
-                      className="justify-center text-center"
-                    >
-                      {t("Clear filters")}
-                    </CommandItem>
-                  </CommandGroup>
-                </>
-              )}
+                        <div
+                          className={cn(
+                            "flex h-4 w-4 items-center justify-center rounded-sm border border-primary ltr:mr-2 rtl:ml-2",
+                            isSelected
+                              ? "bg-primary text-primary-foreground"
+                              : "opacity-50 [&_svg]:invisible"
+                          )}
+                        >
+                          <CheckIcon className={cn("h-4 w-4")} />
+                        </div>
+                        {option.icon && (
+                          <option.icon className="h-4 w-4 text-muted-foreground ltr:mr-2 rtl:ml-2" />
+                        )}
+                        <span>{option.label}</span>
+                      </CommandItem>
+                    );
+                  })}
+                </CommandGroup>
+                {selectedValues.size > 0 && (
+                  <>
+                    <CommandSeparator />
+                    <CommandGroup>
+                      <CommandItem
+                        onSelect={() => {
+                          setSelectedValues(new Set([]));
+                          onValueChange(Array.from(new Set([])));
+                        }}
+                        style={{
+                          pointerEvents: "auto",
+                          opacity: 1,
+                        }}
+                        className="justify-center text-center"
+                      >
+                        {t("Clear filters")}
+                      </CommandItem>
+                    </CommandGroup>
+                  </>
+                )}
+              </ScrollArea>
             </CommandList>
           </Command>
         </PopoverContent>
       </Popover>
     );
-  },
+  }
 );
 
 MultiSelectFormField.displayName = "MultiSelectFormField";
