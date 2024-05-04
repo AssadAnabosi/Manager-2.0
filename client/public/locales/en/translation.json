@@ -197,6 +197,7 @@
   "Moderator": "Moderator",
   "Spectator": "Spectator",
   "User": "User",
+  "Username can only contain letters, numbers, hyphens, underscores, and periods.": "Username can only contain letters, numbers, hyphens, underscores, and periods.",
   "Username is required.": "Username is required.",
   "Username is already taken.": "Username is already taken.",
   "First name is required.": "First name is required.",

@@ -197,6 +197,7 @@
   "Moderator": "مشرف",
   "Spectator": "مراقب",
   "User": "مستخدم",
+  "Username can only contain letters, numbers, hyphens, underscores, and periods.": "اسم المستخدم يمكن ان يحتوي فقط على حروف, ارقام, شرطات, شرطات سفلية, و نقاط.",
   "Username is required.": "اسم المستخدم مطلوب.",
   "Username is already taken.": "اسم المستخدم موجود بالفعل.",
   "First name is required.": "الاسم الاول مطلوب.",

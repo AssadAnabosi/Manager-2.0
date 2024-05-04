@@ -23,6 +23,7 @@ const UserSchema = new Schema({
     type: String,
     required: [true, "Please provide a username"],
     unique: true,
+    match: /^[a-zA-Z0-9\-_.]+$/,
   },
   email: {
     type: String,

@@ -34,6 +34,7 @@
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
+    "ejs": ">=3.1.10",
     "follow-redirects": ">=1.15.6",
     "framer-motion": "^10.16.5",
     "i18next": "^23.7.6",

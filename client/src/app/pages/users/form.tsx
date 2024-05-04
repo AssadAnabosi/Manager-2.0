@@ -48,7 +48,13 @@ const UserForm = ({
 
   const userFormSchema = z
     .object({
-      username: z.string().min(2, "Username is required."),
+      username: z
+        .string()
+        .min(2, "Username is required.")
+        .regex(
+          /^[a-zA-Z0-9\-_.]+$/,
+          "Username can only contain letters, numbers, hyphens, underscores, and periods."
+        ),
       firstName: z.string().min(1, "First name is required."),
       lastName: z.string().min(1, "Last name is required."),
       email: z.string(),
