@@ -11,6 +11,13 @@ export const registerUser = async (req, res) => {
   const { firstName, lastName, username, email, phoneNumber, password } =
     req.body;
 
+  if (!/^[a-zA-Z0-9-_.]*$/.test(username)) {
+    throw new ResponseError(
+      "Username can only contain letters, numbers, hyphens, underscores, and periods",
+      statusCode.BAD_REQUEST
+    );
+  }
+
   await User.create({
     firstName,
     lastName,
