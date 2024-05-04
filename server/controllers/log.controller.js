@@ -7,14 +7,14 @@ import * as queryHelper from "../helpers/queries/logs.queries.js";
 import { USER } from "../utils/constants/userRoles.js";
 
 // @desc    Get all logs
-export const getLogs = async (req, res) => {
-  const { startDate, endDate, filter: workers } = ReqQueryHelper(req.query);
+export const getLogs = async (c) => {
+  const { startDate, endDate, filter: workers } = ReqQueryHelper(c.req.query());
   const filter = queryHelper.findLogs({
-    userRole: req.user.role,
+    userRole: c.var.user.role,
     startDate,
     endDate,
     workers,
-    user: req.user,
+    user: c.var.user,
   });
 
   const logs = await Log.aggregate(filter);
@@ -33,24 +33,34 @@ export const getLogs = async (req, res) => {
   const OTVSum = attendanceSums ? attendanceSums.OTVSum : 0;
   const from = startDate ? startDate.toISOString().substring(0, 10) : "";
   const to = endDate ? endDate.toISOString().substring(0, 10) : "";
-  return res.status(statusCode.OK).json({
-    success: true,
-    data: {
-      logs,
-      paymentsSumValue,
-      daysCount,
-      OTVSum,
-      from,
-      to,
-      filter: workers || "",
+  return c.json(
+    {
+      success: true,
+      data: {
+        logs,
+        paymentsSumValue,
+        daysCount,
+        OTVSum,
+        from,
+        to,
+        filter: workers || "",
+      },
     },
-  });
+    statusCode.OK
+  );
 };
 
 // @desc    Create a log
-export const createLog = async (req, res) => {
-  let { date, isAbsent, startingTime, finishingTime, payment, remarks } =
-    req.body;
+export const createLog = async (c) => {
+  let {
+    date,
+    isAbsent,
+    startingTime,
+    finishingTime,
+    payment,
+    remarks,
+    worker: workerID,
+  } = await c.req.json();
   date = new Date(date);
   date.setUTCHours(0, 0, 0, 0);
   if (
@@ -63,12 +73,12 @@ export const createLog = async (req, res) => {
     );
   }
 
-  const worker = await Worker.findById(req.body.worker);
+  const worker = await Worker.findById(workerID);
   if (!worker)
     throw new ResponseError("Worker not found", statusCode.NOT_FOUND);
 
   const log = new Log({
-    worker: req.body.worker,
+    worker: workerID,
     date,
     isAbsent,
     startingTime,
@@ -78,30 +88,42 @@ export const createLog = async (req, res) => {
   });
   await log.save();
 
-  return res.sendStatus(statusCode.CREATED);
+  return c.json(
+    {
+      success: true,
+      message: "Log was added successfully",
+    },
+    statusCode.CREATED
+  );
 };
 
 // @desc    Get a log
-export const getLog = async (req, res) => {
-  const log = await Log.aggregate(queryHelper.findLogByID(req.params.logID));
-  if (req.user.role === USER && log.worker.id !== req.user.id) {
+export const getLog = async (c) => {
+  const { logID } = c.req.param();
+  const log = await Log.aggregate(queryHelper.findLogByID(logID));
+  if (c.var.user.role === USER && log.worker.id !== c.var.user.id) {
     throw new ResponseError(
       "You are not authorized to access this log",
       statusCode.NOT_AUTHORIZED
     );
   }
 
-  return res.status(statusCode.OK).json({
-    success: true,
-    data: {
-      log: log[0],
+  return c.json(
+    {
+      success: true,
+      data: {
+        log: log[0],
+      },
     },
-  });
+    statusCode.OK
+  );
 };
 
 // @desc    Update a log
-export const updateLog = async (req, res) => {
-  const { isAbsent, startingTime, finishingTime } = req.body;
+export const updateLog = async (c) => {
+  const { logID } = c.req.param();
+  const body = await c.req.json();
+  const { isAbsent, startingTime, finishingTime } = body;
 
   if (
     (isAbsent === undefined || isAbsent === null) &&
@@ -113,17 +135,30 @@ export const updateLog = async (req, res) => {
     );
   }
 
-  await Log.findByIdAndUpdate(req.params.logID, req.body, {
+  await Log.findByIdAndUpdate(logID, body, {
     new: true,
     runValidators: true,
   });
 
-  return res.sendStatus(statusCode.NO_CONTENT);
+  return c.json(
+    {
+      success: true,
+      message: "Bill was updated successfully",
+    },
+    statusCode.OK
+  );
 };
 
 // @desc    Delete a log
-export const deleteLog = async (req, res) => {
-  await Log.findByIdAndDelete(req.params.logID);
+export const deleteLog = async (c) => {
+  const { logID } = c.req.param();
+  await Log.findByIdAndDelete(logID);
 
-  return res.sendStatus(statusCode.NO_CONTENT);
+  return c.json(
+    {
+      success: true,
+      message: "Log was deleted successfully",
+    },
+    statusCode.OK
+  );
 };

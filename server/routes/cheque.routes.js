@@ -1,25 +1,26 @@
-import { Router } from "express";
-const router = Router();
+import { Hono } from "hono";
+const router = new Hono();
 
 import * as controller from "../controllers/cheque.controller.js";
-import catchError from "../utils/catchError.js";
 
-import { authorize } from "../middleware/auth.middleware.js";
-import { ADMIN, MODERATOR } from "../utils/constants/userRoles.js";
+import { authorize, notAuthorized } from "../middleware/auth.middleware.js";
+import { USER, ADMIN, MODERATOR } from "../utils/constants/userRoles.js";
 import * as validator from "../middleware/validators/cheque.validator.js";
 import { validateParamID } from "../middleware/reqValidators.middleware.js";
 
 //  @routes  apiPrefix/cheques
 
+router.use(notAuthorized([USER]));
+
 router
   .route("/")
   // @access  Spec, Mod, Admin
-  .get(catchError(controller.getCheques))
+  .get(controller.getCheques)
   // @access  Mod, Admin
   .post(
     authorize([MODERATOR, ADMIN]),
     validator.validateCreateCheque,
-    catchError(controller.createCheque)
+    controller.createCheque
   );
 
 // @routes  apiPrefix/cheques/:chequeID
@@ -28,10 +29,10 @@ router
   .route("/:chequeID")
   .all(validateParamID("chequeID"))
   // @access  Spec, Mod, Admin
-  .get(catchError(controller.getCheque))
+  .get(controller.getCheque)
   // @access  Mod, Admin
-  .put(authorize([MODERATOR, ADMIN]), catchError(controller.updateCheque))
+  .put(authorize([MODERATOR, ADMIN]), controller.updateCheque)
   // @access  Mod, Admin
-  .delete(authorize([MODERATOR, ADMIN]), catchError(controller.deleteCheque));
+  .delete(authorize([MODERATOR, ADMIN]), controller.deleteCheque);
 
 export default router;

@@ -1,10 +1,14 @@
-const requestIP = (req, res, next) => {
-  let ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-  if (ip.substr(0, 7) == "::ffff:") {
-    ip = ip.substr(7);
+import { createMiddleware } from "hono/factory";
+
+const requestIP = createMiddleware(async (c, next) => {
+  let ip =
+    c.req.raw.headers.get("x-forwarded-for") ||
+    c.req.raw.headers.get("CF-Connecting-IP");
+  if (!ip) {
+    ip = c.env.ip.address.substr(7);
   }
-  req.ip_address = ip;
-  next();
-};
+  c.set("ip_address", ip);
+  await next();
+});
 
 export default requestIP;

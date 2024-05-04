@@ -1,3 +1,4 @@
+import { createMiddleware } from "hono/factory";
 import ResponseError from "../utils/responseError.js";
 import { Types } from "mongoose";
 import * as statusCode from "../utils/constants/statusCodes.js";
@@ -6,65 +7,59 @@ import * as DB from "../models/index.js";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
 
 export const reqBodyIncludes = (rules) => {
-  return function validateBody(req, res, next) {
+  return createMiddleware(async (c, next) => {
+    const body = await c.req.json();
     rules = typeof rules === "string" ? [rules] : rules;
     for (const rule of rules) {
-      if (typeof req.body[rule] === "undefined") {
-        return next(
-          new ResponseError(
-            `Please provide ${rule} in your request's body`,
-            statusCode.BAD_REQUEST
-          )
+      if (typeof body[rule] === "undefined") {
+        throw new ResponseError(
+          `Please provide ${rule} in your request's body`,
+          statusCode.BAD_REQUEST
         );
       }
     }
-    return next();
-  };
+    await next();
+  });
 };
 
 export const reqBodyExcludes = (rules) => {
-  rules = typeof rules === "string" ? [rules] : rules;
-  return function validateBody(req, res, next) {
+  return createMiddleware(async (c, next) => {
+    const body = await c.req.json();
+    rules = typeof rules === "string" ? [rules] : rules;
     for (const rule of rules) {
-      if (req.body[rule] !== undefined) {
-        return next(
-          new ResponseError(
-            `You are not authorized to update the ${rule} field`,
-            statusCode.BAD_REQUEST
-          )
+      if (typeof body[rule] !== "undefined") {
+        throw new ResponseError(
+          `Please provide ${rule} in your request's body`,
+          statusCode.BAD_REQUEST
         );
       }
     }
-    next();
-  };
+    await next();
+  });
 };
 
 export const validateParamID = (params) => {
   params = typeof params === "string" ? [params] : params;
-  return async (req, res, next) => {
+  return createMiddleware(async (c, next) => {
     for (let param of params) {
-      if (!ObjectId.isValid(req.params[param])) {
-        return next(
-          new ResponseError(
-            `Please provide a valid ${capitalizeFirstLetter(param)}`,
-            statusCode.BAD_REQUEST
-          )
+      if (!ObjectId.isValid(c.req.param(param))) {
+        throw new ResponseError(
+          `Please provide a valid ${capitalizeFirstLetter(param)}`,
+          statusCode.BAD_REQUEST
         );
       }
       const model = paramToModel(param);
-      let document = await DB[model].findById(req.params[param]);
+      let document = await DB[model].findById(c.req.param(param));
       if (!document) {
-        return next(
-          new ResponseError(
-            `${model} With ID [${req.params[param]}] Is Not Found`,
-            statusCode.NOT_FOUND
-          )
+        throw new ResponseError(
+          `${model} With ID [${c.req.param(param)}] Is Not Found`,
+          statusCode.NOT_FOUND
         );
       }
-      req[model] = document;
+      c.set(model, document);
     }
-    return next();
-  };
+    await next();
+  });
 };
 
 const paramToModel = (param) => {

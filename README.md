@@ -16,7 +16,7 @@ This app is built upon the need for a database for my family's own workshop, so 
 
 #### V2.0
 
-The V1.0 had a lot of issues that was discovered in a later stage, where the codebase was not moduler or clean, and the UI was anything but responsive so It was not usable at all on mobile phones and any screen that isn't 1920\*1080. So for V2.0 it was built again from scratch with responsivity in mind for FE, As for BE I made sure that I have a much cleaner code base, and more secure (a better Auth system and more strict validations)
+The V1.0 had a lot of issues that was discovered in a later stage, where the codebase was not modular or clean, and the UI was anything but responsive so It was not usable at all on mobile phones and any screen that isn't 1920\*1080. So for V2.0 it was built again from scratch with responsivity in mind for FE, As for BE I made sure that I have a much cleaner code base, and more secure (a better Auth system and more strict validations)
 
 ## Definitions
 
@@ -97,7 +97,7 @@ The V1.0 had a lot of issues that was discovered in a later stage, where the cod
 ### Server Side (Back-end)
 
 - Bun
-- ExpressJS
+- Hono
 - MongoDB
 - Mongoose
 - BcryptJS

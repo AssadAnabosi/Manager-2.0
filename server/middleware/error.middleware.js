@@ -2,7 +2,7 @@ import ResponseError from "../utils/responseError.js";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter.js";
 import * as statusCode from "../utils/constants/statusCodes.js";
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = async (err, c) => {
   let error = { ...err };
 
   error.message = err.message;
@@ -33,7 +33,7 @@ const errorHandler = (err, req, res, next) => {
   }
 
   // Log to console for dev if error wasn't thrown by ResponseError
-  if (!error.statusCode) errorLogger(err, req);
+  if (!error.statusCode) await errorLogger(err, c);
 
   //  Mongoose Validation Error
   if (err.name === "ValidationError") {
@@ -41,22 +41,34 @@ const errorHandler = (err, req, res, next) => {
     error = new ResponseError(message, statusCode.BAD_REQUEST);
   }
 
-  return res.status(error.statusCode || statusCode.INTERNAL_SERVER_ERROR).json({
-    success: false,
-    message: error.message || "Internal Server Error",
-  });
+  const responseCode = error.statusCode || statusCode.INTERNAL_SERVER_ERROR;
+  return c.json(
+    {
+      success: false,
+      message: error.message || "Internal Server Error",
+    },
+    responseCode
+  );
 };
 
 export default errorHandler;
 
-const errorLogger = (err, req) => {
+const errorLogger = async (err, c) => {
   console.log(`⚠️  Error Occurred - ${new Date().toLocaleString()}`);
   // [IP]
-  console.log(`📌  [${req.ip_address}]`);
+  console.log(`📌  [${c.get("ip_address")}]`);
   // METHOD URL
-  console.log(`📌  ${req.method} ${req.originalUrl}`);
+  const originalUrl = c.req.url.replace(/https?:\/\/[^/]+/i, "");
+  console.log(`📌  ${c.req.method} ${originalUrl}`);
   // body
-  console.log(`📌  Body: \n${JSON.stringify(req.body)}`);
+  if ([`POST`, `PUT`, `PATCH`].includes(c.req.method)) {
+    try {
+      const body = JSON.stringify(await c.req.json());
+      console.log(`📌  Body: \n${body}`);
+    } catch (error) {
+      console.log(`📌  Body: [Cannot parse]`);
+    }
+  }
   // error
   console.log(`---~~~--- Start of Error ---~~~---`);
   console.log(err);

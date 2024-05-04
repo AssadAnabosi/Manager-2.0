@@ -1,8 +1,7 @@
-import { Router } from "express";
-const router = Router();
+import { Hono } from "hono";
+const router = new Hono();
 
 import * as controller from "../controllers/user.controller.js";
-import catchError from "../utils/catchError.js";
 
 import { authorize } from "../middleware/auth.middleware.js";
 import { ADMIN, MODERATOR, SPECTATOR } from "../utils/constants/userRoles.js";
@@ -11,35 +10,34 @@ import { validateParamID } from "../middleware/reqValidators.middleware.js";
 
 //  @routes  apiPrefix/users
 
+router.use(authorize());
+
 router
   .route("/")
-  .get(
-    authorize([SPECTATOR, MODERATOR, ADMIN]),
-    catchError(controller.getUsers)
-  )
+  .get(authorize([SPECTATOR, MODERATOR, ADMIN]), controller.getUsers)
   .post(
     authorize([MODERATOR, ADMIN]),
     validator.validateRegisterUser,
-    catchError(controller.registerUser)
+    controller.registerUser
   );
 
 router.post(
-  "/check-username/",
+  "/check-username",
   authorize([MODERATOR, ADMIN]),
   validator.validateCheckUsername,
-  catchError(controller.checkUsername)
+  controller.checkUsername
 );
 
 router.patch(
   "/password",
   validator.validateUpdatePassword,
-  catchError(controller.updatePassword)
+  controller.updatePassword
 );
 
 router.patch(
   "/preferences",
   validator.validateUpdatePreferences,
-  catchError(controller.updatePreferences)
+  controller.updatePreferences
 );
 
 // @routes apiPrefix/users/:userID
@@ -47,32 +45,28 @@ router.patch(
 router
   .route("/:userID")
   .all(validateParamID("userID"))
-  .get(authorize([SPECTATOR, MODERATOR, ADMIN]), catchError(controller.getUser))
-  .put(
-    authorize([ADMIN]),
-    validator.validateUpdateUser,
-    catchError(controller.updateUser)
-  )
-  .delete(authorize([ADMIN]), catchError(controller.deleteUser));
+  .get(authorize([SPECTATOR, MODERATOR, ADMIN]), controller.getUser)
+  .put(authorize([ADMIN]), validator.validateUpdateUser, controller.updateUser)
+  .delete(authorize([ADMIN]), controller.deleteUser);
 
 router.route("/:userID/*").all(validateParamID("userID"), authorize([ADMIN]));
 
 router.patch(
   "/:userID/password",
   validator.validateResetPassword,
-  catchError(controller.resetPassword)
+  controller.resetPassword
 );
 
 router.patch(
   "/:userID/role",
   validator.validateUpdateUserRole,
-  catchError(controller.updateUserRole)
+  controller.updateUserRole
 );
 
 router.patch(
   "/:userID/status",
   validator.validateSetActiveStatus,
-  catchError(controller.setActiveStatus)
+  controller.setActiveStatus
 );
 
 export default router;

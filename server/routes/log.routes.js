@@ -1,8 +1,7 @@
-import { Router } from "express";
-const router = Router();
+import { Hono } from "hono";
+const router = new Hono();
 
 import * as controller from "../controllers/log.controller.js";
-import catchError from "../utils/catchError.js";
 
 import { authorize } from "../middleware/auth.middleware.js";
 import { ADMIN, MODERATOR } from "../utils/constants/userRoles.js";
@@ -11,15 +10,17 @@ import { validateParamID } from "../middleware/reqValidators.middleware.js";
 
 //  @routes  apiPrefix/logs
 
+router.use(authorize());
+
 router
   .route("/")
   // @access  Complex - See controller
-  .get(catchError(controller.getLogs))
+  .get(controller.getLogs)
   // @access  Mod, Admin
   .post(
     authorize([MODERATOR, ADMIN]),
     validator.validateCreateLog,
-    catchError(controller.createLog)
+    controller.createLog
   );
 
 // @routes  apiPrefix/logs/:logID
@@ -28,14 +29,14 @@ router
   .route("/:logID")
   .all(validateParamID("logID"))
   // @access  Complex - See controller
-  .get(catchError(controller.getLog))
+  .get(controller.getLog)
   // @access  Mod, Admin
   .put(
     authorize([MODERATOR, ADMIN]),
     validator.validateUpdateLog,
-    catchError(controller.updateLog)
+    controller.updateLog
   )
   // @access  Mod, Admin
-  .delete(authorize([MODERATOR, ADMIN]), catchError(controller.deleteLog));
+  .delete(authorize([MODERATOR, ADMIN]), controller.deleteLog);
 
 export default router;

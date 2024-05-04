@@ -1,12 +1,13 @@
+import { createMiddleware } from "hono/factory";
 import { allowedOrigins } from "../config/cors.config.js";
 
-const allowCredentials = (req, res, next) => {
-  const origin = req.headers.origin;
+const allowCredentials = createMiddleware(async (c, next) => {
+  const origin = c.req.header("origin");
   if (allowedOrigins.includes(origin)) {
-    res.header("Access-Control-Allow-Credentials", true);
+    c.res.headers.append("Access-Control-Allow-Credentials", true);
   }
 
-  next();
-};
+  await next();
+});
 
 export default allowCredentials;

@@ -1,27 +1,28 @@
-import express from "express";
-import cookieParser from "cookie-parser";
-import cors from "cors";
+import { Hono } from "hono";
+import { poweredBy } from "hono/powered-by";
+import { secureHeaders } from "hono/secure-headers";
+import { cors } from "hono/cors";
+import { csrf } from "hono/csrf";
 
-import APIRoutes from "./routes/index.js";
+import corsOptions from "./config/cors.config.js";
 import errorHandler from "./middleware/error.middleware.js";
 import credentials from "./middleware/allowCredentials.middleware.js";
 import requestIP from "./middleware/reqIP.middleware.js";
-import corsOptions from "./config/cors.config.js";
-
-const app = express();
-app.use(requestIP);
-app.use(credentials);
-app.use(cors(corsOptions));
-app.use(express.json());
-app.use(cookieParser());
+import APIRoutes from "./routes/index.js";
 
 const baseUrl = process.env.API_PREFIX || "/";
+const app = new Hono();
+
+app.use(poweredBy());
+app.use(secureHeaders());
+app.use(credentials);
+app.use(cors(corsOptions));
+app.use(csrf({ origin: corsOptions.origin }));
+app.use(requestIP);
 
 // @desc    Serving API routes
-app.use(baseUrl, APIRoutes);
+app.route(baseUrl, APIRoutes);
 
-// @desc    Error Handler
-// @warn    Must be the last middleware
-app.use(errorHandler);
+app.onError(errorHandler);
 
 export default app;

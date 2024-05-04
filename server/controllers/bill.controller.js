@@ -4,8 +4,8 @@ import ReqQueryHelper from "../helpers/reqQuery.helper.js";
 import * as queryHelper from "../helpers/queries/bills.queries.js";
 
 // @desc    Get all bills
-export const getBills = async (req, res) => {
-  const { startDate, endDate, search } = ReqQueryHelper(req.query);
+export const getBills = async (c) => {
+  const { startDate, endDate, search } = ReqQueryHelper(c.req.query());
   const bills = await Bill.aggregate(
     queryHelper.findBills(startDate, endDate, search)
   );
@@ -19,22 +19,25 @@ export const getBills = async (req, res) => {
   const rangeTotalValue = rangeTotal ? rangeTotal.total : 0;
   const from = startDate ? startDate.toISOString().substring(0, 10) : "";
   const to = endDate ? endDate.toISOString().substring(0, 10) : "";
-  return res.status(OK).json({
-    success: true,
-    data: {
-      bills,
-      allTimeTotalValue,
-      rangeTotalValue,
-      from,
-      to,
-      search,
+  return c.json(
+    {
+      success: true,
+      data: {
+        bills,
+        allTimeTotalValue,
+        rangeTotalValue,
+        from,
+        to,
+        search,
+      },
     },
-  });
+    OK
+  );
 };
 
 // @desc    Create a bill
-export const createBill = async (req, res) => {
-  let { date, value, description, remarks } = req.body;
+export const createBill = async (c) => {
+  let { date, value, description, remarks } = await c.req.json();
   date = new Date(date);
   date.setUTCHours(0, 0, 0, 0);
   await Bill.create({
@@ -43,45 +46,60 @@ export const createBill = async (req, res) => {
     description,
     remarks,
   });
-  return res.status(CREATED).json({
-    success: true,
-    message: "Bill was added successfully",
-  });
+  return c.json(
+    {
+      success: true,
+      message: "Bill was added successfully",
+    },
+    CREATED
+  );
 };
 
 // @desc    Get a bill
-export const getBill = async (req, res) => {
-  return res.status(OK).json({
-    success: true,
-    data: {
-      bill: req.Bill,
+export const getBill = async (c) => {
+  return c.json(
+    {
+      success: true,
+      data: {
+        bill: c.var.Bill,
+      },
     },
-  });
+    OK
+  );
 };
 
 // @desc    Update a bill
-export const updateBill = async (req, res) => {
-  if (req.body.date) {
-    req.body.date = new Date(req.body.date);
-    req.body.date.setUTCHours(0, 0, 0, 0);
+export const updateBill = async (c) => {
+  const { billID } = c.req.param();
+  const body = await c.req.json();
+  if (body.date) {
+    body.date = new Date(body.date);
+    body.date.setUTCHours(0, 0, 0, 0);
   }
-  await Bill.findByIdAndUpdate(req.params.billID, req.body, {
+  await Bill.findByIdAndUpdate(billID, body, {
     new: true,
     runValidators: true,
   });
 
-  return res.status(OK).json({
-    success: true,
-    message: "Bill was updated successfully",
-  });
+  return c.json(
+    {
+      success: true,
+      message: "Bill was updated successfully",
+    },
+    OK
+  );
 };
 
 // @desc    Delete a bill
-export const deleteBill = async (req, res) => {
-  await Bill.findByIdAndDelete(req.params.billID);
+export const deleteBill = async (c) => {
+  const { billID } = c.req.param();
+  await Bill.findByIdAndDelete(billID);
 
-  return res.status(OK).json({
-    success: true,
-    message: "Bill was deleted successfully",
-  });
+  return c.json(
+    {
+      success: true,
+      message: "Bill was deleted successfully",
+    },
+    OK
+  );
 };
