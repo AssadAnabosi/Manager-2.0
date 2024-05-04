@@ -1,4 +1,4 @@
-FROM node:18-slim
+FROM oven/bun:1
 
 # Create app directory
 
@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm install --include-dev
+RUN bun install --production
 
 # Bundle app source
 
@@ -20,4 +20,4 @@ EXPOSE 5000
 
 # Run the app
 
-CMD [ "npm", "start" ]
+CMD [ "bun", "run", "start" ]

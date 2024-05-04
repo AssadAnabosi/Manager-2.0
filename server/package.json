@@ -5,17 +5,18 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "server": "nodemon index.js",
-    "client": "npm start --prefix ../client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "start": "bun index.js",
+    "server": "bun --watch index.js",
+    "client": "bun run --cwd ../client dev",
+    "dev": "concurrently \"bun run server\" \"bun run client\""
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AssadAnabosi/Manager-2.0.git"
   },
   "keywords": [
-    "nodejs",
+    "bun",
+    "api",
     "expressjs"
   ],
   "author": "Assad Anabosi",
@@ -38,7 +39,6 @@
   },
   "devDependencies": {
     "concurrently": "^7.6.0",
-    "nodemon": "^2.0.20",
     "prettier": "^2.8.4"
   }
 }
