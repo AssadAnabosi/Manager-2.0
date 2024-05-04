@@ -96,7 +96,7 @@ The V1.0 had a lot of issues that was discovered in a later stage, where the cod
 
 ### Server Side (Back-end)
 
-- NodeJS
+- Bun
 - ExpressJS
 - MongoDB
 - Mongoose
@@ -109,6 +109,7 @@ The V1.0 had a lot of issues that was discovered in a later stage, where the cod
 
 ### Client Side (Front-end)
 
+- Bun
 - Vite
 - React
 - Typescript
