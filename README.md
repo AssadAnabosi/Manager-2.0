@@ -6,17 +6,17 @@
 
 ## About
 
-PWA that helps digitalize my family's workshop data, like bills, workers logs and more.
+PWA that helps digitalize my family's workshop data, like bills, workers' logs, and more.
 
 ## Backstory
 
 #### V1.0
 
-This app is built upon the need for a database for my family's own workshop, so it was designed to fit the purposes of those needs, at first as a Highschool kid (back in 2018-2019) all I was able to do is a Microsoft Office Access database, and it worked mostly fine for a few years, but the need for a database that can be accessed from different locations by different people started to appear, all of that and the sudden DB file corruption (can't say I didn't expect that the day I designed it on MS Access) made me realize that I need to finally do an upgrade and move it be an Online web app, so Jun. 2022 started working on that with zero background on how to do it, fast forward Dec. 2022 my very first web app, is up and running, and all the old data that survived the corruption have been ported over via a custom app that was specifically created to do this job. I't s double win for me, I learned how to make a Web App Service, and i have a better DB for the workshop.
+This app is built upon the need for a database for my family's own workshop, so it was designed to fit the purposes of those needs, at first as a Highschool kid (back in 2018-2019) all I was able to do is a Microsoft Office Access database, and it worked mostly fine for a few years, but the need for a database that can be accessed from different locations by different people started to appear, all of that and the sudden DB file corruption (can't say I didn't expect that the day I designed it on MS Access) made me realize that I need to finally do an upgrade and move it be an Online web app, so Jun. 2022 started working on that with zero background on how to do it, fast forward Dec. 2022 my very first web app, is up and running, and all the old data that survived the corruption have been ported over via a custom app that was specifically created to do this job. It's a double win for me, I learned how to make a Web App Service, and I have a better DB for the workshop.
 
 #### V2.0
 
-The V1.0 had a lot of issues that was discovered in a later stage, where the codebase was not moduler or clean, and the UI was anything but responsive so It was not usable at all on mobile phones and any screen that isn't 1920\*1080. So for V2.0 it was built again from scratch with responsivity in mind for FE, As for BE I made sure that I have a much cleaner code base, and more secure (a better Auth system and more strict validations)
+The V1.0 had a lot of issues that were discovered in a later stage, where the codebase was not modular or clean, and the UI was anything but responsive so It was not usable at all on mobile phones and any screen that isn't 1920\*1080. So for V2.0 it was built again from scratch with responsivity in mind for FE, As for BE I made sure that I have a much cleaner code base, and more secure (a better Auth system and more strict validations)
 
 ## Definitions
 
@@ -27,12 +27,12 @@ The V1.0 had a lot of issues that was discovered in a later stage, where the cod
   - **email**: is the email of the user.
   - **phoneNumber**: is the phone number of the user.
   - **password**`*`: is the password of the user.
-  - **active**: is a flag that is set to decide whether the user is allowed to login or not.
-  - **role**: are the different roles that a **Worker** can have, different roles gives the ability to do more or less actions they can perform.
+  - **active**: is a flag that is set to decide whether the user is allowed to log in or not.
+  - **role**: are the different roles that a **Worker** can have, different roles give the ability to do more or less actions they can perform.
     1. **User**: can only view his own logs and change his password and preferences.
-    2. **Spectator**: can view all the bills, workers, logs, payees and cheques, but can't edit anything besides his password and preferences.
+    2. **Spectator**: can view all the bills, workers, logs, payees, and cheques, but can't edit anything besides his password and preferences.
     3. **Moderator**: can do what a **Spectator** can do, and can add new records, but with restricted deletion and editing abilities, where he can't update or delete a worker.
-    4. **Administrator**: Highest level of access can do anything.
+    4. **Administrator**: The highest level of access can do anything.
   - **theme**: is the preferred theme that the user is using.
   - **language**: is the preferred language that the user is using.
 - **Log**: is the record of the work(Worksheet/Timesheet) that is done by the worker.
@@ -40,7 +40,7 @@ The V1.0 had a lot of issues that was discovered in a later stage, where the cod
   - **isAbsent**: is a flag that is set to true when the worker is absent.
   - **description**: is the description of the work that was done.
   - **startingTime**: is the time that the work started.
-  - **finishingTime**: is the time that the work finished.
+  - **finishingTime**: is the time that the work is finished.
   - **OTV**: is the amount of overtime that the worker worked.
   - **payment**: is the amount of money that the worker got paid.
   - **remarks**: is an optional extra notes about the log.
@@ -102,10 +102,9 @@ The V1.0 had a lot of issues that was discovered in a later stage, where the cod
 - Mongoose
 - BcryptJS
 - JsonWebToken
-- Dotenv
-- Nodemon
 - Cors
 - Cookies
+- Express Rate Limit
 
 ### Client Side (Front-end)
 
@@ -132,7 +131,7 @@ The V1.0 had a lot of issues that was discovered in a later stage, where the cod
     - `JWT_ACCESS_SECRET`: is the secret that is used to sign the JWT access tokens.
     - `JWT_ACCESS_EXPIRE`: is the expiration time of the JWT access tokens.
     - `JWT_REFRESH_SECRET`: is the secret that is used to sign the JWT refresh tokens.
-    - `MAX_AGE`: is the expiration time if the JWT refresh token and the max age of the cookie.
+    - `MAX_AGE`: is the expiration time if the JWT refresh token and the max-age of the cookie.
     - `SECURE_COOKIE`: is a flag that is set to "true" when the cookies are secure.
   - `CLIENT_URL`: is the URL of the client app for cors, use space between multiple URLs.
   - Admin Account: Initial Admin Account, will run only when there are no users in the database at the moment of the server start.
@@ -147,13 +146,13 @@ The V1.0 had a lot of issues that was discovered in a later stage, where the cod
   - `VITE_APP_TITLE`: is the name of the app, it will be displayed in the title of the page, and different meta tags.
 - Run directly on your machine
   - Backend:
-    - Run `npm install` to install all the needed dependencies
-    - Run `npm run server` to start the server in development mode (nodemon)
+    - Run `bun install` to install all the needed dependencies
+    - Run `bun run server` to start the server in development mode (--watch)
   - Frontend:
-    - Run `npm install` to install all the needed dependencies
-    - Run `npm run dev` to start the client in development mode (vite)
-    - Run `npm run build` to build the client for production
-    - Run `npm run preview` to serve the client in production mode
+    - Run `bun install` to install all the needed dependencies
+    - Run `bun run dev` to start the client in development mode (vite)
+    - Run `bun run build` to build the client for production
+    - Run `bun run preview` to serve the client in production mode
 - Run using docker and docker-compose
   </br>
   Note that you need to have docker and docker-compose installed on your machine
