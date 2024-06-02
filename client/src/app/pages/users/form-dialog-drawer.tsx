@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
-// import { useMediaQuery } from "@/hooks/use-media-query";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 import {
   Dialog,
@@ -18,6 +18,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 import UserForm from "./form";
 
@@ -34,15 +35,14 @@ export default function FormDialogDrawer({
 
   const [open, setOpen] = useState(false);
 
-  // const isDesktop = useMediaQuery("(min-width: 768px)");
-  const isDesktop = true;
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const title = t("New User");
   const description = t("Enter the details for the new user");
   return isDesktop ? (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader className="text-left rtl:text-right pt-6">
+        <DialogHeader className="pt-6 text-left rtl:text-right">
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
@@ -53,16 +53,18 @@ export default function FormDialogDrawer({
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
-        <DrawerHeader className="text-left rtl:text-right pt-6">
+        <DrawerHeader className="pt-6 text-left rtl:text-right">
           <DrawerTitle>{title}</DrawerTitle>
           <DrawerDescription>{description}</DrawerDescription>
         </DrawerHeader>
-        <UserForm
-          className="px-4"
-          setOpen={setOpen}
-          onClose={onClose}
-          isDesktop={isDesktop}
-        />
+        <ScrollArea className="overflow-y-auto">
+          <UserForm
+            className="px-4"
+            setOpen={setOpen}
+            onClose={onClose}
+            isDesktop={isDesktop}
+          />
+        </ScrollArea>
       </DrawerContent>
     </Drawer>
   );

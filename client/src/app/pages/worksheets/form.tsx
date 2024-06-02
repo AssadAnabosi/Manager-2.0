@@ -17,7 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea as CB_ScrollArea } from "@/components/component/cb-scroll-area";
 import { Calendar } from "@/components/ui/calendar";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -192,9 +192,12 @@ const LogForm = ({
                   </PopoverTrigger>
                   <PopoverContent className="w-[280px] p-0">
                     <Command>
-                      <CommandInput placeholder={t("Search...")} />
+                      <CommandInput
+                        className="text-md"
+                        placeholder={t("Search...")}
+                      />
                       <CommandEmpty>{t("No matching results")}</CommandEmpty>
-                      <ScrollArea>
+                      <CB_ScrollArea>
                         <CommandGroup>
                           {workers.map((worker) => (
                             <CommandItem
@@ -228,7 +231,7 @@ const LogForm = ({
                             </CommandItem>
                           ))}
                         </CommandGroup>
-                      </ScrollArea>
+                      </CB_ScrollArea>
                     </Command>
                   </PopoverContent>
                 </Popover>

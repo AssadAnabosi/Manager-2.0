@@ -15,7 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea as CB_ScrollArea } from "@/components/component/cb-scroll-area";
 
 import { useTranslation } from "react-i18next";
 import { Skeleton } from "../ui/skeleton";
@@ -58,9 +58,9 @@ const Combobox = ({
       </PopoverTrigger>
       <PopoverContent className="w-full min-w-[var(--radix-popper-anchor-width)] p-0 md:w-[335px]">
         <Command>
-          <CommandInput placeholder={t("Search...")} />
+          <CommandInput className="text-md" placeholder={t("Search...")} />
           <CommandEmpty>{t("No matching results")}</CommandEmpty>
-          <ScrollArea className="h-72">
+          <CB_ScrollArea className="h-72">
             <CommandGroup>
               <h4 className="mb-4 text-sm font-medium leading-none">Tags</h4>
               {list.map((item) => (
@@ -83,7 +83,7 @@ const Combobox = ({
                 </CommandItem>
               ))}
             </CommandGroup>
-          </ScrollArea>
+          </CB_ScrollArea>
         </Command>
       </PopoverContent>
     </Popover>

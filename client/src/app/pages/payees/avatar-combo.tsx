@@ -2,7 +2,7 @@ import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { PayeeType } from "@/lib/types";
 import { cn } from "@/lib/utils";
-// import { useMediaQuery } from "@/hooks/use-media-query";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 import {
   AlertDialog,
@@ -50,9 +50,8 @@ const AvatarCombo = ({
     deletePayee(payee.id);
     setOpen(false);
   };
-  // const isDesktop = useMediaQuery("(min-width: 768px)");
-  const isDesktop = true;
 
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   return isDesktop ? (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -77,7 +76,7 @@ const AvatarCombo = ({
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
-        <DrawerHeader className="text-left rtl:text-right pt-6">
+        <DrawerHeader className="pt-6 text-left rtl:text-right">
           <DrawerTitle className="space-x-3 rtl:space-x-reverse">
             <span>{title}</span>
           </DrawerTitle>
@@ -109,28 +108,28 @@ const Content = ({
     <div
       className={cn("flex flex-col gap-2 text-left rtl:text-right", className)}
     >
-      <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
+      <div className="flex space-x-5 text-foreground rtl:space-x-reverse">
         <p>{t("Email")}:</p>
         <a
           aria-label="Email"
-          className="text-blue-500 text-md font-semibold"
+          className="text-md font-semibold text-blue-500"
           href={`mailto:${payee.email}`}
         >
           {payee.email}
         </a>
       </div>
-      <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
+      <div className="flex space-x-5 text-foreground rtl:space-x-reverse">
         <p>{t("Phone Number")}:</p>
         <a
           style={{ direction: "ltr" }}
           aria-label="Phone Number"
-          className="text-blue-500 text-md font-semibold"
+          className="text-md font-semibold text-blue-500"
           href={`tel:${payee.phoneNumber}`}
         >
           {payee.phoneNumber}
         </a>
       </div>
-      <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
+      <div className="flex space-x-5 text-foreground rtl:space-x-reverse">
         <p>{t("Remarks")}:</p>
         <p>{payee.remarks}</p>
       </div>
@@ -162,14 +161,14 @@ const Footer = ({
         }}
       >
         <Button>
-          <Pencil2Icon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
+          <Pencil2Icon className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
           <span>{t("Edit")}</span>
         </Button>
       </FormDialogDrawer>
       {userRole !== MODERATOR && (
         <DeleteDialog onAction={handleDelete}>
           <Button variant={"secondary"}>
-            <TrashIcon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
+            <TrashIcon className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
             <span>{t("Delete")}</span>
           </Button>
         </DeleteDialog>

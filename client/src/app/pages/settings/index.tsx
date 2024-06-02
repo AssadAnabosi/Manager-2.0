@@ -145,7 +145,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="flex justify-center items-center align-center my-auto">
+    <div className="align-center my-auto flex items-center justify-center">
       <Tabs
         value={tab}
         onValueChange={setTab}

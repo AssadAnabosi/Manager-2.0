@@ -90,7 +90,7 @@ const BillForm = ({
                       ) : (
                         <span>{t("Pick a date")}</span>
                       )}
-                      <CalendarIcon className="ltr:ml-auto rtl:mr-auto h-4 w-4 opacity-50" />
+                      <CalendarIcon className="h-4 w-4 opacity-50 ltr:ml-auto rtl:mr-auto" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
@@ -122,7 +122,7 @@ const BillForm = ({
               <FormLabel>{t("Value")}</FormLabel>
               <FormControl>
                 <div className="relative w-full justify-between">
-                  <span className="absolute top-0 bottom-0 w-6 h-6 my-auto text-muted-foreground left-3">
+                  <span className="absolute bottom-0 left-3 top-0 my-auto h-6 w-6 text-muted-foreground">
                     <ShekelIcon />
                   </span>
                   <Input
