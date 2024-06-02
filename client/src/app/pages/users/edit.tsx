@@ -166,7 +166,7 @@ export default function Edit() {
   return isLoading ? (
     <Loading />
   ) : (
-    <div className="flex justify-center items-center align-center my-auto">
+    <div className="align-center my-auto flex items-center justify-center">
       <Tabs
         value={tab}
         onValueChange={setTab}
@@ -315,7 +315,7 @@ export default function Edit() {
                   variant={"delete"}
                   className="w-[50%] border border-border hover:border-none"
                 >
-                  <Trash2Icon className="h-4 w-4 mr-3 rtl:ml-3" />
+                  <Trash2Icon className="mr-3 h-4 w-4 rtl:ml-3" />
                   {t("Delete User")}
                 </Button>
               </DeleteDialog>

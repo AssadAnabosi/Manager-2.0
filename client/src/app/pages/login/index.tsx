@@ -90,8 +90,8 @@ export default function Login() {
 
   return (
     <Layout>
-      <div className="flex justify-center items-center align-center my-auto">
-        <div className="mx-auto max-w-sm space-y-6 my-a">
+      <div className="align-center my-auto flex items-center justify-center">
+        <div className="my-a mx-auto max-w-sm space-y-6">
           <div className="space-y-2 text-center">
             <h1 className="text-3xl font-bold">{t("Login")}</h1>
             <p className="text-zinc-500 dark:text-zinc-400">

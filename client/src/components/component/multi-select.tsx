@@ -21,7 +21,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
-import { ScrollArea } from "../ui/scroll-area";
+import { ScrollArea as CB_ScrollArea } from "./cb-scroll-area";
 
 interface MultiSelectFormFieldProps {
   list: {
@@ -135,10 +135,10 @@ const MultiSelectFormField = React.forwardRef<
           align="start"
         >
           <Command>
-            <CommandInput placeholder={t("Search...")} />
+            <CommandInput className="text-md" placeholder={t("Search...")} />
             <CommandList>
               <CommandEmpty>{t("No matching results")}</CommandEmpty>
-              <ScrollArea>
+              <CB_ScrollArea>
                 <CommandGroup>
                   {list.map((option) => {
                     const isSelected = selectedValues.has(option.value);
@@ -191,7 +191,7 @@ const MultiSelectFormField = React.forwardRef<
                     </CommandGroup>
                   </>
                 )}
-              </ScrollArea>
+              </CB_ScrollArea>
             </CommandList>
           </Command>
         </PopoverContent>

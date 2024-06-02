@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ChequeType } from "@/lib/types";
 import { cn, currencyFormatter } from "@/lib/utils";
 import { SPECTATOR } from "@/lib/constants";
-// import { useMediaQuery } from "@/hooks/use-media-query";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 import {
   AlertDialog,
@@ -53,8 +53,8 @@ const AvatarCombo = ({
     deleteCheque(cheque.id);
     setOpen(false);
   };
-  // const isDesktop = useMediaQuery("(min-width: 768px)");
-  const isDesktop = true;
+
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   return isDesktop ? (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -83,7 +83,7 @@ const AvatarCombo = ({
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
-        <DrawerHeader className="text-left rtl:text-right pt-6">
+        <DrawerHeader className="pt-6 text-left rtl:text-right">
           <DrawerTitle className="space-x-3 rtl:space-x-reverse">
             <span>{title}</span>
             <span>-</span>
@@ -121,23 +121,23 @@ const Content = ({
     <div
       className={cn("flex flex-col gap-2 text-left rtl:text-right", className)}
     >
-      <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
+      <div className="flex space-x-5 text-foreground rtl:space-x-reverse">
         <p>{t("Payee")}:</p>
         <p>{title}</p>
       </div>
-      <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
+      <div className="flex space-x-5 text-foreground rtl:space-x-reverse">
         <p>{t("Due Date")}:</p>
         <p>{description}</p>
       </div>
-      <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
+      <div className="flex space-x-5 text-foreground rtl:space-x-reverse">
         <p>{t("Value")}:</p>
         <p>{currencyFormatter(cheque.value)}</p>
       </div>
-      <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
+      <div className="flex space-x-5 text-foreground rtl:space-x-reverse">
         <p>{t("Remarks")}:</p>
         <p>{cheque.remarks}</p>
       </div>
-      <div className="flex space-x-5 rtl:space-x-reverse text-foreground">
+      <div className="flex space-x-5 text-foreground rtl:space-x-reverse">
         <p>{t("Status")}:</p>
         <StatusBadge status={!cheque.isCancelled} />
       </div>
@@ -170,13 +170,13 @@ const Footer = ({
           }}
         >
           <Button>
-            <Pencil2Icon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
+            <Pencil2Icon className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
             <span>{t("Edit")}</span>
           </Button>
         </FormDialogDrawer>
         <DeleteDialog onAction={handleDelete}>
           <Button variant={"secondary"}>
-            <TrashIcon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
+            <TrashIcon className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
             <span>{t("Delete")}</span>
           </Button>
         </DeleteDialog>

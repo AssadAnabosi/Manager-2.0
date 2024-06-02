@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { LogType } from "@/lib/types";
 import { getToday, toList } from "@/lib/utils";
-// import { useMediaQuery } from "@/hooks/use-media-query";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 import {
   logFormSchema,
@@ -29,6 +29,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
 
 import LogForm from "./form";
@@ -98,8 +99,8 @@ export default function FormDialogDrawer({
       });
     }
   };
-  // const isDesktop = useMediaQuery("(min-width: 768px)");
-  const isDesktop = true;
+
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const title = log ? t("Edit Log") : t("New Log");
   const description = log
     ? t("Edit the log details")
@@ -108,7 +109,7 @@ export default function FormDialogDrawer({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader className="text-left rtl:text-right pt-6">
+        <DialogHeader className="pt-6 text-left rtl:text-right">
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
@@ -131,24 +132,26 @@ export default function FormDialogDrawer({
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
-        <DrawerHeader className="text-left rtl:text-right pt-6">
+        <DrawerHeader className="pt-6 text-left rtl:text-right">
           <DrawerTitle>{title}</DrawerTitle>
           <DrawerDescription>{description}</DrawerDescription>
         </DrawerHeader>
-        <LogForm
-          className="px-4"
-          isDesktop={isDesktop}
-          isLoading={isLoading}
-          calendarOpen={calendarOpen}
-          setCalenderOpen={setCalenderOpen}
-          onSubmit={onSubmit}
-          logForm={logForm}
-          log={log}
-          filterLoading={filterLoading}
-          workers={workers}
-          popoverOpen={popoverOpen}
-          setPopoverOpen={setPopoverOpen}
-        />
+        <ScrollArea className="overflow-y-auto">
+          <LogForm
+            className="px-4"
+            isDesktop={isDesktop}
+            isLoading={isLoading}
+            calendarOpen={calendarOpen}
+            setCalenderOpen={setCalenderOpen}
+            onSubmit={onSubmit}
+            logForm={logForm}
+            log={log}
+            filterLoading={filterLoading}
+            workers={workers}
+            popoverOpen={popoverOpen}
+            setPopoverOpen={setPopoverOpen}
+          />
+        </ScrollArea>
       </DrawerContent>
     </Drawer>
   );
