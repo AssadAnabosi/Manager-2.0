@@ -42,6 +42,7 @@ import { useError } from "@/providers/error-provider";
 import { useAuth } from "@/providers/auth-provider";
 
 import useAxios from "@/hooks/use-axios";
+import { PasswordInput } from "@/components/component/password-input";
 const updatePasswordSchema = z
   .object({
     username: z.string(),
@@ -189,9 +190,9 @@ export default function Settings() {
                       <FormItem className="space-y-1 rtl:text-right">
                         <FormLabel>{t("Current password")}</FormLabel>
                         <FormControl>
-                          <Input
+                          <PasswordInput
                             autoComplete="current-password"
-                            type="password"
+                            disabled={passwordForm.formState.isSubmitting}
                             {...field}
                           />
                         </FormControl>
@@ -206,9 +207,9 @@ export default function Settings() {
                       <FormItem className="space-y-1 rtl:text-right">
                         <FormLabel>{t("New password")}</FormLabel>
                         <FormControl>
-                          <Input
+                          <PasswordInput
                             autoComplete="new-password"
-                            type="password"
+                            disabled={passwordForm.formState.isSubmitting}
                             {...field}
                           />
                         </FormControl>
@@ -253,6 +254,7 @@ export default function Settings() {
                       <FormItem className="space-y-1 rtl:text-right">
                         <FormLabel>{t("Theme")}</FormLabel>
                         <Select
+                          disabled={preferencesForm.formState.isSubmitting}
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
@@ -284,6 +286,7 @@ export default function Settings() {
                       <FormItem className="space-y-1 rtl:text-right">
                         <FormLabel>{t("Language")}</FormLabel>
                         <Select
+                          disabled={preferencesForm.formState.isSubmitting}
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >

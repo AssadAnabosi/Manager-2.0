@@ -94,6 +94,7 @@ const ChequeForm = ({
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
+                        disabled={isLoading}
                         variant={"outline"}
                         className={cn(
                           "w-[245px] pl-3 text-left font-normal",
@@ -116,6 +117,7 @@ const ChequeForm = ({
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
+                      disabled={isLoading}
                       captionLayout="dropdown-buttons"
                       fromYear={2019}
                       toYear={new Date().getFullYear() + 10}
@@ -141,7 +143,12 @@ const ChequeForm = ({
               <FormItem className="relative flex flex-col">
                 <FormLabel>{t("Serial No.")}</FormLabel>
                 <FormControl>
-                  <Input {...field} type="string" className="input" />
+                  <Input
+                    {...field}
+                    type="string"
+                    className="input"
+                    disabled={isLoading}
+                  />
                 </FormControl>
                 <FormMessage className="absolute top-[60px]" />
               </FormItem>
@@ -159,6 +166,7 @@ const ChequeForm = ({
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
+                        disabled={isLoading}
                         variant="outline"
                         role="combobox"
                         className={cn(
@@ -177,6 +185,7 @@ const ChequeForm = ({
                   <PopoverContent className="w-[280px] p-0">
                     <Command>
                       <CommandInput
+                        disabled={isLoading}
                         className="text-md"
                         placeholder={t("Search...")}
                       />
@@ -241,6 +250,7 @@ const ChequeForm = ({
                     {...field}
                     type="string"
                     className="input pl-12 pr-4 text-left"
+                    disabled={isLoading}
                   />
                 </div>
               </FormControl>
@@ -255,7 +265,11 @@ const ChequeForm = ({
             <FormItem className="flex flex-col">
               <FormLabel>{t("Remarks")}</FormLabel>
               <FormControl>
-                <Textarea {...field} className="input resize-none" />
+                <Textarea
+                  {...field}
+                  className="input resize-none"
+                  disabled={isLoading}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -269,6 +283,7 @@ const ChequeForm = ({
               <FormControl>
                 <label className="flex items-center">
                   <Switch
+                    disabled={isLoading}
                     checked={field.value}
                     onCheckedChange={field.onChange}
                   />

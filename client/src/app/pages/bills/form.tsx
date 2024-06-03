@@ -76,6 +76,7 @@ const BillForm = ({
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
+                      disabled={isLoading}
                       variant={"outline"}
                       className={cn(
                         "w-[240px] pl-3 text-left font-normal",
@@ -96,6 +97,7 @@ const BillForm = ({
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
+                    disabled={isLoading}
                     captionLayout="dropdown-buttons"
                     fromYear={2024}
                     toYear={new Date().getFullYear() + 5}
@@ -129,6 +131,7 @@ const BillForm = ({
                     {...field}
                     type="string"
                     className="input pl-12 pr-4 text-left"
+                    disabled={isLoading}
                   />
                 </div>
               </FormControl>
@@ -143,7 +146,12 @@ const BillForm = ({
             <FormItem className="flex flex-col">
               <FormLabel>{t("Description")}</FormLabel>
               <FormControl>
-                <Input {...field} type="string" className="input" />
+                <Input
+                  {...field}
+                  type="string"
+                  className="input"
+                  disabled={isLoading}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -156,7 +164,11 @@ const BillForm = ({
             <FormItem className="flex flex-col">
               <FormLabel>{t("Remarks")}</FormLabel>
               <FormControl>
-                <Textarea {...field} className="input resize-none" />
+                <Textarea
+                  {...field}
+                  className="input resize-none"
+                  disabled={isLoading}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

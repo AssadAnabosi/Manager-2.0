@@ -165,7 +165,12 @@ const UserForm = ({
               <FormItem className="flex flex-col rtl:text-right">
                 <FormLabel>{t("Username")}</FormLabel>
                 <FormControl>
-                  <Input {...field} type="string" className="input" />
+                  <Input
+                    {...field}
+                    type="string"
+                    className="input"
+                    disabled={isLoading}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -178,7 +183,12 @@ const UserForm = ({
               <FormItem className="flex flex-col rtl:text-right">
                 <FormLabel>{t("First Name")}</FormLabel>
                 <FormControl>
-                  <Input {...field} type="string" className="input" />
+                  <Input
+                    {...field}
+                    type="string"
+                    className="input"
+                    disabled={isLoading}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -191,7 +201,12 @@ const UserForm = ({
               <FormItem className="flex flex-col rtl:text-right">
                 <FormLabel>{t("Last Name")}</FormLabel>
                 <FormControl>
-                  <Input {...field} type="string" className="input" />
+                  <Input
+                    {...field}
+                    type="string"
+                    className="input"
+                    disabled={isLoading}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -204,7 +219,12 @@ const UserForm = ({
               <FormItem className="flex flex-col rtl:text-right">
                 <FormLabel>{t("Email")}</FormLabel>
                 <FormControl>
-                  <Input {...field} type="string" className="input" />
+                  <Input
+                    {...field}
+                    type="string"
+                    className="input"
+                    disabled={isLoading}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -217,7 +237,12 @@ const UserForm = ({
               <FormItem className="flex flex-col rtl:text-right">
                 <FormLabel>{t("Phone Number")}</FormLabel>
                 <FormControl>
-                  <Input {...field} type="string" className="input" />
+                  <Input
+                    {...field}
+                    type="string"
+                    className="input"
+                    disabled={isLoading}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -237,6 +262,7 @@ const UserForm = ({
                         autoComplete="new-password"
                         type="password"
                         className="input"
+                        disabled={isLoading}
                       />
                     </FormControl>
                     <FormMessage />
@@ -255,6 +281,7 @@ const UserForm = ({
                         autoComplete="new-password"
                         type="password"
                         className="input"
+                        disabled={isLoading}
                       />
                     </FormControl>
                     <FormMessage />
