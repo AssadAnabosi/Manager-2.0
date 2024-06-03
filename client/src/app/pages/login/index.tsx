@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { PasswordInput } from "@/components/component/password-input";
 import Layout from "./layout";
 import { useAuth } from "@/providers/auth-provider";
 import { useError } from "@/providers/error-provider";
@@ -121,7 +122,11 @@ export default function Login() {
                       <FormItem>
                         <FormLabel>{t("Username")}</FormLabel>
                         <FormControl>
-                          <Input {...field} autoComplete="username" />
+                          <Input
+                            {...field}
+                            disabled={form.formState.isSubmitting}
+                            autoComplete="username"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -134,9 +139,9 @@ export default function Login() {
                       <FormItem>
                         <FormLabel>{t("Password")}</FormLabel>
                         <FormControl>
-                          <Input
-                            type="password"
+                          <PasswordInput
                             {...field}
+                            disabled={form.formState.isSubmitting}
                             autoComplete="current-password"
                           />
                         </FormControl>
