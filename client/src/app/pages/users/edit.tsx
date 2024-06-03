@@ -203,6 +203,7 @@ export default function Edit() {
                             autoComplete="username"
                             type="text"
                             {...field}
+                            disabled={passwordForm.formState.isSubmitting}
                           />
                         </FormControl>
                       </FormItem>
@@ -219,6 +220,7 @@ export default function Edit() {
                             autoComplete="new-password"
                             type="password"
                             {...field}
+                            disabled={passwordForm.formState.isSubmitting}
                           />
                         </FormControl>
                         <FormMessage />
@@ -236,6 +238,7 @@ export default function Edit() {
                             autoComplete="new-password"
                             type="password"
                             {...field}
+                            disabled={passwordForm.formState.isSubmitting}
                           />
                         </FormControl>
                         <FormMessage />

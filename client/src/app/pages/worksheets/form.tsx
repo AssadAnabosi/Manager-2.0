@@ -94,7 +94,7 @@ const LogForm = ({
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
-                      disabled={log ? true : false}
+                      disabled={log || isLoading ? true : false}
                       variant={"outline"}
                       className={cn(
                         "w-[280px] pl-3 text-left font-normal",
@@ -115,7 +115,7 @@ const LogForm = ({
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
-                    disabled={log ? true : false}
+                    disabled={log || isLoading ? true : false}
                     captionLayout="dropdown-buttons"
                     fromYear={2024}
                     toYear={new Date().getFullYear() + 5}
@@ -142,7 +142,12 @@ const LogForm = ({
               <FormItem className="flex flex-col">
                 <FormLabel>{t("Start Time")}</FormLabel>
                 <FormControl>
-                  <Input {...field} className="input" type="time" />
+                  <Input
+                    {...field}
+                    className="input"
+                    type="time"
+                    disabled={isLoading}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -155,7 +160,12 @@ const LogForm = ({
               <FormItem className="flex flex-col">
                 <FormLabel>{t("End Time")}</FormLabel>
                 <FormControl>
-                  <Input {...field} className="input" type="time" />
+                  <Input
+                    {...field}
+                    className="input"
+                    type="time"
+                    disabled={isLoading}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -173,7 +183,7 @@ const LogForm = ({
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
-                        disabled={log ? true : false}
+                        disabled={log || isLoading ? true : false}
                         variant="outline"
                         role="combobox"
                         className={cn(
@@ -195,6 +205,7 @@ const LogForm = ({
                       <CommandInput
                         className="text-md"
                         placeholder={t("Search...")}
+                        disabled={log || isLoading ? true : false}
                       />
                       <CommandEmpty>{t("No matching results")}</CommandEmpty>
                       <CB_ScrollArea>
@@ -257,6 +268,7 @@ const LogForm = ({
                     {...field}
                     type="string"
                     className="input pl-12 pr-4 text-left"
+                    disabled={isLoading}
                   />
                 </div>
               </FormControl>
@@ -271,7 +283,11 @@ const LogForm = ({
             <FormItem className="flex flex-col">
               <FormLabel>{t("Remarks")}</FormLabel>
               <FormControl>
-                <Textarea {...field} className="input resize-none" />
+                <Textarea
+                  {...field}
+                  className="input resize-none"
+                  disabled={isLoading}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -287,6 +303,7 @@ const LogForm = ({
                   <Switch
                     checked={field.value}
                     onCheckedChange={field.onChange}
+                    disabled={isLoading}
                   />
                   <span className="ml-2">{t("Absent")}</span>
                 </label>

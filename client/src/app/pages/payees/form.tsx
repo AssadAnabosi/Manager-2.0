@@ -58,7 +58,12 @@ const PayeeForm = ({
             <FormItem className="flex flex-col">
               <FormLabel>{t("Name")}</FormLabel>
               <FormControl>
-                <Input {...field} type="string" className="input" />
+                <Input
+                  {...field}
+                  type="string"
+                  className="input"
+                  disabled={isLoading}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -71,7 +76,12 @@ const PayeeForm = ({
             <FormItem className="flex flex-col">
               <FormLabel>{t("Email")}</FormLabel>
               <FormControl>
-                <Input {...field} type="string" className="input" />
+                <Input
+                  {...field}
+                  type="string"
+                  className="input"
+                  disabled={isLoading}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -84,7 +94,12 @@ const PayeeForm = ({
             <FormItem className="flex flex-col">
               <FormLabel>{t("Phone Number")}</FormLabel>
               <FormControl>
-                <Input {...field} type="string" className="input" />
+                <Input
+                  {...field}
+                  type="string"
+                  className="input"
+                  disabled={isLoading}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -97,7 +112,11 @@ const PayeeForm = ({
             <FormItem className="flex flex-col">
               <FormLabel>{t("Remarks")}</FormLabel>
               <FormControl>
-                <Textarea {...field} className="input resize-none" />
+                <Textarea
+                  {...field}
+                  className="input resize-none"
+                  disabled={isLoading}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -254,6 +254,7 @@ export default function Settings() {
                       <FormItem className="space-y-1 rtl:text-right">
                         <FormLabel>{t("Theme")}</FormLabel>
                         <Select
+                          disabled={preferencesForm.formState.isSubmitting}
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
@@ -285,6 +286,7 @@ export default function Settings() {
                       <FormItem className="space-y-1 rtl:text-right">
                         <FormLabel>{t("Language")}</FormLabel>
                         <Select
+                          disabled={preferencesForm.formState.isSubmitting}
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
