@@ -26,6 +26,7 @@ import { DrawerFooter } from "@/components/ui/drawer";
 
 import Spinner from "@/components/component/spinner";
 import { useToast } from "@/components/ui/use-toast";
+import { PasswordInput } from "@/components/component/password-input";
 
 const BASE_URL = "/users";
 
@@ -257,10 +258,9 @@ const UserForm = ({
                   <FormItem className="flex flex-col rtl:text-right">
                     <FormLabel>{t("Password")}</FormLabel>
                     <FormControl>
-                      <Input
+                      <PasswordInput
                         {...field}
                         autoComplete="new-password"
-                        type="password"
                         className="input"
                         disabled={isLoading}
                       />
@@ -276,10 +276,9 @@ const UserForm = ({
                   <FormItem className="flex flex-col rtl:text-right">
                     <FormLabel>{t("Confirm Password")}</FormLabel>
                     <FormControl>
-                      <Input
+                      <PasswordInput
                         {...field}
                         autoComplete="new-password"
-                        type="password"
                         className="input"
                         disabled={isLoading}
                       />
