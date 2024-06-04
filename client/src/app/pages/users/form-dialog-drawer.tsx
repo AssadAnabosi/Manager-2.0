@@ -35,7 +35,7 @@ export default function FormDialogDrawer({
 
   const [open, setOpen] = useState(false);
 
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
   const title = t("New User");
   const description = t("Enter the details for the new user");
   return isDesktop ? (

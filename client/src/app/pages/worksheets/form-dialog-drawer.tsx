@@ -100,7 +100,7 @@ export default function FormDialogDrawer({
     }
   };
 
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
   const title = log ? t("Edit Log") : t("New Log");
   const description = log
     ? t("Edit the log details")

@@ -79,7 +79,7 @@ export default function FormDialogDrawer({
     }
   };
 
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
   const title = payee ? t("Edit Payee") : t("New Payee");
   const description = payee
     ? t("Edit the payee details")
