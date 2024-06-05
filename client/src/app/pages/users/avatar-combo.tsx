@@ -46,7 +46,7 @@ const AvatarCombo = ({
   const [open, setOpen] = useState(false);
   const Navigate = useNavigate();
 
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
   return isDesktop ? (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>

@@ -112,7 +112,7 @@ export default function FormDialogDrawer({
     }
   };
 
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
   const title = cheque
     ? t(`Edit Cheque #{{serial}}`, {
         serial: cheque.serial,

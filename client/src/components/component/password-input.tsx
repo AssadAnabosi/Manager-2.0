@@ -8,7 +8,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
   ({ className, disabled = false, ...props }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
-    const isDesktop = useMediaQuery("(min-width: 768px)");
+    const isDesktop = useMediaQuery("(min-width: 1024px)");
 
     return (
       <div className="focus-within:group group relative">

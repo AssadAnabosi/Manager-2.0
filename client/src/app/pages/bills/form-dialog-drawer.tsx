@@ -81,7 +81,7 @@ export default function FormDialogDrawer({
     }
   };
 
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
   const title = bill ? t("Edit Bill") : t("New Bill");
   const description = bill
     ? t("Edit the bill details")
