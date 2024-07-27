@@ -2,7 +2,12 @@ import ObjectID from "../../utils/ObjectID.js";
 
 export const findCheques = ({ serial: search, startDate, endDate, payees }) => {
   const filter = [];
-  const serial = parseInt(search) | 0;
+  const serials = search
+    ? search
+        .replace(/\s/g, "")
+        .split(",")
+        .map((s) => parseInt(s) | 0)
+    : null;
   const dueDateFilter = {};
   if (startDate) {
     dueDateFilter.$gte = startDate;
@@ -11,10 +16,10 @@ export const findCheques = ({ serial: search, startDate, endDate, payees }) => {
     dueDateFilter.$lte = endDate;
   }
 
-  if (serial && serial !== 0) {
+  if (serials) {
     filter.push({
       $match: {
-        serial: { $eq: serial },
+        serial: { $in: serials },
       },
     });
   } else {
