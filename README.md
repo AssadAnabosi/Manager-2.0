@@ -91,6 +91,8 @@ The V1.0 had a lot of issues that were discovered in a later stage, where the co
   - When the user sign-in he gets a refresh token and an access token, the refresh token is stored in the httpOnly cookies
   - The access token is used to authenticate the user, and the refresh token is used to generate new access tokens.
   - Any request that is made to the server must have the access token in the Authorization header. (Bearer Token)
+ ![image](https://github.com/user-attachments/assets/76662ee1-4744-4317-8a39-8a1164d52e2d)
+
 
 ## Used Technologies / Libraries
 
