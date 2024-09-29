@@ -153,7 +153,7 @@ const Footer = ({
   handleDelete: any;
 }) => {
   const footerContent = (
-    <div className="flex flex-col gap-3 md:flex-row">
+    <>
       <FormDialogDrawer
         payee={payee}
         onClose={(status) => {
@@ -173,19 +173,19 @@ const Footer = ({
           </Button>
         </DeleteDialog>
       )}
-    </div>
+    </>
   );
   return isDesktop ? (
     <AlertDialogFooter className="gap-3">
+      <div className="flex flex-row gap-3">{footerContent}</div>
       <AlertDialogCancel>{t("Close")}</AlertDialogCancel>
-      {footerContent}
     </AlertDialogFooter>
   ) : (
     <DrawerFooter>
+      <div className="flex flex-col gap-3">{footerContent}</div>
       <DrawerClose asChild>
         <Button variant="outline">{t("Close")}</Button>
       </DrawerClose>
-      {footerContent}
     </DrawerFooter>
   );
 };

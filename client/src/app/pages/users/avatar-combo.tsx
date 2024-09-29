@@ -147,24 +147,24 @@ const Footer = ({
 }) => {
   const footerContent =
     userRole !== MODERATOR ? (
-      <div className="flex flex-col gap-3 md:flex-row">
+      <>
         <Button onClick={() => Navigate(`/users/${user.id}`)}>
           <Pencil2Icon className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
           <span>{t("Edit")}</span>
         </Button>
-      </div>
+      </>
     ) : null;
   return isDesktop ? (
     <AlertDialogFooter className="gap-3">
+      <div className="flex flex-row gap-3">{footerContent}</div>
       <AlertDialogCancel>{t("Close")}</AlertDialogCancel>
-      {footerContent}
     </AlertDialogFooter>
   ) : (
     <DrawerFooter>
+      <div className="flex flex-col gap-3">{footerContent}</div>
       <DrawerClose asChild>
         <Button variant="outline">{t("Close")}</Button>
       </DrawerClose>
-      {footerContent}
     </DrawerFooter>
   );
 };

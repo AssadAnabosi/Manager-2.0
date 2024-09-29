@@ -85,9 +85,9 @@ const AvatarCombo = ({
       <DrawerContent>
         <DrawerHeader className="pt-6 text-left rtl:text-right">
           <DrawerTitle className="space-x-3 rtl:space-x-reverse">
-            <span>{title}</span>
-            <span>-</span>
-            <span>{description}</span>
+            {t("Cheque #{{serial}}", {
+              serial: cheque.serial,
+            })}
           </DrawerTitle>
         </DrawerHeader>
         {Content({ cheque, t, title, description, className: "px-4" })}
@@ -162,7 +162,7 @@ const Footer = ({
 }) => {
   const footerContent =
     userRole !== SPECTATOR ? (
-      <div className="flex flex-col gap-3 md:flex-row">
+      <>
         <FormDialogDrawer
           cheque={cheque}
           onClose={(status) => {
@@ -180,19 +180,19 @@ const Footer = ({
             <span>{t("Delete")}</span>
           </Button>
         </DeleteDialog>
-      </div>
+      </>
     ) : null;
   return isDesktop ? (
     <AlertDialogFooter className="gap-3">
+      <div className="flex flex-row gap-3">{footerContent}</div>
       <AlertDialogCancel>{t("Close")}</AlertDialogCancel>
-      {footerContent}
     </AlertDialogFooter>
   ) : (
     <DrawerFooter>
+      <div className="flex flex-col gap-3">{footerContent}</div>
       <DrawerClose asChild>
         <Button variant="outline">{t("Close")}</Button>
       </DrawerClose>
-      {footerContent}
     </DrawerFooter>
   );
 };
