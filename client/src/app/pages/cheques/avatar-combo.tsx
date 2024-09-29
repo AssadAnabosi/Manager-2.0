@@ -85,9 +85,9 @@ const AvatarCombo = ({
       <DrawerContent>
         <DrawerHeader className="pt-6 text-left rtl:text-right">
           <DrawerTitle className="space-x-3 rtl:space-x-reverse">
-            <span>{title}</span>
-            <span>-</span>
-            <span>{description}</span>
+            {t("Cheque #{{serial}}", {
+              serial: cheque.serial,
+            })}
           </DrawerTitle>
         </DrawerHeader>
         {Content({ cheque, t, title, description, className: "px-4" })}
