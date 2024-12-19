@@ -13,8 +13,8 @@ const connectDB = async () => {
   const MONGO_URI = process.env.MONGO_URI;
   mongoose.set("strictQuery", false);
   const options = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+    // useNewUrlParser: true, // Deprecated
+    // useUnifiedTopology: true, // Deprecated
   };
   createAdmin();
 
