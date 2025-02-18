@@ -149,6 +149,8 @@
 
   "CHEQUES": "الشيكات",
   "A list of cheques": "قائمة الشيكات",
+  "Number of Cheques": "عدد الشيكات",
+  "Number of cheques in the selected range.": "عدد الشيكات في الفترة المحددة.",
   "Sum of all cheques in the selected range.": "مجموع الشيكات في الفترة المحددة.",
   "Filter by payee": "تصفية حسب المستفيد",
   "Serial No.": "الرقم التسلسلي",

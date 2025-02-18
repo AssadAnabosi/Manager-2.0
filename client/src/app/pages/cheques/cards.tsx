@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { currencyFormatter } from "@/lib/utils";
-import { Coins } from "lucide-react";
+import { Coins, Tally5 } from "lucide-react";
 
 const Cards = ({
   chequesData,
@@ -17,11 +17,12 @@ const Cards = ({
       {isLoading ? (
         <>
           <Skeleton className="h-[146px]" />
+          <Skeleton className="h-[146px]" />
         </>
       ) : (
         <>
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 h-[72px]">
+            <CardHeader className="flex h-[72px] flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
                 {t("Total Sum")}
               </CardTitle>
@@ -39,6 +40,28 @@ const Cards = ({
 
               <p className="text-xs text-muted-foreground">
                 {t("Sum of all cheques in the selected range.")}
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex h-[72px] flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                {t("Number of Cheques")}
+              </CardTitle>
+              <Tally5 />
+            </CardHeader>
+            <CardContent>
+              <div
+                style={{ direction: "ltr" }}
+                className="text-2xl font-bold rtl:text-right"
+              >
+                {typeof chequesData?.number !== "undefined"
+                  ? chequesData?.number
+                  : "---"}
+              </div>
+
+              <p className="text-xs text-muted-foreground">
+                {t("Number of cheques in the selected range.")}
               </p>
             </CardContent>
           </Card>

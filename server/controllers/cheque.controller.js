@@ -33,6 +33,7 @@ export const getCheques = async (req, res) => {
     success: true,
     data: {
       cheques,
+      number: cheques.length,
       total,
       from,
       to,
