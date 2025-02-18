@@ -149,6 +149,8 @@
 
   "CHEQUES": "CHEQUES",
   "A list of cheques": "A list of cheques",
+  "Number of Cheques": "Number of Cheques",
+  "Number of cheques in the selected range.": "Number of cheques in the selected range.",
   "Sum of all cheques in the selected range.": "Sum of all cheques in the selected range.",
   "Filter by payee": "Filter by payee",
   "Serial No.": "Serial No.",
