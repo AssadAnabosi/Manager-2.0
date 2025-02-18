@@ -22,6 +22,12 @@ router
     catchError(controller.createCheque)
   );
 
+router.get(
+  "/missing",
+  authorize([ADMIN]),
+  catchError(controller.getMissingCheques)
+);
+
 // @routes  apiPrefix/cheques/:chequeID
 
 router

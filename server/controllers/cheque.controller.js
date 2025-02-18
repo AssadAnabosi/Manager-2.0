@@ -115,3 +115,33 @@ export const deleteCheque = async (req, res) => {
 
   return res.sendStatus(statusCode.NO_CONTENT);
 };
+
+export const getMissingCheques = async (req, res) => {
+  // get the min serial number
+  const minSerial = await Cheque.aggregate([
+    { $group: { _id: null, minSerial: { $min: "$serial" } } },
+  ]);
+  const maxSerial = await Cheque.aggregate([
+    { $group: { _id: null, maxSerial: { $max: "$serial" } } },
+  ]);
+  const min = minSerial[0].minSerial;
+  const max = maxSerial[0].maxSerial;
+  const allSerials = await Cheque.find({}, { serial: 1, _id: 0 }).sort({
+    serial: 1,
+  });
+  // loop between min and max and find the missing serials
+  let missing = [];
+  for (let i = min; i < max; i++) {
+    if (!allSerials.find((s) => s.serial === i)) {
+      missing.push(i);
+    }
+  }
+  return res.status(statusCode.OK).json({
+    success: true,
+    data: {
+      missing,
+      min,
+      max,
+    },
+  });
+};
