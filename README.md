@@ -2,22 +2,110 @@
 
 ##### Version: 2.0.0
 
-2nd Version of the [Manager App](https://github.com/AssadAnabosi/Manager) with a much cleaner code base, and higher coding standards.
-![cover](https://github.com/user-attachments/assets/229a59ca-342f-4190-a32b-95bb1abd16b7)
-
 ## About
 
 PWA that helps digitalize my family's workshop data, like bills, workers' logs, and more.
+![cover](https://github.com/user-attachments/assets/229a59ca-342f-4190-a32b-95bb1abd16b7)
 
 ## Backstory
 
-#### V1.0
+### V1.0
 
 This app is built upon the need for a database for my family's own workshop, so it was designed to fit the purposes of those needs, at first as a Highschool kid (back in 2018-2019) all I was able to do is a Microsoft Office Access database, and it worked mostly fine for a few years, but the need for a database that can be accessed from different locations by different people started to appear, all of that and the sudden DB file corruption (can't say I didn't expect that the day I designed it on MS Access) made me realize that I need to finally do an upgrade and move it be an Online web app, so Jun. 2022 started working on that with zero background on how to do it, fast forward Dec. 2022 my very first web app, is up and running, and all the old data that survived the corruption have been ported over via a custom app that was specifically created to do this job. It's a double win for me, I learned how to make a Web App Service, and I have a better DB for the workshop.
 
-#### V2.0
+### V2.0
 
-The V1.0 had a lot of issues that were discovered in a later stage, where the codebase was not modular or clean, and the UI was anything but responsive so It was not usable at all on mobile phones and any screen that isn't 1920\*1080. So for V2.0 it was built again from scratch with responsivity in mind for FE, As for BE I made sure that I have a much cleaner code base, and more secure (a better Auth system and more strict validations)
+The V1.0 had a lot of issues that were discovered in a later stage, where the codebase was not modular or clean, and the UI was anything but responsive so It was not usable at all on mobile phones and any screen that isn't 1920\*1080. So for V2.0 it was built again from scratch with responsivity in mind for FE, As for BE I made sure that I have a much cleaner code base, and more secure (a better Auth system and more strict validations). in short 2nd version of the [Manager App](https://github.com/AssadAnabosi/Manager) with a much cleaner code base, and higher coding standards.
+
+## Authentication
+
+The authentication is done using JWT and cookies (access token and refresh token)
+
+- When the user sign-in he gets a refresh token and an access token, the refresh token is stored in the httpOnly cookies
+- The access token is used to authenticate the user, and the refresh token is used to generate new access tokens.
+- Any request that is made to the server must have the access token in the Authorization header. (Bearer Token)
+
+![image](https://github.com/user-attachments/assets/76662ee1-4744-4317-8a39-8a1164d52e2d)
+
+## Used Technologies / Libraries
+
+### Server Side (Back-end)
+
+- Bun
+- ExpressJS
+- MongoDB
+- Mongoose
+- BcryptJS
+- JsonWebToken
+- Cors
+- Cookies
+- Express Rate Limit
+
+### Client Side (Front-end)
+
+- Bun
+- Vite
+- React
+- Typescript
+- Tailwind CSS
+- TanStack Query v3 (React Query)
+- React Hook Form
+- Zod
+- Shadcn UI
+- i18-next
+
+## Configuration and Setup
+
+### Configuration
+
+#### Server (Backend) Environment Variables Configuration
+
+In `/server/config` Fill the `config.env.template` file with the needed information, and rename it to `config.env`
+
+- `NODE_ENV`: is the environment that the server will run on. [development, production]
+- `DOMAIN_URL`: is the URL of the server (used to set the jwt issuer).
+- `API_PREFIX`: is the prefix of the API routes e.g: /api/v2.
+- `PORT`: is the port that the server will run on.
+- `MONGO_URI`: is the URI of the MongoDB database.
+- Auth: JWT - Cookies
+  - `JWT_ACCESS_SECRET`: is the secret that is used to sign the JWT access tokens.
+  - `JWT_ACCESS_EXPIRE`: is the expiration time of the JWT access tokens.
+  - `JWT_REFRESH_SECRET`: is the secret that is used to sign the JWT refresh tokens.
+  - `MAX_AGE`: is the expiration time if the JWT refresh token and the max-age of the cookie.
+  - `SECURE_COOKIE`: is a flag that is set to "true" when the cookies are secure.
+- `CLIENT_URL`: is the URL of the client app for cors, use space between multiple URLs.
+- Admin Account: Initial Admin Account, will run only when there are no users in the database at the moment of the server start.
+  - `ADMIN_USERNAME`: is the username of the admin account.
+  - `ADMIN_PASSWORD`: is the password of the admin account.
+  - `ADMIN_EMAIL`: is the email of the admin account.
+  - `ADMIN_FIRST_NAME`: is the first name of the admin account.
+  - `ADMIN_LAST_NAME`: is the last name of the admin account.
+  - `ADMIN_PHONE_NUMBER`: is the phone number of the admin account.
+
+#### Client (Frontend) Environment Variables Configuration
+
+In `/client/` Fill the `.env.template` file with the needed information and rename it to `.env`
+
+- `VITE_API_URL`: is the URL of the server and the prefix e.g: https://api.example.com/api/v2.
+- `VITE_APP_TITLE`: is the name of the app, it will be displayed in the title of the page, and different meta tags.
+
+### Setup
+
+- Run directly on your machine
+  - Backend:
+    - Run `bun install` to install all the needed dependencies
+    - Run `bun run server` to start the server in development mode (--watch)
+  - Frontend:
+    - Run `bun install` to install all the needed dependencies
+    - Run `bun run dev` to start the client in development mode (vite)
+    - Run `bun run build` to build the client for production
+    - Run `bun run preview` to serve the client in production mode
+- Run the Project Using Docker
+  </br>
+  **Note:** You need to have **Docker** installed on your machine.
+  </br>
+  - Run the script and choose an option:
+    `sh init.sh`
 
 ## Definitions
 
@@ -86,89 +174,7 @@ The V1.0 had a lot of issues that were discovered in a later stage, where the co
   - Log worker and date both can't be changed.
   - Log updating or creation can either have a startingTime and a finishingTime, or isAbsent = true. but you can't have both at the same time or none at all.
 
-### Authentication
-
-- The authentication is done using JWT and cookies
-  - When the user sign-in he gets a refresh token and an access token, the refresh token is stored in the httpOnly cookies
-  - The access token is used to authenticate the user, and the refresh token is used to generate new access tokens.
-  - Any request that is made to the server must have the access token in the Authorization header. (Bearer Token)
-
- ![image](https://github.com/user-attachments/assets/76662ee1-4744-4317-8a39-8a1164d52e2d)
-
-
-## Used Technologies / Libraries
-
-### Server Side (Back-end)
-
-- Bun
-- ExpressJS
-- MongoDB
-- Mongoose
-- BcryptJS
-- JsonWebToken
-- Cors
-- Cookies
-- Express Rate Limit
-
-### Client Side (Front-end)
-
-- Bun
-- Vite
-- React
-- Typescript
-- Tailwind CSS
-- TanStack Query v3 (React Query)
-- React Hook Form
-- Zod
-- Shadcn UI
-- i18-next
-
-## Configuration and Setup
-
-- In `/server/config` Fill the `config.env.template` file with the needed information, and rename it to `config.env`
-  - `NODE_ENV`: is the environment that the server will run on. [development, production]
-  - `DOMAIN_URL`: is the URL of the server (used to set the jwt issuer).
-  - `API_PREFIX`: is the prefix of the API routes e.g: /api/v2.
-  - `PORT`: is the port that the server will run on.
-  - `MONGO_URI`: is the URI of the MongoDB database.
-  - Auth: JWT - Cookies
-    - `JWT_ACCESS_SECRET`: is the secret that is used to sign the JWT access tokens.
-    - `JWT_ACCESS_EXPIRE`: is the expiration time of the JWT access tokens.
-    - `JWT_REFRESH_SECRET`: is the secret that is used to sign the JWT refresh tokens.
-    - `MAX_AGE`: is the expiration time if the JWT refresh token and the max-age of the cookie.
-    - `SECURE_COOKIE`: is a flag that is set to "true" when the cookies are secure.
-  - `CLIENT_URL`: is the URL of the client app for cors, use space between multiple URLs.
-  - Admin Account: Initial Admin Account, will run only when there are no users in the database at the moment of the server start.
-    - `ADMIN_USERNAME`: is the username of the admin account.
-    - `ADMIN_PASSWORD`: is the password of the admin account.
-    - `ADMIN_EMAIL`: is the email of the admin account.
-    - `ADMIN_FIRST_NAME`: is the first name of the admin account.
-    - `ADMIN_LAST_NAME`: is the last name of the admin account.
-    - `ADMIN_PHONE_NUMBER`: is the phone number of the admin account.
-- In `/client/` Fill the `.env.template` file with the needed information and rename it to `.env`
-  - `VITE_API_URL`: is the URL of the server and the prefix e.g: https://api.example.com/api/v2.
-  - `VITE_APP_TITLE`: is the name of the app, it will be displayed in the title of the page, and different meta tags.
-- Run directly on your machine
-  - Backend:
-    - Run `bun install` to install all the needed dependencies
-    - Run `bun run server` to start the server in development mode (--watch)
-  - Frontend:
-    - Run `bun install` to install all the needed dependencies
-    - Run `bun run dev` to start the client in development mode (vite)
-    - Run `bun run build` to build the client for production
-    - Run `bun run preview` to serve the client in production mode
-- Run using docker and docker-compose
-  </br>
-  Note that you need to have docker and docker-compose installed on your machine
-  </br>
-  - Run `make compose`
-    - Or Run `docker-compose up --build -d` if you don't have "make" installed on your machine.
-
-</br>
-</br>
-</br>
-
-# API Routes
+## API Routes
 
 ### Auth
 
