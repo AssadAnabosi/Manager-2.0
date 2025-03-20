@@ -41,7 +41,7 @@ const UserForm = ({
   user?: UserType;
   onClose?: (status: boolean) => void;
   setOpen?: (status: boolean) => void;
-  isDesktop?: boolean;
+  isDesktop: boolean;
 }) => {
   const { t } = useTranslation();
   const { toast } = useToast();
