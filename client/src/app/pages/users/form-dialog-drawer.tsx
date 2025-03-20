@@ -46,7 +46,7 @@ export default function FormDialogDrawer({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        <UserForm setOpen={setOpen} onClose={onClose} />
+        <UserForm setOpen={setOpen} onClose={onClose} isDesktop={isDesktop} />
       </DialogContent>
     </Dialog>
   ) : (
