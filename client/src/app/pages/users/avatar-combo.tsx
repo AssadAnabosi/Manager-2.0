@@ -160,7 +160,7 @@ const Footer = ({
       <AlertDialogCancel>{t("Close")}</AlertDialogCancel>
     </AlertDialogFooter>
   ) : (
-    <DrawerFooter>
+    <DrawerFooter className="px-4 pt-2">
       <div className="flex flex-col gap-3">{footerContent}</div>
       <DrawerClose asChild>
         <Button variant="outline">{t("Close")}</Button>
