@@ -18,6 +18,14 @@ export const registerUser = async (req, res) => {
     );
   }
 
+  // password max length 64 chars -- to avoid bcrypt 72 bytes limit issues
+  if (password.length > 64) {
+    throw new ResponseError(
+      "Password cannot exceed 64 characters",
+      statusCode.BAD_REQUEST
+    );
+  }
+
   await User.create({
     firstName,
     lastName,
@@ -98,6 +106,13 @@ export const updatePassword = async (req, res) => {
     throw new ResponseError("Invalid current password", statusCode.BAD_REQUEST);
   }
 
+  if (newPassword.length > 64) {
+    throw new ResponseError(
+      "Password cannot exceed 64 characters",
+      statusCode.BAD_REQUEST
+    );
+  }
+
   user.password = newPassword;
   await user.save();
   await Session.deleteMany({ user: req.user.id });
@@ -158,6 +173,13 @@ export const checkUsername = async (req, res) => {
 // @desc    Reset a user's password by an administrator
 export const resetPassword = async (req, res) => {
   const user = await User.findById(req.params.userID);
+
+  if (req.body.password.length > 64) {
+    throw new ResponseError(
+      "Password cannot exceed 64 characters",
+      statusCode.BAD_REQUEST
+    );
+  }
 
   user.password = req.body.password;
   await user.save();

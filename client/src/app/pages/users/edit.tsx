@@ -57,6 +57,7 @@ import { UserType } from "@/lib/types";
 import { useAuth } from "@/providers/auth-provider";
 
 export default function Edit() {
+  // const isDesktop = useMediaQuery("(min-width: 1024px)");
   const [isLoading, setIsLoading] = useState(true);
   const [active, setActive] = useState(false);
   const [role, setRole] = useState("user");
@@ -270,7 +271,7 @@ export default function Edit() {
                 {t("Update user details.")}
               </CardDescription>
             </CardHeader>
-            <UserForm user={user} />
+            <UserForm user={user} isDesktop={true} />
           </Card>
         </TabsContent>
         <TabsContent value="settings" className="h-[500px]">

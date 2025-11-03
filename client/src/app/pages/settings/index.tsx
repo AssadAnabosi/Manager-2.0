@@ -47,7 +47,11 @@ const updatePasswordSchema = z
   .object({
     username: z.string(),
     current: z.string().min(8, "Password must be at least 8 characters"),
-    new: z.string().min(8, "Password must be at least 8 characters"),
+    // max 64 to avoid bcrypt 72 bytes limit issues
+    new: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .max(64, "Password cannot exceed 64 characters"),
   })
   .refine((data) => data.current !== data.new, {
     message: "New password must be different from current password",
