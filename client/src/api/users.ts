@@ -81,7 +81,8 @@ export const useGetUserQuery = () => {
 export const updatePasswordSchema = z
   .object({
     username: z.string().optional(),
-    password: z.string().min(8, "Password must be at least 8 characters"),
+    // max 64 to avoid bcrypt 72 bytes limit issues
+    password: z.string().min(8, "Password must be at least 8 characters").max(64, "Password cannot exceed 64 characters"),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {

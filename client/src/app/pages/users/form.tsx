@@ -94,12 +94,13 @@ const UserForm = ({
     .refine(
       (data) => {
         if (!user && data.password) {
-          return data.password.length >= 8;
+          // max 64 to avoid bcrypt 72 bytes limit issues
+          return data.password.length >= 8 && data.password.length <= 64;
         }
         return true;
       },
       {
-        message: "Password must be at least 8 characters",
+        message: "Password must be between 8 and 64 characters.",
         path: ["password"],
       }
     );
