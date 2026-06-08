@@ -32,7 +32,7 @@ export default function FooterHoverCard() {
           <div className="space-y">
             <h4 className="text-sm font-semibold">Assad Anabosi</h4>
             <p className="text-xs text-muted-foreground">
-              CSE Student at Arab American University
+              Software Engineer
             </p>
             <div className="flex items-center gap-3">
               <Button asChild variant="link" className="p-0">
