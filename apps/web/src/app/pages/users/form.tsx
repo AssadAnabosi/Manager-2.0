@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { PASSWORD_MIN_LENGTH } from "@workbench/shared";
 import { UserType } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -94,13 +95,12 @@ const UserForm = ({
     .refine(
       (data) => {
         if (!user && data.password) {
-          // max 64 to avoid bcrypt 72 bytes limit issues
-          return data.password.length >= 8 && data.password.length <= 64;
+          return data.password.length >= PASSWORD_MIN_LENGTH;
         }
         return true;
       },
       {
-        message: "Password must be between 8 and 64 characters.",
+        message: "Password must be at least 12 characters long",
         path: ["password"],
       }
     );

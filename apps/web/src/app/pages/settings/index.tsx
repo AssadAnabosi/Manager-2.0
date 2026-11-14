@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { LANGUAGES, THEMES, passwordSchema } from "@workbench/shared";
 import { LanguageType } from "@/lib/types";
 
 import {
@@ -46,12 +47,8 @@ import { PasswordInput } from "@/components/component/password-input";
 const updatePasswordSchema = z
   .object({
     username: z.string(),
-    current: z.string().min(8, "Password must be at least 8 characters"),
-    // max 64 to avoid bcrypt 72 bytes limit issues
-    new: z
-      .string()
-      .min(8, "Password must be at least 8 characters")
-      .max(64, "Password cannot exceed 64 characters"),
+    current: z.string().min(1, "Current password is required"),
+    new: passwordSchema,
   })
   .refine((data) => data.current !== data.new, {
     message: "New password must be different from current password",
@@ -60,8 +57,8 @@ const updatePasswordSchema = z
 type UpdatePasswordSchema = z.infer<typeof updatePasswordSchema>;
 
 const UpdatePreferencesSchema = z.object({
-  theme: z.enum(["dark", "light", "system"]),
-  language: z.enum(["en", "ar"]),
+  theme: z.enum(THEMES),
+  language: z.enum(LANGUAGES),
 });
 
 type UpdatePreferencesSchemaType = z.infer<typeof UpdatePreferencesSchema>;

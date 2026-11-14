@@ -19,7 +19,9 @@ import FormDialogDrawer from "./form-dialog-drawer";
 
 import { CalendarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
-import { currencyFormatter } from "@/lib/utils";
+import { cn, signedCurrencyFormatter } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { billKindColor, billKindLabel } from "./type-toggle";
 import { SPECTATOR } from "@/lib/constants";
 
 const Row = (bill: BillType, deleteBill: any, userRole: string | undefined) => {
@@ -58,7 +60,20 @@ const Row = (bill: BillType, deleteBill: any, userRole: string | undefined) => {
         </AvatarCombo>
       </TableCell>
       <TableCell style={{ direction: "ltr" }} className="rtl:text-right">
-        {currencyFormatter(bill.value)}
+        <div className="flex items-center gap-2 rtl:flex-row-reverse rtl:justify-end">
+          <span
+            className={cn("font-medium", billKindColor(bill.type))}
+            aria-label="Amount"
+          >
+            {signedCurrencyFormatter(bill.type, bill.amount)}
+          </span>
+          <Badge
+            variant="outline"
+            className={cn("print:hidden", billKindColor(bill.type))}
+          >
+            {i18next.t(billKindLabel(bill.type))}
+          </Badge>
+        </div>
       </TableCell>
       <TableCell className="print:table-cell hidden md:table-cell">
         {bill.description}

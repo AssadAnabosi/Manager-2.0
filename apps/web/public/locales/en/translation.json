@@ -56,7 +56,6 @@
   "Change Password": "Change Password",
   "Password changed successfully": "Password changed successfully",
   "Invalid current password": "Invalid current password",
-  "Password must be at least 8 characters": "Password must be at least 8 characters",
   "Changing your password will log you out from all devices.": "Changing your password will log you out from all devices.",
 
   "Success": "Success",
@@ -144,8 +143,6 @@
   "Bill was deleted successfully": "Bill was deleted successfully",
   "A list of bills": "A list of bills",
   "Range Sum": "Range Sum",
-  "Sum of all bills in the selected range.": "Sum of all bills in the selected range.",
-  "Sum of all bills ever.": "Sum of all bills ever.",
 
   "CHEQUES": "CHEQUES",
   "A list of cheques": "A list of cheques",
@@ -229,5 +226,20 @@
   "Go back home": "Go back home",
   "Retry": "Retry",
 
-  "Made with ❤️ by": "Made with ❤️ by"
+  "Made with ❤️ by": "Made with ❤️ by",
+  "Password must be at least 12 characters long": "Password must be at least 12 characters long",
+  "Current password is required": "Current password is required",
+  "Password is required": "Password is required",
+  "Spent": "Spent",
+  "Received": "Received",
+  "Net": "Net",
+  "Total Net": "Total Net",
+  "All": "All",
+  "Type": "Type",
+  "Amount": "Amount",
+  "Amount must be greater than 0": "Amount must be greater than 0",
+  "Total spent in the selected range.": "Total spent in the selected range.",
+  "Total received in the selected range.": "Total received in the selected range.",
+  "Spent minus received in the selected range.": "Spent minus received in the selected range.",
+  "Spent minus received, all time.": "Spent minus received, all time."
 }

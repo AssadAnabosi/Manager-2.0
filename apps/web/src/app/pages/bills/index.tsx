@@ -6,7 +6,7 @@ import { DateRange } from "react-day-picker";
 
 import { useAuth } from "@/providers/auth-context";
 
-import { BillType } from "@/lib/types";
+import { BillKind, BillType } from "@/lib/types";
 import { DATE_FORMAT, SPECTATOR } from "@/lib/constants";
 
 import { useGetBillsQuery, useDeleteBillMutation } from "@/api/bills";
@@ -24,6 +24,7 @@ import {
 
 import DateRangePicker from "@/components/component/date-picker-range";
 import Searchbox from "@/components/component/searchbox";
+import TypeFilter from "./type-filter";
 import NoResults from "@/components/component/no-results";
 import FetchError from "@/components/component/fetch-error";
 
@@ -57,6 +58,20 @@ const Bills = () => {
       (prev) => {
         prev.delete("search");
         if (value) prev.set("search", value);
+        return prev;
+      },
+      { replace: true }
+    );
+  };
+
+  const typeParam = searchParams.get("type");
+  const type: BillKind | "" =
+    typeParam === "expense" || typeParam === "income" ? typeParam : "";
+  const setType = (value: BillKind | "") => {
+    setSearchParams(
+      (prev) => {
+        prev.delete("type");
+        if (value) prev.set("type", value);
         return prev;
       },
       { replace: true }
@@ -114,7 +129,8 @@ const Bills = () => {
       <Cards billsData={billsData} isLoading={isLoading} />
       <Separator />
       {/* FILTER */}
-      <div className="flex justify-end flex-wrap">
+      <div className="flex justify-between items-center gap-4 flex-wrap">
+        <TypeFilter value={type} onChange={setType} />
         <div className="w-full md:w-[335px]">
           <Searchbox value={search} setValue={setSearch} />
         </div>
@@ -155,7 +171,7 @@ const Bills = () => {
             <TableRow>
               <TableHead className="w-[210px]"></TableHead>
               <TableHead className="table-cell w-[120px] rtl:text-right">
-                {t("Value")}
+                {t("Amount")}
               </TableHead>
               <TableHead className="print:table-cell hidden md:table-cell rtl:text-right">
                 {t("Description")}

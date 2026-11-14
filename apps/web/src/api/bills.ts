@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { BILL_TYPES } from "@workbench/shared";
 import { useSearchParams } from "react-router-dom";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -17,15 +18,17 @@ export const useGetBillsQuery = () => {
   const search = searchParams.get("search");
   const from = searchParams.get("from");
   const to = searchParams.get("to");
+  const type = searchParams.get("type");
 
   return useQuery({
-    queryKey: ["bills", { search, from: from, to: to }],
+    queryKey: ["bills", { search, from: from, to: to, type }],
     queryFn: async () => {
       const { data: response } = await axios.get(`${BASE_URL}`, {
         params: {
           search,
           from: from,
           to: to,
+          type,
         },
       });
       return response.data;
@@ -64,12 +67,13 @@ export const useDeleteBillMutation = () => {
 
 export const billFormSchema = z.object({
   date: z.any(),
-  value: z.string().refine(
-    (value) => {
-      const number = Number(value);
-      return !isNaN(number) && value?.length > 0;
+  type: z.enum(BILL_TYPES),
+  amount: z.string().refine(
+    (amount) => {
+      const number = Number(amount);
+      return !isNaN(number) && amount?.length > 0 && number > 0;
     },
-    { message: "Invalid number" }
+    { message: "Amount must be greater than 0" }
   ),
   description: z.string().min(1, "Description is required"),
   remarks: z.string().optional(),

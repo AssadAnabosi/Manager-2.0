@@ -29,7 +29,8 @@ import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 import FormDialogDrawer from "./form-dialog-drawer";
 import DeleteDialog from "@/components/component/delete-dialog";
 
-import { cn, numberFormatter } from "@/lib/utils";
+import { cn, signedCurrencyFormatter } from "@/lib/utils";
+import { billKindLabel } from "./type-toggle";
 import { SPECTATOR } from "@/lib/constants";
 
 const AvatarCombo = ({
@@ -117,7 +118,10 @@ const Content = ({
     >
       <div className="flex space-x-5 text-foreground rtl:space-x-reverse">
         <p>{t("Value")}:</p>
-        <p>{numberFormatter(bill.value)}</p>
+        <p>
+          {signedCurrencyFormatter(bill.type, bill.amount)} ·{" "}
+          {t(billKindLabel(bill.type))}
+        </p>
       </div>
       <div className="flex space-x-5 text-foreground rtl:space-x-reverse">
         <p>{t("Description")}:</p>

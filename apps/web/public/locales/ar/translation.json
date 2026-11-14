@@ -56,7 +56,6 @@
   "Change Password": "تغيير كلمة المرور",
   "Password changed successfully": "تم تغيير كلمة المرور بنجاح",
   "Invalid current password": "كلمة المرور الحالية غير صحيحة",
-  "Password must be at least 8 characters": "كلمة المرور يجب ان تكون على الاقل 8 احرف",
   "Changing your password will log you out from all devices.": "سيتم تسجيل الخروج من جميع الاجهزة عند تغيير كلمة المرور",
 
   "Success": "نجاح",
@@ -144,8 +143,6 @@
   "Bill was deleted successfully": "تم حذف الفاتورة بنجاح",
   "A list of bills": "قائمة الفواتير",
   "Range Sum": "المجموع الجزئي",
-  "Sum of all bills in the selected range.": "مجموع الفواتير في الفترة المحددة.",
-  "Sum of all bills ever.": "مجموع جميع الفواتير.",
 
   "CHEQUES": "الشيكات",
   "A list of cheques": "قائمة الشيكات",
@@ -229,5 +226,20 @@
   "Go back home": "العودة للصفحة الرئيسية",
   "Retry": "اعادة المحاولة",
 
-  "Made with ❤️ by": "صنع بكل ❤️ من قبل"
+  "Made with ❤️ by": "صنع بكل ❤️ من قبل",
+  "Password must be at least 12 characters long": "كلمة المرور يجب ان تكون على الاقل 12 حرفا",
+  "Current password is required": "كلمة المرور الحالية مطلوبة",
+  "Password is required": "كلمة المرور مطلوبة",
+  "Spent": "مصروف",
+  "Received": "مقبوض",
+  "Net": "الصافي",
+  "Total Net": "الصافي الكلي",
+  "All": "الكل",
+  "Type": "النوع",
+  "Amount": "المبلغ",
+  "Amount must be greater than 0": "المبلغ يجب ان يكون اكبر من صفر",
+  "Total spent in the selected range.": "مجموع المصروفات في الفترة المحددة.",
+  "Total received in the selected range.": "مجموع المقبوضات في الفترة المحددة.",
+  "Spent minus received in the selected range.": "المصروفات ناقص المقبوضات في الفترة المحددة.",
+  "Spent minus received, all time.": "المصروفات ناقص المقبوضات منذ البداية."
 }

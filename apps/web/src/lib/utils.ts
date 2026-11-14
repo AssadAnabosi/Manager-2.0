@@ -77,6 +77,12 @@ export const currencyFormatter = (amount: any) => {
   return formatter.format(amount);
 };
 
+/** `−₪120` for money spent, `+₪500` for money received. */
+export const signedCurrencyFormatter = (
+  type: "expense" | "income",
+  amount: number
+) => `${type === "expense" ? "−" : "+"}${currencyFormatter(amount)}`;
+
 export const numberFormatter = (number: any) => {
   if (typeof number !== "number") {
     number = 0;

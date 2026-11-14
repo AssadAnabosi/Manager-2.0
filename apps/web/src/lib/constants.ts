@@ -1,8 +1,13 @@
-export const USER = "User";
-export const SPECTATOR = "Spectator";
-export const MODERATOR = "Moderator";
-export const ADMIN = "Administrator";
+import {
+  USER,
+  SPECTATOR,
+  MODERATOR,
+  ADMIN,
+  ROLES as SHARED_ROLES,
+} from "@workbench/shared";
 
-export const ROLES = [USER, SPECTATOR, MODERATOR, ADMIN];
+export { USER, SPECTATOR, MODERATOR, ADMIN };
+
+export const ROLES: string[] = [...SHARED_ROLES];
 
 export const DATE_FORMAT = "EEEE, dd/LL/y";

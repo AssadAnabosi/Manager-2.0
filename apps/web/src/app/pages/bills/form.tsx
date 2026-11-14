@@ -28,6 +28,14 @@ import Spinner from "@/components/component/spinner";
 
 import { CalendarIcon } from "lucide-react";
 import ShekelIcon from "@/components/icons/shekel";
+import TypeToggle from "./type-toggle";
+
+/** Keeps only digits and one decimal point, so only positive numbers can be typed. */
+const positiveNumber = (value: string) => {
+  const cleaned = value.replace(/[^0-9.]/g, "");
+  const [whole, ...rest] = cleaned.split(".");
+  return rest.length ? `${whole}.${rest.join("")}` : whole;
+};
 
 const BillForm = ({
   className,
@@ -118,10 +126,27 @@ const BillForm = ({
         />
         <FormField
           control={billForm.control}
-          name="value"
+          name="type"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>{t("Value")}</FormLabel>
+              <FormLabel>{t("Type")}</FormLabel>
+              <FormControl>
+                <TypeToggle
+                  value={field.value}
+                  onChange={field.onChange}
+                  disabled={isLoading}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={billForm.control}
+          name="amount"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>{t("Amount")}</FormLabel>
               <FormControl>
                 <div className="relative w-full justify-between">
                   <span className="absolute bottom-0 left-3 top-0 my-auto h-6 w-6 text-muted-foreground">
@@ -129,9 +154,11 @@ const BillForm = ({
                   </span>
                   <Input
                     {...field}
-                    type="string"
+                    type="text"
+                    inputMode="decimal"
                     className="input pl-12 pr-4 text-left"
                     disabled={isLoading}
+                    onChange={(e) => field.onChange(positiveNumber(e.target.value))}
                   />
                 </div>
               </FormControl>

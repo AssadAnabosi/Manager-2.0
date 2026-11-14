@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { passwordSchema } from "@workbench/shared";
 import { useSearchParams, useNavigate, useParams } from "react-router-dom";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -81,8 +82,7 @@ export const useGetUserQuery = () => {
 export const updatePasswordSchema = z
   .object({
     username: z.string().optional(),
-    // max 64 to avoid bcrypt 72 bytes limit issues
-    password: z.string().min(8, "Password must be at least 8 characters").max(64, "Password cannot exceed 64 characters"),
+    password: passwordSchema,
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {

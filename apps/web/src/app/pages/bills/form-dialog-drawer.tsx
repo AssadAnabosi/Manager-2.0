@@ -50,7 +50,8 @@ export default function FormDialogDrawer({
     resolver: zodResolver(billFormSchema),
     defaultValues: {
       date: bill ? new Date(bill?.date) : getToday(),
-      value: bill?.value.toString() || "",
+      type: bill?.type || "expense",
+      amount: bill?.amount?.toString() || "",
       description: bill?.description || "",
       remarks: bill?.remarks || "",
     },

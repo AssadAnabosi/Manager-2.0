@@ -41,13 +41,18 @@ export type CreateLogType = {
   worker: string;
 };
 
+export type BillKind = "expense" | "income";
+
 export type BillType = {
   id: string;
   date: Date | string;
-  value: number | string;
+  type: BillKind;
+  amount: number;
   description: string;
-  remarks: string;
+  remarks?: string;
 };
+
+export type BillTotals = { spent: number; received: number; net: number };
 
 export type ChequeType = {
   id: string;

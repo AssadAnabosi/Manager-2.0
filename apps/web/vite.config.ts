@@ -98,7 +98,7 @@ export default ({ mode }) => {
       },
     },
     server: {
-      port: 3000,
+      port: 5173,
       strictPort: true,
       host: true,
     },
