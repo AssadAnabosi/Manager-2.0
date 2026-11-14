@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-import Layout from "./layout";
+import Layout from "@/components/shell/bare-layout";
 import { WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 

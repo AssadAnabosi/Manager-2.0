@@ -241,5 +241,10 @@
   "Total spent in the selected range.": "مجموع المصروفات في الفترة المحددة.",
   "Total received in the selected range.": "مجموع المقبوضات في الفترة المحددة.",
   "Spent minus received in the selected range.": "المصروفات ناقص المقبوضات في الفترة المحددة.",
-  "Spent minus received, all time.": "المصروفات ناقص المقبوضات منذ البداية."
+  "Spent minus received, all time.": "المصروفات ناقص المقبوضات منذ البداية.",
+  "Records": "البيانات",
+  "Manage": "الإدارة",
+  "Sidebar": "الشريط الجانبي",
+  "Toggle Sidebar": "تبديل الشريط الجانبي",
+  "Displays the mobile sidebar.": "يعرض الشريط الجانبي للهاتف."
 }
