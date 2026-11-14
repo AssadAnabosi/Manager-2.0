@@ -83,7 +83,7 @@ export const createApp = (prefix = "") => {
     bodyLimit({
       maxSize: BODY_LIMIT_BYTES,
       onError: (c) =>
-        c.json(errorBody("Request body is too large"), PAYLOAD_TOO_LARGE),
+        c.json(errorBody("PAYLOAD_TOO_LARGE"), PAYLOAD_TOO_LARGE),
     })
   );
   app.route(prefix, api);

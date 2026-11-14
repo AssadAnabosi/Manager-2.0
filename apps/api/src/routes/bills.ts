@@ -150,8 +150,9 @@ export const billsRoutes = () => {
         !(BILL_TYPES as readonly string[]).includes(query.type)
       ) {
         throw new ResponseError(
-          `Invalid bill type [${BILL_TYPES.toString()}]`,
-          BAD_REQUEST
+          "INVALID_BILL_TYPE",
+          BAD_REQUEST,
+          `Invalid bill type [${BILL_TYPES.toString()}]`
         );
       }
       const conditions: SQL[] = [];

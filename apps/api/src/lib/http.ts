@@ -1,4 +1,5 @@
 import type { Context } from "hono";
+import { ERROR_MESSAGES, type ErrorCode } from "@workbench/shared";
 
 export const OK = 200;
 export const CREATED = 201;
@@ -12,12 +13,17 @@ export const PAYLOAD_TOO_LARGE = 413;
 export const TOO_MANY_REQUESTS = 429;
 export const INTERNAL_SERVER_ERROR = 500;
 
+/**
+ * An error the API reports to its client. `code` is the stable identifier clients translate;
+ * `message` defaults to the English text for the code and may be overridden with dynamic detail.
+ */
 export class ResponseError extends Error {
   constructor(
-    message: string,
-    public statusCode: number
+    public code: ErrorCode,
+    public statusCode: number,
+    message?: string
   ) {
-    super(message);
+    super(message ?? ERROR_MESSAGES[code]);
   }
 }
 
