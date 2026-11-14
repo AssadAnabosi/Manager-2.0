@@ -184,6 +184,8 @@ export default function AttendanceCalendar({
                   key={dayKey(d)}
                   type="button"
                   role="gridcell"
+                  // a future day with no record has nothing to show or add
+                  disabled={future && status === "none"}
                   style={i === 0 ? { gridColumnStart: lead + 1 } : undefined}
                   onClick={() =>
                     status === "none" && onAddDay ? onAddDay(d) : setSelected(d)
@@ -196,7 +198,7 @@ export default function AttendanceCalendar({
                         : t("No record")
                   }`}
                   className={cn(
-                    "focus-visible:ring-ring/50 relative flex aspect-square flex-col items-center justify-center rounded-lg text-sm font-medium tabular-nums transition-colors focus-visible:ring-[3px] focus-visible:outline-none",
+                    "focus-visible:ring-ring/50 relative flex aspect-square flex-col items-center justify-center rounded-lg text-sm font-medium tabular-nums transition-colors focus-visible:ring-[3px] focus-visible:outline-none disabled:pointer-events-none",
                     STATUS_STYLE[status],
                     // empty and future days never print a border
                     future &&
