@@ -50,19 +50,21 @@ import ShekelIcon from "@/components/icons/shekel";
 
 type LogFormProps = {
   log?: LogType;
+  /** Prefilled values for a new log. */
+  defaults?: { worker?: string; date?: Date };
   /** Called after a successful save. */
   onDone: () => void;
 };
 
-const LogForm = ({ log, onDone }: LogFormProps) => {
+const LogForm = ({ log, defaults, onDone }: LogFormProps) => {
   const { t } = useTranslation();
   const fmt = useFormatters();
   const { toast } = useToast();
   const logForm = useForm<logFormSchemaType>({
     resolver: zodResolver(logFormSchema),
     defaultValues: {
-      date: log ? new Date(log.date) : getToday(),
-      worker: log?.worker?.id || undefined,
+      date: log ? new Date(log.date) : (defaults?.date ?? getToday()),
+      worker: log?.worker?.id || defaults?.worker || undefined,
       startingTime: log?.startingTime || "08:30",
       finishingTime: log?.finishingTime || "16:30",
       isAbsent: log?.isAbsent || false,

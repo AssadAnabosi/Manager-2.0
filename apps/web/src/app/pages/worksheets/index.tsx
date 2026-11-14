@@ -1,5 +1,5 @@
 import { useDateRangeParams, useSearchParam } from "@/hooks/use-url-state";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { endOfMonth, parse, startOfMonth } from "date-fns";
 import { useFormatters } from "@/hooks/use-locale";
@@ -86,6 +86,8 @@ const Logs = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view, date.from, date.to]);
   const oneWorker = filter && !filter.includes(",") ? filter : "";
+  // a day tapped in the calendar that has no record yet
+  const [addDay, setAddDay] = useState<Date | null>(null);
   const { data: logsData, isLoading } = useGetLogsQuery();
 
   const { data: usersData, isLoading: filterLoading } = useGetUsersQuery();
@@ -106,6 +108,13 @@ const Logs = () => {
         )}
         <PrintButton disabled={isLoading} />
       </PageHeader>
+      {canWrite && (
+        <LogFormDialog
+          open={addDay !== null}
+          onOpenChange={(open) => !open && setAddDay(null)}
+          defaults={{ worker: oneWorker, date: addDay ?? undefined }}
+        />
+      )}
       <Separator />
       <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between print:hidden">
         <Tabs value={view} onValueChange={setView}>
@@ -144,6 +153,7 @@ const Logs = () => {
               logs={logsData?.logs ?? []}
               loading={isLoading}
               onMonthChange={(m) => setDate(monthRange(m))}
+              onAddDay={canWrite ? setAddDay : undefined}
             />
           ) : (
             <p className="text-muted-foreground py-12 text-center">

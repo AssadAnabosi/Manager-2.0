@@ -40,9 +40,9 @@ const dayKey = (d: Date) => format(d, "yyyy-MM-dd");
 
 const STATUS_STYLE: Record<DayStatus, string> = {
   worked:
-    "bg-green-500 text-white hover:bg-green-500/85 dark:bg-green-600 dark:hover:bg-green-600/85",
+    "bg-green-500 text-white hover:bg-green-500/85 dark:bg-green-600 dark:hover:bg-green-600/85 print:text-black",
   absent:
-    "bg-red-500 text-white hover:bg-red-500/85 dark:bg-red-600 dark:hover:bg-red-600/85",
+    "bg-red-500 text-white hover:bg-red-500/85 dark:bg-red-600 dark:hover:bg-red-600/85 print:text-black",
   none: "bg-muted text-muted-foreground hover:bg-muted/70",
 };
 
@@ -52,6 +52,8 @@ type Props = {
   logs: LogType[];
   loading: boolean;
   onMonthChange: (month: Date) => void;
+  /** When given, tapping a day with no record calls this instead of opening the details. */
+  onAddDay?: (day: Date) => void;
 };
 
 /**
@@ -63,6 +65,7 @@ export default function AttendanceCalendar({
   logs,
   loading,
   onMonthChange,
+  onAddDay,
 }: Props) {
   const { t } = useTranslation();
   const fmt = useFormatters();
@@ -174,7 +177,9 @@ export default function AttendanceCalendar({
                   type="button"
                   role="gridcell"
                   style={i === 0 ? { gridColumnStart: lead + 1 } : undefined}
-                  onClick={() => setSelected(d)}
+                  onClick={() =>
+                    status === "none" && onAddDay ? onAddDay(d) : setSelected(d)
+                  }
                   aria-label={`${fmt.date(d)}, ${
                     status === "worked"
                       ? t("Attended")
@@ -185,7 +190,9 @@ export default function AttendanceCalendar({
                   className={cn(
                     "focus-visible:ring-ring/50 relative flex aspect-square flex-col items-center justify-center rounded-lg text-sm font-medium tabular-nums transition-colors focus-visible:ring-[3px] focus-visible:outline-none",
                     STATUS_STYLE[status],
-                    future && "ring-border bg-transparent opacity-50 ring-1",
+                    // empty and future days never print a border
+                    future &&
+                      "ring-border bg-transparent opacity-50 ring-1 print:ring-0",
                     isToday &&
                       "ring-foreground ring-offset-background ring-2 ring-offset-2"
                   )}
@@ -193,7 +200,7 @@ export default function AttendanceCalendar({
                   <span>{fmt.date(d, "d")}</span>
                   {Icon && !future && (
                     <Icon
-                      className="absolute bottom-1 size-3 opacity-90"
+                      className="absolute bottom-1 size-3 opacity-90 print:size-4 print:opacity-100"
                       aria-hidden
                     />
                   )}
@@ -203,7 +210,7 @@ export default function AttendanceCalendar({
       </div>
 
       {/* legend */}
-      <ul className="text-muted-foreground flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs">
+      <ul className="text-muted-foreground flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs print:hidden">
         {(
           [
             ["worked", "Attended"],

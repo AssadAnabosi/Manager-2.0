@@ -15,17 +15,33 @@ import {
 import LogForm from "./log-form";
 
 type Props = {
-  children: ReactNode;
+  /** The button that opens the dialog; leave it out to control `open` yourself. */
+  children?: ReactNode;
   log?: LogType;
+  /** Prefilled values for a new log. */
+  defaults?: { worker?: string; date?: Date };
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   onDone?: () => void;
 };
 
-export default function LogFormDialog({ children, log, onDone }: Props) {
+export default function LogFormDialog({
+  children,
+  log,
+  defaults,
+  open: openProp,
+  onOpenChange,
+  onDone,
+}: Props) {
   const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
+  const [inner, setInner] = useState(false);
+  const open = openProp ?? inner;
+  const setOpen = onOpenChange ?? setInner;
   return (
     <ResponsiveDialog open={open} onOpenChange={setOpen}>
-      <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+      {children && (
+        <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+      )}
       <ResponsiveDialogContent>
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle>
@@ -40,6 +56,7 @@ export default function LogFormDialog({ children, log, onDone }: Props) {
         <ResponsiveDialogBody>
           <LogForm
             log={log}
+            defaults={defaults}
             onDone={() => {
               setOpen(false);
               onDone?.();
