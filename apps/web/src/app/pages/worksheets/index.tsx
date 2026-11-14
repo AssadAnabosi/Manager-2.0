@@ -97,7 +97,6 @@ const Logs = () => {
     <div className="flex-1 space-y-4 p-4 pt-4 sm:p-8 sm:pt-6 print:px-4">
       {/* HEADER */}
       <PageHeader title={t("Work Timesheets")}>
-        {view === "list" && <DateRangePicker date={date} setDate={setDate} />}
         {canWrite && (
           <LogFormDialog>
             <Button className="w-full print:hidden">
@@ -108,29 +107,37 @@ const Logs = () => {
         <PrintButton disabled={isLoading} />
       </PageHeader>
       <Separator />
-      <Tabs value={view} onValueChange={setView} className="print:hidden">
-        <TabsList>
-          <TabsTrigger value="list">
-            <List /> {t("List")}
-          </TabsTrigger>
-          <TabsTrigger value="calendar">
-            <CalendarDays /> {t("Calendar")}
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
+      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between print:hidden">
+        <Tabs value={view} onValueChange={setView}>
+          <TabsList>
+            <TabsTrigger value="list">
+              <List /> {t("List")}
+            </TabsTrigger>
+            <TabsTrigger value="calendar">
+              <CalendarDays /> {t("Calendar")}
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+        {view === "list" ? (
+          <DateRangePicker
+            className="md:w-auto"
+            date={date}
+            setDate={setDate}
+          />
+        ) : (
+          user?.role !== USER && (
+            <Combobox
+              isLoading={filterLoading}
+              list={workers}
+              filter={oneWorker}
+              setFilter={setFilter}
+              placeholder={t("Select a worker")}
+            />
+          )
+        )}
+      </div>
       {view === "calendar" ? (
         <div className="space-y-4">
-          {user?.role !== USER && (
-            <div className="mx-auto w-full max-w-2xl">
-              <Combobox
-                isLoading={filterLoading}
-                list={workers}
-                filter={oneWorker}
-                setFilter={setFilter}
-                placeholder={t("Select a worker")}
-              />
-            </div>
-          )}
           {oneWorker ? (
             <AttendanceCalendar
               month={month}

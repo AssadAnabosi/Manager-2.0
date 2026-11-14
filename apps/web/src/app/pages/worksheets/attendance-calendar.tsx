@@ -93,21 +93,8 @@ export default function AttendanceCalendar({
       else worked++;
       balance += log.OTV;
     }
-    // consecutive attended days, counting back from the latest record up to today; days
-    // without a record (weekends) don't break it
-    const past = [...logs]
-      .filter(
-        (l) =>
-          !isAfter(new Date(String(l.date).slice(0, 10) + "T00:00:00"), today)
-      )
-      .sort((a, b) => String(b.date).localeCompare(String(a.date)));
-    let streak = 0;
-    for (const log of past) {
-      if (log.isAbsent) break;
-      streak++;
-    }
-    return { worked, absent, balance, streak };
-  }, [logs, today]);
+    return { worked, absent, balance };
+  }, [logs]);
 
   // pad the first week so the 1st lands on its weekday (the week starts on Sunday)
   const lead = getDay(first);
@@ -145,11 +132,10 @@ export default function AttendanceCalendar({
       </div>
 
       {/* stats */}
-      <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      <dl className="grid grid-cols-3 gap-2">
         {[
           { title: t("Days Worked"), value: stats.worked },
           { title: t("Days absent"), value: stats.absent },
-          { title: t("Current streak"), value: stats.streak },
           { title: t("Hours balance"), value: fmt.number(stats.balance) },
         ].map((s) => (
           <div key={s.title} className="bg-card rounded-lg border px-3 py-2">
