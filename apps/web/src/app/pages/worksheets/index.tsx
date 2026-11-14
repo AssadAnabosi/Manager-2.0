@@ -89,7 +89,21 @@ const Logs = () => {
     if (!same(from, date.from) || !same(to, date.to)) setDate({ from, to });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view, date.from, date.to]);
-  const oneWorker = filter && !filter.includes(",") ? filter : "";
+  // The list filters by any number of workers, the calendar shows exactly one: the first of
+  // the selection. Switching to the calendar keeps that one in the URL (the effect below), and
+  // picking another worker there replaces the selection, so going back to the list shows it.
+  const oneWorker =
+    view === "calendar"
+      ? (filter.split(",")[0] ?? "")
+      : filter && !filter.includes(",")
+        ? filter
+        : "";
+  useEffect(() => {
+    if (view === "calendar" && filter.includes(",")) {
+      setFilter(filter.split(",")[0]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view, filter]);
   // a day tapped in the calendar that has no record yet
   const [addDay, setAddDay] = useState<Date | null>(null);
   const addDialog = useAddDialog();
@@ -159,7 +173,10 @@ const Logs = () => {
           {oneWorker ? (
             <AttendanceCalendar
               month={month}
-              logs={logsData?.logs ?? []}
+              // until the URL catches up the query may still hold every selected worker
+              logs={(logsData?.logs ?? []).filter(
+                (log) => log.worker.id === oneWorker
+              )}
               loading={isLoading}
               workerName={workers.find((w) => w.value === oneWorker)?.label}
               onMonthChange={(m) => setDate(monthRange(m))}
