@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useSearchParam } from "@/hooks/use-url-state";
 import { useTranslation } from "react-i18next";
 import { PayeeType } from "@/lib/types";
 
@@ -40,21 +40,7 @@ const PAYEES_SKELETON: SkeletonColumn[] = [
 const Payees = () => {
   const { canWrite } = usePermissions();
   const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useSearchParams({
-    search: "",
-  });
-
-  const search = searchParams.get("search") || "";
-  const setSearch = (value: string) => {
-    setSearchParams(
-      (prev) => {
-        prev.delete("search");
-        if (value) prev.set("search", value);
-        return prev;
-      },
-      { replace: true }
-    );
-  };
+  const [search, setSearch] = useSearchParam("search");
 
   const { data: payeesData, isLoading } = useGetPayeesQuery();
   const { mutate: deletePayee } = useDeletePayeeMutation();

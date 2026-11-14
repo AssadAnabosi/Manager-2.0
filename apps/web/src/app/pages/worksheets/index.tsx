@@ -1,8 +1,7 @@
-import { useSearchParams } from "react-router-dom";
+import { useDateRangeParams, useSearchParam } from "@/hooks/use-url-state";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
-import { DateRange } from "react-day-picker";
 
 import { useAuth } from "@/providers/auth-context";
 import { usePermissions } from "@/hooks/use-permissions";
@@ -37,13 +36,7 @@ import LogRow from "./log-row";
 import LogFormDialog from "./log-form-dialog";
 
 import { Printer, FilePlus } from "lucide-react";
-import {
-  getFirstDayOfCurrentMonth,
-  getLastDayOfCurrentMonth,
-  toList,
-  dateToString,
-  stringToDate,
-} from "@/lib/utils";
+import { toList, stringToDate } from "@/lib/utils";
 
 const WORKSHEETS_SKELETON: SkeletonColumn[] = [
   { kind: "identity" },
@@ -58,42 +51,11 @@ const Logs = () => {
   const { user } = useAuth();
   const { canWrite } = usePermissions();
   const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useSearchParams({
-    filter: user?.role === USER ? user.id : "",
-    from: getFirstDayOfCurrentMonth(),
-    to: getLastDayOfCurrentMonth(),
-  });
-
-  const filter = searchParams.get("filter") || "";
-  const setFilter = (value: string) => {
-    setSearchParams(
-      (prev) => {
-        prev.delete("filter");
-        if (value) prev.set("filter", value);
-        return prev;
-      },
-      { replace: true }
-    );
-  };
-
-  const date = {
-    from: searchParams.get("from"),
-    to: searchParams.get("to"),
-  };
-  const setDate = (date: DateRange) => {
-    setSearchParams(
-      (prev) => {
-        prev.delete("from");
-        prev.delete("to");
-        if (date) {
-          if (date.from) prev.set("from", dateToString(date.from));
-          if (date.to) prev.set("to", dateToString(date.to));
-        }
-        return prev;
-      },
-      { replace: true }
-    );
-  };
+  const [filter, setFilter] = useSearchParam(
+    "filter",
+    user?.role === USER ? user.id : ""
+  );
+  const [date, setDate] = useDateRangeParams();
   const { data: logsData, isLoading } = useGetLogsQuery();
 
   const { data: usersData, isLoading: filterLoading } = useGetUsersQuery();

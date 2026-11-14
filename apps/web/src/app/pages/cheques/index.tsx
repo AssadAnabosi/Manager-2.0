@@ -1,8 +1,7 @@
-import { useSearchParams } from "react-router-dom";
+import { useDateRangeParams, useSearchParam } from "@/hooks/use-url-state";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { ar, enGB } from "date-fns/locale";
-import { DateRange } from "react-day-picker";
 
 import { usePermissions } from "@/hooks/use-permissions";
 
@@ -39,13 +38,7 @@ import ChequeFormDialog from "./cheque-form-dialog";
 
 import { Printer, FilePlus } from "lucide-react";
 
-import {
-  getFirstDayOfCurrentMonth,
-  getLastDayOfCurrentMonth,
-  stringToDate,
-  dateToString,
-  toList,
-} from "@/lib/utils";
+import { stringToDate, toList } from "@/lib/utils";
 
 const CHEQUES_SKELETON: SkeletonColumn[] = [
   { kind: "identity" },
@@ -57,55 +50,9 @@ const CHEQUES_SKELETON: SkeletonColumn[] = [
 const Cheques = () => {
   const { canWrite } = usePermissions();
   const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useSearchParams({
-    serial: "",
-    filter: "",
-    from: getFirstDayOfCurrentMonth(),
-    to: getLastDayOfCurrentMonth(),
-  });
-
-  const filter = searchParams.get("filter") || "";
-  const setFilter = (value: string) => {
-    setSearchParams(
-      (prev) => {
-        prev.delete("filter");
-        if (value) prev.set("filter", value);
-        return prev;
-      },
-      { replace: true }
-    );
-  };
-
-  const serial = searchParams.get("serial") || "";
-  const setSerial = (value: string) => {
-    setSearchParams(
-      (prev) => {
-        prev.delete("serial");
-        if (value) prev.set("serial", value);
-        return prev;
-      },
-      { replace: true }
-    );
-  };
-
-  const date = {
-    from: searchParams.get("from"),
-    to: searchParams.get("to"),
-  };
-  const setDate = (date: DateRange) => {
-    setSearchParams(
-      (prev) => {
-        prev.delete("from");
-        prev.delete("to");
-        if (date) {
-          if (date.from) prev.set("from", dateToString(date.from));
-          if (date.to) prev.set("to", dateToString(date.to));
-        }
-        return prev;
-      },
-      { replace: true }
-    );
-  };
+  const [filter, setFilter] = useSearchParam("filter");
+  const [serial, setSerial] = useSearchParam("serial");
+  const [date, setDate] = useDateRangeParams();
 
   const { data: chequesData, isLoading } = useGetChequesQuery();
 

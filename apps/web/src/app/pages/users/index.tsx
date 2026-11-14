@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useSearchParam } from "@/hooks/use-url-state";
 import { useTranslation } from "react-i18next";
 
 import { usePermissions } from "@/hooks/use-permissions";
@@ -41,21 +41,7 @@ const USERS_SKELETON: SkeletonColumn[] = [
 const Users = () => {
   const { canCreateUsers } = usePermissions();
   const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useSearchParams({
-    search: "",
-  });
-
-  const search = searchParams.get("search") || "";
-  const setSearch = (value: string) => {
-    setSearchParams(
-      (prev) => {
-        prev.delete("search");
-        if (value) prev.set("search", value);
-        return prev;
-      },
-      { replace: true }
-    );
-  };
+  const [search, setSearch] = useSearchParam("search");
 
   const { data: usersData, isLoading } = useGetUsersQuery();
 

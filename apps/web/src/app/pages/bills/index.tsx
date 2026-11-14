@@ -1,8 +1,7 @@
-import { useSearchParams } from "react-router-dom";
+import { useDateRangeParams, useSearchParam } from "@/hooks/use-url-state";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
-import { DateRange } from "react-day-picker";
 
 import { usePermissions } from "@/hooks/use-permissions";
 
@@ -38,12 +37,7 @@ import BillFormDialog from "./bill-form-dialog";
 
 import { Printer, FilePlus } from "lucide-react";
 
-import {
-  getFirstDayOfCurrentMonth,
-  getLastDayOfCurrentMonth,
-  dateToString,
-  stringToDate,
-} from "@/lib/utils";
+import { stringToDate } from "@/lib/utils";
 
 const BILLS_SKELETON: SkeletonColumn[] = [
   { kind: "identity" },
@@ -56,56 +50,11 @@ const BILLS_SKELETON: SkeletonColumn[] = [
 const Bills = () => {
   const { canWrite } = usePermissions();
   const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useSearchParams({
-    search: "",
-    from: getFirstDayOfCurrentMonth(),
-    to: getLastDayOfCurrentMonth(),
-  });
-
-  const search = searchParams.get("search") || "";
-  const setSearch = (value: string) => {
-    setSearchParams(
-      (prev) => {
-        prev.delete("search");
-        if (value) prev.set("search", value);
-        return prev;
-      },
-      { replace: true }
-    );
-  };
-
-  const typeParam = searchParams.get("type");
+  const [search, setSearch] = useSearchParam("search");
+  const [typeParam, setType] = useSearchParam("type");
   const type: BillKind | "" =
     typeParam === "expense" || typeParam === "income" ? typeParam : "";
-  const setType = (value: BillKind | "") => {
-    setSearchParams(
-      (prev) => {
-        prev.delete("type");
-        if (value) prev.set("type", value);
-        return prev;
-      },
-      { replace: true }
-    );
-  };
-
-  const date = {
-    from: searchParams.get("from"),
-    to: searchParams.get("to"),
-  };
-  const setDate = (date: DateRange) => {
-    setSearchParams(
-      (prev) => {
-        prev.delete("from");
-        prev.delete("to");
-        if (date) {
-          if (date.from) prev.set("from", dateToString(date.from));
-          if (date.to) prev.set("to", dateToString(date.to));
-        }
-        return prev;
-      },
-      { replace: true }
-    );
-  };
+  const [date, setDate] = useDateRangeParams();
   const { data: billsData, isLoading } = useGetBillsQuery();
 
   const { mutate: deleteBill } = useDeleteBillMutation();
