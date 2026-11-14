@@ -10,7 +10,7 @@ import { AuthProvider } from "@/providers/auth-provider";
 
 import App from "@/app";
 
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner";
 import BootFallback from "@/components/component/boot-fallback";
 import { bootstrapSession } from "@/lib/session";
 import { ErrorProvider } from "./providers/error-provider";
