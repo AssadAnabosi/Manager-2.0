@@ -103,14 +103,14 @@ const Bills = () => {
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       {/* HEADER */}
-      <div className="flex space-y-2 flex-col justify-between md:flex-row gap-5">
+      <div className="flex flex-col justify-between gap-5 space-y-2 md:flex-row">
         <h2 className="text-3xl font-bold tracking-tight">{t("Bills")}</h2>
-        <div className="flex items-center gap-2 flex-col md:flex-row">
+        <div className="flex flex-col items-center gap-2 md:flex-row">
           <DateRangePicker date={date} setDate={setDate} />
           {user?.role !== SPECTATOR && (
             <BillFormDialog>
-              <Button className="print:hidden w-full">
-                <FilePlus className="ltr:mr-2 rtl:ml-2 h-7 w-7" />{" "}
+              <Button className="w-full print:hidden">
+                <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" />{" "}
                 {t("Add New")}
               </Button>
             </BillFormDialog>
@@ -120,7 +120,7 @@ const Bills = () => {
             className="w-full print:hidden"
             onClick={() => window.print()}
           >
-            <Printer className="ltr:mr-2 rtl:ml-2 h-6 w-6" /> {t("Print")}
+            <Printer className="h-6 w-6 ltr:mr-2 rtl:ml-2" /> {t("Print")}
           </Button>
         </div>
       </div>
@@ -129,7 +129,7 @@ const Bills = () => {
       <Cards billsData={billsData} isLoading={isLoading} />
       <Separator />
       {/* FILTER */}
-      <div className="flex justify-between items-center gap-4 flex-wrap">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <TypeFilter value={type} onChange={setType} />
         <div className="w-full md:w-[335px]">
           <Searchbox value={search} setValue={setSearch} />
@@ -173,26 +173,26 @@ const Bills = () => {
               <TableHead className="table-cell w-[120px] rtl:text-right">
                 {t("Amount")}
               </TableHead>
-              <TableHead className="print:table-cell hidden md:table-cell rtl:text-right">
+              <TableHead className="hidden md:table-cell rtl:text-right print:table-cell">
                 {t("Description")}
               </TableHead>
-              <TableHead className="print:table-cell hidden lg:table-cell rtl:text-right w-max">
+              <TableHead className="hidden w-max lg:table-cell rtl:text-right print:table-cell">
                 {t("Remarks")}
               </TableHead>
-              <TableHead className="print:hidden lg:print:hidden hidden lg:table-cell w-[120px]"></TableHead>
+              <TableHead className="hidden w-[120px] lg:table-cell print:hidden lg:print:hidden"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
-              : billsData.bills.map((bill: BillType) =>
+              : billsData.bills.map((bill: BillType) => (
                   <BillRow
                     key={bill.id}
                     bill={bill}
                     onDelete={deleteBill}
                     userRole={user?.role}
                   />
-                )}
+                ))}
           </TableBody>
         </Table>
       )}

@@ -66,10 +66,7 @@ const PayeeForm = ({ payee, onDone }: PayeeFormProps) => {
 
   return (
     <Form {...payeeForm}>
-      <form
-        className="space-y-4"
-        onSubmit={payeeForm.handleSubmit(onSubmit)}
-      >
+      <form className="space-y-4" onSubmit={payeeForm.handleSubmit(onSubmit)}>
         <FormField
           control={payeeForm.control}
           name="name"

@@ -70,7 +70,7 @@ export default function BillDetails({
             <div className="flex flex-col gap-3 md:flex-row">
               <BillFormDialog bill={bill} onDone={() => setOpen(false)}>
                 <Button>
-                  <Pencil2Icon className="h-4 w-4 me-2" />
+                  <Pencil2Icon className="me-2 h-4 w-4" />
                   <span>{t("Edit")}</span>
                 </Button>
               </BillFormDialog>
@@ -81,7 +81,7 @@ export default function BillDetails({
                 }}
               >
                 <Button variant="secondary">
-                  <TrashIcon className="h-4 w-4 me-2" />
+                  <TrashIcon className="me-2 h-4 w-4" />
                   <span>{t("Delete")}</span>
                 </Button>
               </DeleteDialog>

@@ -44,7 +44,7 @@ const PayeeRow = ({ payee, onDelete, userRole }: Props) => {
                 <User className="h-5 w-5" />
               </AvatarFallback>
             </Avatar>
-            <div className="ltr:ml-4 rtl:mr-4 space-y-1">
+            <div className="space-y-1 ltr:ml-4 rtl:mr-4">
               <p className="text-sm font-medium leading-none">{title}</p>
             </div>
           </div>
@@ -55,7 +55,7 @@ const PayeeRow = ({ payee, onDelete, userRole }: Props) => {
           <p>
             <a
               aria-label="Email"
-              className="text-blue-500 font-bold hover:cursor-pointer"
+              className="font-bold text-blue-500 hover:cursor-pointer"
               href={`mailto:${payee.email}`}
             >
               {payee.email}
@@ -73,7 +73,7 @@ const PayeeRow = ({ payee, onDelete, userRole }: Props) => {
         </div>
       </TableCell>
       <TableCell className="hidden lg:table-cell">{payee.remarks}</TableCell>
-      <TableCell className="w-max text-right hidden lg:table-cell">
+      <TableCell className="hidden w-max text-right lg:table-cell">
         <PayeeFormDialog payee={payee}>
           <Button size="icon" variant="edit" aria-label="Edit">
             <TooltipProvider>

@@ -49,13 +49,13 @@ const BillRow = ({ bill, onDelete, userRole }: Props) => {
           userRole={userRole}
         >
           <div className="flex items-center">
-            <Avatar className="print:hidden h-9 w-9">
+            <Avatar className="h-9 w-9 print:hidden">
               <AvatarImage alt="Avatar" />
               <AvatarFallback>
                 <CalendarIcon className="h-5 w-5" />
               </AvatarFallback>
             </Avatar>
-            <div className="ltr:ml-4 rtl:mr-4 space-y-1">
+            <div className="space-y-1 ltr:ml-4 rtl:mr-4">
               <p className="text-sm font-medium leading-none" aria-label="Day">
                 {title}
               </p>
@@ -82,13 +82,13 @@ const BillRow = ({ bill, onDelete, userRole }: Props) => {
           </Badge>
         </div>
       </TableCell>
-      <TableCell className="print:table-cell hidden md:table-cell">
+      <TableCell className="hidden md:table-cell print:table-cell">
         {bill.description}
       </TableCell>
-      <TableCell className="print:table-cell hidden lg:table-cell">
+      <TableCell className="hidden lg:table-cell print:table-cell">
         {bill.remarks}
       </TableCell>
-      <TableCell className="print:hidden lg:print:hidden text-right hidden lg:table-cell">
+      <TableCell className="hidden text-right lg:table-cell print:hidden lg:print:hidden">
         {userRole !== SPECTATOR && (
           <div className="grid grid-cols-2">
             <BillFormDialog bill={bill}>

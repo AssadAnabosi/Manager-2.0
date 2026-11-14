@@ -89,10 +89,7 @@ const BillForm = ({ bill, onDone }: BillFormProps) => {
 
   return (
     <Form {...billForm}>
-      <form
-        className="space-y-4"
-        onSubmit={billForm.handleSubmit(onSubmit)}
-      >
+      <form className="space-y-4" onSubmit={billForm.handleSubmit(onSubmit)}>
         <FormField
           control={billForm.control}
           name="date"
@@ -177,7 +174,9 @@ const BillForm = ({ bill, onDone }: BillFormProps) => {
                     inputMode="decimal"
                     className="input pl-12 pr-4 text-left"
                     disabled={isLoading}
-                    onChange={(e) => field.onChange(positiveNumber(e.target.value))}
+                    onChange={(e) =>
+                      field.onChange(positiveNumber(e.target.value))
+                    }
                   />
                 </div>
               </FormControl>

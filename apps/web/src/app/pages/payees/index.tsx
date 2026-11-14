@@ -53,19 +53,19 @@ const Payees = () => {
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       {/* HEADER */}
-      <div className="flex space-y-2 flex-col justify-between md:flex-row gap-5">
+      <div className="flex flex-col justify-between gap-5 space-y-2 md:flex-row">
         <h2 className="text-3xl font-bold tracking-tight">{t("Payees")}</h2>
-        <div className="flex items-center gap-2 flex-col md:flex-row">
+        <div className="flex flex-col items-center gap-2 md:flex-row">
           <PayeeFormDialog>
             <Button className="w-full">
-              <FilePlus className="ltr:mr-2 rtl:ml-2 h-7 w-7" /> {t("Add New")}
+              <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" /> {t("Add New")}
             </Button>
           </PayeeFormDialog>
         </div>
       </div>
       <Separator />
       {/* FILTER */}
-      <div className="flex justify-end flex-wrap">
+      <div className="flex flex-wrap justify-end">
         <div className=" w-full md:w-[335px]">
           <Searchbox value={search} setValue={setSearch} />
         </div>
@@ -83,26 +83,26 @@ const Payees = () => {
               <TableHead className="w-[270px] rtl:text-right">
                 {t("Payee Name")}
               </TableHead>
-              <TableHead className="hidden md:table-cell w-[300px] rtl:text-right">
+              <TableHead className="hidden w-[300px] md:table-cell rtl:text-right">
                 {t("Contact Details")}
               </TableHead>
-              <TableHead className="hidden lg:table-cell w-max rtl:text-right">
+              <TableHead className="hidden w-max lg:table-cell rtl:text-right">
                 {t("Remarks")}
               </TableHead>
-              <TableHead className="w-[120px] hidden lg:table-cell"></TableHead>
+              <TableHead className="hidden w-[120px] lg:table-cell"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
-              : payeesData.payees.map((payee: PayeeType) =>
+              : payeesData.payees.map((payee: PayeeType) => (
                   <PayeeRow
                     key={payee.id}
                     payee={payee}
                     onDelete={deletePayee}
                     userRole={user?.role}
                   />
-                )}
+                ))}
           </TableBody>
         </Table>
       )}
