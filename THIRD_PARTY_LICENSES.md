@@ -26,6 +26,17 @@ Workbench is released under the MIT license (see [LICENSE](LICENSE)). It uses th
 | tailwindcss-animate | Jamie Kyle | MIT | https://github.com/jamiebuilds/tailwindcss-animate |
 | pulltorefreshjs | Rafael Soto | MIT | https://github.com/BoxFactura/pulltorefresh.js |
 
+## API (`apps/api`)
+
+| Component | Author | License | Source |
+| --- | --- | --- | --- |
+| Hono, `@hono/zod-openapi`, `@hono/swagger-ui` | Yusuke Wada and contributors | MIT | https://github.com/honojs |
+| Drizzle ORM | Drizzle Team | Apache-2.0 | https://github.com/drizzle-team/drizzle-orm |
+| jose | Filip Skokan | MIT | https://github.com/panva/jose |
+| ms | Vercel, Inc. | MIT | https://github.com/vercel/ms |
+| Zod | Colin McDonnell | MIT | https://github.com/colinhacks/zod |
+| Swagger UI (loaded by `/docs` in development) | SmartBear Software | Apache-2.0 | https://github.com/swagger-api/swagger-ui |
+
 UI components follow the patterns of [shadcn/ui](https://github.com/shadcn-ui/ui) (MIT).
 
 The full license texts are available in each component's source repository and in its published npm package.
