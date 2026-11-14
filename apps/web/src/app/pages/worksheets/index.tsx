@@ -188,7 +188,18 @@ const Logs = () => {
           {!isLoading && !logsData ? (
             <FetchError />
           ) : !isLoading && !logsData?.logs?.length ? (
-            <NoResults />
+            <NoResults
+              filterKeys={["filter", "from", "to"]}
+              action={
+                canWrite && (
+                  <LogFormDialog>
+                    <Button className="print:hidden">
+                      <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
+                    </Button>
+                  </LogFormDialog>
+                )
+              }
+            />
           ) : (
             <Table>
               <TableCaption>

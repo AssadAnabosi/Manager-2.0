@@ -102,7 +102,18 @@ const Cheques = () => {
       {!isLoading && !chequesData ? (
         <FetchError />
       ) : !isLoading && !chequesData?.cheques?.length ? (
-        <NoResults />
+        <NoResults
+          filterKeys={["filter", "serial", "from", "to"]}
+          action={
+            canWrite && (
+              <ChequeFormDialog>
+                <Button className="print:hidden">
+                  <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
+                </Button>
+              </ChequeFormDialog>
+            )
+          }
+        />
       ) : (
         <Table>
           <TableCaption>
