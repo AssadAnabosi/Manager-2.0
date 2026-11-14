@@ -1,0 +1,4 @@
+.wrangler
+.dev.vars
+node_modules
+wrangler.deploy.jsonc

@@ -1,0 +1,21 @@
+# Copy to .dev.vars (gitignored). Dev values only.
+ENVIRONMENT=development
+API_DOCS=true
+ALLOWED_ORIGINS=http://localhost:5173
+JWT_ISSUER=http://localhost:8787
+BENCH=true
+
+JWT_ACCESS_SECRET=dev-access-secret-change-me-0123456789
+JWT_REFRESH_SECRET=dev-refresh-secret-change-me-0123456789
+# 32 random bytes, base64:  openssl rand -base64 32
+PASSWORD_PEPPER=ZGV2LXBlcHBlci0wMTIzNDU2Nzg5MDEyMzQ1Njc4OTA=
+PASSWORD_PEPPER_VERSION=1
+PBKDF2_ITERATIONS=30000
+
+# Seed (bun run db:seed:local)
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=change-me-please-123
+ADMIN_FIRSTNAME=Admin
+ADMIN_LASTNAME=User
+ADMIN_EMAIL=admin@example.com
+ADMIN_PHONE_NUMBER=0000000000

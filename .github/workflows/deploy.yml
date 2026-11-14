@@ -1,0 +1,47 @@
+name: Deploy API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - apps/api/**
+      - packages/shared/**
+      - bun.lock
+      - .github/workflows/deploy.yml
+
+concurrency:
+  group: deploy-api
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: bun install --frozen-lockfile
+
+      # The repository only contains example.com placeholders. The real domain and database
+      # ID are repository variables (Settings > Secrets and variables > Actions > Variables).
+      - name: Render deploy config
+        run: bun scripts/render-wrangler.ts
+        working-directory: apps/api
+        env:
+          API_DOMAIN: ${{ vars.API_DOMAIN }}
+          WEB_ORIGIN: ${{ vars.WEB_ORIGIN }}
+          D1_DATABASE_ID: ${{ vars.D1_DATABASE_ID }}
+
+      - name: Apply migrations and deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4.162.0"
+          workingDirectory: apps/api
+          preCommands: wrangler d1 migrations apply workbench-db --remote --config wrangler.deploy.jsonc
+          command: deploy --config wrangler.deploy.jsonc
