@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import i18next from "i18next";
+import { useTranslation } from "react-i18next";
 
 import { UserType } from "@/lib/types";
 import { TableCell, TableRow } from "@/components/ui/table";
@@ -14,19 +14,25 @@ import {
 } from "@/components/ui/tooltip";
 
 import StatusBadge from "@/components/component/status-badge";
-import AvatarCombo from "./avatar-combo";
+import UserDetails from "./user-details";
 import RoleBadge from "./role-badge";
 
 import { AvatarIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { MODERATOR } from "@/lib/constants";
 
-const Row = (user: UserType, userRole: string | undefined) => {
+type Props = {
+  user: UserType;
+  userRole: string | undefined;
+};
+
+const UserRow = ({ user, userRole }: Props) => {
+  const { t } = useTranslation();
   const title = user.fullName;
   const description = `@${user.username}`;
   return (
-    <TableRow key={user.id} className="h-[73px]">
+    <TableRow className="h-[73px]">
       <TableCell>
-        <AvatarCombo title={user.fullName} user={user} userRole={userRole}>
+        <UserDetails title={user.fullName} user={user} userRole={userRole}>
           <div className="flex items-center">
             <Avatar className="h-9 w-9">
               <AvatarImage alt="Avatar" />
@@ -34,7 +40,7 @@ const Row = (user: UserType, userRole: string | undefined) => {
                 <AvatarIcon className="h-7 w-7" />
               </AvatarFallback>
             </Avatar>
-            <div className="ltr:ml-4 rtl:mr-4 space-y-1">
+            <div className="space-y-1 ltr:ml-4 rtl:mr-4">
               <p
                 className="text-sm font-medium leading-none"
                 aria-label="Full Name"
@@ -50,7 +56,7 @@ const Row = (user: UserType, userRole: string | undefined) => {
               </p>
             </div>
           </div>
-        </AvatarCombo>
+        </UserDetails>
       </TableCell>
       <TableCell className="hidden md:table-cell">
         <RoleBadge role={user.role} />
@@ -62,7 +68,7 @@ const Row = (user: UserType, userRole: string | undefined) => {
         <div className="flex flex-col space-y-1">
           <p>
             <a
-              className="text-blue-400 font-bold hover:cursor-pointer"
+              className="font-bold text-blue-400 hover:cursor-pointer"
               href={`mailto:${user.email}`}
             >
               {user.email}
@@ -78,7 +84,7 @@ const Row = (user: UserType, userRole: string | undefined) => {
           </p>
         </div>
       </TableCell>
-      <TableCell className="w-max text-right hidden lg:table-cell">
+      <TableCell className="hidden w-max text-right lg:table-cell">
         {userRole !== MODERATOR && (
           <TooltipProvider>
             <Tooltip>
@@ -90,7 +96,7 @@ const Row = (user: UserType, userRole: string | undefined) => {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>{i18next.t("Edit")}</p>
+                <p>{t("Edit")}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -100,4 +106,4 @@ const Row = (user: UserType, userRole: string | undefined) => {
   );
 };
 
-export default Row;
+export default UserRow;

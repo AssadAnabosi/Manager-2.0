@@ -48,7 +48,7 @@ import {
 } from "@/components/ui/select";
 
 import DeleteDialog from "@/components/component/delete-dialog";
-import UserForm from "./form";
+import UserForm from "./user-form";
 
 import { ROLES } from "@/lib/constants";
 
@@ -271,7 +271,7 @@ export default function Edit() {
                 {t("Update user details.")}
               </CardDescription>
             </CardHeader>
-            <UserForm user={user} isDesktop={true} />
+            <UserForm user={user} />
           </Card>
         </TabsContent>
         <TabsContent value="settings" className="h-[500px]">

@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { PASSWORD_MIN_LENGTH } from "@workbench/shared";
 import { UserType } from "@/lib/types";
-import { cn } from "@/lib/utils";
 
 import useAxios from "@/hooks/use-axios";
 import { useUserFormMutation } from "@/api/users";
@@ -22,8 +21,7 @@ import {
 } from "@/components/ui/form";
 
 import { CardContent, CardFooter } from "@/components/ui/card";
-import { DialogFooter } from "@/components/ui/dialog";
-import { DrawerFooter } from "@/components/ui/drawer";
+import { ResponsiveDialogFooter } from "@/components/ui/responsive-dialog";
 
 import Spinner from "@/components/component/spinner";
 import { useToast } from "@/components/ui/use-toast";
@@ -32,17 +30,12 @@ import { PasswordInput } from "@/components/component/password-input";
 const BASE_URL = "/users";
 
 const UserForm = ({
-  className,
   user,
-  onClose,
-  setOpen,
-  isDesktop,
+  onDone,
 }: {
-  className?: string;
   user?: UserType;
-  onClose?: (status: boolean) => void;
-  setOpen?: (status: boolean) => void;
-  isDesktop: boolean;
+  /** Called after a successful create (the edit page stays put). */
+  onDone?: () => void;
 }) => {
   const { t } = useTranslation();
   const { toast } = useToast();
@@ -128,8 +121,7 @@ const UserForm = ({
       if (!user) {
         await mutateAsync({ data });
         userForm.reset();
-        setOpen?.(false);
-        onClose?.(false);
+        onDone?.();
       } else {
         await mutateAsync({ data, userId: user.id });
       }
@@ -157,7 +149,7 @@ const UserForm = ({
     <Form {...userForm}>
       <form
         onSubmit={userForm.handleSubmit(onSubmit)}
-        className={user ? "space-y-2" : cn(className, "space-y-4")}
+        className={user ? "space-y-2" : "space-y-4"}
       >
         <CardWrapper user={user}>
           <FormField
@@ -291,7 +283,7 @@ const UserForm = ({
             </>
           )}
         </CardWrapper>
-        <ButtonWrapper user={user} isDesktop={isDesktop}>
+        <ButtonWrapper user={user}>
           <Button type="submit" disabled={isLoading} className="w-[50%]">
             {isLoading ? (
               <Spinner className="h-4 w-4" />
@@ -324,18 +316,14 @@ const CardWrapper = ({
 const ButtonWrapper = ({
   children,
   user,
-  isDesktop,
 }: {
   children: React.ReactNode;
   user?: UserType;
-  isDesktop?: boolean;
 }) => {
   return user ? (
     <CardFooter className="">{children}</CardFooter>
-  ) : isDesktop ? (
-    <DialogFooter>{children}</DialogFooter>
   ) : (
-    <DrawerFooter className="pt-2">{children}</DrawerFooter>
+    <ResponsiveDialogFooter>{children}</ResponsiveDialogFooter>
   );
 };
 

@@ -1,8 +1,22 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
-import { ListType, ChequeType } from "@/lib/types";
-import { cn, stringToDate } from "@/lib/utils";
+import { ChequeType } from "@/lib/types";
+import {
+  cn,
+  getLastDayOfCurrentMonthDate,
+  stringToDate,
+  toList,
+} from "@/lib/utils";
+import {
+  chequeFormSchema,
+  chequeFormSchemaType,
+  useChequeFormMutation,
+} from "@/api/cheques";
+import { useGetPayeesQuery } from "@/api/payees";
 
 import {
   Form,
@@ -30,59 +44,89 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { DialogFooter } from "@/components/ui/dialog";
-import { DrawerFooter } from "@/components/ui/drawer";
+import { ResponsiveDialogFooter } from "@/components/ui/responsive-dialog";
+import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import Spinner from "@/components/component/spinner";
 
 import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
 import ShekelIcon from "@/components/icons/shekel";
 
-const ChequeForm = ({
-  className,
-  isDesktop,
-  chequeForm,
-  onSubmit,
-  calendarOpen,
-  setCalenderOpen,
-  isLoading,
-  cheque,
-  filterLoading,
-  payees,
-  popoverOpen,
-  setPopoverOpen,
-}: {
-  className?: string;
-  isDesktop: boolean;
-  chequeForm: any;
-  onSubmit: any;
-  calendarOpen: boolean;
-  setCalenderOpen: any;
-  isLoading: boolean;
+type ChequeFormProps = {
   cheque?: ChequeType;
-  filterLoading: boolean;
-  payees: ListType[];
-  popoverOpen: boolean;
-  setPopoverOpen: any;
-}) => {
+  /** Called after a successful save. */
+  onDone: () => void;
+};
+
+const ChequeForm = ({ cheque, onDone }: ChequeFormProps) => {
   const { t } = useTranslation();
-  const footerContent = (
-    <Button type="submit" disabled={isLoading} className="md:w-[45%]">
-      {isLoading ? (
-        <Spinner className="h-4 w-4" />
-      ) : cheque ? (
-        t("Save Changes")
-      ) : (
-        t("Create")
-      )}
-    </Button>
-  );
+  const { toast } = useToast();
+  const chequeForm = useForm<chequeFormSchemaType>({
+    resolver: zodResolver(chequeFormSchema),
+    defaultValues: {
+      dueDate: cheque
+        ? new Date(cheque.dueDate)
+        : getLastDayOfCurrentMonthDate(),
+      payee: cheque?.payee?.id || undefined,
+      serial: cheque?.serial.toString() || "",
+      value: cheque?.value.toString() || "",
+      isCancelled: cheque?.isCancelled || false,
+      remarks: cheque?.remarks || "",
+    },
+  });
+  const isLoading = chequeForm.formState.isSubmitting;
+
+  const { data: payeesData, isLoading: filterLoading } = useGetPayeesQuery();
+  const payees = toList(payeesData?.payees || [], "name");
+
+  const { mutateAsync } = useChequeFormMutation();
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [calendarOpen, setCalenderOpen] = useState(false);
+
+  const onSubmit = async (data: chequeFormSchemaType) => {
+    try {
+      if (cheque) {
+        await mutateAsync({ data, chequeId: cheque.id });
+      } else {
+        await mutateAsync({ data });
+        chequeForm.reset();
+      }
+      onDone();
+    } catch (error: any) {
+      const message = error?.response?.data?.message;
+      if (message)
+        switch (message) {
+          case "Serial already exists":
+            chequeForm.setError("serial", {
+              type: "manual",
+              message: "Cheque with this serial already exists.",
+            });
+            return;
+          case "Payee not found":
+            chequeForm.setError("payee", {
+              type: "manual",
+              message: "Payee not found",
+            });
+            return;
+          case "Please select a payee":
+            chequeForm.setError("payee", {
+              type: "manual",
+              message: "Please select a payee",
+            });
+            return;
+        }
+      toast({
+        variant: "destructive",
+        title: t("Error"),
+        description:
+          t(error?.response?.data?.message) || t("Something went wrong"),
+      });
+    }
+  };
+
   return (
     <Form {...chequeForm}>
-      <form
-        className={cn(className, "space-y-4")}
-        onSubmit={chequeForm.handleSubmit(onSubmit)}
-      >
+      <form className="space-y-4" onSubmit={chequeForm.handleSubmit(onSubmit)}>
         <div className="flex gap-5">
           <FormField
             control={chequeForm.control}
@@ -294,11 +338,17 @@ const ChequeForm = ({
             </FormItem>
           )}
         />
-        {isDesktop ? (
-          <DialogFooter>{footerContent}</DialogFooter>
-        ) : (
-          <DrawerFooter className="pt-2">{footerContent}</DrawerFooter>
-        )}
+        <ResponsiveDialogFooter>
+          <Button type="submit" disabled={isLoading} className="md:w-[45%]">
+            {isLoading ? (
+              <Spinner className="h-4 w-4" />
+            ) : cheque ? (
+              t("Save Changes")
+            ) : (
+              t("Create")
+            )}
+          </Button>
+        </ResponsiveDialogFooter>
       </form>
     </Form>
   );

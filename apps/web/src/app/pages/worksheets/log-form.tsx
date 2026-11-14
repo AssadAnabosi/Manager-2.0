@@ -1,8 +1,17 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
-import { ListType, LogType } from "@/lib/types";
-import { cn, stringToDate } from "@/lib/utils";
+import { LogType } from "@/lib/types";
+import { cn, getToday, stringToDate, toList } from "@/lib/utils";
+import {
+  logFormSchema,
+  logFormSchemaType,
+  useLogFormMutation,
+} from "@/api/logs";
+import { useGetUsersQuery } from "@/api/users";
 
 import {
   Form,
@@ -30,8 +39,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { DialogFooter } from "@/components/ui/dialog";
-import { DrawerFooter } from "@/components/ui/drawer";
+import { ResponsiveDialogFooter } from "@/components/ui/responsive-dialog";
+import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 
 import Spinner from "@/components/component/spinner";
@@ -39,51 +48,67 @@ import Spinner from "@/components/component/spinner";
 import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
 import ShekelIcon from "@/components/icons/shekel";
 
-const LogForm = ({
-  className,
-  isDesktop,
-  logForm,
-  onSubmit,
-  calendarOpen,
-  setCalenderOpen,
-  isLoading,
-  log,
-  filterLoading,
-  workers,
-  popoverOpen,
-  setPopoverOpen,
-}: {
-  className?: string;
-  isDesktop: boolean;
-  logForm: any;
-  onSubmit: any;
-  calendarOpen: boolean;
-  setCalenderOpen: any;
-  isLoading: boolean;
+type LogFormProps = {
   log?: LogType;
-  filterLoading: boolean;
-  workers: ListType[];
-  popoverOpen: boolean;
-  setPopoverOpen: any;
-}) => {
+  /** Called after a successful save. */
+  onDone: () => void;
+};
+
+const LogForm = ({ log, onDone }: LogFormProps) => {
   const { t } = useTranslation();
-  const footerContent = (
-    <Button type="submit" disabled={isLoading} className="md:w-[45%]">
-      {isLoading ? (
-        <Spinner className="h-4 w-4" />
-      ) : log ? (
-        t("Save Changes")
-      ) : (
-        t("Create")
-      )}
-    </Button>
-  );
+  const { toast } = useToast();
+  const logForm = useForm<logFormSchemaType>({
+    resolver: zodResolver(logFormSchema),
+    defaultValues: {
+      date: log ? new Date(log.date) : getToday(),
+      worker: log?.worker?.id || undefined,
+      startingTime: log?.startingTime || "08:30",
+      finishingTime: log?.finishingTime || "16:30",
+      isAbsent: log?.isAbsent || false,
+      payment: log?.payment.toString() || "0",
+      remarks: log?.remarks || "",
+    },
+  });
+  const isLoading = logForm.formState.isSubmitting;
+
+  const { data: usersData, isLoading: filterLoading } = useGetUsersQuery();
+  const workers = toList(usersData?.users || [], "fullName", true);
+
+  const { mutateAsync } = useLogFormMutation();
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [calendarOpen, setCalenderOpen] = useState(false);
+
+  const onSubmit = async (data: logFormSchemaType) => {
+    try {
+      if (log) {
+        await mutateAsync({ data, logId: log.id });
+      } else {
+        await mutateAsync({ data });
+        logForm.reset();
+      }
+      onDone();
+    } catch (error: any) {
+      const message = error?.response?.data?.message;
+      if (message)
+        switch (message) {
+          case "There is a record of this log already":
+            logForm.setError("date", {
+              type: "manual",
+              message: "This log already exists",
+            });
+            return;
+        }
+      toast({
+        variant: "destructive",
+        title: t("Error"),
+        description: message ? t(message) : t("Something went wrong"),
+      });
+    }
+  };
+
   return (
     <Form {...logForm}>
-      <form
-        className={cn(className, "space-y-4")}
-        onSubmit={logForm.handleSubmit(onSubmit)}
-      >
+      <form className="space-y-4" onSubmit={logForm.handleSubmit(onSubmit)}>
         <FormField
           control={logForm.control}
           name="date"
@@ -312,11 +337,17 @@ const LogForm = ({
             </FormItem>
           )}
         />
-        {isDesktop ? (
-          <DialogFooter>{footerContent}</DialogFooter>
-        ) : (
-          <DrawerFooter className="pt-2">{footerContent}</DrawerFooter>
-        )}
+        <ResponsiveDialogFooter>
+          <Button type="submit" disabled={isLoading} className="md:w-[45%]">
+            {isLoading ? (
+              <Spinner className="h-4 w-4" />
+            ) : log ? (
+              t("Save Changes")
+            ) : (
+              t("Create")
+            )}
+          </Button>
+        </ResponsiveDialogFooter>
       </form>
     </Form>
   );

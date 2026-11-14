@@ -29,8 +29,8 @@ import FetchError from "@/components/component/fetch-error";
 
 import Cards from "./cards";
 import RowSkeleton from "./row-skeleton";
-import Row from "./row";
-import FormDialogDrawer from "./form-dialog-drawer";
+import LogRow from "./log-row";
+import LogFormDialog from "./log-form-dialog";
 
 import { Printer, FilePlus } from "lucide-react";
 import {
@@ -59,7 +59,7 @@ const Logs = () => {
         if (value) prev.set("filter", value);
         return prev;
       },
-      { replace: true },
+      { replace: true }
     );
   };
 
@@ -78,7 +78,7 @@ const Logs = () => {
         }
         return prev;
       },
-      { replace: true },
+      { replace: true }
     );
   };
   const { data: logsData, isLoading } = useGetLogsQuery();
@@ -97,14 +97,14 @@ const Logs = () => {
         </h2>
         <div className="flex flex-col items-center gap-2 md:flex-row">
           <DateRangePicker date={date} setDate={setDate} />
-          <FormDialogDrawer>
-            {![USER, SPECTATOR].includes(user?.role as string) && (
+          {![USER, SPECTATOR].includes(user?.role as string) && (
+            <LogFormDialog>
               <Button className="w-full print:hidden">
                 <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" />{" "}
                 {t("Add New")}
               </Button>
-            )}
-          </FormDialogDrawer>
+            </LogFormDialog>
+          )}
           <Button
             disabled={isLoading}
             className="w-full print:hidden"
@@ -187,9 +187,14 @@ const Logs = () => {
           <TableBody>
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
-              : logsData.logs.map((log: LogType) =>
-                  Row(log, deleteLog, user?.role),
-                )}
+              : logsData.logs.map((log: LogType) => (
+                  <LogRow
+                    key={log.id}
+                    log={log}
+                    onDelete={deleteLog}
+                    userRole={user?.role}
+                  />
+                ))}
           </TableBody>
         </Table>
       )}

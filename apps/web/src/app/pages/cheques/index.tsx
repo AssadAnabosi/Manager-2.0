@@ -31,8 +31,8 @@ import FetchError from "@/components/component/fetch-error";
 
 import Cards from "./cards";
 import RowSkeleton from "./row-skeleton";
-import Row from "./row";
-import FormDialogDrawer from "./form-dialog-drawer";
+import ChequeRow from "./cheque-row";
+import ChequeFormDialog from "./cheque-form-dialog";
 
 import { Printer, FilePlus } from "lucide-react";
 
@@ -63,7 +63,7 @@ const Cheques = () => {
         if (value) prev.set("filter", value);
         return prev;
       },
-      { replace: true },
+      { replace: true }
     );
   };
 
@@ -75,7 +75,7 @@ const Cheques = () => {
         if (value) prev.set("serial", value);
         return prev;
       },
-      { replace: true },
+      { replace: true }
     );
   };
 
@@ -94,7 +94,7 @@ const Cheques = () => {
         }
         return prev;
       },
-      { replace: true },
+      { replace: true }
     );
   };
 
@@ -113,12 +113,12 @@ const Cheques = () => {
         <div className="flex flex-col items-center gap-2 md:flex-row">
           <DateRangePicker date={date} setDate={setDate} />
           {user?.role !== SPECTATOR && (
-            <FormDialogDrawer>
+            <ChequeFormDialog>
               <Button className="w-full print:hidden">
                 <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" />{" "}
                 {t("Add New")}
               </Button>
-            </FormDialogDrawer>
+            </ChequeFormDialog>
           )}
           <Button
             disabled={isLoading}
@@ -200,9 +200,14 @@ const Cheques = () => {
           <TableBody>
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
-              : chequesData.cheques.map((cheque: ChequeType) =>
-                  Row(cheque, deleteCheque, user?.role),
-                )}
+              : chequesData.cheques.map((cheque: ChequeType) => (
+                  <ChequeRow
+                    key={cheque.id}
+                    cheque={cheque}
+                    onDelete={deleteCheque}
+                    userRole={user?.role}
+                  />
+                ))}
           </TableBody>
         </Table>
       )}

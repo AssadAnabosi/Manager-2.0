@@ -20,10 +20,10 @@ import {
 import Searchbox from "@/components/component/searchbox";
 import NoResults from "@/components/component/no-results";
 import FetchError from "@/components/component/fetch-error";
-import FormDialogDrawer from "./form-dialog-drawer";
+import UserFormDialog from "./user-form-dialog";
 
 import RowSkeleton from "./row-skeleton";
-import Row from "./row";
+import UserRow from "./user-row";
 
 import { FilePlus } from "lucide-react";
 
@@ -52,19 +52,19 @@ const Users = () => {
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       {/* HEADER */}
-      <div className="flex space-y-2 flex-col justify-between md:flex-row gap-5">
+      <div className="flex flex-col justify-between gap-5 space-y-2 md:flex-row">
         <h2 className="text-3xl font-bold tracking-tight">{t("Users")}</h2>
-        <div className="flex items-center gap-2 flex-col md:flex-row">
-          <FormDialogDrawer>
+        <div className="flex flex-col items-center gap-2 md:flex-row">
+          <UserFormDialog>
             <Button className="w-full">
-              <FilePlus className="ltr:mr-2 rtl:ml-2 h-7 w-7" /> {t("Add New")}
+              <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" /> {t("Add New")}
             </Button>
-          </FormDialogDrawer>
+          </UserFormDialog>
         </div>
       </div>
       <Separator />
       {/* FILTER */}
-      <div className="flex justify-end flex-wrap">
+      <div className="flex flex-wrap justify-end">
         <div className=" w-full md:w-[335px]">
           <Searchbox value={search} setValue={setSearch} />
         </div>
@@ -82,24 +82,28 @@ const Users = () => {
               <TableHead className="w-[270px] rtl:text-right">
                 {t("Full Name")}
               </TableHead>
-              <TableHead className="w-[130px] text-center hidden md:table-cell">
+              <TableHead className="hidden w-[130px] text-center md:table-cell">
                 {t("Role")}
               </TableHead>
-              <TableHead className="w-[80px] text-center hidden md:table-cell">
+              <TableHead className="hidden w-[80px] text-center md:table-cell">
                 {t("Status")}
               </TableHead>
-              <TableHead className="w-max hidden lg:table-cell rtl:text-right">
+              <TableHead className="hidden w-max lg:table-cell rtl:text-right">
                 {t("Contact Details")}
               </TableHead>
-              <TableHead className="w-[60px] hidden lg:table-cell"></TableHead>
+              <TableHead className="hidden w-[60px] lg:table-cell"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
-              : usersData.users.map((user: UserType) =>
-                  Row(user, authUser?.role)
-                )}
+              : usersData.users.map((user: UserType) => (
+                  <UserRow
+                    key={user.id}
+                    user={user}
+                    userRole={authUser?.role}
+                  />
+                ))}
           </TableBody>
         </Table>
       )}

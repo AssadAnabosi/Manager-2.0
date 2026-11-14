@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
-import i18next from "i18next";
+import { useTranslation } from "react-i18next";
 
 import { ChequeType } from "@/lib/types";
 import { currencyFormatter } from "@/lib/utils";
@@ -19,26 +19,29 @@ import DeleteDialog from "@/components/component/delete-dialog";
 
 import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
-import AvatarCombo from "./avatar-combo";
-import FormDialogDrawer from "./form-dialog-drawer";
+import ChequeDetails from "./cheque-details";
+import ChequeFormDialog from "./cheque-form-dialog";
 
-const Row = (
-  cheque: ChequeType,
-  deleteCheque: any,
-  userRole: string | undefined
-) => {
+type Props = {
+  cheque: ChequeType;
+  onDelete: (id: string) => void;
+  userRole: string | undefined;
+};
+
+const ChequeRow = ({ cheque, onDelete, userRole }: Props) => {
+  const { t, i18n } = useTranslation();
   const title = cheque.payee.name;
   const description = format(new Date(cheque.dueDate), DATE_FORMAT, {
-    locale: document.documentElement.lang === "ar" ? ar : enGB,
+    locale: i18n.resolvedLanguage === "ar" ? ar : enGB,
   });
   return (
-    <TableRow key={cheque.id} className="h-[73px]">
+    <TableRow className="h-[73px]">
       <TableCell>
-        <AvatarCombo
+        <ChequeDetails
           title={title}
           description={description}
           cheque={cheque}
-          deleteCheque={deleteCheque}
+          deleteCheque={onDelete}
           userRole={userRole}
         >
           <div className="flex items-center">
@@ -50,7 +53,7 @@ const Row = (
                 {cheque.serial}
               </AvatarFallback>
             </Avatar>
-            <div className="ltr:ml-4 rtl:mr-4 space-y-1">
+            <div className="space-y-1 ltr:ml-4 rtl:mr-4">
               <p
                 className="text-sm font-medium leading-none"
                 aria-label="Payee Name"
@@ -65,7 +68,7 @@ const Row = (
               </p>
             </div>
           </div>
-        </AvatarCombo>
+        </ChequeDetails>
       </TableCell>
       <TableCell
         style={{ direction: "ltr" }}
@@ -80,10 +83,10 @@ const Row = (
       >
         {cheque.remarks}
       </TableCell>
-      <TableCell className="print:hidden lg:print:hidden text-right hidden lg:table-cell">
+      <TableCell className="hidden text-right lg:table-cell print:hidden lg:print:hidden">
         {userRole !== SPECTATOR && (
           <div className="grid grid-cols-2">
-            <FormDialogDrawer cheque={cheque}>
+            <ChequeFormDialog cheque={cheque}>
               <Button size="icon" variant="edit" aria-label="Edit">
                 <TooltipProvider>
                   <Tooltip>
@@ -91,13 +94,13 @@ const Row = (
                       <Pencil2Icon />
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>{i18next.t("Edit")}</p>
+                      <p>{t("Edit")}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
               </Button>
-            </FormDialogDrawer>
-            <DeleteDialog onAction={() => deleteCheque(cheque.id)}>
+            </ChequeFormDialog>
+            <DeleteDialog onAction={() => onDelete(cheque.id)}>
               <Button size="icon" variant="delete" aria-label="Delete">
                 <TooltipProvider>
                   <Tooltip>
@@ -105,7 +108,7 @@ const Row = (
                       <TrashIcon />
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>{i18next.t("Delete")}</p>
+                      <p>{t("Delete")}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -118,4 +121,4 @@ const Row = (
   );
 };
 
-export default Row;
+export default ChequeRow;
