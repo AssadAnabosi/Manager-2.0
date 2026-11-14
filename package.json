@@ -1,0 +1,5 @@
+{
+  "name": "workbench",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"]
+}

@@ -26,7 +26,7 @@ services:
     container_name: manager-web
     # Build the image from the Dockerfile in the client folder
     build:
-      context: ./client
+      context: ./apps/web
     # Run on startup and restart if it crashes
     restart: always
     # Expose the port to the host machine

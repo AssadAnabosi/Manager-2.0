@@ -17,7 +17,7 @@ is_docker_installed() {
 build() {
     echo "Building..."
     docker build -t manager-api ./server
-    docker build -t manager-web ./client
+    docker build -t manager-web ./apps/web
     echo "Build complete."
 }
 
