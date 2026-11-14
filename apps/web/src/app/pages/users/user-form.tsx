@@ -149,7 +149,7 @@ const UserForm = ({
     <Form {...userForm}>
       <form
         onSubmit={userForm.handleSubmit(onSubmit)}
-        className={user ? "space-y-2" : "space-y-4"}
+        className={user ? "flex flex-col gap-6" : "space-y-4"}
       >
         <CardWrapper user={user}>
           <FormField

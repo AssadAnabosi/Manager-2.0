@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactElement, ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { usePermissions } from "@/hooks/use-permissions";
 
@@ -26,7 +26,7 @@ import LogFormDialog from "./log-form-dialog";
 type Props = {
   children: ReactNode;
   title: string;
-  description?: string | JSX.Element;
+  description?: string | ReactElement;
   log: LogType;
   deleteLog: (id: string) => void;
 };

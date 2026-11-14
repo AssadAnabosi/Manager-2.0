@@ -167,7 +167,10 @@ export default function Settings() {
               </CardDescription>
             </CardHeader>
             <Form {...passwordForm}>
-              <form onSubmit={passwordForm.handleSubmit(updatePassword)}>
+              <form
+                className="flex flex-col gap-6"
+                onSubmit={passwordForm.handleSubmit(updatePassword)}
+              >
                 <CardContent className="space-y-2">
                   <FormField
                     control={passwordForm.control}
@@ -246,7 +249,10 @@ export default function Settings() {
               </CardDescription>
             </CardHeader>
             <Form {...preferencesForm}>
-              <form onSubmit={preferencesForm.handleSubmit(updatePreferences)}>
+              <form
+                className="flex flex-col gap-6"
+                onSubmit={preferencesForm.handleSubmit(updatePreferences)}
+              >
                 <CardContent className="space-y-2">
                   <FormField
                     control={preferencesForm.control}

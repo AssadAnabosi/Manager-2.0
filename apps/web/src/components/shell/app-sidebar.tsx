@@ -1,12 +1,12 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Settings } from "lucide-react";
 
 import { NavMain } from "@/components/shell/nav-main";
 import { NavSecondary } from "@/components/shell/nav-secondary";
 import { NavUser } from "@/components/shell/nav-user";
 import { Brand } from "@/components/shell/brand";
+import { SETTINGS_ITEM } from "@/components/shell/nav-items";
 import {
   Sidebar,
   SidebarContent,
@@ -44,7 +44,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain />
         <NavSecondary
           className="mt-auto"
-          items={[{ title: "Settings", url: "/settings", icon: Settings }]}
+          items={[
+            {
+              title: SETTINGS_ITEM.title,
+              url: SETTINGS_ITEM.path,
+              icon: SETTINGS_ITEM.icon,
+            },
+          ]}
         />
       </SidebarContent>
       <SidebarFooter>

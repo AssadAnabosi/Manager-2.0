@@ -192,7 +192,10 @@ export default function Edit() {
               </CardDescription>
             </CardHeader>
             <Form {...passwordForm}>
-              <form onSubmit={passwordForm.handleSubmit(updatePassword)}>
+              <form
+                className="flex flex-col gap-6"
+                onSubmit={passwordForm.handleSubmit(updatePassword)}
+              >
                 <CardContent className="space-y-2">
                   <FormField
                     control={passwordForm.control}
@@ -317,7 +320,7 @@ export default function Edit() {
               <DeleteDialog onAction={async () => await deleteUser(user.id)}>
                 <Button
                   variant={"delete"}
-                  className="w-[50%] border border-border hover:border-none"
+                  className="border-border w-[50%] border hover:border-none"
                 >
                   <Trash2Icon className="mr-3 h-4 w-4 rtl:ml-3" />
                   {t("Delete User")}
