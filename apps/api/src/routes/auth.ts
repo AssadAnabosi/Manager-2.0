@@ -19,6 +19,7 @@ import {
   clientIp,
 } from "../lib/http";
 import { authorize } from "../middleware/auth";
+import { cookieSecure } from "../lib/dev";
 import {
   getDummyHash,
   hashPassword,
@@ -64,7 +65,7 @@ export const authRoutes = (prefix: string) => {
   const clearCookie = (c: Context<AppEnv>) =>
     deleteCookie(c, COOKIE, {
       path: cookiePath,
-      secure: true,
+      secure: cookieSecure(c.env),
       httpOnly: true,
       sameSite: "Strict",
     });
@@ -177,7 +178,7 @@ export const authRoutes = (prefix: string) => {
 
       setCookie(c, COOKIE, refreshToken, {
         httpOnly: true,
-        secure: true,
+        secure: cookieSecure(c.env),
         sameSite: "Strict",
         path: cookiePath,
         maxAge,

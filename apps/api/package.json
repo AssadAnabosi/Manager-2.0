@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "wrangler dev",
+    "dev": "wrangler dev --ip 0.0.0.0",
     "types": "wrangler types src/env.d.ts --env-interface Env",
     "typecheck": "tsc --noEmit && tsc --noEmit -p scripts",
     "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0",

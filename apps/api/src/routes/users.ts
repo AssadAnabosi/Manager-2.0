@@ -28,6 +28,7 @@ import {
 } from "../lib/http";
 import { containsLike, nullIfEmpty } from "../lib/query";
 import { authorize } from "../middleware/auth";
+import { cookieSecure } from "../lib/dev";
 import { paramRecord } from "../middleware/params";
 import { hashPassword, verifyPassword } from "../services/password";
 import { deleteSessionsOfUser } from "../services/sessions";
@@ -304,7 +305,7 @@ export const usersRoutes = (prefix: string) => {
       await deleteSessionsOfUser(db, me.id);
       deleteCookie(c, "refreshToken", {
         path: `${prefix}/auth`,
-        secure: true,
+        secure: cookieSecure(c.env),
         httpOnly: true,
         sameSite: "Strict",
       });
