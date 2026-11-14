@@ -60,7 +60,7 @@ const Combobox = ({
         <Command>
           <CommandInput className="text-md" placeholder={t("Search...")} />
           <CommandEmpty>{t("No matching results")}</CommandEmpty>
-          <CB_ScrollArea className="h-72">
+          <CB_ScrollArea>
             <CommandGroup>
               {list.map((item) => (
                 <CommandItem

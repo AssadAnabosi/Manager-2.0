@@ -18,23 +18,13 @@ import type { LogType } from "@/lib/types";
 import { useFormatters } from "@/hooks/use-locale";
 
 import { Button } from "@/components/ui/button";
-import {
-  ResponsiveDialog,
-  ResponsiveDialogBody,
-  ResponsiveDialogContent,
-  ResponsiveDialogDescription,
-  ResponsiveDialogFooter,
-  ResponsiveDialogClose,
-  ResponsiveDialogHeader,
-  ResponsiveDialogTitle,
-} from "@/components/ui/responsive-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import StatusBadge from "@/components/component/status-badge";
+import LogDetails from "./log-details";
 
 type DayStatus = "worked" | "absent" | "none";
 
-// a reference week, Sunday first, for the weekday header
-const WEEK = Array.from({ length: 7 }, (_, i) => new Date(2023, 0, 1 + i));
+// a reference week, Saturday first, for the weekday header
+const WEEK = Array.from({ length: 7 }, (_, i) => new Date(2023, 0, 7 + i));
 
 const dayKey = (d: Date) => format(d, "yyyy-MM-dd");
 
@@ -56,6 +46,8 @@ type Props = {
   onMonthChange: (month: Date) => void;
   /** When given, tapping a day with no record calls this instead of opening the details. */
   onAddDay?: (day: Date) => void;
+  /** Deletes a log from its details. */
+  onDelete?: (id: string) => void;
 };
 
 /**
@@ -69,6 +61,7 @@ export default function AttendanceCalendar({
   workerName,
   onMonthChange,
   onAddDay,
+  onDelete,
 }: Props) {
   const { t } = useTranslation();
   const fmt = useFormatters();
@@ -102,8 +95,8 @@ export default function AttendanceCalendar({
     return { worked, absent, balance };
   }, [logs]);
 
-  // pad the first week so the 1st lands on its weekday (the week starts on Sunday)
-  const lead = getDay(first);
+  // pad the first week so the 1st lands on its weekday (the week starts on Saturday)
+  const lead = (getDay(first) + 1) % 7;
   const selectedLog = selected ? byDay.get(dayKey(selected)) : undefined;
 
   return (
@@ -240,58 +233,17 @@ export default function AttendanceCalendar({
         ))}
       </ul>
 
-      {/* the tapped day */}
-      <ResponsiveDialog
-        open={selected !== null}
-        onOpenChange={(open) => !open && setSelected(null)}
-      >
-        <ResponsiveDialogContent>
-          <ResponsiveDialogHeader>
-            <ResponsiveDialogTitle>
-              {selected ? fmt.date(selected) : ""}
-            </ResponsiveDialogTitle>
-            <ResponsiveDialogDescription className="sr-only">
-              {t("Attendance details for this day")}
-            </ResponsiveDialogDescription>
-          </ResponsiveDialogHeader>
-          <ResponsiveDialogBody>
-            {selectedLog ? (
-              <dl className="grid grid-cols-[auto_1fr] items-center gap-x-5 gap-y-2 text-start">
-                <dt className="text-muted-foreground">{t("Status")}</dt>
-                <dd>
-                  <StatusBadge status={!selectedLog.isAbsent} />
-                </dd>
-                {!selectedLog.isAbsent && (
-                  <>
-                    <dt className="text-muted-foreground">{t("Work Hours")}</dt>
-                    <dd dir="ltr" className="text-start">
-                      {selectedLog.startingTime} - {selectedLog.finishingTime} (
-                      {fmt.number(selectedLog.OTV)})
-                    </dd>
-                  </>
-                )}
-                <dt className="text-muted-foreground">{t("Payment")}</dt>
-                <dd>{fmt.currency(selectedLog.payment)}</dd>
-                {selectedLog.remarks && (
-                  <>
-                    <dt className="text-muted-foreground">{t("Remarks")}</dt>
-                    <dd>{selectedLog.remarks}</dd>
-                  </>
-                )}
-              </dl>
-            ) : (
-              <p className="text-muted-foreground">
-                {t("No record for this day.")}
-              </p>
-            )}
-          </ResponsiveDialogBody>
-          <ResponsiveDialogFooter>
-            <ResponsiveDialogClose asChild>
-              <Button variant="outline">{t("Close")}</Button>
-            </ResponsiveDialogClose>
-          </ResponsiveDialogFooter>
-        </ResponsiveDialogContent>
-      </ResponsiveDialog>
+      {/* the tapped day: the same details as the table */}
+      {selectedLog && (
+        <LogDetails
+          open
+          onOpenChange={(open) => !open && setSelected(null)}
+          title={selectedLog.worker.fullName}
+          description={fmt.date(new Date(selectedLog.date))}
+          log={selectedLog}
+          deleteLog={(id) => onDelete?.(id)}
+        />
+      )}
     </section>
   );
 }

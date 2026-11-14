@@ -322,6 +322,9 @@
   "{{name}} will be logged out from all devices where they are signed in.": "سيتم تسجيل خروج {{name}} من جميع الأجهزة المسجّل الدخول عليها.",
   "Made with": "صنع بكل",
   "by": "من قبل",
+  "Caps Lock is on": "زر الأحرف الكبيرة (Caps Lock) مفعّل",
+  "Show password": "إظهار كلمة المرور",
+  "Hide password": "إخفاء كلمة المرور",
   "Nothing here yet": "لا يوجد شيء هنا بعد",
   "Records you add will show up here.": "السجلات التي تضيفها ستظهر هنا.",
   "Try changing or clearing the filters.": "جرّب تغيير الفلاتر أو مسحها."

@@ -155,6 +155,7 @@ const Logs = () => {
               workerName={workers.find((w) => w.value === oneWorker)?.label}
               onMonthChange={(m) => setDate(monthRange(m))}
               onAddDay={canWrite ? setAddDay : undefined}
+              onDelete={deleteLog}
             />
           ) : (
             <p className="text-muted-foreground py-12 text-center">

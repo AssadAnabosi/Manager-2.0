@@ -155,7 +155,7 @@ export default function Settings() {
         value={tab}
         onValueChange={setTab}
         defaultValue="password"
-        className="w-[400px]"
+        className="w-full max-w-[400px]"
       >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="password">{t("Password")}</TabsTrigger>
