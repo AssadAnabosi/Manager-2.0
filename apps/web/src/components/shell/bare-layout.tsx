@@ -19,7 +19,7 @@ const BareLayout = ({
     <div className="flex min-h-screen flex-1 flex-col">
       <div className="border-border sticky inset-x-0 top-0 z-30 w-full border-b">
         <div className="flex h-[47px] items-center justify-between px-4">
-          <Brand label={t("Dashboard")} surface="page" />
+          <Brand label={t("Dashboard")} />
           {withSettings && <SettingsGear />}
         </div>
       </div>

@@ -1,12 +1,9 @@
-import { GlassIconReveal } from "@/components/ui/liquid-glass-logo-reveal";
-import { MARK_SVG } from "@/components/shell/mark";
-import { readThemeColors } from "@/lib/theme-color";
+import { DashboardIcon } from "@radix-ui/react-icons";
 
 /**
- * Branded loading screen: the logo is revealed through a drop of glass (WebGL; a still logo where
- * that isn't available, and a still frame with reduced motion). Fades in only once the page has
- * been loading for 300ms, so fast loads never flash it. The static splash in index.html shows the
- * same logo, so the hand-off from HTML to React is seamless.
+ * Branded splash: logo + small spinner. Fades in only once the page has been
+ * loading for 300ms, so fast loads never flash it. Matches the static splash in index.html, so the hand-off
+ * from HTML to React is seamless.
  */
 const SHOW_AFTER_MS = 300;
 
@@ -14,24 +11,22 @@ const Loading = () => {
   // Timed from page start, not from mount: if the static HTML splash is already
   // showing, this one appears immediately instead of blinking out for 300ms.
   const delay = Math.max(0, SHOW_AFTER_MS - performance.now());
-  // the canvas paints its own backdrop, so it has to match the page's
-  const { dark, primary, background } = readThemeColors();
   return (
     <div
       role="status"
       aria-label="Loading"
-      className="bg-background animate-in fade-in fill-mode-both fixed inset-0 z-50 duration-300"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-background duration-300 animate-in fade-in fill-mode-both"
       style={{ animationDelay: `${delay}ms` }}
     >
-      <GlassIconReveal
-        logo={MARK_SVG}
-        look={dark ? "dark" : "light"}
-        background={background}
-        logoColor={primary}
-        label="Loading"
-        className="h-full w-full cursor-default"
-        tuning={{ present: 1.6, glide: 1.6 }}
-      />
+      <div className="flex flex-col items-center gap-5">
+        <div className="flex items-center gap-3">
+          <DashboardIcon className="h-8 w-8" />
+          <span className="text-2xl font-bold" dir="ltr">
+            Dashboard
+          </span>
+        </div>
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-muted border-t-primary" />
+      </div>
     </div>
   );
 };
