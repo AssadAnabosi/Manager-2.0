@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { apiErrorKey, apiErrorText } from "@/lib/api-error";
 import { useLocale } from "@/hooks/use-locale";
@@ -45,6 +46,7 @@ import { useAuth } from "@/providers/auth-context";
 
 import useAxios from "@/hooks/use-axios";
 import { PasswordInput } from "@/components/component/password-input";
+import ConfirmDialog from "@/components/component/confirm-dialog";
 const updatePasswordSchema = z
   .object({
     username: z.string(),
@@ -121,6 +123,8 @@ export default function Settings() {
       new: "",
     },
   });
+  const [pendingPassword, setPendingPassword] =
+    useState<UpdatePasswordSchema | null>(null);
   const updatePassword = async (values: UpdatePasswordSchema) => {
     try {
       await axios.patch("/users/password", values);
@@ -168,7 +172,9 @@ export default function Settings() {
             <Form {...passwordForm}>
               <form
                 className="flex flex-col gap-6"
-                onSubmit={passwordForm.handleSubmit(updatePassword)}
+                onSubmit={passwordForm.handleSubmit((values) =>
+                  setPendingPassword(values)
+                )}
               >
                 <CardContent className="space-y-2">
                   <FormField
@@ -235,6 +241,18 @@ export default function Settings() {
                 </CardFooter>
               </form>
             </Form>
+            <ConfirmDialog
+              open={pendingPassword !== null}
+              onOpenChange={(open) => !open && setPendingPassword(null)}
+              title={t("Change your password?")}
+              description={t(
+                "You will be logged out from all your devices, including this one, and will need to log in again with your new password."
+              )}
+              confirmLabel={t("Save Changes")}
+              onConfirm={async () => {
+                if (pendingPassword) await updatePassword(pendingPassword);
+              }}
+            />
           </Card>
         </TabsContent>
         <TabsContent value="preferences">
