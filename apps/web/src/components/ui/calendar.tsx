@@ -43,6 +43,7 @@ function Calendar({
   return (
     <DayPicker
       locale={dateLocale}
+      weekStartsOn={6}
       formatters={{
         formatCaption: (month, options) =>
           format(month, "LL y", { locale: options?.locale }),

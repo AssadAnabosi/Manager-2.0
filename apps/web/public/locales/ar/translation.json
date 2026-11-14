@@ -321,5 +321,8 @@
   "Reset password?": "إعادة تعيين كلمة المرور؟",
   "{{name}} will be logged out from all devices where they are signed in.": "سيتم تسجيل خروج {{name}} من جميع الأجهزة المسجّل الدخول عليها.",
   "Made with": "صنع بكل",
-  "by": "من قبل"
+  "by": "من قبل",
+  "Caps Lock is on": "زر الأحرف الكبيرة (Caps Lock) مفعّل",
+  "Show password": "إظهار كلمة المرور",
+  "Hide password": "إخفاء كلمة المرور"
 }
