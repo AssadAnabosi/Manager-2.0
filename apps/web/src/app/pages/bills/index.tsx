@@ -89,7 +89,18 @@ const Bills = () => {
       {!isLoading && !billsData ? (
         <FetchError />
       ) : !isLoading && !billsData?.bills?.length ? (
-        <NoResults />
+        <NoResults
+          filterKeys={["search", "type", "from", "to"]}
+          action={
+            canWrite && (
+              <BillFormDialog>
+                <Button className="print:hidden">
+                  <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
+                </Button>
+              </BillFormDialog>
+            )
+          }
+        />
       ) : (
         <Table>
           <TableCaption>

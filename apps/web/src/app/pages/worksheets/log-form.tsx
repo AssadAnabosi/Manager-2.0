@@ -156,17 +156,17 @@ const LogForm = ({ log, defaults, onDone }: LogFormProps) => {
             </FormItem>
           )}
         />
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-3">
           <FormField
             control={logForm.control}
             name="startingTime"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem className="flex min-w-0 flex-col">
                 <FormLabel>{t("Start Time")}</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    className="input"
+                    className="input block min-w-0 appearance-none text-start"
                     type="time"
                     disabled={isLoading}
                   />
@@ -179,12 +179,12 @@ const LogForm = ({ log, defaults, onDone }: LogFormProps) => {
             control={logForm.control}
             name="finishingTime"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem className="flex min-w-0 flex-col">
                 <FormLabel>{t("End Time")}</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    className="input"
+                    className="input block min-w-0 appearance-none text-start"
                     type="time"
                     disabled={isLoading}
                   />
@@ -283,13 +283,13 @@ const LogForm = ({ log, defaults, onDone }: LogFormProps) => {
               <FormLabel>{t("Payment")}</FormLabel>
               <FormControl>
                 <div className="relative w-full justify-between">
-                  <span className="text-muted-foreground absolute top-0 bottom-0 left-3 my-auto h-6 w-6">
+                  <span className="text-muted-foreground absolute start-3 top-0 bottom-0 my-auto h-6 w-6">
                     <ShekelIcon />
                   </span>
                   <Input
                     {...field}
                     type="string"
-                    className="input pr-4 pl-12 text-left"
+                    className="input pe-4 ps-12 text-start"
                     disabled={isLoading}
                   />
                 </div>

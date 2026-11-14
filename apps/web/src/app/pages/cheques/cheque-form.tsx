@@ -284,13 +284,13 @@ const ChequeForm = ({ cheque, onDone }: ChequeFormProps) => {
               <FormLabel>{t("Value")}</FormLabel>
               <FormControl>
                 <div className="relative w-full justify-between">
-                  <span className="text-muted-foreground absolute top-0 bottom-0 left-3 my-auto h-6 w-6">
+                  <span className="text-muted-foreground absolute start-3 top-0 bottom-0 my-auto h-6 w-6">
                     <ShekelIcon />
                   </span>
                   <Input
                     {...field}
                     type="string"
-                    className="input pr-4 pl-12 text-left"
+                    className="input pe-4 ps-12 text-start"
                     disabled={isLoading}
                   />
                 </div>
