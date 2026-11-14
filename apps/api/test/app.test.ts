@@ -106,6 +106,48 @@ describe.each(["", "/api"])("app with prefix %j", (prefix) => {
     });
   });
 
+  describe("CORS from the local network", () => {
+    const origins = [
+      "http://192.168.1.105:5173",
+      "http://10.0.0.7:5173",
+      "http://172.20.1.2:5173",
+      "http://my-laptop.local:5173",
+      "http://localhost:3000",
+    ];
+
+    it("allows private network origins in development", async () => {
+      const dev = client(prefix, { ENVIRONMENT: "development" });
+      for (const origin of origins) {
+        const res = await dev.request("/health", { headers: { origin } });
+        expect(res.headers.get("access-control-allow-origin")).toBe(origin);
+        expect(res.headers.get("access-control-allow-credentials")).toBe("true");
+      }
+    });
+
+    it("still rejects public origins in development", async () => {
+      const dev = client(prefix, { ENVIRONMENT: "development" });
+      for (const origin of [
+        "https://evil.example.com",
+        "http://192.169.1.1:5173",
+        "http://172.32.0.1:5173",
+        "http://192.168.1.105.evil.com",
+      ]) {
+        const res = await dev.request("/health", { headers: { origin } });
+        expect(res.headers.get("access-control-allow-origin")).toBeNull();
+      }
+    });
+
+    it("never allows them outside development", async () => {
+      for (const environment of ["production", "test"]) {
+        const other = client(prefix, { ENVIRONMENT: environment });
+        const res = await other.request("/health", {
+          headers: { origin: origins[0] },
+        });
+        expect(res.headers.get("access-control-allow-origin")).toBeNull();
+      }
+    });
+  });
+
   describe("OpenAPI and Swagger UI", () => {
     it("serves the document listing the auth routes when API_DOCS is true", async () => {
       const res = await api.request("/openapi.json");

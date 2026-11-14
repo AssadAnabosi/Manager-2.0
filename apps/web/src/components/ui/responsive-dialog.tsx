@@ -104,7 +104,7 @@ const ResponsiveDialogBody = ({
   if (useDesktop()) return <div className={className} {...props} />;
   return (
     <ScrollArea className="overflow-y-auto">
-      <div className={cn("px-4", className)} {...props} />
+      <div className={cn("px-4 pb-4", className)} {...props} />
     </ScrollArea>
   );
 };
@@ -116,7 +116,7 @@ const ResponsiveDialogFooter = ({
   if (useDesktop()) {
     return <DialogFooter className={className} {...props} />;
   }
-  return <DrawerFooter className={cn("px-4 pt-2", className)} {...props} />;
+  return <DrawerFooter className={cn("px-4 pt-2 pb-6", className)} {...props} />;
 };
 
 export {

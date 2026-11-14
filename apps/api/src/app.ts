@@ -14,6 +14,7 @@ import { payeesRoutes } from "./routes/payees";
 import { usersRoutes } from "./routes/users";
 import { createRouter } from "./routes/router";
 import { getIterations, hashPassword } from "./services/password";
+import { isDevelopment, isLanOrigin } from "./lib/dev";
 import type { AppEnv } from "./types";
 
 export const BODY_LIMIT_BYTES = 16 * 1024;
@@ -71,7 +72,10 @@ export const createApp = (prefix = "") => {
   app.use("*", (c, next) =>
     cors({
       origin: (origin) =>
-        allowedOrigins(c.env.ALLOWED_ORIGINS).includes(origin) ? origin : null,
+        allowedOrigins(c.env.ALLOWED_ORIGINS).includes(origin) ||
+        (isDevelopment(c.env) && isLanOrigin(origin))
+          ? origin
+          : null,
       credentials: true,
       allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
       allowHeaders: ["Content-Type", "Authorization"],
