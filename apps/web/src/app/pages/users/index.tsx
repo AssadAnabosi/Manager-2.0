@@ -69,7 +69,18 @@ const Users = () => {
       {!isLoading && !usersData ? (
         <FetchError />
       ) : !isLoading && !usersData?.users?.length ? (
-        <NoResults />
+        <NoResults
+          filterKeys={["search"]}
+          action={
+            canCreateUsers && (
+              <UserFormDialog>
+                <Button className="print:hidden">
+                  <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
+                </Button>
+              </UserFormDialog>
+            )
+          }
+        />
       ) : (
         <Table>
           <TableCaption>{t("A list of users")}</TableCaption>

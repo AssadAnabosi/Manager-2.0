@@ -321,5 +321,8 @@
   "Reset password?": "إعادة تعيين كلمة المرور؟",
   "{{name}} will be logged out from all devices where they are signed in.": "سيتم تسجيل خروج {{name}} من جميع الأجهزة المسجّل الدخول عليها.",
   "Made with": "صنع بكل",
-  "by": "من قبل"
+  "by": "من قبل",
+  "Nothing here yet": "لا يوجد شيء هنا بعد",
+  "Records you add will show up here.": "السجلات التي تضيفها ستظهر هنا.",
+  "Try changing or clearing the filters.": "جرّب تغيير الفلاتر أو مسحها."
 }

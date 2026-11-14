@@ -69,7 +69,18 @@ const Payees = () => {
       {!isLoading && !payeesData ? (
         <FetchError />
       ) : !isLoading && !payeesData?.payees?.length ? (
-        <NoResults />
+        <NoResults
+          filterKeys={["search"]}
+          action={
+            canWrite && (
+              <PayeeFormDialog>
+                <Button className="print:hidden">
+                  <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
+                </Button>
+              </PayeeFormDialog>
+            )
+          }
+        />
       ) : (
         <Table>
           <TableCaption>{t("A list of payees")}</TableCaption>
