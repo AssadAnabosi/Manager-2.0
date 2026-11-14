@@ -62,7 +62,10 @@ const UserRow = ({ user }: Props) => {
         <RoleBadge role={user.role} />
       </TableCell>
       <TableCell className="hidden md:table-cell">
-        <StatusBadge status={user.active} />
+        <StatusBadge
+          status={user.active}
+          labels={[t("Active"), t("Inactive")]}
+        />
       </TableCell>
       <TableCell className="hidden lg:table-cell">
         <div className="flex flex-col space-y-1">

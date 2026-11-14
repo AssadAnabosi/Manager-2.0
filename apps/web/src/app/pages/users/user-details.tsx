@@ -28,11 +28,7 @@ type Props = {
   user: UserType;
 };
 
-export default function UserDetails({
-  children,
-  title,
-  user,
-}: Props) {
+export default function UserDetails({ children, title, user }: Props) {
   const { t } = useTranslation();
   const { canManageUsers } = usePermissions();
   const [open, setOpen] = useState(false);
@@ -53,7 +49,10 @@ export default function UserDetails({
             </dd>
             <dt className="text-muted-foreground">{t("Status")}</dt>
             <dd>
-              <StatusBadge status={user.active} />
+              <StatusBadge
+                status={user.active}
+                labels={[t("Active"), t("Inactive")]}
+              />
             </dd>
             <dt className="text-muted-foreground">{t("Email")}</dt>
             <dd>

@@ -6,13 +6,7 @@ import { LogType } from "@/lib/types";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  TooltipProvider,
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/components/ui/tooltip";
+import TooltipButton from "@/components/component/tooltip-button";
 
 import DeleteDialog from "@/components/component/delete-dialog";
 import LogDetails from "./log-details";
@@ -66,7 +60,10 @@ const LogRow = ({ log, onDelete }: Props) => {
         </LogDetails>
       </TableCell>
       <TableCell className="text-center">
-        <StatusBadge status={!log.isAbsent} />
+        <StatusBadge
+          status={!log.isAbsent}
+          labels={[t("Attended"), t("Absent")]}
+        />
       </TableCell>
       <TableCell className="hidden md:table-cell print:table-cell">
         {log.startingTime} - {log.finishingTime} ({fmt.number(log.OTV)})
@@ -83,32 +80,14 @@ const LogRow = ({ log, onDelete }: Props) => {
         {canWrite && (
           <div className="grid grid-cols-2">
             <LogFormDialog log={log}>
-              <Button size="icon" variant="edit" aria-label={t("Edit")}>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Pencil2Icon />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{t("Edit")}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </Button>
+              <TooltipButton size="icon" variant="edit" label={t("Edit")}>
+                <Pencil2Icon />
+              </TooltipButton>
             </LogFormDialog>
             <DeleteDialog onAction={() => onDelete(log.id)}>
-              <Button size="icon" variant="delete" aria-label={t("Delete")}>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <TrashIcon />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{t("Delete")}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </Button>
+              <TooltipButton size="icon" variant="delete" label={t("Delete")}>
+                <TrashIcon />
+              </TooltipButton>
             </DeleteDialog>
           </div>
         )}

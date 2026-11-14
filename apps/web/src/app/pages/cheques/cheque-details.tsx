@@ -64,7 +64,10 @@ export default function ChequeDetails({
             <dd>{cheque.remarks}</dd>
             <dt className="text-muted-foreground">{t("Status")}</dt>
             <dd>
-              <StatusBadge status={!cheque.isCancelled} />
+              <StatusBadge
+                status={!cheque.isCancelled}
+                labels={[t("Valid"), t("Cancelled")]}
+              />
             </dd>
           </dl>
         </ResponsiveDialogBody>
