@@ -31,6 +31,14 @@
     --input: 0 0% 89.8%;
     --ring: 0 72.2% 50.6%;
     --radius: 0.5rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 26%;
+    --sidebar-primary: 0 72.2% 50.6%;
+    --sidebar-primary-foreground: 0 85.7% 97.3%;
+    --sidebar-accent: 0 0% 94%;
+    --sidebar-accent-foreground: 0 0% 9%;
+    --sidebar-border: 0 0% 89.8%;
+    --sidebar-ring: 0 72.2% 50.6%;
   }
 
   .dark {
@@ -60,6 +68,14 @@
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
     --ring: 0 72.2% 50.6%;
+    --sidebar-background: 0 0% 7%;
+    --sidebar-foreground: 0 0% 95.9%;
+    --sidebar-primary: 0 72.2% 50.6%;
+    --sidebar-primary-foreground: 0 85.7% 97.3%;
+    --sidebar-accent: 0 0% 14.9%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 14.9%;
+    --sidebar-ring: 0 72.2% 50.6%;
   }
 }
 
@@ -111,6 +127,14 @@
       --input: 0 0% 89.8%;
       --ring: 0 72.2% 50.6%;
       --radius: 0.5rem;
+      --sidebar-background: 0 0% 98%;
+      --sidebar-foreground: 0 0% 26%;
+      --sidebar-primary: 0 72.2% 50.6%;
+      --sidebar-primary-foreground: 0 85.7% 97.3%;
+      --sidebar-accent: 0 0% 94%;
+      --sidebar-accent-foreground: 0 0% 9%;
+      --sidebar-border: 0 0% 89.8%;
+      --sidebar-ring: 0 72.2% 50.6%;
     }
     html {
       background-color: hsl(0 0% 100%);

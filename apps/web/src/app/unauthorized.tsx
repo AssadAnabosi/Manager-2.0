@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-import Layout from "./layout";
+import Layout from "@/components/shell/bare-layout";
 import { ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 

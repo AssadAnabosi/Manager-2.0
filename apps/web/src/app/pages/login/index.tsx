@@ -21,7 +21,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { PasswordInput } from "@/components/component/password-input";
-import Layout from "./layout";
+import Layout from "@/components/shell/bare-layout";
 import { useAuth } from "@/providers/auth-context";
 import { useError } from "@/providers/error-provider";
 import Spinner from "@/components/component/spinner";
@@ -90,7 +90,7 @@ export default function Login() {
   }, []);
 
   return (
-    <Layout>
+    <Layout withSettings>
       <div className="align-center my-auto flex items-center justify-center">
         <div className="my-a mx-auto max-w-sm space-y-6">
           <div className="space-y-2 text-center">
