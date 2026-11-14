@@ -321,5 +321,8 @@
   "Reset password?": "Reset password?",
   "{{name}} will be logged out from all devices where they are signed in.": "{{name}} will be logged out from all devices where they are signed in.",
   "Made with": "Made with",
-  "by": "by"
+  "by": "by",
+  "Command menu": "Command menu",
+  "Search for a page or a setting": "Search for a page or a setting",
+  "Pages": "Pages"
 }
