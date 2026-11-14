@@ -5,9 +5,10 @@ import { enGB, ar } from "date-fns/locale";
 import { DateRange } from "react-day-picker";
 
 import { useAuth } from "@/providers/auth-context";
+import { usePermissions } from "@/hooks/use-permissions";
 
 import { LogType } from "@/lib/types";
-import { DATE_FORMAT, SPECTATOR, USER } from "@/lib/constants";
+import { DATE_FORMAT, USER } from "@/lib/constants";
 
 import { useGetUsersQuery } from "@/api/users";
 import { useGetLogsQuery, useDeleteLogMutation } from "@/api/logs";
@@ -44,6 +45,7 @@ import {
 const Logs = () => {
   const dummy = [...Array(8)];
   const { user } = useAuth();
+  const { canWrite } = usePermissions();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
     filter: user?.role === USER ? user.id : "",
@@ -97,7 +99,7 @@ const Logs = () => {
         </h2>
         <div className="flex flex-col items-center gap-2 md:flex-row">
           <DateRangePicker date={date} setDate={setDate} />
-          {![USER, SPECTATOR].includes(user?.role as string) && (
+          {canWrite && (
             <LogFormDialog>
               <Button className="w-full print:hidden">
                 <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" />{" "}
@@ -188,12 +190,7 @@ const Logs = () => {
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
               : logsData.logs.map((log: LogType) => (
-                  <LogRow
-                    key={log.id}
-                    log={log}
-                    onDelete={deleteLog}
-                    userRole={user?.role}
-                  />
+                  <LogRow key={log.id} log={log} onDelete={deleteLog} />
                 ))}
           </TableBody>
         </Table>

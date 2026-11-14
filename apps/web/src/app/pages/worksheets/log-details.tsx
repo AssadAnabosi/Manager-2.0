@@ -1,9 +1,9 @@
 import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { usePermissions } from "@/hooks/use-permissions";
 
 import { LogType } from "@/lib/types";
 import { numberFormatter, currencyFormatter } from "@/lib/utils";
-import { USER, SPECTATOR } from "@/lib/constants";
 
 import {
   ResponsiveDialog,
@@ -29,7 +29,6 @@ type Props = {
   description?: string | JSX.Element;
   log: LogType;
   deleteLog: (id: string) => void;
-  userRole: string | undefined;
 };
 
 export default function LogDetails({
@@ -38,12 +37,11 @@ export default function LogDetails({
   description,
   log,
   deleteLog,
-  userRole,
 }: Props) {
   const { t } = useTranslation();
+  const { canWrite } = usePermissions();
   const [open, setOpen] = useState(false);
-  const canEdit = ![USER, SPECTATOR].includes(userRole as string);
-
+  
   return (
     <ResponsiveDialog open={open} onOpenChange={setOpen}>
       <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
@@ -71,7 +69,7 @@ export default function LogDetails({
           </dl>
         </ResponsiveDialogBody>
         <ResponsiveDialogFooter>
-          {canEdit && (
+          {canWrite && (
             <div className="flex flex-col gap-3 md:flex-row">
               <LogFormDialog log={log} onDone={() => setOpen(false)}>
                 <Button>

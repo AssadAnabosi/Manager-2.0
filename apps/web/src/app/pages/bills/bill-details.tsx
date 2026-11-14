@@ -1,9 +1,9 @@
 import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { usePermissions } from "@/hooks/use-permissions";
 
 import { BillType } from "@/lib/types";
 import { signedCurrencyFormatter } from "@/lib/utils";
-import { SPECTATOR } from "@/lib/constants";
 
 import {
   ResponsiveDialog,
@@ -29,7 +29,6 @@ type Props = {
   children: ReactNode;
   bill: BillType;
   deleteBill: (id: string) => void;
-  userRole: string | undefined;
 };
 
 export default function BillDetails({
@@ -38,9 +37,9 @@ export default function BillDetails({
   children,
   bill,
   deleteBill,
-  userRole,
 }: Props) {
   const { t } = useTranslation();
+  const { canWrite } = usePermissions();
   const [open, setOpen] = useState(false);
 
   return (
@@ -66,7 +65,7 @@ export default function BillDetails({
           </dl>
         </ResponsiveDialogBody>
         <ResponsiveDialogFooter>
-          {userRole !== SPECTATOR && (
+          {canWrite && (
             <div className="flex flex-col gap-3 md:flex-row">
               <BillFormDialog bill={bill} onDone={() => setOpen(false)}>
                 <Button>

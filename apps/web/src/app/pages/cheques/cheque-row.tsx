@@ -1,10 +1,11 @@
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
+import { usePermissions } from "@/hooks/use-permissions";
 
 import { ChequeType } from "@/lib/types";
 import { currencyFormatter } from "@/lib/utils";
-import { DATE_FORMAT, SPECTATOR } from "@/lib/constants";
+import { DATE_FORMAT } from "@/lib/constants";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -25,11 +26,11 @@ import ChequeFormDialog from "./cheque-form-dialog";
 type Props = {
   cheque: ChequeType;
   onDelete: (id: string) => void;
-  userRole: string | undefined;
 };
 
-const ChequeRow = ({ cheque, onDelete, userRole }: Props) => {
+const ChequeRow = ({ cheque, onDelete }: Props) => {
   const { t, i18n } = useTranslation();
+  const { canWrite } = usePermissions();
   const title = cheque.payee.name;
   const description = format(new Date(cheque.dueDate), DATE_FORMAT, {
     locale: i18n.resolvedLanguage === "ar" ? ar : enGB,
@@ -42,7 +43,6 @@ const ChequeRow = ({ cheque, onDelete, userRole }: Props) => {
           description={description}
           cheque={cheque}
           deleteCheque={onDelete}
-          userRole={userRole}
         >
           <div className="flex items-center">
             <Avatar className="h-9 w-9">
@@ -84,7 +84,7 @@ const ChequeRow = ({ cheque, onDelete, userRole }: Props) => {
         {cheque.remarks}
       </TableCell>
       <TableCell className="hidden text-right lg:table-cell print:hidden lg:print:hidden">
-        {userRole !== SPECTATOR && (
+        {canWrite && (
           <div className="grid grid-cols-2">
             <ChequeFormDialog cheque={cheque}>
               <Button size="icon" variant="edit" aria-label="Edit">

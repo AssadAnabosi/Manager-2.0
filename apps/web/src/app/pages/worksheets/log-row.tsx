@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
+import { usePermissions } from "@/hooks/use-permissions";
 
 import { LogType } from "@/lib/types";
 import { DATE_FORMAT } from "@/lib/constants";
@@ -23,16 +24,15 @@ import StatusBadge from "@/components/component/status-badge";
 import { CalendarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
 import { currencyFormatter, numberFormatter } from "@/lib/utils";
-import { USER, SPECTATOR } from "@/lib/constants";
 
 type Props = {
   log: LogType;
   onDelete: (id: string) => void;
-  userRole: string | undefined;
 };
 
-const LogRow = ({ log, onDelete, userRole }: Props) => {
+const LogRow = ({ log, onDelete }: Props) => {
   const { t, i18n } = useTranslation();
+  const { canWrite } = usePermissions();
   const title = log.worker.fullName;
   const description = format(new Date(log.date), DATE_FORMAT, {
     locale: i18n.resolvedLanguage === "ar" ? ar : enGB,
@@ -45,7 +45,6 @@ const LogRow = ({ log, onDelete, userRole }: Props) => {
           description={description}
           log={log}
           deleteLog={onDelete}
-          userRole={userRole}
         >
           <div className="flex items-center">
             <Avatar className="h-9 w-9 print:hidden">
@@ -86,7 +85,7 @@ const LogRow = ({ log, onDelete, userRole }: Props) => {
         {log.remarks}
       </TableCell>
       <TableCell className="hidden 2xl:table-cell print:hidden 2xl:print:hidden">
-        {![USER, SPECTATOR].includes(userRole as string) && (
+        {canWrite && (
           <div className="grid grid-cols-2">
             <LogFormDialog log={log}>
               <Button size="icon" variant="edit" aria-label="Edit">

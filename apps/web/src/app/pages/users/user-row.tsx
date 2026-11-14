@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { usePermissions } from "@/hooks/use-permissions";
 
 import { UserType } from "@/lib/types";
 import { TableCell, TableRow } from "@/components/ui/table";
@@ -18,21 +19,20 @@ import UserDetails from "./user-details";
 import RoleBadge from "./role-badge";
 
 import { AvatarIcon, Pencil2Icon } from "@radix-ui/react-icons";
-import { MODERATOR } from "@/lib/constants";
 
 type Props = {
   user: UserType;
-  userRole: string | undefined;
 };
 
-const UserRow = ({ user, userRole }: Props) => {
+const UserRow = ({ user }: Props) => {
   const { t } = useTranslation();
+  const { canManageUsers } = usePermissions();
   const title = user.fullName;
   const description = `@${user.username}`;
   return (
     <TableRow className="h-[73px]">
       <TableCell>
-        <UserDetails title={user.fullName} user={user} userRole={userRole}>
+        <UserDetails title={user.fullName} user={user}>
           <div className="flex items-center">
             <Avatar className="h-9 w-9">
               <AvatarImage alt="Avatar" />
@@ -85,7 +85,7 @@ const UserRow = ({ user, userRole }: Props) => {
         </div>
       </TableCell>
       <TableCell className="hidden w-max text-right lg:table-cell">
-        {userRole !== MODERATOR && (
+        {canManageUsers && (
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

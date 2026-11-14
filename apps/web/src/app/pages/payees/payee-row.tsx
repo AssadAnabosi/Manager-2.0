@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { usePermissions } from "@/hooks/use-permissions";
 import { PayeeType } from "@/lib/types";
 
 import { TableCell, TableRow } from "@/components/ui/table";
@@ -17,26 +18,20 @@ import DeleteDialog from "@/components/component/delete-dialog";
 
 import PayeeDetails from "./payee-details";
 import PayeeFormDialog from "./payee-form-dialog";
-import { MODERATOR } from "@/lib/constants";
 
 type Props = {
   payee: PayeeType;
   onDelete: (id: string) => void;
-  userRole: string | undefined;
 };
 
-const PayeeRow = ({ payee, onDelete, userRole }: Props) => {
+const PayeeRow = ({ payee, onDelete }: Props) => {
   const { t } = useTranslation();
+  const { canWrite } = usePermissions();
   const title = payee.name;
   return (
     <TableRow className="h-[73px]">
       <TableCell>
-        <PayeeDetails
-          title={title}
-          payee={payee}
-          deletePayee={onDelete}
-          userRole={userRole}
-        >
+        <PayeeDetails title={title} payee={payee} deletePayee={onDelete}>
           <div className="flex items-center">
             <Avatar className="h-9 w-9">
               <AvatarImage alt="Avatar" />
@@ -74,35 +69,37 @@ const PayeeRow = ({ payee, onDelete, userRole }: Props) => {
       </TableCell>
       <TableCell className="hidden lg:table-cell">{payee.remarks}</TableCell>
       <TableCell className="hidden w-max text-right lg:table-cell">
-        <PayeeFormDialog payee={payee}>
-          <Button size="icon" variant="edit" aria-label="Edit">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Pencil2Icon />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{t("Edit")}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </Button>
-        </PayeeFormDialog>
-        {userRole !== MODERATOR && (
-          <DeleteDialog onAction={() => onDelete(payee.id)}>
-            <Button size="icon" variant="delete" aria-label="Delete">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <TrashIcon />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{t("Delete")}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </Button>
-          </DeleteDialog>
+        {canWrite && (
+          <>
+            <PayeeFormDialog payee={payee}>
+              <Button size="icon" variant="edit" aria-label="Edit">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Pencil2Icon />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{t("Edit")}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </Button>
+            </PayeeFormDialog>
+            <DeleteDialog onAction={() => onDelete(payee.id)}>
+              <Button size="icon" variant="delete" aria-label="Delete">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <TrashIcon />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{t("Delete")}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </Button>
+            </DeleteDialog>
+          </>
         )}
       </TableCell>
     </TableRow>

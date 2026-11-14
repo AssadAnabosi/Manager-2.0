@@ -1,9 +1,9 @@
 import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { usePermissions } from "@/hooks/use-permissions";
 
 import { ChequeType } from "@/lib/types";
 import { currencyFormatter } from "@/lib/utils";
-import { SPECTATOR } from "@/lib/constants";
 
 import {
   ResponsiveDialog,
@@ -29,7 +29,6 @@ type Props = {
   description?: string;
   cheque: ChequeType;
   deleteCheque: (id: string) => void;
-  userRole: string | undefined;
 };
 
 export default function ChequeDetails({
@@ -38,9 +37,9 @@ export default function ChequeDetails({
   description,
   cheque,
   deleteCheque,
-  userRole,
 }: Props) {
   const { t } = useTranslation();
+  const { canWrite } = usePermissions();
   const [open, setOpen] = useState(false);
 
   return (
@@ -69,7 +68,7 @@ export default function ChequeDetails({
           </dl>
         </ResponsiveDialogBody>
         <ResponsiveDialogFooter>
-          {userRole !== SPECTATOR && (
+          {canWrite && (
             <div className="flex flex-col gap-3 md:flex-row">
               <ChequeFormDialog cheque={cheque} onDone={() => setOpen(false)}>
                 <Button>

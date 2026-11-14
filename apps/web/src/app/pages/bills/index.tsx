@@ -4,10 +4,10 @@ import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 import { DateRange } from "react-day-picker";
 
-import { useAuth } from "@/providers/auth-context";
+import { usePermissions } from "@/hooks/use-permissions";
 
 import { BillKind, BillType } from "@/lib/types";
-import { DATE_FORMAT, SPECTATOR } from "@/lib/constants";
+import { DATE_FORMAT } from "@/lib/constants";
 
 import { useGetBillsQuery, useDeleteBillMutation } from "@/api/bills";
 
@@ -44,7 +44,7 @@ import {
 
 const Bills = () => {
   const dummy = [...Array(8)];
-  const { user } = useAuth();
+  const { canWrite } = usePermissions();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
     search: "",
@@ -107,7 +107,7 @@ const Bills = () => {
         <h2 className="text-3xl font-bold tracking-tight">{t("Bills")}</h2>
         <div className="flex flex-col items-center gap-2 md:flex-row">
           <DateRangePicker date={date} setDate={setDate} />
-          {user?.role !== SPECTATOR && (
+          {canWrite && (
             <BillFormDialog>
               <Button className="w-full print:hidden">
                 <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" />{" "}
@@ -186,12 +186,7 @@ const Bills = () => {
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
               : billsData.bills.map((bill: BillType) => (
-                  <BillRow
-                    key={bill.id}
-                    bill={bill}
-                    onDelete={deleteBill}
-                    userRole={user?.role}
-                  />
+                  <BillRow key={bill.id} bill={bill} onDelete={deleteBill} />
                 ))}
           </TableBody>
         </Table>

@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 import { BillType } from "@/lib/types";
 import { useTranslation } from "react-i18next";
+import { usePermissions } from "@/hooks/use-permissions";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -22,16 +23,15 @@ import { CalendarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 import { cn, signedCurrencyFormatter } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { billKindColor, billKindLabel } from "./kind";
-import { SPECTATOR } from "@/lib/constants";
 
 type Props = {
   bill: BillType;
   onDelete: (id: string) => void;
-  userRole: string | undefined;
 };
 
-const BillRow = ({ bill, onDelete, userRole }: Props) => {
+const BillRow = ({ bill, onDelete }: Props) => {
   const { t, i18n } = useTranslation();
+  const { canWrite } = usePermissions();
   const title = format(new Date(bill.date), "EEEE", {
     locale: i18n.resolvedLanguage === "ar" ? ar : enGB,
   });
@@ -46,7 +46,6 @@ const BillRow = ({ bill, onDelete, userRole }: Props) => {
           description={description}
           bill={bill}
           deleteBill={onDelete}
-          userRole={userRole}
         >
           <div className="flex items-center">
             <Avatar className="h-9 w-9 print:hidden">
@@ -89,7 +88,7 @@ const BillRow = ({ bill, onDelete, userRole }: Props) => {
         {bill.remarks}
       </TableCell>
       <TableCell className="hidden text-right lg:table-cell print:hidden lg:print:hidden">
-        {userRole !== SPECTATOR && (
+        {canWrite && (
           <div className="grid grid-cols-2">
             <BillFormDialog bill={bill}>
               <Button size="icon" variant="edit" aria-label="Edit">

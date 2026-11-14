@@ -1,9 +1,9 @@
 import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { usePermissions } from "@/hooks/use-permissions";
 import { useNavigate } from "react-router-dom";
 
 import { UserType } from "@/lib/types";
-import { MODERATOR } from "@/lib/constants";
 
 import {
   ResponsiveDialog,
@@ -26,16 +26,15 @@ type Props = {
   children: ReactNode;
   title: string;
   user: UserType;
-  userRole: string | undefined;
 };
 
 export default function UserDetails({
   children,
   title,
   user,
-  userRole,
 }: Props) {
   const { t } = useTranslation();
+  const { canManageUsers } = usePermissions();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -78,7 +77,7 @@ export default function UserDetails({
           </dl>
         </ResponsiveDialogBody>
         <ResponsiveDialogFooter>
-          {userRole !== MODERATOR && (
+          {canManageUsers && (
             <Button onClick={() => navigate(`/users/${user.id}`)}>
               <Pencil2Icon className="me-2 h-4 w-4" />
               <span>{t("Edit")}</span>

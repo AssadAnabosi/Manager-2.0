@@ -4,10 +4,10 @@ import { format } from "date-fns";
 import { ar, enGB } from "date-fns/locale";
 import { DateRange } from "react-day-picker";
 
-import { useAuth } from "@/providers/auth-context";
+import { usePermissions } from "@/hooks/use-permissions";
 
 import { ChequeType } from "@/lib/types";
-import { DATE_FORMAT, SPECTATOR } from "@/lib/constants";
+import { DATE_FORMAT } from "@/lib/constants";
 
 import { useGetPayeesQuery } from "@/api/payees";
 import { useGetChequesQuery, useDeleteChequeMutation } from "@/api/cheques";
@@ -46,7 +46,7 @@ import {
 
 const Cheques = () => {
   const dummy = [...Array(8)];
-  const { user } = useAuth();
+  const { canWrite } = usePermissions();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
     serial: "",
@@ -112,7 +112,7 @@ const Cheques = () => {
         <h2 className="text-3xl font-bold tracking-tight">{t("Cheques")}</h2>
         <div className="flex flex-col items-center gap-2 md:flex-row">
           <DateRangePicker date={date} setDate={setDate} />
-          {user?.role !== SPECTATOR && (
+          {canWrite && (
             <ChequeFormDialog>
               <Button className="w-full print:hidden">
                 <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" />{" "}
@@ -205,7 +205,6 @@ const Cheques = () => {
                     key={cheque.id}
                     cheque={cheque}
                     onDelete={deleteCheque}
-                    userRole={user?.role}
                   />
                 ))}
           </TableBody>

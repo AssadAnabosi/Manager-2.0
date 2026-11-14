@@ -2,7 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { PayeeType } from "@/lib/types";
 
-import { useAuth } from "@/providers/auth-context";
+import { usePermissions } from "@/hooks/use-permissions";
 
 import { useGetPayeesQuery, useDeletePayeeMutation } from "@/api/payees";
 
@@ -29,7 +29,7 @@ import { FilePlus } from "lucide-react";
 
 const Payees = () => {
   const dummy = [...Array(8)];
-  const { user } = useAuth();
+  const { canWrite } = usePermissions();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
     search: "",
@@ -56,11 +56,14 @@ const Payees = () => {
       <div className="flex flex-col justify-between gap-5 space-y-2 md:flex-row">
         <h2 className="text-3xl font-bold tracking-tight">{t("Payees")}</h2>
         <div className="flex flex-col items-center gap-2 md:flex-row">
-          <PayeeFormDialog>
-            <Button className="w-full">
-              <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" /> {t("Add New")}
-            </Button>
-          </PayeeFormDialog>
+          {canWrite && (
+            <PayeeFormDialog>
+              <Button className="w-full">
+                <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" />{" "}
+                {t("Add New")}
+              </Button>
+            </PayeeFormDialog>
+          )}
         </div>
       </div>
       <Separator />
@@ -100,7 +103,6 @@ const Payees = () => {
                     key={payee.id}
                     payee={payee}
                     onDelete={deletePayee}
-                    userRole={user?.role}
                   />
                 ))}
           </TableBody>

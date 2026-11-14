@@ -1,8 +1,8 @@
 import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { usePermissions } from "@/hooks/use-permissions";
 
 import { PayeeType } from "@/lib/types";
-import { MODERATOR } from "@/lib/constants";
 
 import {
   ResponsiveDialog,
@@ -26,7 +26,6 @@ type Props = {
   title: string;
   payee: PayeeType;
   deletePayee: (id: string) => void;
-  userRole: string | undefined;
 };
 
 export default function PayeeDetails({
@@ -34,9 +33,9 @@ export default function PayeeDetails({
   title,
   payee,
   deletePayee,
-  userRole,
 }: Props) {
   const { t } = useTranslation();
+  const { canWrite } = usePermissions();
   const [open, setOpen] = useState(false);
 
   return (
@@ -72,14 +71,14 @@ export default function PayeeDetails({
           </dl>
         </ResponsiveDialogBody>
         <ResponsiveDialogFooter>
-          <div className="flex flex-col gap-3 md:flex-row">
-            <PayeeFormDialog payee={payee} onDone={() => setOpen(false)}>
-              <Button>
-                <Pencil2Icon className="me-2 h-4 w-4" />
-                <span>{t("Edit")}</span>
-              </Button>
-            </PayeeFormDialog>
-            {userRole !== MODERATOR && (
+          {canWrite && (
+            <div className="flex flex-col gap-3 md:flex-row">
+              <PayeeFormDialog payee={payee} onDone={() => setOpen(false)}>
+                <Button>
+                  <Pencil2Icon className="me-2 h-4 w-4" />
+                  <span>{t("Edit")}</span>
+                </Button>
+              </PayeeFormDialog>
               <DeleteDialog
                 onAction={() => {
                   deletePayee(payee.id);
@@ -91,8 +90,8 @@ export default function PayeeDetails({
                   <span>{t("Delete")}</span>
                 </Button>
               </DeleteDialog>
-            )}
-          </div>
+            </div>
+          )}
           <ResponsiveDialogClose asChild>
             <Button variant="outline">{t("Close")}</Button>
           </ResponsiveDialogClose>

@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { useAuth } from "@/providers/auth-context";
+import { usePermissions } from "@/hooks/use-permissions";
 
 import { UserType } from "@/lib/types";
 import { useGetUsersQuery } from "@/api/users";
@@ -29,7 +29,7 @@ import { FilePlus } from "lucide-react";
 
 const Users = () => {
   const dummy = [...Array(8)];
-  const { user: authUser } = useAuth();
+  const { canCreateUsers } = usePermissions();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
     search: "",
@@ -55,11 +55,14 @@ const Users = () => {
       <div className="flex flex-col justify-between gap-5 space-y-2 md:flex-row">
         <h2 className="text-3xl font-bold tracking-tight">{t("Users")}</h2>
         <div className="flex flex-col items-center gap-2 md:flex-row">
-          <UserFormDialog>
-            <Button className="w-full">
-              <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" /> {t("Add New")}
-            </Button>
-          </UserFormDialog>
+          {canCreateUsers && (
+            <UserFormDialog>
+              <Button className="w-full">
+                <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" />{" "}
+                {t("Add New")}
+              </Button>
+            </UserFormDialog>
+          )}
         </div>
       </div>
       <Separator />
@@ -98,11 +101,7 @@ const Users = () => {
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
               : usersData.users.map((user: UserType) => (
-                  <UserRow
-                    key={user.id}
-                    user={user}
-                    userRole={authUser?.role}
-                  />
+                  <UserRow key={user.id} user={user} />
                 ))}
           </TableBody>
         </Table>
