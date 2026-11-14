@@ -90,7 +90,7 @@ export function CommandPalette() {
       <Button
         variant="outline"
         size="sm"
-        className="text-muted-foreground ms-auto h-8 gap-2 px-2 font-normal md:w-56 md:justify-start"
+        className="text-muted-foreground ms-auto h-10 gap-2 px-3 font-normal md:h-8 md:w-56 md:justify-start md:px-2 [&_svg]:size-5 md:[&_svg]:size-4"
         onClick={() => setOpen(true)}
       >
         <Search />
