@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { navItemFor } from "@/components/shell/nav-items";
+import { CommandPalette } from "@/components/shell/command-palette";
 
 export function SiteHeader() {
   const { t } = useTranslation();
@@ -18,6 +19,7 @@ export function SiteHeader() {
           className="mx-2 data-[orientation=vertical]:h-4"
         />
         <h1 className="text-base font-medium">{item ? t(item.title) : ""}</h1>
+        <CommandPalette />
       </div>
     </header>
   );

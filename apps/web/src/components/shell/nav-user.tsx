@@ -22,13 +22,13 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-const THEMES: { value: ThemeType; label: string }[] = [
+export const THEMES: { value: ThemeType; label: string }[] = [
   { value: "light", label: "Light" },
   { value: "dark", label: "Dark" },
   { value: "system", label: "System" },
 ];
 
-const LANGUAGES = [
+export const LANGUAGES = [
   { value: "en", label: "English" },
   { value: "ar", label: "العربية" },
 ];
