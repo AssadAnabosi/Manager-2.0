@@ -1,9 +1,17 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 import { BillType } from "@/lib/types";
 
-import { cn, stringToDate } from "@/lib/utils";
+import { cn, getToday, stringToDate } from "@/lib/utils";
+import {
+  billFormSchema,
+  billFormSchemaType,
+  useBillFormMutation,
+} from "@/api/bills";
 
 import {
   Form,
@@ -20,8 +28,8 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
-import { DialogFooter } from "@/components/ui/dialog";
-import { DrawerFooter } from "@/components/ui/drawer";
+import { ResponsiveDialogFooter } from "@/components/ui/responsive-dialog";
+import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import Spinner from "@/components/component/spinner";
@@ -37,41 +45,52 @@ const positiveNumber = (value: string) => {
   return rest.length ? `${whole}.${rest.join("")}` : whole;
 };
 
-const BillForm = ({
-  className,
-  isDesktop,
-  billForm,
-  onSubmit,
-  calendarOpen,
-  setCalenderOpen,
-  isLoading,
-  bill,
-}: {
-  className?: string;
-  isDesktop: boolean;
-  billForm: any;
-  onSubmit: any;
-  calendarOpen: boolean;
-  setCalenderOpen: any;
-  isLoading: boolean;
+type BillFormProps = {
   bill?: BillType;
-}) => {
+  /** Called after a successful save. */
+  onDone: () => void;
+};
+
+const BillForm = ({ bill, onDone }: BillFormProps) => {
   const { t } = useTranslation();
-  const footerContent = (
-    <Button type="submit" disabled={isLoading} className="md:w-[45%]">
-      {isLoading ? (
-        <Spinner className="h-4 w-4" />
-      ) : bill ? (
-        t("Save Changes")
-      ) : (
-        t("Create")
-      )}
-    </Button>
-  );
+  const { toast } = useToast();
+  const [calendarOpen, setCalenderOpen] = useState(false);
+  const billForm = useForm<billFormSchemaType>({
+    resolver: zodResolver(billFormSchema),
+    defaultValues: {
+      date: bill ? new Date(bill.date) : getToday(),
+      type: bill?.type || "expense",
+      amount: bill?.amount?.toString() || "",
+      description: bill?.description || "",
+      remarks: bill?.remarks || "",
+    },
+  });
+  const isLoading = billForm.formState.isSubmitting;
+  const { mutateAsync } = useBillFormMutation();
+
+  const onSubmit = async (data: billFormSchemaType) => {
+    try {
+      if (bill) {
+        await mutateAsync({ data, billId: bill.id });
+      } else {
+        await mutateAsync({ data });
+        billForm.reset();
+      }
+      onDone();
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: t("Error"),
+        description:
+          t(error?.response?.data?.message) || t("Something went wrong"),
+      });
+    }
+  };
+
   return (
     <Form {...billForm}>
       <form
-        className={cn(className, "space-y-4")}
+        className="space-y-4"
         onSubmit={billForm.handleSubmit(onSubmit)}
       >
         <FormField
@@ -201,11 +220,17 @@ const BillForm = ({
             </FormItem>
           )}
         />
-        {isDesktop ? (
-          <DialogFooter>{footerContent}</DialogFooter>
-        ) : (
-          <DrawerFooter className="pt-2">{footerContent}</DrawerFooter>
-        )}
+        <ResponsiveDialogFooter>
+          <Button type="submit" disabled={isLoading} className="md:w-[45%]">
+            {isLoading ? (
+              <Spinner className="h-4 w-4" />
+            ) : bill ? (
+              t("Save Changes")
+            ) : (
+              t("Create")
+            )}
+          </Button>
+        </ResponsiveDialogFooter>
       </form>
     </Form>
   );

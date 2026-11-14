@@ -1,4 +1,4 @@
-import i18next from "i18next";
+import { useTranslation } from "react-i18next";
 import { PayeeType } from "@/lib/types";
 
 import { TableCell, TableRow } from "@/components/ui/table";
@@ -15,23 +15,26 @@ import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 import { User } from "lucide-react";
 import DeleteDialog from "@/components/component/delete-dialog";
 
-import AvatarCombo from "./avatar-combo";
-import FormDialogDrawer from "./form-dialog-drawer";
+import PayeeDetails from "./payee-details";
+import PayeeFormDialog from "./payee-form-dialog";
 import { MODERATOR } from "@/lib/constants";
 
-const Row = (
-  payee: PayeeType,
-  deletePayee: any,
-  userRole: string | undefined
-) => {
+type Props = {
+  payee: PayeeType;
+  onDelete: (id: string) => void;
+  userRole: string | undefined;
+};
+
+const PayeeRow = ({ payee, onDelete, userRole }: Props) => {
+  const { t } = useTranslation();
   const title = payee.name;
   return (
-    <TableRow key={payee.id} className="h-[73px]">
+    <TableRow className="h-[73px]">
       <TableCell>
-        <AvatarCombo
+        <PayeeDetails
           title={title}
           payee={payee}
-          deletePayee={deletePayee}
+          deletePayee={onDelete}
           userRole={userRole}
         >
           <div className="flex items-center">
@@ -45,7 +48,7 @@ const Row = (
               <p className="text-sm font-medium leading-none">{title}</p>
             </div>
           </div>
-        </AvatarCombo>
+        </PayeeDetails>
       </TableCell>
       <TableCell className="hidden md:table-cell">
         <div className="flex flex-col space-y-1">
@@ -71,7 +74,7 @@ const Row = (
       </TableCell>
       <TableCell className="hidden lg:table-cell">{payee.remarks}</TableCell>
       <TableCell className="w-max text-right hidden lg:table-cell">
-        <FormDialogDrawer payee={payee}>
+        <PayeeFormDialog payee={payee}>
           <Button size="icon" variant="edit" aria-label="Edit">
             <TooltipProvider>
               <Tooltip>
@@ -79,14 +82,14 @@ const Row = (
                   <Pencil2Icon />
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{i18next.t("Edit")}</p>
+                  <p>{t("Edit")}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </Button>
-        </FormDialogDrawer>
+        </PayeeFormDialog>
         {userRole !== MODERATOR && (
-          <DeleteDialog onAction={() => deletePayee(payee.id)}>
+          <DeleteDialog onAction={() => onDelete(payee.id)}>
             <Button size="icon" variant="delete" aria-label="Delete">
               <TooltipProvider>
                 <Tooltip>
@@ -94,7 +97,7 @@ const Row = (
                     <TrashIcon />
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{i18next.t("Delete")}</p>
+                    <p>{t("Delete")}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -106,4 +109,4 @@ const Row = (
   );
 };
 
-export default Row;
+export default PayeeRow;

@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 import { BillType } from "@/lib/types";
-import i18next from "i18next";
+import { useTranslation } from "react-i18next";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/tooltip";
 import DeleteDialog from "@/components/component/delete-dialog";
 
-import AvatarCombo from "./avatar-combo";
-import FormDialogDrawer from "./form-dialog-drawer";
+import BillDetails from "./bill-details";
+import BillFormDialog from "./bill-form-dialog";
 
 import { CalendarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
@@ -24,21 +24,28 @@ import { Badge } from "@/components/ui/badge";
 import { billKindColor, billKindLabel } from "./kind";
 import { SPECTATOR } from "@/lib/constants";
 
-const Row = (bill: BillType, deleteBill: any, userRole: string | undefined) => {
+type Props = {
+  bill: BillType;
+  onDelete: (id: string) => void;
+  userRole: string | undefined;
+};
+
+const BillRow = ({ bill, onDelete, userRole }: Props) => {
+  const { t, i18n } = useTranslation();
   const title = format(new Date(bill.date), "EEEE", {
-    locale: document.documentElement.lang === "ar" ? ar : enGB,
+    locale: i18n.resolvedLanguage === "ar" ? ar : enGB,
   });
   const description = format(new Date(bill.date), "dd/LL/y", {
-    locale: document.documentElement.lang === "ar" ? ar : enGB,
+    locale: i18n.resolvedLanguage === "ar" ? ar : enGB,
   });
   return (
-    <TableRow key={bill.id} className="h-[73px]">
+    <TableRow className="h-[73px]">
       <TableCell>
-        <AvatarCombo
+        <BillDetails
           title={title}
           description={description}
           bill={bill}
-          deleteBill={deleteBill}
+          deleteBill={onDelete}
           userRole={userRole}
         >
           <div className="flex items-center">
@@ -57,7 +64,7 @@ const Row = (bill: BillType, deleteBill: any, userRole: string | undefined) => {
               </p>
             </div>
           </div>
-        </AvatarCombo>
+        </BillDetails>
       </TableCell>
       <TableCell style={{ direction: "ltr" }} className="rtl:text-right">
         <div className="flex items-center gap-2 rtl:flex-row-reverse rtl:justify-end">
@@ -71,7 +78,7 @@ const Row = (bill: BillType, deleteBill: any, userRole: string | undefined) => {
             variant="outline"
             className={cn("print:hidden", billKindColor(bill.type))}
           >
-            {i18next.t(billKindLabel(bill.type))}
+            {t(billKindLabel(bill.type))}
           </Badge>
         </div>
       </TableCell>
@@ -84,7 +91,7 @@ const Row = (bill: BillType, deleteBill: any, userRole: string | undefined) => {
       <TableCell className="print:hidden lg:print:hidden text-right hidden lg:table-cell">
         {userRole !== SPECTATOR && (
           <div className="grid grid-cols-2">
-            <FormDialogDrawer bill={bill}>
+            <BillFormDialog bill={bill}>
               <Button size="icon" variant="edit" aria-label="Edit">
                 <TooltipProvider>
                   <Tooltip>
@@ -92,13 +99,13 @@ const Row = (bill: BillType, deleteBill: any, userRole: string | undefined) => {
                       <Pencil2Icon />
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>{i18next.t("Edit")}</p>
+                      <p>{t("Edit")}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
               </Button>
-            </FormDialogDrawer>
-            <DeleteDialog onAction={() => deleteBill(bill.id)}>
+            </BillFormDialog>
+            <DeleteDialog onAction={() => onDelete(bill.id)}>
               <Button size="icon" variant="delete" aria-label="Delete">
                 <TooltipProvider>
                   <Tooltip>
@@ -106,7 +113,7 @@ const Row = (bill: BillType, deleteBill: any, userRole: string | undefined) => {
                       <TrashIcon />
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>{i18next.t("Delete")}</p>
+                      <p>{t("Delete")}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -119,4 +126,4 @@ const Row = (bill: BillType, deleteBill: any, userRole: string | undefined) => {
   );
 };
 
-export default Row;
+export default BillRow;

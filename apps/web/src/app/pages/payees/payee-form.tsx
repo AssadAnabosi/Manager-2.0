@@ -1,6 +1,12 @@
 import { useTranslation } from "react-i18next";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { PayeeType } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import {
+  payeeFormSchema,
+  payeeFormSchemaType,
+  usePayeeFormMutation,
+} from "@/api/payees";
 
 import {
   Form,
@@ -12,43 +18,56 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { DialogFooter } from "@/components/ui/dialog";
-import { DrawerFooter } from "@/components/ui/drawer";
+import { ResponsiveDialogFooter } from "@/components/ui/responsive-dialog";
+import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 
 import Spinner from "@/components/component/spinner";
 
-const PayeeForm = ({
-  className,
-  isDesktop,
-  payeeForm,
-  onSubmit,
-  isLoading,
-  payee,
-}: {
-  className?: string;
-  isDesktop: boolean;
-  payeeForm: any;
-  onSubmit: any;
-  isLoading: boolean;
+type PayeeFormProps = {
   payee?: PayeeType;
-}) => {
+  /** Called after a successful save. */
+  onDone: () => void;
+};
+
+const PayeeForm = ({ payee, onDone }: PayeeFormProps) => {
   const { t } = useTranslation();
-  const footerContent = (
-    <Button type="submit" disabled={isLoading} className="md:w-[45%]">
-      {isLoading ? (
-        <Spinner className="h-4 w-4" />
-      ) : payee ? (
-        t("Save Changes")
-      ) : (
-        t("Create")
-      )}
-    </Button>
-  );
+  const { toast } = useToast();
+  const payeeForm = useForm<payeeFormSchemaType>({
+    resolver: zodResolver(payeeFormSchema),
+    defaultValues: {
+      name: payee?.name || "",
+      email: payee?.email || "",
+      phoneNumber: payee?.phoneNumber || "",
+      remarks: payee?.remarks || "",
+    },
+  });
+  const isLoading = payeeForm.formState.isSubmitting;
+  const { mutateAsync } = usePayeeFormMutation();
+
+  const onSubmit = async (data: payeeFormSchemaType) => {
+    try {
+      if (payee) {
+        await mutateAsync({ data, payeeId: payee.id });
+      } else {
+        await mutateAsync({ data });
+        payeeForm.reset();
+      }
+      onDone();
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: t("Error"),
+        description:
+          t(error?.response?.data?.message) || t("Something went wrong"),
+      });
+    }
+  };
+
   return (
     <Form {...payeeForm}>
       <form
-        className={cn(className, "space-y-4")}
+        className="space-y-4"
         onSubmit={payeeForm.handleSubmit(onSubmit)}
       >
         <FormField
@@ -122,11 +141,17 @@ const PayeeForm = ({
             </FormItem>
           )}
         />
-        {isDesktop ? (
-          <DialogFooter>{footerContent}</DialogFooter>
-        ) : (
-          <DrawerFooter className="pt-2">{footerContent}</DrawerFooter>
-        )}
+        <ResponsiveDialogFooter>
+          <Button type="submit" disabled={isLoading} className="md:w-[45%]">
+            {isLoading ? (
+              <Spinner className="h-4 w-4" />
+            ) : payee ? (
+              t("Save Changes")
+            ) : (
+              t("Create")
+            )}
+          </Button>
+        </ResponsiveDialogFooter>
       </form>
     </Form>
   );

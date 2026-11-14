@@ -29,9 +29,9 @@ import NoResults from "@/components/component/no-results";
 import FetchError from "@/components/component/fetch-error";
 
 import Cards from "./cards";
-import Row from "./row";
+import BillRow from "./bill-row";
 import RowSkeleton from "./row-skeleton";
-import FormDialogDrawer from "./form-dialog-drawer";
+import BillFormDialog from "./bill-form-dialog";
 
 import { Printer, FilePlus } from "lucide-react";
 
@@ -108,12 +108,12 @@ const Bills = () => {
         <div className="flex items-center gap-2 flex-col md:flex-row">
           <DateRangePicker date={date} setDate={setDate} />
           {user?.role !== SPECTATOR && (
-            <FormDialogDrawer>
+            <BillFormDialog>
               <Button className="print:hidden w-full">
                 <FilePlus className="ltr:mr-2 rtl:ml-2 h-7 w-7" />{" "}
                 {t("Add New")}
               </Button>
-            </FormDialogDrawer>
+            </BillFormDialog>
           )}
           <Button
             disabled={isLoading}
@@ -186,7 +186,12 @@ const Bills = () => {
             {isLoading
               ? dummy.map((_, index) => RowSkeleton(index))
               : billsData.bills.map((bill: BillType) =>
-                  Row(bill, deleteBill, user?.role)
+                  <BillRow
+                    key={bill.id}
+                    bill={bill}
+                    onDelete={deleteBill}
+                    userRole={user?.role}
+                  />
                 )}
           </TableBody>
         </Table>
