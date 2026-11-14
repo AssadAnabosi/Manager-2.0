@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { apiErrorText } from "@/lib/api-error";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -108,9 +109,7 @@ export default function Edit() {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
       });
     }
   };
@@ -134,9 +133,7 @@ export default function Edit() {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
       });
     }
   };
@@ -155,9 +152,7 @@ export default function Edit() {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
       });
     }
   };

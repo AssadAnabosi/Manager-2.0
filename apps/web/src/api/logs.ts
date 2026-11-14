@@ -1,4 +1,5 @@
 import type { LogsList } from "@workbench/shared";
+import { apiErrorText } from "@/lib/api-error";
 import { z } from "zod";
 import type { AxiosResponse } from "axios";
 import { useSearchParams } from "react-router-dom";
@@ -56,9 +57,7 @@ export const useDeleteLogMutation = () => {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
       });
     },
   });
@@ -147,9 +146,7 @@ export const useLogFormMutation = () => {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
       });
     },
   });

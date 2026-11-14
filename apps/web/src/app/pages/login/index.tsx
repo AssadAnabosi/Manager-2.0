@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { apiErrorKey } from "@/lib/api-error";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -78,7 +79,7 @@ export default function Login() {
       } else {
         form.setValue("password", "");
         setError({
-          description: error.response.data.message,
+          description: apiErrorKey(error) ?? "Something went wrong",
         });
       }
     }

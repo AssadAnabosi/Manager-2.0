@@ -54,8 +54,7 @@ const useAxios = () => {
         } else {
           const refreshNeeded =
             error?.response.status === 403 &&
-            error?.response.data.message ===
-              "Token Expired, Please Refresh Token";
+            error?.response.data.code === "AUTH_TOKEN_EXPIRED";
           if (refreshNeeded && !original.refreshed) {
             original.refreshed = true;
             try {

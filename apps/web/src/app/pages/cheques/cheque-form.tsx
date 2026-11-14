@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { apiErrorCode, apiValidationIssues } from "@/lib/api-error";
+import { apiErrorText } from "@/lib/api-error";
 import { useTranslation } from "react-i18next";
 import { useFormatters } from "@/hooks/use-locale";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -93,33 +95,33 @@ const ChequeForm = ({ cheque, onDone }: ChequeFormProps) => {
       }
       onDone();
     } catch (error: any) {
-      const message = error?.response?.data?.message;
-      if (message)
-        switch (message) {
-          case "Serial already exists":
-            chequeForm.setError("serial", {
-              type: "manual",
-              message: "Cheque with this serial already exists.",
-            });
-            return;
-          case "Payee not found":
-            chequeForm.setError("payee", {
-              type: "manual",
-              message: "Payee not found",
-            });
-            return;
-          case "Please select a payee":
-            chequeForm.setError("payee", {
-              type: "manual",
-              message: "Please select a payee",
-            });
-            return;
-        }
+      const code = apiErrorCode(error);
+      if (code === "CHEQUE_SERIAL_EXISTS") {
+        chequeForm.setError("serial", {
+          type: "manual",
+          message: "Cheque with this serial already exists.",
+        });
+        return;
+      }
+      if (code === "PAYEE_NOT_FOUND") {
+        chequeForm.setError("payee", {
+          type: "manual",
+          message: "errors.PAYEE_NOT_FOUND",
+        });
+        return;
+      }
+      if (apiValidationIssues(error).some((i) => i.code === "payee_required")) {
+        chequeForm.setError("payee", {
+          type: "manual",
+          message: "validation.payee_required",
+        });
+        return;
+      }
       toast({
         variant: "destructive",
         title: t("Error"),
         description:
-          t(error?.response?.data?.message) || t("Something went wrong"),
+          apiErrorText(error, t),
       });
     }
   };

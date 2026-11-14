@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { apiErrorText } from "@/lib/api-error";
 import { useTranslation } from "react-i18next";
 import { useFormatters } from "@/hooks/use-locale";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -82,7 +83,7 @@ const BillForm = ({ bill, onDone }: BillFormProps) => {
         variant: "destructive",
         title: t("Error"),
         description:
-          t(error?.response?.data?.message) || t("Something went wrong"),
+          apiErrorText(error, t),
       });
     }
   };

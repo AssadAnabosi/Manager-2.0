@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { apiErrorCode, apiErrorText } from "@/lib/api-error";
 import { useTranslation } from "react-i18next";
 import { useFormatters } from "@/hooks/use-locale";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -88,20 +89,17 @@ const LogForm = ({ log, onDone }: LogFormProps) => {
       }
       onDone();
     } catch (error: any) {
-      const message = error?.response?.data?.message;
-      if (message)
-        switch (message) {
-          case "There is a record of this log already":
-            logForm.setError("date", {
-              type: "manual",
-              message: "This log already exists",
-            });
-            return;
-        }
+      if (apiErrorCode(error) === "LOG_EXISTS") {
+        logForm.setError("date", {
+          type: "manual",
+          message: "This log already exists",
+        });
+        return;
+      }
       toast({
         variant: "destructive",
         title: t("Error"),
-        description: message ? t(message) : t("Something went wrong"),
+        description: apiErrorText(error, t),
       });
     }
   };

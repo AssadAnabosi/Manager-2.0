@@ -6,6 +6,7 @@
  */
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
+import { ERROR_CODES, VALIDATION_CODES } from "@workbench/shared";
 import { fileURLToPath } from "node:url";
 
 const webDir = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -43,6 +44,12 @@ const locales = Object.fromEntries(
     ) as Record<string, string>,
   ])
 );
+
+// Keys built at runtime from the API's error and validation codes (see src/lib/api-error.ts).
+for (const code of ERROR_CODES)
+  used.set(`errors.${code}`, "@workbench/shared errors");
+for (const code of VALIDATION_CODES)
+  used.set(`validation.${code}`, "@workbench/shared errors");
 
 let failed = false;
 const report = (title: string, items: string[]) => {

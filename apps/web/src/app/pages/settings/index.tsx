@@ -1,4 +1,5 @@
 import { useSearchParams } from "react-router-dom";
+import { apiErrorKey, apiErrorText } from "@/lib/api-error";
 import { useLocale } from "@/hooks/use-locale";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -106,7 +107,7 @@ export default function Settings() {
     } catch (error: any) {
       toast({
         title: t("Something went wrong"),
-        description: error.response.data.message,
+        description: apiErrorText(error, t),
         variant: "destructive",
       });
     }
@@ -133,14 +134,12 @@ export default function Settings() {
       const { response } = error;
       if (response.status === 400) {
         passwordForm.setError("current", {
-          message: response.data.message,
+          message: apiErrorKey(error),
         });
       }
       toast({
         title: t("Something went wrong"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
         variant: "destructive",
       });
     }
