@@ -6,5 +6,7 @@ export type AppEnv = {
   Variables: {
     user: UserRow;
     sessionId: string;
+    /** The row loaded by `paramRecord`. */
+    record: any;
   };
 };

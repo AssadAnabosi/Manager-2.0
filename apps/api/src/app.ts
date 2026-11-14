@@ -7,6 +7,11 @@ import { PAYLOAD_TOO_LARGE } from "./lib/http";
 import { errorBody, notFound, onError } from "./middleware/errors";
 import { authRoutes } from "./routes/auth";
 import { healthRoutes } from "./routes/health";
+import { billsRoutes } from "./routes/bills";
+import { chequesRoutes } from "./routes/cheques";
+import { logsRoutes } from "./routes/logs";
+import { payeesRoutes } from "./routes/payees";
+import { usersRoutes } from "./routes/users";
 import { createRouter } from "./routes/router";
 import { getIterations, hashPassword } from "./services/password";
 import type { AppEnv } from "./types";
@@ -25,6 +30,11 @@ export const createApp = (prefix = "") => {
 
   api.route("/", healthRoutes());
   api.route("/", authRoutes(prefix));
+  api.route("/", usersRoutes(prefix));
+  api.route("/", logsRoutes());
+  api.route("/", billsRoutes());
+  api.route("/", payeesRoutes());
+  api.route("/", chequesRoutes());
 
   // OpenAPI + Swagger UI: public, but only served when API_DOCS="true" (never in production)
   api.use("/openapi.json", async (c, next) =>

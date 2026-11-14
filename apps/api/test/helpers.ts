@@ -7,7 +7,13 @@ import { hashPassword } from "../src/services/password";
 import type { Role } from "@workbench/shared";
 
 export const baseEnv = (over: Partial<Env> = {}): Env =>
-  ({ ...(env as unknown as Env), API_DOCS: "true", ...over }) as Env;
+  ({
+    ...(env as unknown as Env),
+    // independent of a developer's local .dev.vars
+    BENCH: undefined,
+    API_DOCS: "true",
+    ...over,
+  }) as Env;
 
 export const TEST_PASSWORD = "correct horse battery";
 

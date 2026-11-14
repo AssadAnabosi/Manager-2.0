@@ -164,3 +164,7 @@ export const loginAttempts = sqliteTable(
 
 export type UserRow = typeof users.$inferSelect;
 export type SessionRow = typeof sessions.$inferSelect;
+export type PayeeRow = typeof payees.$inferSelect;
+export type ChequeRow = typeof cheques.$inferSelect;
+export type BillRow = typeof bills.$inferSelect;
+export type LogRow = typeof logs.$inferSelect;

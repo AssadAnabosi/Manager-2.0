@@ -43,6 +43,18 @@ Numbers in major units (`120.5`) for `amount`, `value` and `payment`; numeric st
 
 `GET /bills` returns `totals.range` (same filters as the list) and `totals.allTime` (no filters), each with `spent`, `received` and `net` (`net = spent - received`).
 
+### Logs
+
+Responses use `OTV` (overtime hours) as the field name. A log is either an absence (`isAbsent: true`; any times sent are ignored and stored as `00:00`) or a worked day (`isAbsent: false` with both `startingTime` and `finishingTime`, `HH:MM`). Overtime is the worked time minus 8 hours and may be negative. `date` and `worker` can't be changed after creation. A user with the `User` role only sees their own logs.
+
+### Cheques
+
+`serial` is a comma-separated list; when given, only those serials are returned and the date range and `filter` are ignored. `total` excludes cancelled cheques. A cheque whose payee was deleted shows `payee: { id: null, name: "Deleted Payee" }`.
+
+### Guards and ID parameters
+
+Role guards run before an `:xxxID` parameter is validated, so a caller without the required role gets 403 whether or not the ID exists. After that, a malformed ID returns 400 and an unknown ID returns 404.
+
 ### Other endpoints
 
 `GET /` returns the version and environment; `GET /health` returns 200.

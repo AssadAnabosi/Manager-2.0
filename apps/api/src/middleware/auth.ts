@@ -1,4 +1,4 @@
-import type { MiddlewareHandler } from "hono";
+import type { Context, MiddlewareHandler } from "hono";
 import { eq } from "drizzle-orm";
 import type { Role } from "@workbench/shared";
 import { getDb } from "../db";
@@ -52,34 +52,38 @@ export const isAuth: MiddlewareHandler<AppEnv> = async (c, next) => {
 const roleList = (roles: Role | readonly Role[]): readonly Role[] =>
   typeof roles === "string" ? [roles] : roles;
 
+// A route can sit behind a mount-level guard and a role guard; authenticate only once.
+const ensureAuth = async (c: Context<AppEnv>) => {
+  if (!c.get("user")) await isAuth(c, async () => undefined);
+};
+
+const forbidden = () =>
+  new ResponseError("Not Authorized To Access This Route", NOT_AUTHORIZED);
+
 /** Authenticated, and (when `roles` is given) the role is one of `roles`. */
-export const authorize = (roles: Role | readonly Role[] = []): MiddlewareHandler<AppEnv> => {
+export const authorize = (
+  roles: Role | readonly Role[] = []
+): MiddlewareHandler<AppEnv> => {
   const allowed = roleList(roles);
   return async (c, next) => {
-    await isAuth(c, async () => {
-      if (allowed.length && !allowed.includes(c.get("user").role)) {
-        throw new ResponseError(
-          "Not Authorized To Access This Route",
-          NOT_AUTHORIZED
-        );
-      }
-    });
+    await ensureAuth(c);
+    if (allowed.length && !allowed.includes(c.get("user").role)) {
+      throw forbidden();
+    }
     await next();
   };
 };
 
 /** Authenticated, and the role is NOT one of `roles`. */
-export const notAuthorized = (roles: Role | readonly Role[] = []): MiddlewareHandler<AppEnv> => {
+export const notAuthorized = (
+  roles: Role | readonly Role[] = []
+): MiddlewareHandler<AppEnv> => {
   const denied = roleList(roles);
   return async (c, next) => {
-    await isAuth(c, async () => {
-      if (denied.length && denied.includes(c.get("user").role)) {
-        throw new ResponseError(
-          "Not Authorized To Access This Route",
-          NOT_AUTHORIZED
-        );
-      }
-    });
+    await ensureAuth(c);
+    if (denied.length && denied.includes(c.get("user").role)) {
+      throw forbidden();
+    }
     await next();
   };
 };

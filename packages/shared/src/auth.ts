@@ -39,13 +39,3 @@ export const meSuccessSchema = z.object({
   success: z.literal(true),
   data: z.object({ user: userSchema }),
 });
-
-export const messageSuccessSchema = z.object({
-  success: z.literal(true),
-  message: z.string().optional(),
-});
-
-export const errorSchema = z.object({
-  success: z.literal(false),
-  message: z.union([z.string(), z.array(z.string())]),
-});
