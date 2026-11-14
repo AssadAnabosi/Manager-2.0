@@ -20,7 +20,7 @@ Set them in your shell or in `apps/api/.dev.vars` for manual deploys, and as rep
 2. **D1**: `wrangler d1 create workbench-db`, then keep the printed `database_id` as `D1_DATABASE_ID` (it is not committed).
 3. **Secrets**: `wrangler secret put` for `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, `PASSWORD_PEPPER`, `PASSWORD_PEPPER_VERSION`.
 4. **First deploy**: `bun run deploy` from the repo root (renders the config, applies remote migrations, deploys). The rendered `routes` entry attaches your Custom Domain (`workers.dev` and preview URLs are disabled).
-5. **Seed the admin**: `bun apps/api/scripts/seed.ts --remote` with the admin variables set.
+5. **Seed the admin**: `bun run db:seed:remote` with the admin variables, the pepper variables and `PBKDF2_ITERATIONS` set (and the same pepper values as the Worker secrets).
 6. **WAF rate limiting rule** (free plan allows one): path equals `/auth`, method POST, counted per IP, more than 10 requests in 10 seconds, block for 10 seconds.
 7. **Password iterations**: deploy once with `BENCH=true`, call `/__bench/pbkdf2?n=` for several values and read CPU time in Workers Logs, then set `PBKDF2_ITERATIONS` to the highest value that keeps a full `POST /auth` at roughly 8 ms or less and redeploy without `BENCH`.
 8. **GitHub settings** for CI deploys: secrets `CLOUDFLARE_API_TOKEN` (Workers + D1 edit) and `CLOUDFLARE_ACCOUNT_ID`; variables `API_DOMAIN`, `WEB_ORIGIN` and `D1_DATABASE_ID`.

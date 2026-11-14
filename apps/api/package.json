@@ -12,6 +12,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate:local": "wrangler d1 migrations apply workbench-db --local",
     "db:seed:local": "bun scripts/seed.ts --local",
+    "db:seed:remote": "bun scripts/render-wrangler.ts && bun scripts/seed.ts --remote",
     "db:reset:local": "bun scripts/reset-local.ts && bun run db:migrate:local && bun run db:seed:local",
     "deploy": "bun scripts/render-wrangler.ts && wrangler d1 migrations apply workbench-db --remote --config wrangler.deploy.jsonc && wrangler deploy --config wrangler.deploy.jsonc"
   },

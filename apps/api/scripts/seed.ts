@@ -46,8 +46,16 @@ if (!target) {
 const q = (s: string | undefined) =>
   s ? `'${s.replace(/'/g, "''")}'` : "NULL";
 
+// --remote must use the rendered config (real database ID), see render-wrangler.ts
+const configArgs =
+  target === "--remote" ? ["--config", "wrangler.deploy.jsonc"] : [];
+if (target === "--remote" && !existsSync(join(apiDir, "wrangler.deploy.jsonc"))) {
+  console.error("Run `bun scripts/render-wrangler.ts` first (or use `bun run db:seed:remote`)");
+  process.exit(1);
+}
+
 const wrangler = (args: string[]) =>
-  spawnSync("bunx", ["wrangler", "d1", "execute", "workbench-db", ...args, target], {
+  spawnSync("bunx", ["wrangler", "d1", "execute", "workbench-db", ...configArgs, ...args, target], {
     cwd: apiDir,
     encoding: "utf8",
     shell: process.platform === "win32",
