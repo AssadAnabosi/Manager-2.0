@@ -30,6 +30,14 @@ jobs:
       #   API_DOMAIN       the API's domain, e.g. api.mycompany.com
       #   WEB_ORIGIN       the web app's origin, e.g. https://dash.mycompany.com
       #   VITE_APP_TITLE   optional app name (defaults to Workbench)
+      - name: Check variables
+        run: |
+          test -n "$API_DOMAIN" || { echo "Repository variable API_DOMAIN is not set"; exit 1; }
+          test -n "$WEB_ORIGIN" || { echo "Repository variable WEB_ORIGIN is not set"; exit 1; }
+        env:
+          API_DOMAIN: ${{ vars.API_DOMAIN }}
+          WEB_ORIGIN: ${{ vars.WEB_ORIGIN }}
+
       - name: Build
         run: bun run --cwd apps/web build
         env:
