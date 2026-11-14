@@ -8,6 +8,7 @@ import { useGetPayeesQuery, useDeletePayeeMutation } from "@/api/payees";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { PageHeader } from "@/components/component/page-header";
 import {
   Table,
   TableBody,
@@ -48,19 +49,15 @@ const Payees = () => {
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       {/* HEADER */}
-      <div className="flex flex-col justify-between gap-5 space-y-2 md:flex-row">
-        <h2 className="text-3xl font-bold tracking-tight">{t("Payees")}</h2>
-        <div className="flex flex-col items-center gap-2 md:flex-row">
-          {canWrite && (
-            <PayeeFormDialog>
-              <Button className="w-full">
-                <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" />{" "}
-                {t("Add New")}
-              </Button>
-            </PayeeFormDialog>
-          )}
-        </div>
-      </div>
+      <PageHeader title={t("Payees")}>
+        {canWrite && (
+          <PayeeFormDialog>
+            <Button className="w-full">
+              <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" /> {t("Add New")}
+            </Button>
+          </PayeeFormDialog>
+        )}
+      </PageHeader>
       <Separator />
       {/* FILTER */}
       <div className="flex flex-wrap justify-end">

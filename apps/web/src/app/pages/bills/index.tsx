@@ -11,6 +11,8 @@ import { DATE_FORMAT } from "@/lib/constants";
 import { useGetBillsQuery, useDeleteBillMutation } from "@/api/bills";
 
 import { Separator } from "@/components/ui/separator";
+import { PageHeader } from "@/components/component/page-header";
+import { PrintButton } from "@/components/component/print-button";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -35,7 +37,7 @@ import {
 } from "@/components/component/table-skeleton";
 import BillFormDialog from "./bill-form-dialog";
 
-import { Printer, FilePlus } from "lucide-react";
+import { FilePlus } from "lucide-react";
 
 import { stringToDate } from "@/lib/utils";
 
@@ -62,27 +64,17 @@ const Bills = () => {
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       {/* HEADER */}
-      <div className="flex flex-col justify-between gap-5 space-y-2 md:flex-row">
-        <h2 className="text-3xl font-bold tracking-tight">{t("Bills")}</h2>
-        <div className="flex flex-col items-center gap-2 md:flex-row">
-          <DateRangePicker date={date} setDate={setDate} />
-          {canWrite && (
-            <BillFormDialog>
-              <Button className="w-full print:hidden">
-                <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" />{" "}
-                {t("Add New")}
-              </Button>
-            </BillFormDialog>
-          )}
-          <Button
-            disabled={isLoading}
-            className="w-full print:hidden"
-            onClick={() => window.print()}
-          >
-            <Printer className="h-6 w-6 ltr:mr-2 rtl:ml-2" /> {t("Print")}
-          </Button>
-        </div>
-      </div>
+      <PageHeader title={t("Bills")}>
+        <DateRangePicker date={date} setDate={setDate} />
+        {canWrite && (
+          <BillFormDialog>
+            <Button className="w-full print:hidden">
+              <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" /> {t("Add New")}
+            </Button>
+          </BillFormDialog>
+        )}
+        <PrintButton disabled={isLoading} />
+      </PageHeader>
       <Separator />
       {/* CARDS */}
       <Cards billsData={billsData} isLoading={isLoading} />

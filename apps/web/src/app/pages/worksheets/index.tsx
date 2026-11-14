@@ -13,6 +13,8 @@ import { useGetUsersQuery } from "@/api/users";
 import { useGetLogsQuery, useDeleteLogMutation } from "@/api/logs";
 
 import { Separator } from "@/components/ui/separator";
+import { PageHeader } from "@/components/component/page-header";
+import { PrintButton } from "@/components/component/print-button";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -35,7 +37,7 @@ import {
 import LogRow from "./log-row";
 import LogFormDialog from "./log-form-dialog";
 
-import { Printer, FilePlus } from "lucide-react";
+import { FilePlus } from "lucide-react";
 import { toList, stringToDate } from "@/lib/utils";
 
 const WORKSHEETS_SKELETON: SkeletonColumn[] = [
@@ -66,29 +68,17 @@ const Logs = () => {
   return (
     <div className="flex-1 space-y-4 p-8 pt-6 print:px-4">
       {/* HEADER */}
-      <div className="flex flex-col justify-between gap-5 space-y-2 md:flex-row">
-        <h2 className="text-3xl font-bold tracking-tight">
-          {t("Work Timesheets")}
-        </h2>
-        <div className="flex flex-col items-center gap-2 md:flex-row">
-          <DateRangePicker date={date} setDate={setDate} />
-          {canWrite && (
-            <LogFormDialog>
-              <Button className="w-full print:hidden">
-                <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" />{" "}
-                {t("Add New")}
-              </Button>
-            </LogFormDialog>
-          )}
-          <Button
-            disabled={isLoading}
-            className="w-full print:hidden"
-            onClick={() => window.print()}
-          >
-            <Printer className="h-6 w-6 ltr:mr-2 rtl:ml-2" /> {t("Print")}
-          </Button>
-        </div>
-      </div>
+      <PageHeader title={t("Work Timesheets")}>
+        <DateRangePicker date={date} setDate={setDate} />
+        {canWrite && (
+          <LogFormDialog>
+            <Button className="w-full print:hidden">
+              <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" /> {t("Add New")}
+            </Button>
+          </LogFormDialog>
+        )}
+        <PrintButton disabled={isLoading} />
+      </PageHeader>
       <Separator />
       {/* CARDS */}
       <Cards isLoading={isLoading} logsData={logsData} />
