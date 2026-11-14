@@ -114,7 +114,7 @@ export default function Login() {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-8"
               >
-                <div>
+                <div className="space-y-4">
                   <FormField
                     control={form.control}
                     name="username"

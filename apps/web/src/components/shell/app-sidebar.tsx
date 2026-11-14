@@ -22,7 +22,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar
       side={i18n.dir() === "rtl" ? "right" : "left"}
-      collapsible="icon"
+      collapsible="offcanvas"
       className="print:hidden"
       {...props}
     >

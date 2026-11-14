@@ -34,7 +34,7 @@ const AppShellSkeleton = () => {
         <Sidebar
           variant="inset"
           side={document.documentElement.dir === "rtl" ? "right" : "left"}
-          collapsible="icon"
+          collapsible="offcanvas"
           className="print:hidden"
         >
           <SidebarHeader>
