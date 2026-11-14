@@ -259,7 +259,10 @@ export default function AttendanceCalendar({
               <dl className="grid grid-cols-[auto_1fr] items-center gap-x-5 gap-y-2 text-start">
                 <dt className="text-muted-foreground">{t("Status")}</dt>
                 <dd>
-                  <StatusBadge status={!selectedLog.isAbsent} />
+                  <StatusBadge
+                    status={!selectedLog.isAbsent}
+                    labels={[t("Attended"), t("Absent")]}
+                  />
                 </dd>
                 {!selectedLog.isAbsent && (
                   <>

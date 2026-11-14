@@ -56,7 +56,10 @@ export default function LogDetails({
           <dl className="grid grid-cols-[auto_1fr] items-center gap-x-5 gap-y-2 text-start">
             <dt className="text-muted-foreground">{t("Status")}</dt>
             <dd>
-              <StatusBadge status={!log.isAbsent} />
+              <StatusBadge
+                status={!log.isAbsent}
+                labels={[t("Attended"), t("Absent")]}
+              />
             </dd>
             <dt className="text-muted-foreground">{t("Work Hours")}</dt>
             <dd>

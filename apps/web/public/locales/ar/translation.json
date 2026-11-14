@@ -321,5 +321,8 @@
   "Reset password?": "إعادة تعيين كلمة المرور؟",
   "{{name}} will be logged out from all devices where they are signed in.": "سيتم تسجيل خروج {{name}} من جميع الأجهزة المسجّل الدخول عليها.",
   "Made with": "صنع بكل",
-  "by": "من قبل"
+  "by": "من قبل",
+  "Valid": "ساري",
+  "Active": "نشط",
+  "Inactive": "غير نشط"
 }
