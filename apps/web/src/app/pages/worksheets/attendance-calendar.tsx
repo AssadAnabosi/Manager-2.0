@@ -30,9 +30,9 @@ const dayKey = (d: Date) => format(d, "yyyy-MM-dd");
 
 const STATUS_STYLE: Record<DayStatus, string> = {
   worked:
-    "bg-green-500 text-white hover:bg-green-500/85 dark:bg-green-600 dark:hover:bg-green-600/85 print:text-black",
+    "bg-success text-success-foreground hover:bg-success/85 print:text-black",
   absent:
-    "bg-red-500 text-white hover:bg-red-500/85 dark:bg-red-600 dark:hover:bg-red-600/85 print:text-black",
+    "bg-destructive text-destructive-foreground hover:bg-destructive/85 print:text-black",
   none: "bg-muted text-muted-foreground hover:bg-muted/70",
 };
 
