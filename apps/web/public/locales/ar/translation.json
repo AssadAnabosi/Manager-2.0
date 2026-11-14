@@ -316,5 +316,9 @@
   "Calendar": "التقويم",
   "Select a worker to see their attendance": "اختر عاملا لعرض حضوره",
   "Days absent": "ايام الغياب",
-  "Hours balance": "رصيد الساعات"
+  "Hours balance": "رصيد الساعات",
+  "Change your password?": "تغيير كلمة المرور؟",
+  "You will be logged out from all your devices, including this one, and will need to log in again with your new password.": "سيتم تسجيل خروجك من جميع أجهزتك، بما في ذلك هذا الجهاز، وستحتاج إلى تسجيل الدخول مرة أخرى بكلمة المرور الجديدة.",
+  "Reset password?": "إعادة تعيين كلمة المرور؟",
+  "{{name}} will be logged out from all devices where they are signed in.": "سيتم تسجيل خروج {{name}} من جميع الأجهزة المسجّل الدخول عليها."
 }

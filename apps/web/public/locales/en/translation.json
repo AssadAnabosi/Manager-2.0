@@ -316,5 +316,9 @@
   "Calendar": "Calendar",
   "Select a worker to see their attendance": "Select a worker to see their attendance",
   "Days absent": "Days absent",
-  "Hours balance": "Hours balance"
+  "Hours balance": "Hours balance",
+  "Change your password?": "Change your password?",
+  "You will be logged out from all your devices, including this one, and will need to log in again with your new password.": "You will be logged out from all your devices, including this one, and will need to log in again with your new password.",
+  "Reset password?": "Reset password?",
+  "{{name}} will be logged out from all devices where they are signed in.": "{{name}} will be logged out from all devices where they are signed in."
 }

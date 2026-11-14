@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiErrorText } from "@/lib/api-error";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -55,7 +55,9 @@ import { ROLES } from "@/lib/constants";
 
 import { Trash2Icon } from "lucide-react";
 import { UserType } from "@/lib/types";
-import { useAuth } from "@/providers/auth-context";
+import { useAuth, useLogout } from "@/providers/auth-context";
+import { useError } from "@/providers/error-provider";
+import ConfirmDialog from "@/components/component/confirm-dialog";
 
 export default function Edit() {
   // const isDesktop = useMediaQuery("(min-width: 1024px)");
@@ -63,6 +65,12 @@ export default function Edit() {
   const [active, setActive] = useState(false);
   const [role, setRole] = useState("user");
   const { t } = useTranslation();
+  const { user: authUser } = useAuth();
+  const logout = useLogout();
+  const navigate = useNavigate();
+  const { setError } = useError();
+  const [pendingPassword, setPendingPassword] =
+    useState<updatePasswordSchemaType | null>(null);
   const [searchParams, setSearchParams] = useSearchParams({
     tab: "password",
   });
@@ -105,6 +113,15 @@ export default function Edit() {
     try {
       await mutateAsync({ data, userId: user?.id });
       passwordForm.reset();
+      if (user?.id === authUser?.id) {
+        // resetting your own password revokes your own sessions too
+        setError({
+          title: "Password changed successfully",
+          description: "Please login again.",
+        });
+        await logout(false);
+        navigate("/", { replace: true });
+      }
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -157,8 +174,6 @@ export default function Edit() {
     }
   };
 
-  const { user: authUser } = useAuth();
-
   return isLoading ? (
     <Loading />
   ) : (
@@ -189,7 +204,9 @@ export default function Edit() {
             <Form {...passwordForm}>
               <form
                 className="flex flex-col gap-6"
-                onSubmit={passwordForm.handleSubmit(updatePassword)}
+                onSubmit={passwordForm.handleSubmit((data) =>
+                  setPendingPassword(data)
+                )}
               >
                 <CardContent className="space-y-2">
                   <FormField
@@ -259,6 +276,25 @@ export default function Edit() {
                 </CardFooter>
               </form>
             </Form>
+            <ConfirmDialog
+              open={pendingPassword !== null}
+              onOpenChange={(open) => !open && setPendingPassword(null)}
+              title={t("Reset password?")}
+              description={
+                user?.id === authUser?.id
+                  ? t(
+                      "You will be logged out from all your devices, including this one, and will need to log in again with your new password."
+                    )
+                  : t(
+                      "{{name}} will be logged out from all devices where they are signed in.",
+                      { name: user?.fullName }
+                    )
+              }
+              confirmLabel={t("Reset Password")}
+              onConfirm={async () => {
+                if (pendingPassword) await updatePassword(pendingPassword);
+              }}
+            />
           </Card>
         </TabsContent>
         <TabsContent value="profile" className="h-[500px]">
