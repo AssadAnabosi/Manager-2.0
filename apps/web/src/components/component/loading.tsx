@@ -11,6 +11,25 @@ const MARK = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15"><path 
  */
 const SHOW_AFTER_MS = 300;
 
+/** The `--primary` token ("H S% L%") as #rrggbb, which is what the canvas wants. */
+function primaryHex(): string {
+  const raw = getComputedStyle(document.documentElement).getPropertyValue(
+    "--primary"
+  );
+  const [h, sat, lum] = raw.match(/-?[\d.]+/g)?.map(Number) ?? [0, 72.2, 50.6];
+  const s = sat / 100;
+  const l = lum / 100;
+  const a = s * Math.min(l, 1 - l);
+  const channel = (n: number) => {
+    const k = (n + h / 30) % 12;
+    const v = l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1));
+    return Math.round(v * 255)
+      .toString(16)
+      .padStart(2, "0");
+  };
+  return `#${channel(0)}${channel(8)}${channel(4)}`;
+}
+
 const Loading = () => {
   // Timed from page start, not from mount: if the static HTML splash is already
   // showing, this one appears immediately instead of blinking out for 300ms.
@@ -28,7 +47,7 @@ const Loading = () => {
         logo={MARK}
         look={dark ? "dark" : "light"}
         background={dark ? "#0a0a0a" : "#ffffff"}
-        logoColor={dark ? "#fafafa" : "#0a0a0a"}
+        logoColor={primaryHex()}
         label="Loading"
         className="h-full w-full cursor-default"
         tuning={{ present: 1.6, glide: 1.6 }}

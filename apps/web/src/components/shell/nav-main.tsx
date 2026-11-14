@@ -24,13 +24,16 @@ export function NavMain() {
     <>
       {groups.map((group) => (
         <SidebarGroup key={group.label}>
-          <SidebarGroupLabel>{t(group.label)}</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-sm md:text-xs">
+            {t(group.label)}
+          </SidebarGroupLabel>
           <SidebarGroupContent className="flex flex-col gap-2">
-            <SidebarMenu>
+            <SidebarMenu className="gap-1.5 md:gap-1">
               {group.items.map((item) => (
                 <SidebarMenuItem key={item.path}>
                   <SidebarMenuButton
                     asChild
+                    className="h-12 text-base md:h-8 md:text-sm [&>svg]:size-5 md:[&>svg]:size-4"
                     isActive={current?.path === item.path}
                     tooltip={t(item.title)}
                   >

@@ -28,11 +28,12 @@ export function NavSecondary({
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
-        <SidebarMenu>
+        <SidebarMenu className="gap-1.5 md:gap-1">
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
                 asChild
+                className="h-12 text-base md:h-8 md:text-sm [&>svg]:size-5 md:[&>svg]:size-4"
                 isActive={pathname === item.url}
                 tooltip={t(item.title)}
               >
