@@ -54,7 +54,7 @@ import { ROLES } from "@/lib/constants";
 
 import { Trash2Icon } from "lucide-react";
 import { UserType } from "@/lib/types";
-import { useAuth } from "@/providers/auth-provider";
+import { useAuth } from "@/providers/auth-context";
 
 export default function Edit() {
   // const isDesktop = useMediaQuery("(min-width: 1024px)");

@@ -2,7 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { PayeeType } from "@/lib/types";
 
-import { useAuth } from "@/providers/auth-provider";
+import { useAuth } from "@/providers/auth-context";
 
 import { useGetPayeesQuery, useDeletePayeeMutation } from "@/api/payees";
 

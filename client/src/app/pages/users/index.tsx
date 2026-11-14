@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { useAuth } from "@/providers/auth-provider";
+import { useAuth } from "@/providers/auth-context";
 
 import { UserType } from "@/lib/types";
 import { useGetUsersQuery } from "@/api/users";

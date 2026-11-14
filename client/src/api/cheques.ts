@@ -64,9 +64,7 @@ export const useDeleteChequeMutation = () => {
   });
 };
 export const chequeFormSchema = z.object({
-  dueDate: z.any({
-    required_error: "Due Date is required",
-  }),
+  dueDate: z.any(),
   payee: z.string().optional(),
   serial: z.string().refine(
     (value) => {

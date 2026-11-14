@@ -54,13 +54,25 @@ export const refresh = async (req, res, next) => {
   try {
     const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
 
-    const user = await User.findById(decoded.id).select("-active");
+    const user = await User.findById(decoded.id);
     if (!user) {
       res.clearCookie("refreshToken");
       return next(
         new ResponseError("User account deleted", statusCode.NOT_FOUND)
       );
     }
+
+    // Same check as the `authorize` middleware, so a refresh can't revive a deactivated account
+    if (!user.active) {
+      res.clearCookie("refreshToken");
+      return next(
+        new ResponseError(
+          "Your account has been deactivated",
+          statusCode.NOT_AUTHORIZED
+        )
+      );
+    }
+    user.active = undefined;
 
     const session = await Session.findOne({ refreshToken });
     if (!session) {
@@ -73,7 +85,9 @@ export const refresh = async (req, res, next) => {
     return res.status(statusCode.OK).json({
       success: true,
       message: "Refreshed Access Token Successfully",
+      // The user is included so clients can restore a session in one round trip
       data: {
+        user,
         accessToken: user.getAccessToken(session._id),
       },
     });

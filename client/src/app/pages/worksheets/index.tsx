@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { enGB, ar } from "date-fns/locale";
 import { DateRange } from "react-day-picker";
 
-import { useAuth } from "@/providers/auth-provider";
+import { useAuth } from "@/providers/auth-context";
 
 import { LogType } from "@/lib/types";
 import { DATE_FORMAT, SPECTATOR, USER } from "@/lib/constants";

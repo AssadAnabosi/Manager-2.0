@@ -63,9 +63,7 @@ export const useDeleteBillMutation = () => {
 };
 
 export const billFormSchema = z.object({
-  date: z.any({
-    required_error: "Date is required",
-  }),
+  date: z.any(),
   value: z.string().refine(
     (value) => {
       const number = Number(value);

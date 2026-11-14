@@ -22,7 +22,7 @@ import { AlertCircle } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { PasswordInput } from "@/components/component/password-input";
 import Layout from "./layout";
-import { useAuth } from "@/providers/auth-provider";
+import { useAuth } from "@/providers/auth-context";
 import { useError } from "@/providers/error-provider";
 import Spinner from "@/components/component/spinner";
 

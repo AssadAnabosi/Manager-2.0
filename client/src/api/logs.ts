@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { AxiosResponse } from "axios";
 import { useSearchParams } from "react-router-dom";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -63,18 +64,10 @@ export const useDeleteLogMutation = () => {
 };
 export const logFormSchema = z
   .object({
-    date: z.any({
-      required_error: "Date is required",
-    }),
-    worker: z.string({
-      required_error: "Please select a worker.",
-    }),
-    startingTime: z.string({
-      required_error: "Start time is required.",
-    }),
-    finishingTime: z.string({
-      required_error: "End time is required.",
-    }),
+    date: z.any(),
+    worker: z.string({ error: "Please select a worker." }),
+    startingTime: z.string({ error: "Start time is required." }),
+    finishingTime: z.string({ error: "End time is required." }),
     isAbsent: z.boolean(),
     payment: z.string().refine(
       (payment) => {
@@ -118,7 +111,7 @@ export const useLogFormMutation = () => {
     }: {
       data: logFormSchemaType;
       logId?: string;
-    }) => {
+    }): Promise<AxiosResponse> => {
       if (!logId) {
         return axios.post(`${BASE_URL}`, {
           ...data,
