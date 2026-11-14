@@ -21,11 +21,11 @@ const Searchbox = ({
 
   return (
     <div className="relative w-full justify-between print:hidden">
-      <MagnifyingGlassIcon className="absolute bottom-0 top-0 my-auto h-6 w-6 text-muted-foreground ltr:left-3 rtl:right-3" />
+      <MagnifyingGlassIcon className="text-muted-foreground absolute start-3 top-0 bottom-0 my-auto h-6 w-6" />
       <Input
         type="text"
         placeholder={t(placeholder)}
-        className="ltr:pl-12 ltr:pr-4 rtl:pl-4 rtl:pr-12"
+        className="ps-12 pe-4"
         value={value}
         onChange={onChange}
       />

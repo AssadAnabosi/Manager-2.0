@@ -21,7 +21,11 @@ export type RawListQuery = {
 const parseDay = (value: string, name: string): Date => {
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) {
-    throw new ResponseError(`Please provide a valid ${name} date`, BAD_REQUEST);
+    throw new ResponseError(
+      "INVALID_DATE",
+      BAD_REQUEST,
+      `Please provide a valid ${name} date`
+    );
   }
   return d;
 };
@@ -31,7 +35,7 @@ export const parseListQuery = (query: RawListQuery, now = new Date()) => {
   const search = (query.search ?? "").trim();
   const filter = query.filter ? query.filter.split(",") : undefined;
   if (filter && !filter.every(isUuid)) {
-    throw new ResponseError("Please provide a valid filter", BAD_REQUEST);
+    throw new ResponseError("INVALID_FILTER", BAD_REQUEST);
   }
 
   let startDate: Date | null = null;

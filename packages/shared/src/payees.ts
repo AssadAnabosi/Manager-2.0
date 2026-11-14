@@ -36,3 +36,6 @@ export const payeeGetSchema = z.object({
   success: z.literal(true),
   data: z.object({ payee: payeeSchema }),
 });
+
+/** The `data` of a list response. */
+export type PayeesList = z.infer<typeof payeesListSchema>["data"];

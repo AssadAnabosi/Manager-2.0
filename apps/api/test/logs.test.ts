@@ -92,7 +92,9 @@ describe.each(["", "/api"])("logs with prefix %j", (prefix) => {
       const { create } = await setup();
       const missing = await create({ worker: "11111111-1111-4111-8111-111111111111" });
       expect(missing.status).toBe(404);
-      expect((await body(missing)).message).toBe("Worker not found");
+      const missingBody = await body(missing);
+      expect(missingBody.message).toBe("Worker not found");
+      expect(missingBody.code).toBe("WORKER_NOT_FOUND");
       expect((await create({ worker: "nope" })).status).toBe(404);
     });
 
@@ -101,7 +103,9 @@ describe.each(["", "/api"])("logs with prefix %j", (prefix) => {
       await create();
       const res = await create();
       expect(res.status).toBe(409);
-      expect((await body(res)).message).toBe("There is a record of this log already");
+      const resBody = await body(res);
+      expect(resBody.message).toBe("There is a record of this log already");
+      expect(resBody.code).toBe("LOG_EXISTS");
     });
   });
 

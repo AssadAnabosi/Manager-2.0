@@ -1,7 +1,7 @@
 import * as React from "react";
+import { useLocale } from "@/hooks/use-locale";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker } from "react-day-picker";
-import { ar, enGB } from "date-fns/locale";
 import { format } from "date-fns";
 
 import { cn } from "@/lib/utils";
@@ -20,8 +20,14 @@ function Calendar({
   className,
   classNames,
   showOutsideDays = false,
+  fluid = false,
   ...props
-}: CalendarProps & { onChange?: React.ChangeEventHandler<HTMLSelectElement> }) {
+}: CalendarProps & {
+  onChange?: React.ChangeEventHandler<HTMLSelectElement>;
+  /** Days and weekday labels stretch to fill the width below the sm breakpoint. */
+  fluid?: boolean;
+}) {
+  const { dateLocale } = useLocale();
   const handleCalendarChange = (
     _value: string | number,
     _e: React.ChangeEventHandler<HTMLSelectElement>
@@ -36,7 +42,7 @@ function Calendar({
 
   return (
     <DayPicker
-      locale={document.documentElement.lang === "ar" ? ar : enGB}
+      locale={dateLocale}
       formatters={{
         formatCaption: (month, options) =>
           format(month, "LL y", { locale: options?.locale }),
@@ -47,18 +53,18 @@ function Calendar({
       className={cn("p-3", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-        month: "space-y-4",
+        month: cn("space-y-4", fluid && "w-full sm:w-auto"),
         caption_start: "is-start",
         caption_between: "is-between",
         caption_end: "is-end",
         caption: "flex justify-center pt-1 relative items-center gap-1",
         caption_label:
-          "flex h-7 text-sm font-medium justify-center items-center grow [.is-multiple_&]:flex",
+          "flex h-7 text-sm font-medium justify-center items-center grow in-[.is-multiple]:flex",
         caption_dropdowns: "flex justify-center gap-3 grow dropdowns pl-8 pr-9",
         multiple_months: "is-multiple",
         vhidden:
-          "hidden [.is-between_&]:flex [.is-end_&]:flex [.is-start.is-end_&]:hidden",
-        nav: "flex items-center [&:has([name='previous-month'])]:order-first [&:has([name='next-month'])]:order-last gap-1",
+          "hidden in-[.is-between]:flex in-[.is-end]:flex [.is-start.is-end_&]:hidden",
+        nav: "flex items-center has-[[name='previous-month']]:order-first has-[[name='next-month']]:order-last gap-1",
         nav_button: cn(
           buttonVariants({ variant: "outline" }),
           "h-7 w-7 bg-transparent p-0 text-muted-foreground"
@@ -67,18 +73,22 @@ function Calendar({
         nav_button_next: "absolute ltr:right-1 rtl:left-1",
         table: "w-full border-collapse space-y-1",
         head_row: "flex",
-        head_cell:
-          "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
+        head_cell: cn(
+          "text-muted-foreground rounded-md font-normal text-[0.8rem]",
+          fluid ? "flex-1 sm:w-9 sm:flex-none" : "w-9"
+        ),
         row: "flex w-full mt-2",
         cell: cn(
-          "h-9 w-9 relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent",
+          fluid ? "h-10 flex-1 sm:h-9 sm:w-9 sm:flex-none" : "h-9 w-9",
+          "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 has-aria-[selected]:bg-accent",
           props.mode === "range"
-            ? "ltr:[&:has(>.day-range-end)]:rounded-r-md rtl:[&:has(>.day-range-end)]:rounded-l-md ltr:[&:has(>.day-range-start)]:rounded-l-md rtl:[&:has(>.day-range-start)]:rounded-r-md ltr:first:[&:has([aria-selected])]:rounded-l-md rtl:first:[&:has([aria-selected])]:rounded-r-md ltr:last:[&:has([aria-selected])]:rounded-r-md rtl:last:[&:has([aria-selected])]:rounded-l-md"
-            : "[&:has([aria-selected])]:rounded-md"
+            ? "[&:has(>.day-range-end)]:ltr:rounded-r-md [&:has(>.day-range-end)]:rtl:rounded-l-md [&:has(>.day-range-start)]:ltr:rounded-l-md [&:has(>.day-range-start)]:rtl:rounded-r-md has-aria-[selected]:first:ltr:rounded-l-md has-aria-[selected]:first:rtl:rounded-r-md has-aria-[selected]:last:ltr:rounded-r-md has-aria-[selected]:last:rtl:rounded-l-md"
+            : "has-aria-[selected]:rounded-md"
         ),
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-9 w-9 p-0 font-normal aria-selected:opacity-100"
+          fluid ? "h-10 w-full sm:h-9 sm:w-9" : "h-9 w-9",
+          "p-0 font-normal aria-selected:opacity-100"
         ),
         day_range_start: "day-range-start",
         day_range_end: "day-range-end",
@@ -109,7 +119,7 @@ function Calendar({
             <SelectTrigger
               className={cn(
                 buttonVariants({ variant: "ghost" }),
-                "pl-2 pr-1 py-2 h-7 border-none w-fit font-medium [.is-between_&]:hidden [.is-end_&]:hidden [.is-start.is-end_&]:flex"
+                "h-7 w-fit border-none py-2 pr-1 pl-2 font-medium in-[.is-between]:hidden in-[.is-end]:hidden [.is-start.is-end_&]:flex"
               )}
             >
               <SelectValue placeholder={props?.caption}>
@@ -121,7 +131,7 @@ function Calendar({
                 React.Children.map(props.children, (child) => (
                   <SelectItem
                     value={(child as React.ReactElement<any>)?.props?.value}
-                    className="min-w-[var(--radix-popper-anchor-width)]"
+                    className="min-w-(--radix-popper-anchor-width)"
                   >
                     {(child as React.ReactElement<any>)?.props?.children}
                   </SelectItem>

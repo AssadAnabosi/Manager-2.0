@@ -1,8 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { currencyFormatter } from "@/lib/utils";
+import { useFormatters } from "@/hooks/use-locale";
 import { Coins, Tally5 } from "lucide-react";
+import { StatCard, StatCardGrid } from "@/components/component/stat-card";
 
 const Cards = ({
   chequesData,
@@ -12,62 +11,26 @@ const Cards = ({
   isLoading: boolean;
 }) => {
   const { t } = useTranslation();
+  const fmt = useFormatters();
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {isLoading ? (
-        <>
-          <Skeleton className="h-[146px]" />
-          <Skeleton className="h-[146px]" />
-        </>
-      ) : (
-        <>
-          <Card>
-            <CardHeader className="flex h-[72px] flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {t("Total Sum")}
-              </CardTitle>
-              <Coins />
-            </CardHeader>
-            <CardContent>
-              <div
-                style={{ direction: "ltr" }}
-                className="text-2xl font-bold rtl:text-right"
-              >
-                {typeof chequesData?.total !== "undefined"
-                  ? currencyFormatter(chequesData?.total)
-                  : "---"}
-              </div>
-
-              <p className="text-xs text-muted-foreground">
-                {t("Sum of all cheques in the selected range.")}
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex h-[72px] flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {t("Number of Cheques")}
-              </CardTitle>
-              <Tally5 />
-            </CardHeader>
-            <CardContent>
-              <div
-                style={{ direction: "ltr" }}
-                className="text-2xl font-bold rtl:text-right"
-              >
-                {typeof chequesData?.number !== "undefined"
-                  ? chequesData?.number
-                  : "---"}
-              </div>
-
-              <p className="text-xs text-muted-foreground">
-                {t("Number of cheques in the selected range.")}
-              </p>
-            </CardContent>
-          </Card>
-        </>
-      )}
-    </div>
+    <StatCardGrid count={2} loading={isLoading}>
+      <StatCard
+        title={t("Total Sum")}
+        value={
+          typeof chequesData?.total !== "undefined"
+            ? fmt.currency(chequesData.total)
+            : undefined
+        }
+        hint={t("Sum of all cheques in the selected range.")}
+        icon={Coins}
+      />
+      <StatCard
+        title={t("Number of Cheques")}
+        value={chequesData?.number}
+        hint={t("Number of cheques in the selected range.")}
+        icon={Tally5}
+      />
+    </StatCardGrid>
   );
 };
 

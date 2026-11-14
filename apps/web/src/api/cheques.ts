@@ -1,3 +1,5 @@
+import type { ChequesList } from "@workbench/shared";
+import { apiErrorText } from "@/lib/api-error";
 import { z } from "zod";
 import { useSearchParams } from "react-router-dom";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
@@ -21,7 +23,7 @@ export const useGetChequesQuery = () => {
 
   return useQuery({
     queryKey: ["cheques", { filter, from, to, serial }],
-    queryFn: async () => {
+    queryFn: async (): Promise<ChequesList> => {
       const { data: response } = await axios.get(`${BASE_URL}`, {
         params: {
           filter,
@@ -56,9 +58,7 @@ export const useDeleteChequeMutation = () => {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
       });
     },
   });
@@ -132,9 +132,7 @@ export const useChequeFormMutation = () => {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
       });
     },
   });

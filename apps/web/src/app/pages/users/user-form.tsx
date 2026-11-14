@@ -1,0 +1,329 @@
+import { useTranslation } from "react-i18next";
+import { apiValidationIssues } from "@/lib/api-error";
+import { apiErrorText } from "@/lib/api-error";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { PASSWORD_MIN_LENGTH } from "@workbench/shared";
+import { UserType } from "@/lib/types";
+
+import useAxios from "@/hooks/use-axios";
+import { useUserFormMutation } from "@/api/users";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+import { CardContent, CardFooter } from "@/components/ui/card";
+import { ResponsiveDialogFooter } from "@/components/ui/responsive-dialog";
+
+import Spinner from "@/components/component/spinner";
+import { useToast } from "@/components/ui/use-toast";
+import { PasswordInput } from "@/components/component/password-input";
+
+const BASE_URL = "/users";
+
+const UserForm = ({
+  user,
+  onDone,
+}: {
+  user?: UserType;
+  /** Called after a successful create (the edit page stays put). */
+  onDone?: () => void;
+}) => {
+  const { t } = useTranslation();
+  const { toast } = useToast();
+  const axios = useAxios();
+
+  const userFormSchema = z
+    .object({
+      username: z
+        .string()
+        .min(2, "Username is required.")
+        .regex(
+          /^[a-zA-Z0-9\-_.]+$/,
+          "Username can only contain letters, numbers, hyphens, underscores, and periods."
+        ),
+      firstName: z.string().min(1, "First name is required."),
+      lastName: z.string().min(1, "Last name is required."),
+      email: z.string(),
+      phoneNumber: z.string(),
+      password: z.any(),
+      confirmPassword: z.any(),
+    })
+    .refine(
+      async (data) => {
+        if (user && data.username === user.username) return true;
+        const { data: response } = await axios.post(
+          `${BASE_URL}/check-username`,
+          {
+            username: data.username,
+          }
+        );
+        return response.data.isAvailable;
+      },
+      {
+        message: "Username is already taken.",
+        path: ["username"],
+      }
+    )
+    .refine(
+      (data) => {
+        if (!user && data.password && data.confirmPassword) {
+          return data.password === data.confirmPassword;
+        }
+        return true;
+      },
+      {
+        message: "Passwords do not match.",
+        path: ["confirmPassword"],
+      }
+    )
+    .refine(
+      (data) => {
+        if (!user && data.password) {
+          return data.password.length >= PASSWORD_MIN_LENGTH;
+        }
+        return true;
+      },
+      {
+        message: "Password must be at least 12 characters long",
+        path: ["password"],
+      }
+    );
+
+  type userFormSchemaType = z.infer<typeof userFormSchema>;
+
+  const userForm = useForm<userFormSchemaType>({
+    resolver: zodResolver(userFormSchema),
+    defaultValues: {
+      username: user?.username || "",
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      email: user?.email || "",
+      phoneNumber: user?.phoneNumber || "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+  const isLoading = userForm.formState.isSubmitting;
+
+  const { mutateAsync } = useUserFormMutation();
+
+  const onSubmit = async (data: userFormSchemaType) => {
+    try {
+      if (!user) {
+        await mutateAsync({ data });
+        userForm.reset();
+        onDone?.();
+      } else {
+        await mutateAsync({ data, userId: user.id });
+      }
+    } catch (error: any) {
+      if (apiValidationIssues(error).some((i) => i.code === "email_invalid")) {
+        userForm.setError("email", {
+          type: "manual",
+          message: "validation.email_invalid",
+        });
+        return;
+      }
+      toast({
+        variant: "destructive",
+        title: t("Error"),
+        description:
+          apiErrorText(error, t),
+      });
+    }
+  };
+
+  return (
+    <Form {...userForm}>
+      <form
+        onSubmit={userForm.handleSubmit(onSubmit)}
+        className={user ? "flex flex-col gap-6" : "space-y-4"}
+      >
+        <CardWrapper user={user}>
+          <FormField
+            control={userForm.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>{t("Username")}</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="string"
+                    className="input"
+                    disabled={isLoading}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={userForm.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>{t("First Name")}</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="string"
+                    className="input"
+                    disabled={isLoading}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={userForm.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>{t("Last Name")}</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="string"
+                    className="input"
+                    disabled={isLoading}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={userForm.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>{t("Email")}</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="string"
+                    className="input"
+                    disabled={isLoading}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={userForm.control}
+            name="phoneNumber"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>{t("Phone Number")}</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="string"
+                    className="input"
+                    disabled={isLoading}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {user ? null : (
+            <>
+              <FormField
+                control={userForm.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>{t("Password")}</FormLabel>
+                    <FormControl>
+                      <PasswordInput
+                        {...field}
+                        autoComplete="new-password"
+                        className="input"
+                        disabled={isLoading}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={userForm.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>{t("Confirm Password")}</FormLabel>
+                    <FormControl>
+                      <PasswordInput
+                        {...field}
+                        autoComplete="new-password"
+                        className="input"
+                        disabled={isLoading}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
+        </CardWrapper>
+        <ButtonWrapper user={user}>
+          <Button type="submit" disabled={isLoading} className="w-[50%]">
+            {isLoading ? (
+              <Spinner className="h-4 w-4" />
+            ) : !user ? (
+              t("Create")
+            ) : (
+              t("Update")
+            )}
+          </Button>
+        </ButtonWrapper>
+      </form>
+    </Form>
+  );
+};
+
+const CardWrapper = ({
+  children,
+  user,
+}: {
+  children: React.ReactNode;
+  user?: UserType;
+}) => {
+  return user ? (
+    <CardContent className="space-y-2">{children}</CardContent>
+  ) : (
+    <>{children}</>
+  );
+};
+
+const ButtonWrapper = ({
+  children,
+  user,
+}: {
+  children: React.ReactNode;
+  user?: UserType;
+}) => {
+  return user ? (
+    <CardFooter className="">{children}</CardFooter>
+  ) : (
+    <ResponsiveDialogFooter>{children}</ResponsiveDialogFooter>
+  );
+};
+
+export default UserForm;

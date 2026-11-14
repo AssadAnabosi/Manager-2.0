@@ -1,11 +1,12 @@
 import { useSearchParams } from "react-router-dom";
+import { apiErrorKey, apiErrorText } from "@/lib/api-error";
+import { useLocale } from "@/hooks/use-locale";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { LANGUAGES, THEMES, passwordSchema } from "@workbench/shared";
-import { LanguageType } from "@/lib/types";
 
 import {
   Card,
@@ -88,7 +89,7 @@ export default function Settings() {
     );
   };
 
-  const lang = document.documentElement.lang.substring(0, 2) as LanguageType;
+  const { lang } = useLocale();
   const { setTheme, theme } = useTheme();
 
   const preferencesForm = useForm<UpdatePreferencesSchemaType>({
@@ -106,7 +107,7 @@ export default function Settings() {
     } catch (error: any) {
       toast({
         title: t("Something went wrong"),
-        description: error.response.data.message,
+        description: apiErrorText(error, t),
         variant: "destructive",
       });
     }
@@ -133,14 +134,12 @@ export default function Settings() {
       const { response } = error;
       if (response.status === 400) {
         passwordForm.setError("current", {
-          message: response.data.message,
+          message: apiErrorKey(error),
         });
       }
       toast({
         title: t("Something went wrong"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
         variant: "destructive",
       });
     }
@@ -161,13 +160,16 @@ export default function Settings() {
         <TabsContent value="password">
           <Card>
             <CardHeader>
-              <CardTitle className="rtl:text-right">{t("Password")}</CardTitle>
-              <CardDescription className="rtl:text-right">
+              <CardTitle>{t("Password")}</CardTitle>
+              <CardDescription>
                 {t("Changing your password will log you out from all devices.")}
               </CardDescription>
             </CardHeader>
             <Form {...passwordForm}>
-              <form onSubmit={passwordForm.handleSubmit(updatePassword)}>
+              <form
+                className="flex flex-col gap-6"
+                onSubmit={passwordForm.handleSubmit(updatePassword)}
+              >
                 <CardContent className="space-y-2">
                   <FormField
                     control={passwordForm.control}
@@ -188,7 +190,7 @@ export default function Settings() {
                     control={passwordForm.control}
                     name="current"
                     render={({ field }) => (
-                      <FormItem className="space-y-1 rtl:text-right">
+                      <FormItem className="space-y-1">
                         <FormLabel>{t("Current password")}</FormLabel>
                         <FormControl>
                           <PasswordInput
@@ -205,7 +207,7 @@ export default function Settings() {
                     control={passwordForm.control}
                     name="new"
                     render={({ field }) => (
-                      <FormItem className="space-y-1 rtl:text-right">
+                      <FormItem className="space-y-1">
                         <FormLabel>{t("New password")}</FormLabel>
                         <FormControl>
                           <PasswordInput
@@ -238,21 +240,20 @@ export default function Settings() {
         <TabsContent value="preferences">
           <Card>
             <CardHeader>
-              <CardTitle className="rtl:text-right">
-                {t("Preferences")}
-              </CardTitle>
-              <CardDescription className="rtl:text-right">
-                {t("Change your preferences.")}
-              </CardDescription>
+              <CardTitle>{t("Preferences")}</CardTitle>
+              <CardDescription>{t("Change your preferences.")}</CardDescription>
             </CardHeader>
             <Form {...preferencesForm}>
-              <form onSubmit={preferencesForm.handleSubmit(updatePreferences)}>
+              <form
+                className="flex flex-col gap-6"
+                onSubmit={preferencesForm.handleSubmit(updatePreferences)}
+              >
                 <CardContent className="space-y-2">
                   <FormField
                     control={preferencesForm.control}
                     name="theme"
                     render={({ field }) => (
-                      <FormItem className="space-y-1 rtl:text-right">
+                      <FormItem className="space-y-1">
                         <FormLabel>{t("Theme")}</FormLabel>
                         <Select
                           disabled={preferencesForm.formState.isSubmitting}
@@ -284,7 +285,7 @@ export default function Settings() {
                     control={preferencesForm.control}
                     name="language"
                     render={({ field }) => (
-                      <FormItem className="space-y-1 rtl:text-right">
+                      <FormItem className="space-y-1">
                         <FormLabel>{t("Language")}</FormLabel>
                         <Select
                           disabled={preferencesForm.formState.isSubmitting}

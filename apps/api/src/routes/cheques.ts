@@ -54,7 +54,7 @@ const selectCheques = (db: DB, where?: SQL) =>
 
 const requirePayee = async (db: DB, id: string) => {
   const [payee] = await db.select().from(payees).where(eq(payees.id, id)).limit(1);
-  if (!payee) throw new ResponseError("Payee not found", NOT_FOUND);
+  if (!payee) throw new ResponseError("PAYEE_NOT_FOUND", NOT_FOUND);
   return payee;
 };
 

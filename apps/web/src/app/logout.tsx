@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { useLogout } from "@/providers/auth-context";
 
-import Layout from "./layout";
+import Layout from "@/components/shell/bare-layout";
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -21,11 +21,11 @@ const Logout = () => {
   }, []);
   return (
     <Layout>
-      <div className="flex justify-center items-center my-auto flex-col gap-6">
+      <div className="my-auto flex flex-col items-center justify-center gap-6">
         <LogOut size={256} strokeWidth={10} absoluteStrokeWidth />
         <p
-          style={{ direction: "ltr" }}
-          className="uppercase tracking-[20px] text-red-600 text-3xl"
+          dir="ltr"
+          className="text-3xl tracking-[20px] text-red-600 uppercase"
         >
           Good Bye!
         </p>

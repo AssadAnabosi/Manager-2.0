@@ -294,7 +294,7 @@ export const usersRoutes = (prefix: string) => {
       const me = c.get("user");
       const { ok } = await verifyPassword(current, me.passwordHash, c.env);
       if (!ok) {
-        throw new ResponseError("Invalid current password", BAD_REQUEST);
+        throw new ResponseError("CURRENT_PASSWORD_INVALID", BAD_REQUEST);
       }
       const db = getDb(c.env.DB);
       await db
@@ -360,10 +360,7 @@ export const usersRoutes = (prefix: string) => {
     .openapi(remove, async (c) => {
       const target = c.get("record") as UserRow;
       if (target.id === c.get("user").id) {
-        throw new ResponseError(
-          "You are not authorized to delete your own account",
-          BAD_REQUEST
-        );
+        throw new ResponseError("CANNOT_DELETE_SELF", BAD_REQUEST);
       }
       // logs and sessions are removed by ON DELETE CASCADE
       await getDb(c.env.DB).delete(users).where(eq(users.id, target.id));
@@ -383,10 +380,7 @@ export const usersRoutes = (prefix: string) => {
     .openapi(setRole, async (c) => {
       const target = c.get("record") as UserRow;
       if (target.id === c.get("user").id) {
-        throw new ResponseError(
-          "You are not authorized to change your role",
-          BAD_REQUEST
-        );
+        throw new ResponseError("CANNOT_CHANGE_OWN_ROLE", BAD_REQUEST);
       }
       await getDb(c.env.DB)
         .update(users)
@@ -397,10 +391,7 @@ export const usersRoutes = (prefix: string) => {
     .openapi(setStatus, async (c) => {
       const target = c.get("record") as UserRow;
       if (target.id === c.get("user").id) {
-        throw new ResponseError(
-          "You are not authorized to deactivate your own account",
-          BAD_REQUEST
-        );
+        throw new ResponseError("CANNOT_DEACTIVATE_SELF", BAD_REQUEST);
       }
       await getDb(c.env.DB)
         .update(users)

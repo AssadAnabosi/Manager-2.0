@@ -79,3 +79,6 @@ export const billGetSchema = z.object({
   success: z.literal(true),
   data: z.object({ bill: billSchema }),
 });
+
+/** The `data` of a list response. */
+export type BillsList = z.infer<typeof billsListSchema>["data"];

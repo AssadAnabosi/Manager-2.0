@@ -13,7 +13,7 @@ import Settings from "@/app/pages/settings";
 
 import PersistentLogin from "@/components/routing/persistent-login";
 import RequireAuth from "@/components/routing/require-auth";
-import NavLayout from "@/components/navbar/layout";
+import AppLayout from "@/components/shell/app-layout";
 
 import NotFound from "./not-found";
 import Unauthorized from "./unauthorized";
@@ -51,6 +51,9 @@ function App() {
       instructionsPullToRefresh: `${t("Pull down to refresh")}`,
       instructionsReleaseToRefresh: `${t("Release to refresh")}`,
       instructionsRefreshing: `${t("Refreshing")}...`,
+      // not while a dialog or the sidebar sheet is open
+      shouldPullToRefresh: () =>
+        !window.scrollY && !document.querySelector("[role=dialog]"),
       distIgnore: 110,
       distThreshold: 120,
       distMax: 140,
@@ -73,7 +76,7 @@ function App() {
             <Route path="/logout" element={<Logout />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
           </Route>
-          <Route path="/" element={<NavLayout />}>
+          <Route path="/" element={<AppLayout />}>
             <Route element={<RequireAuth />}>
               <Route path="/worksheets" element={<Logs />} />
               <Route path="/settings" element={<Settings />} />

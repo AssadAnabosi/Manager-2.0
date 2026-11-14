@@ -72,3 +72,6 @@ export const chequeGetSchema = z.object({
   success: z.literal(true),
   data: z.object({ cheque: chequeSchema }),
 });
+
+/** The `data` of a list response. */
+export type ChequesList = z.infer<typeof chequesListSchema>["data"];

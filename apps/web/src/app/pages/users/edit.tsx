@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { apiErrorText } from "@/lib/api-error";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -48,7 +49,7 @@ import {
 } from "@/components/ui/select";
 
 import DeleteDialog from "@/components/component/delete-dialog";
-import UserForm from "./form";
+import UserForm from "./user-form";
 
 import { ROLES } from "@/lib/constants";
 
@@ -108,9 +109,7 @@ export default function Edit() {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
       });
     }
   };
@@ -134,9 +133,7 @@ export default function Edit() {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
       });
     }
   };
@@ -155,9 +152,7 @@ export default function Edit() {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
       });
     }
   };
@@ -184,15 +179,18 @@ export default function Edit() {
         <TabsContent value="password" className="h-[500px]">
           <Card>
             <CardHeader>
-              <CardTitle className="rtl:text-right">{t("Password")}</CardTitle>
-              <CardDescription className="rtl:text-right">
+              <CardTitle>{t("Password")}</CardTitle>
+              <CardDescription>
                 {t(
                   "Resetting user password will log them out from all devices."
                 )}
               </CardDescription>
             </CardHeader>
             <Form {...passwordForm}>
-              <form onSubmit={passwordForm.handleSubmit(updatePassword)}>
+              <form
+                className="flex flex-col gap-6"
+                onSubmit={passwordForm.handleSubmit(updatePassword)}
+              >
                 <CardContent className="space-y-2">
                   <FormField
                     control={passwordForm.control}
@@ -214,7 +212,7 @@ export default function Edit() {
                     control={passwordForm.control}
                     name="password"
                     render={({ field }) => (
-                      <FormItem className="space-y-1 rtl:text-right">
+                      <FormItem className="space-y-1">
                         <FormLabel>{t("New password")}</FormLabel>
                         <FormControl>
                           <Input
@@ -232,7 +230,7 @@ export default function Edit() {
                     control={passwordForm.control}
                     name="confirmPassword"
                     render={({ field }) => (
-                      <FormItem className="space-y-1 rtl:text-right">
+                      <FormItem className="space-y-1">
                         <FormLabel>{t("Confirm password")}</FormLabel>
                         <FormControl>
                           <Input
@@ -266,19 +264,17 @@ export default function Edit() {
         <TabsContent value="profile" className="h-[500px]">
           <Card>
             <CardHeader>
-              <CardTitle className="rtl:text-right">{t("Profile")}</CardTitle>
-              <CardDescription className="rtl:text-right">
-                {t("Update user details.")}
-              </CardDescription>
+              <CardTitle>{t("Profile")}</CardTitle>
+              <CardDescription>{t("Update user details.")}</CardDescription>
             </CardHeader>
-            <UserForm user={user} isDesktop={true} />
+            <UserForm user={user} />
           </Card>
         </TabsContent>
         <TabsContent value="settings" className="h-[500px]">
           <Card>
             <CardHeader>
-              <CardTitle className="rtl:text-right">{t("Settings")}</CardTitle>
-              <CardDescription className="rtl:text-right">
+              <CardTitle>{t("Settings")}</CardTitle>
+              <CardDescription>
                 {t(
                   "Update Role, Active status, or delete user from the system."
                 )}
@@ -300,7 +296,7 @@ export default function Edit() {
                 <Label>{t("User Role")}</Label>
                 <Select value={role} onValueChange={updateRole}>
                   <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Theme" />
+                    <SelectValue placeholder={t("Theme")} />
                   </SelectTrigger>
                   <SelectContent>
                     {ROLES.map((role) => (
@@ -317,9 +313,9 @@ export default function Edit() {
               <DeleteDialog onAction={async () => await deleteUser(user.id)}>
                 <Button
                   variant={"delete"}
-                  className="w-[50%] border border-border hover:border-none"
+                  className="border-border w-[50%] border hover:border-none"
                 >
-                  <Trash2Icon className="mr-3 h-4 w-4 rtl:ml-3" />
+                  <Trash2Icon className="me-3 h-4 w-4" />
                   {t("Delete User")}
                 </Button>
               </DeleteDialog>

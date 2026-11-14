@@ -210,7 +210,7 @@ export const logsRoutes = () => {
       const [worker] = isUuid(body.worker)
         ? await db.select().from(users).where(eq(users.id, body.worker)).limit(1)
         : [];
-      if (!worker) throw new ResponseError("Worker not found", NOT_FOUND);
+      if (!worker) throw new ResponseError("WORKER_NOT_FOUND", NOT_FOUND);
 
       const absent = body.isAbsent;
       await db.insert(logs).values({
@@ -229,10 +229,7 @@ export const logsRoutes = () => {
       const me = c.get("user");
       const record = c.get("record") as typeof logs.$inferSelect;
       if (me.role === USER && record.workerId !== me.id) {
-        throw new ResponseError(
-          "You are not authorized to access this log",
-          NOT_AUTHORIZED
-        );
+        throw new ResponseError("LOG_FORBIDDEN", NOT_AUTHORIZED);
       }
       const [row] = await selectLogs(getDb(c.env.DB), eq(logs.id, record.id));
       return c.json(

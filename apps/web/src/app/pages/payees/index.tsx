@@ -1,13 +1,14 @@
-import { useSearchParams } from "react-router-dom";
+import { useSearchParam } from "@/hooks/use-url-state";
 import { useTranslation } from "react-i18next";
 import { PayeeType } from "@/lib/types";
 
-import { useAuth } from "@/providers/auth-context";
+import { usePermissions } from "@/hooks/use-permissions";
 
 import { useGetPayeesQuery, useDeletePayeeMutation } from "@/api/payees";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { PageHeader } from "@/components/component/page-header";
 import {
   Table,
   TableBody,
@@ -20,32 +21,27 @@ import {
 import Searchbox from "@/components/component/searchbox";
 import NoResults from "@/components/component/no-results";
 import FetchError from "@/components/component/fetch-error";
-import FormDialogDrawer from "./form-dialog-drawer";
+import PayeeFormDialog from "./payee-form-dialog";
 
-import RowSkeleton from "./row-skeleton";
-import Row from "./row";
+import {
+  TableSkeleton,
+  type SkeletonColumn,
+} from "@/components/component/table-skeleton";
+import PayeeRow from "./payee-row";
 
 import { FilePlus } from "lucide-react";
 
-const Payees = () => {
-  const dummy = [...Array(8)];
-  const { user } = useAuth();
-  const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useSearchParams({
-    search: "",
-  });
+const PAYEES_SKELETON: SkeletonColumn[] = [
+  { kind: "identity-single" },
+  { kind: "lines", className: "hidden md:table-cell" },
+  { kind: "text", className: "hidden lg:table-cell" },
+  { kind: "empty", className: "hidden lg:table-cell" },
+];
 
-  const search = searchParams.get("search") || "";
-  const setSearch = (value: string) => {
-    setSearchParams(
-      (prev) => {
-        prev.delete("search");
-        if (value) prev.set("search", value);
-        return prev;
-      },
-      { replace: true }
-    );
-  };
+const Payees = () => {
+  const { canWrite } = usePermissions();
+  const { t } = useTranslation();
+  const [search, setSearch] = useSearchParam("search");
 
   const { data: payeesData, isLoading } = useGetPayeesQuery();
   const { mutate: deletePayee } = useDeletePayeeMutation();
@@ -53,20 +49,19 @@ const Payees = () => {
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       {/* HEADER */}
-      <div className="flex space-y-2 flex-col justify-between md:flex-row gap-5">
-        <h2 className="text-3xl font-bold tracking-tight">{t("Payees")}</h2>
-        <div className="flex items-center gap-2 flex-col md:flex-row">
-          <FormDialogDrawer>
+      <PageHeader title={t("Payees")}>
+        {canWrite && (
+          <PayeeFormDialog>
             <Button className="w-full">
-              <FilePlus className="ltr:mr-2 rtl:ml-2 h-7 w-7" /> {t("Add New")}
+              <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
             </Button>
-          </FormDialogDrawer>
-        </div>
-      </div>
+          </PayeeFormDialog>
+        )}
+      </PageHeader>
       <Separator />
       {/* FILTER */}
-      <div className="flex justify-end flex-wrap">
-        <div className=" w-full md:w-[335px]">
+      <div className="flex flex-wrap justify-end">
+        <div className="w-full md:w-[335px]">
           <Searchbox value={search} setValue={setSearch} />
         </div>
       </div>
@@ -80,24 +75,24 @@ const Payees = () => {
           <TableCaption>{t("A list of payees")}</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[270px] rtl:text-right">
-                {t("Payee Name")}
-              </TableHead>
-              <TableHead className="hidden md:table-cell w-[300px] rtl:text-right">
+              <TableHead className="w-[270px]">{t("Payee Name")}</TableHead>
+              <TableHead className="hidden w-[300px] md:table-cell">
                 {t("Contact Details")}
               </TableHead>
-              <TableHead className="hidden lg:table-cell w-max rtl:text-right">
+              <TableHead className="hidden w-max lg:table-cell">
                 {t("Remarks")}
               </TableHead>
-              <TableHead className="w-[120px] hidden lg:table-cell"></TableHead>
+              <TableHead className="hidden w-[120px] lg:table-cell"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading
-              ? dummy.map((_, index) => RowSkeleton(index))
-              : payeesData.payees.map((payee: PayeeType) =>
-                  Row(payee, deletePayee, user?.role)
-                )}
+            {isLoading ? (
+              <TableSkeleton columns={PAYEES_SKELETON} />
+            ) : (
+              payeesData?.payees.map((payee: PayeeType) => (
+                <PayeeRow key={payee.id} payee={payee} onDelete={deletePayee} />
+              ))
+            )}
           </TableBody>
         </Table>
       )}

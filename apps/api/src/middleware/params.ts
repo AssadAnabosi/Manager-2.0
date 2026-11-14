@@ -19,8 +19,9 @@ export const paramRecord = (
     const id = c.req.param(param);
     if (!isUuid(id)) {
       throw new ResponseError(
-        `Please provide a valid ${capitalize(param)}`,
-        BAD_REQUEST
+        "INVALID_ID",
+        BAD_REQUEST,
+        `Please provide a valid ${capitalize(param)}`
       );
     }
     const [row] = await getDb(c.env.DB)
@@ -29,7 +30,11 @@ export const paramRecord = (
       .where(eq(table.id, id))
       .limit(1);
     if (!row) {
-      throw new ResponseError(`${model} With ID [${id}] Is Not Found`, NOT_FOUND);
+      throw new ResponseError(
+        "RECORD_NOT_FOUND",
+        NOT_FOUND,
+        `${model} With ID [${id}] Is Not Found`
+      );
     }
     c.set("record", row);
     await next();

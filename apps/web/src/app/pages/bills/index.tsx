@@ -1,17 +1,16 @@
-import { useSearchParams } from "react-router-dom";
+import { useDateRangeParams, useSearchParam } from "@/hooks/use-url-state";
 import { useTranslation } from "react-i18next";
-import { format } from "date-fns";
-import { enGB, ar } from "date-fns/locale";
-import { DateRange } from "react-day-picker";
+import { useFormatters } from "@/hooks/use-locale";
 
-import { useAuth } from "@/providers/auth-context";
+import { usePermissions } from "@/hooks/use-permissions";
 
 import { BillKind, BillType } from "@/lib/types";
-import { DATE_FORMAT, SPECTATOR } from "@/lib/constants";
 
 import { useGetBillsQuery, useDeleteBillMutation } from "@/api/bills";
 
 import { Separator } from "@/components/ui/separator";
+import { PageHeader } from "@/components/component/page-header";
+import { PrintButton } from "@/components/component/print-button";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -29,73 +28,34 @@ import NoResults from "@/components/component/no-results";
 import FetchError from "@/components/component/fetch-error";
 
 import Cards from "./cards";
-import Row from "./row";
-import RowSkeleton from "./row-skeleton";
-import FormDialogDrawer from "./form-dialog-drawer";
-
-import { Printer, FilePlus } from "lucide-react";
-
+import BillRow from "./bill-row";
 import {
-  getFirstDayOfCurrentMonth,
-  getLastDayOfCurrentMonth,
-  dateToString,
-  stringToDate,
-} from "@/lib/utils";
+  TableSkeleton,
+  type SkeletonColumn,
+} from "@/components/component/table-skeleton";
+import BillFormDialog from "./bill-form-dialog";
+
+import { FilePlus } from "lucide-react";
+
+import { stringToDate } from "@/lib/utils";
+
+const BILLS_SKELETON: SkeletonColumn[] = [
+  { kind: "identity" },
+  { kind: "badge" },
+  { kind: "text", className: "hidden md:table-cell" },
+  { kind: "text", className: "hidden lg:table-cell" },
+  { kind: "empty", className: "hidden lg:table-cell" },
+];
 
 const Bills = () => {
-  const dummy = [...Array(8)];
-  const { user } = useAuth();
+  const { canWrite } = usePermissions();
   const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useSearchParams({
-    search: "",
-    from: getFirstDayOfCurrentMonth(),
-    to: getLastDayOfCurrentMonth(),
-  });
-
-  const search = searchParams.get("search") || "";
-  const setSearch = (value: string) => {
-    setSearchParams(
-      (prev) => {
-        prev.delete("search");
-        if (value) prev.set("search", value);
-        return prev;
-      },
-      { replace: true }
-    );
-  };
-
-  const typeParam = searchParams.get("type");
+  const fmt = useFormatters();
+  const [search, setSearch] = useSearchParam("search");
+  const [typeParam, setType] = useSearchParam("type");
   const type: BillKind | "" =
     typeParam === "expense" || typeParam === "income" ? typeParam : "";
-  const setType = (value: BillKind | "") => {
-    setSearchParams(
-      (prev) => {
-        prev.delete("type");
-        if (value) prev.set("type", value);
-        return prev;
-      },
-      { replace: true }
-    );
-  };
-
-  const date = {
-    from: searchParams.get("from"),
-    to: searchParams.get("to"),
-  };
-  const setDate = (date: DateRange) => {
-    setSearchParams(
-      (prev) => {
-        prev.delete("from");
-        prev.delete("to");
-        if (date) {
-          if (date.from) prev.set("from", dateToString(date.from));
-          if (date.to) prev.set("to", dateToString(date.to));
-        }
-        return prev;
-      },
-      { replace: true }
-    );
-  };
+  const [date, setDate] = useDateRangeParams();
   const { data: billsData, isLoading } = useGetBillsQuery();
 
   const { mutate: deleteBill } = useDeleteBillMutation();
@@ -103,33 +63,23 @@ const Bills = () => {
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       {/* HEADER */}
-      <div className="flex space-y-2 flex-col justify-between md:flex-row gap-5">
-        <h2 className="text-3xl font-bold tracking-tight">{t("Bills")}</h2>
-        <div className="flex items-center gap-2 flex-col md:flex-row">
-          <DateRangePicker date={date} setDate={setDate} />
-          {user?.role !== SPECTATOR && (
-            <FormDialogDrawer>
-              <Button className="print:hidden w-full">
-                <FilePlus className="ltr:mr-2 rtl:ml-2 h-7 w-7" />{" "}
-                {t("Add New")}
-              </Button>
-            </FormDialogDrawer>
-          )}
-          <Button
-            disabled={isLoading}
-            className="w-full print:hidden"
-            onClick={() => window.print()}
-          >
-            <Printer className="ltr:mr-2 rtl:ml-2 h-6 w-6" /> {t("Print")}
-          </Button>
-        </div>
-      </div>
+      <PageHeader title={t("Bills")}>
+        <DateRangePicker date={date} setDate={setDate} />
+        {canWrite && (
+          <BillFormDialog>
+            <Button className="w-full print:hidden">
+              <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
+            </Button>
+          </BillFormDialog>
+        )}
+        <PrintButton disabled={isLoading} />
+      </PageHeader>
       <Separator />
       {/* CARDS */}
       <Cards billsData={billsData} isLoading={isLoading} />
       <Separator />
       {/* FILTER */}
-      <div className="flex justify-between items-center gap-4 flex-wrap">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <TypeFilter value={type} onChange={setType} />
         <div className="w-full md:w-[335px]">
           <Searchbox value={search} setValue={setSearch} />
@@ -143,51 +93,40 @@ const Bills = () => {
       ) : (
         <Table>
           <TableCaption>
-            {billsData?.from ? (
-              billsData.to ? (
-                <>
-                  {t("A list of bills")} {t("from")}{" "}
-                  {format(stringToDate(billsData.from), DATE_FORMAT, {
-                    locale: document.documentElement.lang === "ar" ? ar : enGB,
-                  })}{" "}
-                  {t("to")}{" "}
-                  {format(stringToDate(billsData.to), DATE_FORMAT, {
-                    locale: document.documentElement.lang === "ar" ? ar : enGB,
-                  })}
-                </>
-              ) : (
-                <>
-                  {t("A list of bills")} {t("from")}{" "}
-                  {format(stringToDate(billsData.from), DATE_FORMAT, {
-                    locale: document.documentElement.lang === "ar" ? ar : enGB,
-                  })}
-                </>
-              )
-            ) : (
-              <>{t("A list of bills")}</>
-            )}
+            {billsData?.from
+              ? billsData.to
+                ? t("A list of bills from {{from}} to {{to}}", {
+                    from: fmt.date(stringToDate(billsData.from)),
+                    to: fmt.date(stringToDate(billsData.to)),
+                  })
+                : t("A list of bills from {{from}}", {
+                    from: fmt.date(stringToDate(billsData.from)),
+                  })
+              : t("A list of bills")}
           </TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[210px]"></TableHead>
-              <TableHead className="table-cell w-[120px] rtl:text-right">
+              <TableHead className="table-cell w-[120px]">
                 {t("Amount")}
               </TableHead>
-              <TableHead className="print:table-cell hidden md:table-cell rtl:text-right">
+              <TableHead className="hidden md:table-cell print:table-cell">
                 {t("Description")}
               </TableHead>
-              <TableHead className="print:table-cell hidden lg:table-cell rtl:text-right w-max">
+              <TableHead className="hidden w-max lg:table-cell print:table-cell">
                 {t("Remarks")}
               </TableHead>
-              <TableHead className="print:hidden lg:print:hidden hidden lg:table-cell w-[120px]"></TableHead>
+              <TableHead className="hidden w-[120px] lg:table-cell print:hidden lg:print:hidden"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading
-              ? dummy.map((_, index) => RowSkeleton(index))
-              : billsData.bills.map((bill: BillType) =>
-                  Row(bill, deleteBill, user?.role)
-                )}
+            {isLoading ? (
+              <TableSkeleton columns={BILLS_SKELETON} />
+            ) : (
+              billsData?.bills.map((bill: BillType) => (
+                <BillRow key={bill.id} bill={bill} onDelete={deleteBill} />
+              ))
+            )}
           </TableBody>
         </Table>
       )}

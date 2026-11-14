@@ -9,10 +9,14 @@ i18n
   .use(Backend)
   .init({
     fallbackLng: "en",
+    // ar-PS, en-US, ... resolve to ar / en without fetching their own files
+    supportedLngs: ["en", "ar"],
+    nonExplicitSupportedLngs: true,
+    load: "languageOnly",
     interpolation: {
       escapeValue: false,
     },
-    debug: import.meta.env.NODE_ENV === "development" ? true : false,
+    debug: import.meta.env.DEV,
   });
 
 export default i18n;
