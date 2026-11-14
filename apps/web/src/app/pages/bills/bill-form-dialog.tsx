@@ -15,17 +15,30 @@ import {
 import BillForm from "./bill-form";
 
 type Props = {
-  children: ReactNode;
+  /** The button that opens the dialog; leave it out to control `open` yourself. */
+  children?: ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   bill?: BillType;
   onDone?: () => void;
 };
 
-export default function BillFormDialog({ children, bill, onDone }: Props) {
+export default function BillFormDialog({
+  children,
+  bill,
+  onDone,
+  open: openProp,
+  onOpenChange,
+}: Props) {
   const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
+  const [inner, setInner] = useState(false);
+  const open = openProp ?? inner;
+  const setOpen = onOpenChange ?? setInner;
   return (
     <ResponsiveDialog open={open} onOpenChange={setOpen}>
-      <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+      {children && (
+        <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+      )}
       <ResponsiveDialogContent>
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle>

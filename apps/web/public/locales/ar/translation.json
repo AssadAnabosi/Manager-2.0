@@ -333,5 +333,11 @@
   "Hide password": "إخفاء كلمة المرور",
   "Nothing here yet": "لا يوجد شيء هنا بعد",
   "Records you add will show up here.": "السجلات التي تضيفها ستظهر هنا.",
-  "Try changing or clearing the filters.": "جرّب تغيير الفلاتر أو مسحها."
+  "Try changing or clearing the filters.": "جرّب تغيير الفلاتر أو مسحها.",
+  "Add worklog": "إضافة سجل عمل",
+  "Add bill": "إضافة فاتورة",
+  "Add cheque": "إضافة شيك",
+  "Add payee": "إضافة مستفيد",
+  "Add user": "إضافة مستخدم",
+  "Add cheque with serial {{serial}}": "إضافة شيك بالرقم التسلسلي {{serial}}"
 }

@@ -1,9 +1,20 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Check, LogOut, Search } from "lucide-react";
+import {
+  Archive,
+  Check,
+  Landmark,
+  LogOut,
+  Plus,
+  Receipt,
+  Search,
+  User,
+  Users,
+} from "lucide-react";
 
 import { useAuth } from "@/providers/auth-context";
+import { usePermissions } from "@/hooks/use-permissions";
 import { useTheme } from "@/providers/theme-provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,7 +43,9 @@ export function CommandPalette() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { theme, setTheme } = useTheme();
+  const { canWrite, canCreateUsers } = usePermissions();
   const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
   const lang = (i18n.resolvedLanguage ?? "en").substring(0, 2);
 
   useEffect(() => {
@@ -50,8 +63,23 @@ export function CommandPalette() {
 
   const run = (fn: () => void) => {
     setOpen(false);
+    setQuery("");
     fn();
   };
+  // "add cheque 1234", or just "1234": offer to add a cheque with that serial
+  const serial = query.match(/d+/)?.[0];
+  const creates = [
+    {
+      show: canWrite,
+      title: "Add worklog",
+      path: "/worksheets",
+      icon: Archive,
+    },
+    { show: canWrite, title: "Add bill", path: "/bills", icon: Receipt },
+    { show: canWrite, title: "Add cheque", path: "/cheques", icon: Landmark },
+    { show: canWrite, title: "Add payee", path: "/payees", icon: User },
+    { show: canCreateUsers, title: "Add user", path: "/users", icon: Users },
+  ].filter((item) => item.show);
   const pages = [
     ...navGroupsFor(user.role).flatMap((g) => g.items),
     SETTINGS_ITEM,
@@ -74,14 +102,53 @@ export function CommandPalette() {
         </kbd>
         <span className="sr-only md:hidden">{t("Search...")}</span>
       </Button>
-      <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandDialog
+        open={open}
+        onOpenChange={(next) => {
+          setOpen(next);
+          if (!next) setQuery("");
+        }}
+      >
         <DialogTitle className="sr-only">{t("Command menu")}</DialogTitle>
         <DialogDescription className="sr-only">
           {t("Search for a page or a setting")}
         </DialogDescription>
-        <CommandInput placeholder={t("Search...")} />
+        <CommandInput
+          placeholder={t("Search...")}
+          value={query}
+          onValueChange={setQuery}
+        />
         <CommandList>
           <CommandEmpty>{t("No matching results")}</CommandEmpty>
+          {creates.length > 0 && (
+            <>
+              <CommandGroup heading={t("Create")}>
+                {canWrite && serial && (
+                  <CommandItem
+                    forceMount
+                    value={`add cheque serial ${serial}`}
+                    onSelect={() =>
+                      run(() => navigate(`/cheques?add=1&addSerial=${serial}`))
+                    }
+                  >
+                    <Plus />
+                    {t("Add cheque with serial {{serial}}", { serial })}
+                  </CommandItem>
+                )}
+                {creates.map((item) => (
+                  <CommandItem
+                    key={item.path}
+                    value={`${t(item.title)} ${item.title}`}
+                    onSelect={() => run(() => navigate(`${item.path}?add=1`))}
+                  >
+                    <item.icon />
+                    {t(item.title)}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+              <CommandSeparator />
+            </>
+          )}
           <CommandGroup heading={t("Pages")}>
             {pages.map((page) => (
               <CommandItem

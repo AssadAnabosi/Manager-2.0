@@ -1,4 +1,8 @@
-import { useDateRangeParams, useSearchParam } from "@/hooks/use-url-state";
+import {
+  useAddDialog,
+  useDateRangeParams,
+  useSearchParam,
+} from "@/hooks/use-url-state";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { endOfMonth, parse, startOfMonth } from "date-fns";
@@ -88,6 +92,7 @@ const Logs = () => {
   const oneWorker = filter && !filter.includes(",") ? filter : "";
   // a day tapped in the calendar that has no record yet
   const [addDay, setAddDay] = useState<Date | null>(null);
+  const addDialog = useAddDialog();
   const { data: logsData, isLoading } = useGetLogsQuery();
 
   const { data: usersData, isLoading: filterLoading } = useGetUsersQuery();
@@ -110,8 +115,12 @@ const Logs = () => {
       </PageHeader>
       {canWrite && (
         <LogFormDialog
-          open={addDay !== null}
-          onOpenChange={(open) => !open && setAddDay(null)}
+          open={addDay !== null || addDialog.open}
+          onOpenChange={(open) => {
+            if (open) return;
+            setAddDay(null);
+            addDialog.setOpen(false);
+          }}
           defaults={{ worker: oneWorker, date: addDay ?? undefined }}
         />
       )}

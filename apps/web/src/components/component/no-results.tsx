@@ -10,13 +10,15 @@ type Props = {
   filterKeys?: string[];
   /** Shown when nothing matches because there are no records yet, e.g. the "Add New" button. */
   action?: ReactNode;
+  /** Offered next to "Clear filters" when the filters match nothing. */
+  filteredAction?: ReactNode;
 };
 
 /**
  * An empty list. With filters applied it says nothing matches and offers to clear them;
  * otherwise it says there is nothing yet and offers the page's primary action.
  */
-const NoResults = ({ filterKeys = [], action }: Props) => {
+const NoResults = ({ filterKeys = [], action, filteredAction }: Props) => {
   const { t } = useTranslation();
   const { active, clear } = useFilterState(filterKeys);
   const Icon = active ? SearchX : Inbox;
@@ -34,9 +36,12 @@ const NoResults = ({ filterKeys = [], action }: Props) => {
         </p>
       </div>
       {active ? (
-        <Button variant="outline" onClick={clear} className="print:hidden">
-          {t("Clear filters")}
-        </Button>
+        <div className="flex flex-wrap justify-center gap-2 print:hidden">
+          {filteredAction}
+          <Button variant="outline" onClick={clear}>
+            {t("Clear filters")}
+          </Button>
+        </div>
       ) : (
         action
       )}

@@ -15,17 +15,30 @@ import {
 import PayeeForm from "./payee-form";
 
 type Props = {
-  children: ReactNode;
+  /** The button that opens the dialog; leave it out to control `open` yourself. */
+  children?: ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   payee?: PayeeType;
   onDone?: () => void;
 };
 
-export default function PayeeFormDialog({ children, payee, onDone }: Props) {
+export default function PayeeFormDialog({
+  children,
+  payee,
+  onDone,
+  open: openProp,
+  onOpenChange,
+}: Props) {
   const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
+  const [inner, setInner] = useState(false);
+  const open = openProp ?? inner;
+  const setOpen = onOpenChange ?? setInner;
   return (
     <ResponsiveDialog open={open} onOpenChange={setOpen}>
-      <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+      {children && (
+        <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+      )}
       <ResponsiveDialogContent>
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle>

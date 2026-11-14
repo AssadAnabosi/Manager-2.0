@@ -14,15 +14,26 @@ import {
 import UserForm from "./user-form";
 
 type Props = {
-  children: ReactNode;
+  /** The button that opens the dialog; leave it out to control `open` yourself. */
+  children?: ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 };
 
-export default function UserFormDialog({ children }: Props) {
+export default function UserFormDialog({
+  children,
+  open: openProp,
+  onOpenChange,
+}: Props) {
   const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
+  const [inner, setInner] = useState(false);
+  const open = openProp ?? inner;
+  const setOpen = onOpenChange ?? setInner;
   return (
     <ResponsiveDialog open={open} onOpenChange={setOpen}>
-      <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+      {children && (
+        <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+      )}
       <ResponsiveDialogContent>
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle>{t("New User")}</ResponsiveDialogTitle>

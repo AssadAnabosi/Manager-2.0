@@ -1,4 +1,4 @@
-import { useSearchParam } from "@/hooks/use-url-state";
+import { useAddDialog, useSearchParam } from "@/hooks/use-url-state";
 import { useTranslation } from "react-i18next";
 
 import { usePermissions } from "@/hooks/use-permissions";
@@ -41,6 +41,7 @@ const USERS_SKELETON: SkeletonColumn[] = [
 
 const Users = () => {
   const { canCreateUsers } = usePermissions();
+  const addDialog = useAddDialog();
   const { t } = useTranslation();
   const [search, setSearch] = useSearchParam("search");
 
@@ -58,6 +59,12 @@ const Users = () => {
           </UserFormDialog>
         )}
       </PageHeader>
+      {canCreateUsers && (
+        <UserFormDialog
+          open={addDialog.open}
+          onOpenChange={addDialog.setOpen}
+        />
+      )}
       <Separator />
       {/* FILTER */}
       <div className="flex flex-wrap justify-end">

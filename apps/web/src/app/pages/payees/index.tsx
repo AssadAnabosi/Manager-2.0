@@ -1,4 +1,4 @@
-import { useSearchParam } from "@/hooks/use-url-state";
+import { useAddDialog, useSearchParam } from "@/hooks/use-url-state";
 import { useTranslation } from "react-i18next";
 import { PayeeType } from "@/lib/types";
 
@@ -40,6 +40,7 @@ const PAYEES_SKELETON: SkeletonColumn[] = [
 
 const Payees = () => {
   const { canWrite } = usePermissions();
+  const addDialog = useAddDialog();
   const { t } = useTranslation();
   const [search, setSearch] = useSearchParam("search");
 
@@ -58,6 +59,12 @@ const Payees = () => {
           </PayeeFormDialog>
         )}
       </PageHeader>
+      {canWrite && (
+        <PayeeFormDialog
+          open={addDialog.open}
+          onOpenChange={addDialog.setOpen}
+        />
+      )}
       <Separator />
       {/* FILTER */}
       <div className="flex flex-wrap justify-end">

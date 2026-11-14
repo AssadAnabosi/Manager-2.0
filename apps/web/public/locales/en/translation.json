@@ -333,5 +333,11 @@
   "Hide password": "Hide password",
   "Nothing here yet": "Nothing here yet",
   "Records you add will show up here.": "Records you add will show up here.",
-  "Try changing or clearing the filters.": "Try changing or clearing the filters."
+  "Try changing or clearing the filters.": "Try changing or clearing the filters.",
+  "Add worklog": "Add worklog",
+  "Add bill": "Add bill",
+  "Add cheque": "Add cheque",
+  "Add payee": "Add payee",
+  "Add user": "Add user",
+  "Add cheque with serial {{serial}}": "Add cheque with serial {{serial}}"
 }
