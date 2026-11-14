@@ -94,7 +94,7 @@ const MultiSelectFormField = React.forwardRef<
                         )}
                         {option?.label}
                         <XCircle
-                          className="h-4 w-4 cursor-pointer ltr:ml-2 rtl:mr-2"
+                          className="pointer-events-auto! h-4 w-4 cursor-pointer ltr:ml-2 rtl:mr-2"
                           onClick={(event) => {
                             toggleOption(value);
                             event.stopPropagation();
@@ -106,7 +106,7 @@ const MultiSelectFormField = React.forwardRef<
                 </div>
                 <div className="flex items-center justify-between">
                   <XIcon
-                    className="mx-2 h-4 cursor-pointer text-muted-foreground"
+                    className="pointer-events-auto! mx-2 h-4 cursor-pointer text-muted-foreground"
                     onClick={(event) => {
                       setSelectedValues(new Set([]));
                       onValueChange(Array.from(new Set([])));
