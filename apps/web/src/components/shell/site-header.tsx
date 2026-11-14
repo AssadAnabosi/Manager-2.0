@@ -10,7 +10,7 @@ export function SiteHeader() {
   const { pathname } = useLocation();
   const item = navItemFor(pathname);
   return (
-    <header className="flex h-[calc(var(--header-height)+env(safe-area-inset-top))] shrink-0 items-center gap-2 border-b pt-[env(safe-area-inset-top)] transition-[width,height] ease-linear print:hidden">
+    <header className="flex h-[calc(var(--header-height)+max(env(safe-area-inset-top),0.75rem))] md:h-(--header-height) shrink-0 items-center gap-2 border-b pt-[max(env(safe-area-inset-top),0.75rem)] md:pt-0 transition-[width,height] ease-linear print:hidden">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
         <SidebarTrigger className="-ms-1" />
         <Separator
