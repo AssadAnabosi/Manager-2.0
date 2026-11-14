@@ -224,7 +224,6 @@
   "Go back home": "العودة للصفحة الرئيسية",
   "Retry": "اعادة المحاولة",
 
-  "Made with ❤️ by": "صنع بكل ❤️ من قبل",
   "Password must be at least 12 characters long": "كلمة المرور يجب ان تكون على الاقل 12 حرفا",
   "Current password is required": "كلمة المرور الحالية مطلوبة",
   "Password is required": "كلمة المرور مطلوبة",
@@ -320,5 +319,7 @@
   "Change your password?": "تغيير كلمة المرور؟",
   "You will be logged out from all your devices, including this one, and will need to log in again with your new password.": "سيتم تسجيل خروجك من جميع أجهزتك، بما في ذلك هذا الجهاز، وستحتاج إلى تسجيل الدخول مرة أخرى بكلمة المرور الجديدة.",
   "Reset password?": "إعادة تعيين كلمة المرور؟",
-  "{{name}} will be logged out from all devices where they are signed in.": "سيتم تسجيل خروج {{name}} من جميع الأجهزة المسجّل الدخول عليها."
+  "{{name}} will be logged out from all devices where they are signed in.": "سيتم تسجيل خروج {{name}} من جميع الأجهزة المسجّل الدخول عليها.",
+  "Made with": "صنع بكل",
+  "by": "من قبل"
 }

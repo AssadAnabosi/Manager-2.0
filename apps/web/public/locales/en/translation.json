@@ -224,7 +224,6 @@
   "Go back home": "Go back home",
   "Retry": "Retry",
 
-  "Made with ❤️ by": "Made with ❤️ by",
   "Password must be at least 12 characters long": "Password must be at least 12 characters long",
   "Current password is required": "Current password is required",
   "Password is required": "Password is required",
@@ -320,5 +319,7 @@
   "Change your password?": "Change your password?",
   "You will be logged out from all your devices, including this one, and will need to log in again with your new password.": "You will be logged out from all your devices, including this one, and will need to log in again with your new password.",
   "Reset password?": "Reset password?",
-  "{{name}} will be logged out from all devices where they are signed in.": "{{name}} will be logged out from all devices where they are signed in."
+  "{{name}} will be logged out from all devices where they are signed in.": "{{name}} will be logged out from all devices where they are signed in.",
+  "Made with": "Made with",
+  "by": "by"
 }

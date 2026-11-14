@@ -1,3 +1,4 @@
+import type { ReactElement } from "react";
 import {
   EnvelopeClosedIcon,
   GitHubLogoIcon,
@@ -13,16 +14,14 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 
-export default function FooterHoverCard() {
+export default function FooterHoverCard({
+  children,
+}: {
+  children: ReactElement;
+}) {
   return (
-    <HoverCard>
-      <HoverCardTrigger asChild className="px-0">
-        <Button variant="link" asChild dir="ltr">
-          <a href="https://anabosi.dev" target="_blank">
-            @assadanabosi
-          </a>
-        </Button>
-      </HoverCardTrigger>
+    <HoverCard openDelay={100} closeDelay={150}>
+      <HoverCardTrigger asChild>{children}</HoverCardTrigger>
       <HoverCardContent dir="ltr">
         <div className="flex space-x-4">
           <Avatar className="aspect-square">
