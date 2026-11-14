@@ -226,7 +226,6 @@
   "Go back home": "العودة للصفحة الرئيسية",
   "Retry": "اعادة المحاولة",
 
-  "Made with ❤️ by": "صنع بكل ❤️ من قبل",
   "Password must be at least 12 characters long": "كلمة المرور يجب ان تكون على الاقل 12 حرفا",
   "Current password is required": "كلمة المرور الحالية مطلوبة",
   "Password is required": "كلمة المرور مطلوبة",
@@ -246,5 +245,7 @@
   "Manage": "الإدارة",
   "Sidebar": "الشريط الجانبي",
   "Toggle Sidebar": "تبديل الشريط الجانبي",
-  "Displays the mobile sidebar.": "يعرض الشريط الجانبي للهاتف."
+  "Displays the mobile sidebar.": "يعرض الشريط الجانبي للهاتف.",
+  "Made with": "صنع بكل",
+  "by": "من قبل"
 }
