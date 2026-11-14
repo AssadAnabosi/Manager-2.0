@@ -13,7 +13,7 @@
     "db:migrate:local": "wrangler d1 migrations apply workbench-db --local",
     "db:seed:local": "bun scripts/seed.ts --local",
     "db:reset:local": "bun scripts/reset-local.ts && bun run db:migrate:local && bun run db:seed:local",
-    "deploy": "wrangler d1 migrations apply workbench-db --remote && wrangler deploy"
+    "deploy": "bun scripts/render-wrangler.ts && wrangler d1 migrations apply workbench-db --remote --config wrangler.deploy.jsonc && wrangler deploy --config wrangler.deploy.jsonc"
   },
   "dependencies": {
     "@hono/swagger-ui": "^0.6.2",

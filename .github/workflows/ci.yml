@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: bun install --frozen-lockfile
+      - run: bun run typecheck
+      - run: bun run lint
+      - run: bun run test
+      - name: Web build
+        run: bun run --cwd apps/web build
+        env:
+          VITE_APP_TITLE: Workbench
+      - name: Worker dry-run deploy
+        run: bunx wrangler deploy --dry-run --outdir "$RUNNER_TEMP/dry"
+        working-directory: apps/api

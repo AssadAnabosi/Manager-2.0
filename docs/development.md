@@ -34,7 +34,7 @@ bun run dev:native
 | `typecheck` | `tsc --noEmit` in every workspace |
 | `lint` | ESLint in every workspace |
 | `test` | `vitest run` |
-| `deploy` | Apply remote migrations and `wrangler deploy` |
+| `deploy` | Render the deploy config (see [deployment.md](deployment.md)), apply remote migrations and `wrangler deploy` |
 
 ## Hot reload
 
