@@ -20,8 +20,13 @@ function Calendar({
   className,
   classNames,
   showOutsideDays = false,
+  fluid = false,
   ...props
-}: CalendarProps & { onChange?: React.ChangeEventHandler<HTMLSelectElement> }) {
+}: CalendarProps & {
+  onChange?: React.ChangeEventHandler<HTMLSelectElement>;
+  /** Days and weekday labels stretch to fill the width below the sm breakpoint. */
+  fluid?: boolean;
+}) {
   const { dateLocale } = useLocale();
   const handleCalendarChange = (
     _value: string | number,
@@ -48,7 +53,7 @@ function Calendar({
       className={cn("p-3", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-        month: "space-y-4",
+        month: cn("space-y-4", fluid && "w-full sm:w-auto"),
         caption_start: "is-start",
         caption_between: "is-between",
         caption_end: "is-end",
@@ -68,18 +73,22 @@ function Calendar({
         nav_button_next: "absolute ltr:right-1 rtl:left-1",
         table: "w-full border-collapse space-y-1",
         head_row: "flex",
-        head_cell:
-          "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
+        head_cell: cn(
+          "text-muted-foreground rounded-md font-normal text-[0.8rem]",
+          fluid ? "flex-1 sm:w-9 sm:flex-none" : "w-9"
+        ),
         row: "flex w-full mt-2",
         cell: cn(
-          "h-9 w-9 relative p-0 text-center text-sm focus-within:relative focus-within:z-20 has-aria-[selected]:bg-accent",
+          fluid ? "h-10 flex-1 sm:h-9 sm:w-9 sm:flex-none" : "h-9 w-9",
+          "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 has-aria-[selected]:bg-accent",
           props.mode === "range"
             ? "[&:has(>.day-range-end)]:ltr:rounded-r-md [&:has(>.day-range-end)]:rtl:rounded-l-md [&:has(>.day-range-start)]:ltr:rounded-l-md [&:has(>.day-range-start)]:rtl:rounded-r-md has-aria-[selected]:first:ltr:rounded-l-md has-aria-[selected]:first:rtl:rounded-r-md has-aria-[selected]:last:ltr:rounded-r-md has-aria-[selected]:last:rtl:rounded-l-md"
             : "has-aria-[selected]:rounded-md"
         ),
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-9 w-9 p-0 font-normal aria-selected:opacity-100"
+          fluid ? "h-10 w-full sm:h-9 sm:w-9" : "h-9 w-9",
+          "p-0 font-normal aria-selected:opacity-100"
         ),
         day_range_start: "day-range-start",
         day_range_end: "day-range-end",

@@ -12,6 +12,7 @@ import {
 
 import { useTranslation } from "react-i18next";
 import { useFormatters } from "@/hooks/use-locale";
+import { useIsDesktop } from "@/hooks/use-breakpoint";
 
 type DatePickerWithRangeProps = {
   className?: string;
@@ -29,6 +30,7 @@ export default function DatePickerWithRange({
 }: DatePickerWithRangeProps) {
   const { t } = useTranslation();
   const fmt = useFormatters();
+  const isDesktop = useIsDesktop();
   const date = {
     from: data.from ? new Date(data?.from) : undefined,
     to: data.to ? new Date(data?.to) : undefined,
@@ -60,7 +62,11 @@ export default function DatePickerWithRange({
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="end">
+        <PopoverContent
+          className="w-[calc(100vw-2rem)] p-0 md:w-auto"
+          align={isDesktop ? "end" : "center"}
+          collisionPadding={16}
+        >
           <Calendar
             initialFocus
             mode="range"
@@ -68,7 +74,8 @@ export default function DatePickerWithRange({
             defaultMonth={date?.from}
             selected={date}
             onSelect={setDate}
-            numberOfMonths={2}
+            numberOfMonths={isDesktop ? 2 : 1}
+            fluid
             fromYear={2019}
             toYear={new Date().getFullYear() + 10}
           />
