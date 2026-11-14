@@ -11,14 +11,16 @@ export function SiteHeader() {
   const { pathname } = useLocation();
   const item = navItemFor(pathname);
   return (
-    <header className="flex h-[calc(var(--header-height)+max(env(safe-area-inset-top),0.75rem))] md:h-(--header-height) shrink-0 items-center gap-2 border-b pt-[max(env(safe-area-inset-top),0.75rem)] md:pt-0 transition-[width,height] ease-linear print:hidden">
+    <header className="flex h-[calc(3.5rem+max(env(safe-area-inset-top),0.75rem))] shrink-0 items-center gap-2 border-b pt-[max(env(safe-area-inset-top),0.75rem)] transition-[width,height] ease-linear md:h-(--header-height) md:pt-0 print:hidden">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
-        <SidebarTrigger className="-ms-1" />
+        <SidebarTrigger className="-ms-1 size-9 md:size-7 [&_svg]:size-5 md:[&_svg]:size-4" />
         <Separator
           orientation="vertical"
-          className="mx-2 data-[orientation=vertical]:h-4"
+          className="mx-2 data-[orientation=vertical]:h-5 md:data-[orientation=vertical]:h-4"
         />
-        <h1 className="text-base font-medium">{item ? t(item.title) : ""}</h1>
+        <h1 className="text-lg font-medium md:text-base">
+          {item ? t(item.title) : ""}
+        </h1>
         <CommandPalette />
       </div>
     </header>

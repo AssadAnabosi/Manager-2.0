@@ -80,3 +80,44 @@ export function useFilterState(keys: string[]) {
   );
   return { active, clear };
 }
+
+/**
+ * The "add new" dialog of a list page, driven by `?add=1` so the command palette (or a link)
+ * can open it. Extra values such as `addSerial` prefill the form.
+ */
+export function useAddDialog() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const open = searchParams.get("add") === "1";
+  const setOpen = useCallback(
+    (next: boolean) =>
+      setSearchParams(
+        (prev) => {
+          prev.delete("add");
+          prev.delete("addSerial");
+          if (next) prev.set("add", "1");
+          return prev;
+        },
+        { replace: true }
+      ),
+    [setSearchParams]
+  );
+  const openWith = useCallback(
+    (values: Record<string, string>) =>
+      setSearchParams(
+        (prev) => {
+          prev.set("add", "1");
+          for (const [key, value] of Object.entries(values))
+            prev.set(key, value);
+          return prev;
+        },
+        { replace: true }
+      ),
+    [setSearchParams]
+  );
+  return {
+    open,
+    setOpen,
+    openWith,
+    get: (key: string) => searchParams.get(key) ?? undefined,
+  };
+}

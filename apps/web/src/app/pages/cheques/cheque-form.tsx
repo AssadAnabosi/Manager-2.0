@@ -55,11 +55,12 @@ import ShekelIcon from "@/components/icons/shekel";
 
 type ChequeFormProps = {
   cheque?: ChequeType;
+  defaults?: { serial?: string };
   /** Called after a successful save. */
   onDone: () => void;
 };
 
-const ChequeForm = ({ cheque, onDone }: ChequeFormProps) => {
+const ChequeForm = ({ cheque, defaults, onDone }: ChequeFormProps) => {
   const { t } = useTranslation();
   const fmt = useFormatters();
   const { toast } = useToast();
@@ -70,7 +71,7 @@ const ChequeForm = ({ cheque, onDone }: ChequeFormProps) => {
         ? new Date(cheque.dueDate)
         : getLastDayOfCurrentMonthDate(),
       payee: cheque?.payee?.id || undefined,
-      serial: cheque?.serial.toString() || "",
+      serial: cheque?.serial.toString() || defaults?.serial || "",
       value: cheque?.value.toString() || "",
       isCancelled: cheque?.isCancelled || false,
       remarks: cheque?.remarks || "",
@@ -120,8 +121,7 @@ const ChequeForm = ({ cheque, onDone }: ChequeFormProps) => {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description:
-          apiErrorText(error, t),
+        description: apiErrorText(error, t),
       });
     }
   };
@@ -290,7 +290,7 @@ const ChequeForm = ({ cheque, onDone }: ChequeFormProps) => {
                   <Input
                     {...field}
                     type="string"
-                    className="input pe-4 ps-12 text-start"
+                    className="input ps-12 pe-4 text-start"
                     disabled={isLoading}
                   />
                 </div>

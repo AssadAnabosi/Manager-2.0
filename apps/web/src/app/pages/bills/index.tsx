@@ -1,4 +1,8 @@
-import { useDateRangeParams, useSearchParam } from "@/hooks/use-url-state";
+import {
+  useAddDialog,
+  useDateRangeParams,
+  useSearchParam,
+} from "@/hooks/use-url-state";
 import { useTranslation } from "react-i18next";
 import { useFormatters } from "@/hooks/use-locale";
 
@@ -49,6 +53,7 @@ const BILLS_SKELETON: SkeletonColumn[] = [
 
 const Bills = () => {
   const { canWrite } = usePermissions();
+  const addDialog = useAddDialog();
   const { t } = useTranslation();
   const fmt = useFormatters();
   const [search, setSearch] = useSearchParam("search");
@@ -74,6 +79,12 @@ const Bills = () => {
         )}
         <PrintButton disabled={isLoading} />
       </PageHeader>
+      {canWrite && (
+        <BillFormDialog
+          open={addDialog.open}
+          onOpenChange={addDialog.setOpen}
+        />
+      )}
       <Separator />
       {/* CARDS */}
       <Cards billsData={billsData} isLoading={isLoading} />

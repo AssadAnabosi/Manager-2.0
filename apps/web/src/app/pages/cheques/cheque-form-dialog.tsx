@@ -15,17 +15,33 @@ import {
 import ChequeForm from "./cheque-form";
 
 type Props = {
-  children: ReactNode;
+  /** The button that opens the dialog; leave it out to control `open` yourself. */
+  children?: ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   cheque?: ChequeType;
+  /** Prefilled values for a new cheque. */
+  defaults?: { serial?: string };
   onDone?: () => void;
 };
 
-export default function ChequeFormDialog({ children, cheque, onDone }: Props) {
+export default function ChequeFormDialog({
+  children,
+  cheque,
+  defaults,
+  onDone,
+  open: openProp,
+  onOpenChange,
+}: Props) {
   const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
+  const [inner, setInner] = useState(false);
+  const open = openProp ?? inner;
+  const setOpen = onOpenChange ?? setInner;
   return (
     <ResponsiveDialog open={open} onOpenChange={setOpen}>
-      <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+      {children && (
+        <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+      )}
       <ResponsiveDialogContent>
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle>
@@ -42,6 +58,7 @@ export default function ChequeFormDialog({ children, cheque, onDone }: Props) {
         <ResponsiveDialogBody>
           <ChequeForm
             cheque={cheque}
+            defaults={defaults}
             onDone={() => {
               setOpen(false);
               onDone?.();

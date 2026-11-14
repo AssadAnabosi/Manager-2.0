@@ -1,4 +1,8 @@
-import { useDateRangeParams, useSearchParam } from "@/hooks/use-url-state";
+import {
+  useAddDialog,
+  useDateRangeParams,
+  useSearchParam,
+} from "@/hooks/use-url-state";
 import { useTranslation } from "react-i18next";
 import { useFormatters } from "@/hooks/use-locale";
 
@@ -49,6 +53,7 @@ const CHEQUES_SKELETON: SkeletonColumn[] = [
 
 const Cheques = () => {
   const { canWrite } = usePermissions();
+  const addDialog = useAddDialog();
   const { t } = useTranslation();
   const fmt = useFormatters();
   const [filter, setFilter] = useSearchParam("filter");
@@ -76,6 +81,13 @@ const Cheques = () => {
         )}
         <PrintButton disabled={isLoading} />
       </PageHeader>
+      {canWrite && (
+        <ChequeFormDialog
+          open={addDialog.open}
+          onOpenChange={addDialog.setOpen}
+          defaults={{ serial: addDialog.get("addSerial") }}
+        />
+      )}
       <Separator />
       {/* CARDS */}
       <Cards isLoading={isLoading} chequesData={chequesData} />
@@ -104,6 +116,15 @@ const Cheques = () => {
       ) : !isLoading && !chequesData?.cheques?.length ? (
         <NoResults
           filterKeys={["filter", "serial", "from", "to"]}
+          filteredAction={
+            canWrite &&
+            serial && (
+              <Button onClick={() => addDialog.openWith({ addSerial: serial })}>
+                <FilePlus className="me-2 h-7 w-7" />{" "}
+                {t("Add cheque with serial {{serial}}", { serial })}
+              </Button>
+            )
+          }
           action={
             canWrite && (
               <ChequeFormDialog>
