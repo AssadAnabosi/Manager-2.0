@@ -44,7 +44,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <AuthProvider>
         <ErrorProvider>
           <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
+            <BrowserRouter
+              future={{
+                v7_startTransition: true,
+                v7_relativeSplatPath: true,
+              }}
+            >
               <React.Suspense fallback={<BootFallback />}>
                 <App />
                 <Toaster />
