@@ -1,5 +1,7 @@
 import { useDateRangeParams, useSearchParam } from "@/hooks/use-url-state";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { endOfMonth, parse, startOfMonth } from "date-fns";
 import { useFormatters } from "@/hooks/use-locale";
 
 import { useAuth } from "@/providers/auth-context";
@@ -36,7 +38,10 @@ import {
 import LogRow from "./log-row";
 import LogFormDialog from "./log-form-dialog";
 
-import { FilePlus } from "lucide-react";
+import { CalendarDays, FilePlus, List } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Combobox from "@/components/component/combobox";
+import AttendanceCalendar from "./attendance-calendar";
 import { toList, stringToDate } from "@/lib/utils";
 
 const WORKSHEETS_SKELETON: SkeletonColumn[] = [
@@ -58,6 +63,29 @@ const Logs = () => {
     user?.role === USER ? user.id : ""
   );
   const [date, setDate] = useDateRangeParams();
+  // "list" is the table; "calendar" is one worker's month at a glance
+  const [viewParam, setView] = useSearchParam("view", "list");
+  const view = viewParam === "calendar" ? "calendar" : "list";
+  const month = startOfMonth(
+    parse(date.from ?? "", "yyyy-MM-dd", new Date()).getTime()
+      ? parse(date.from ?? "", "yyyy-MM-dd", new Date())
+      : new Date()
+  );
+  const monthRange = (m: Date) => ({
+    from: startOfMonth(m),
+    to: endOfMonth(m),
+  });
+  // the calendar always shows exactly one month
+  useEffect(() => {
+    if (view !== "calendar") return;
+    const { from, to } = monthRange(month);
+    const same = (d: Date, s: string | null) =>
+      s !== null &&
+      d.getTime() === parse(s, "yyyy-MM-dd", new Date()).getTime();
+    if (!same(from, date.from) || !same(to, date.to)) setDate({ from, to });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view, date.from, date.to]);
+  const oneWorker = filter && !filter.includes(",") ? filter : "";
   const { data: logsData, isLoading } = useGetLogsQuery();
 
   const { data: usersData, isLoading: filterLoading } = useGetUsersQuery();
@@ -66,10 +94,10 @@ const Logs = () => {
   const { mutate: deleteLog } = useDeleteLogMutation();
 
   return (
-    <div className="flex-1 space-y-4 p-8 pt-6 print:px-4">
+    <div className="flex-1 space-y-4 p-4 pt-4 sm:p-8 sm:pt-6 print:px-4">
       {/* HEADER */}
       <PageHeader title={t("Work Timesheets")}>
-        <DateRangePicker date={date} setDate={setDate} />
+        {view === "list" && <DateRangePicker date={date} setDate={setDate} />}
         {canWrite && (
           <LogFormDialog>
             <Button className="w-full print:hidden">
@@ -80,72 +108,112 @@ const Logs = () => {
         <PrintButton disabled={isLoading} />
       </PageHeader>
       <Separator />
-      {/* CARDS */}
-      <Cards isLoading={isLoading} logsData={logsData} />
-      <Separator />
-      {/* FILTER */}
-      <div className="flex flex-wrap justify-end">
-        {user?.role !== USER && (
-          <MultiSelectFormField
-            isLoading={filterLoading}
-            list={workers}
-            // filter={filter}
-            // setFilter={setFilter}
-            placeholder={t("Filter by worker")}
-            onValueChange={(value) => {
-              setFilter(value.toString());
-            }}
-            defaultValue={filter ? filter.split(",") : []}
-          />
-        )}
-      </div>
-      {/* TABLE */}
-      {!isLoading && !logsData ? (
-        <FetchError />
-      ) : !isLoading && !logsData?.logs?.length ? (
-        <NoResults />
+      <Tabs value={view} onValueChange={setView} className="print:hidden">
+        <TabsList>
+          <TabsTrigger value="list">
+            <List /> {t("List")}
+          </TabsTrigger>
+          <TabsTrigger value="calendar">
+            <CalendarDays /> {t("Calendar")}
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
+      {view === "calendar" ? (
+        <div className="space-y-4">
+          {user?.role !== USER && (
+            <div className="mx-auto w-full max-w-2xl">
+              <Combobox
+                isLoading={filterLoading}
+                list={workers}
+                filter={oneWorker}
+                setFilter={setFilter}
+                placeholder={t("Select a worker")}
+              />
+            </div>
+          )}
+          {oneWorker ? (
+            <AttendanceCalendar
+              month={month}
+              logs={logsData?.logs ?? []}
+              loading={isLoading}
+              onMonthChange={(m) => setDate(monthRange(m))}
+            />
+          ) : (
+            <p className="text-muted-foreground py-12 text-center">
+              {t("Select a worker to see their attendance")}
+            </p>
+          )}
+        </div>
       ) : (
-        <Table>
-          <TableCaption>
-            {logsData?.from
-              ? logsData.to
-                ? t("A list of worksheets from {{from}} to {{to}}", {
-                    from: fmt.date(stringToDate(logsData.from)),
-                    to: fmt.date(stringToDate(logsData.to)),
-                  })
-                : t("A list of worksheets from {{from}}", {
-                    from: fmt.date(stringToDate(logsData.from)),
-                  })
-              : t("A list of worksheets")}
-          </TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[270px] print:w-[190px]"></TableHead>
-              <TableHead className="w-[80px] text-center">
-                {t("Attended")}
-              </TableHead>
-              <TableHead className="hidden w-[150px] md:table-cell md:w-[280px] print:table-cell md:print:w-[150px]">
-                {t("Workday Variance: Balancing Hours")}
-              </TableHead>
-              <TableHead className="hidden w-[120px] md:table-cell print:table-cell">
-                {t("Payment")}
-              </TableHead>
-              <TableHead className="hidden w-max lg:table-cell print:table-cell">
-                {t("Remarks")}
-              </TableHead>
-              <TableHead className="hidden w-[120px] 2xl:table-cell print:hidden 2xl:print:hidden"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              <TableSkeleton columns={WORKSHEETS_SKELETON} />
-            ) : (
-              logsData?.logs.map((log: LogType) => (
-                <LogRow key={log.id} log={log} onDelete={deleteLog} />
-              ))
+        <>
+          {/* CARDS */}
+          <Cards isLoading={isLoading} logsData={logsData} />
+          <Separator />
+          {/* FILTER */}
+          <div className="flex flex-wrap justify-end">
+            {user?.role !== USER && (
+              <MultiSelectFormField
+                isLoading={filterLoading}
+                list={workers}
+                // filter={filter}
+                // setFilter={setFilter}
+                placeholder={t("Filter by worker")}
+                onValueChange={(value) => {
+                  setFilter(value.toString());
+                }}
+                defaultValue={filter ? filter.split(",") : []}
+              />
             )}
-          </TableBody>
-        </Table>
+          </div>
+          {/* TABLE */}
+          {!isLoading && !logsData ? (
+            <FetchError />
+          ) : !isLoading && !logsData?.logs?.length ? (
+            <NoResults />
+          ) : (
+            <Table>
+              <TableCaption>
+                {logsData?.from
+                  ? logsData.to
+                    ? t("A list of worksheets from {{from}} to {{to}}", {
+                        from: fmt.date(stringToDate(logsData.from)),
+                        to: fmt.date(stringToDate(logsData.to)),
+                      })
+                    : t("A list of worksheets from {{from}}", {
+                        from: fmt.date(stringToDate(logsData.from)),
+                      })
+                  : t("A list of worksheets")}
+              </TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[270px] print:w-[190px]"></TableHead>
+                  <TableHead className="w-[80px] text-center">
+                    {t("Attended")}
+                  </TableHead>
+                  <TableHead className="hidden w-[150px] md:table-cell md:w-[280px] print:table-cell md:print:w-[150px]">
+                    {t("Workday Variance: Balancing Hours")}
+                  </TableHead>
+                  <TableHead className="hidden w-[120px] md:table-cell print:table-cell">
+                    {t("Payment")}
+                  </TableHead>
+                  <TableHead className="hidden w-max lg:table-cell print:table-cell">
+                    {t("Remarks")}
+                  </TableHead>
+                  <TableHead className="hidden w-[120px] 2xl:table-cell print:hidden 2xl:print:hidden"></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {isLoading ? (
+                  <TableSkeleton columns={WORKSHEETS_SKELETON} />
+                ) : (
+                  logsData?.logs.map((log: LogType) => (
+                    <LogRow key={log.id} log={log} onDelete={deleteLog} />
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          )}
+        </>
       )}
     </div>
   );

@@ -28,8 +28,8 @@ export function StatCard({
   tone = "neutral",
 }: StatCardProps) {
   return (
-    <Card>
-      <CardHeader className="flex h-[72px] flex-row items-center justify-between space-y-0 pb-2">
+    <Card className="gap-1 py-5">
+      <CardHeader className="flex h-10 flex-row items-center justify-between space-y-0 pb-0">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         <Icon />
       </CardHeader>
@@ -40,7 +40,7 @@ export function StatCard({
         >
           {typeof value !== "undefined" ? value : "---"}
         </div>
-        <p className="text-xs text-muted-foreground">{hint}</p>
+        <p className="text-muted-foreground text-xs">{hint}</p>
       </CardContent>
     </Card>
   );

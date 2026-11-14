@@ -305,5 +305,17 @@
   "validation.name_required": "ادخل اسما.",
   "validation.password_required": "ادخل كلمة مرور.",
   "validation.password_min": "يجب ان تتكون كلمة المرور من {{min}} حرفا على الاقل.",
-  "validation.invalid": "بعض البيانات غير صحيحة."
+  "validation.invalid": "بعض البيانات غير صحيحة.",
+  "Previous month": "الشهر السابق",
+  "Next month": "الشهر التالي",
+  "Calendar records": "السجلات",
+  "No record": "لا يوجد سجل",
+  "Attendance details for this day": "تفاصيل الحضور لهذا اليوم",
+  "No record for this day.": "لا يوجد سجل لهذا اليوم.",
+  "List": "قائمة",
+  "Calendar": "التقويم",
+  "Select a worker to see their attendance": "اختر عاملا لعرض حضوره",
+  "Days absent": "ايام الغياب",
+  "Current streak": "ايام الحضور المتتالية",
+  "Hours balance": "رصيد الساعات"
 }

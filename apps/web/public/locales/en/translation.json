@@ -305,5 +305,17 @@
   "validation.name_required": "Enter a name.",
   "validation.password_required": "Enter a password.",
   "validation.password_min": "The password must be at least {{min}} characters long.",
-  "validation.invalid": "Some of the details are invalid."
+  "validation.invalid": "Some of the details are invalid.",
+  "Previous month": "Previous month",
+  "Next month": "Next month",
+  "Calendar records": "Records",
+  "No record": "No record",
+  "Attendance details for this day": "Attendance details for this day",
+  "No record for this day.": "No record for this day.",
+  "List": "List",
+  "Calendar": "Calendar",
+  "Select a worker to see their attendance": "Select a worker to see their attendance",
+  "Days absent": "Days absent",
+  "Current streak": "Current streak",
+  "Hours balance": "Hours balance"
 }
