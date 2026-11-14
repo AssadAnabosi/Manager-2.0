@@ -152,6 +152,7 @@ const Logs = () => {
               month={month}
               logs={logsData?.logs ?? []}
               loading={isLoading}
+              workerName={workers.find((w) => w.value === oneWorker)?.label}
               onMonthChange={(m) => setDate(monthRange(m))}
               onAddDay={canWrite ? setAddDay : undefined}
             />

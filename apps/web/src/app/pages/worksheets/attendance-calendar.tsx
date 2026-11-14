@@ -51,6 +51,8 @@ type Props = {
   month: Date;
   logs: LogType[];
   loading: boolean;
+  /** Printed above the month, since the worker select is hidden on paper. */
+  workerName?: string;
   onMonthChange: (month: Date) => void;
   /** When given, tapping a day with no record calls this instead of opening the details. */
   onAddDay?: (day: Date) => void;
@@ -64,6 +66,7 @@ export default function AttendanceCalendar({
   month,
   logs,
   loading,
+  workerName,
   onMonthChange,
   onAddDay,
 }: Props) {
@@ -116,6 +119,11 @@ export default function AttendanceCalendar({
           <ChevronLeft className="rtl:rotate-180" />
         </Button>
         <div className="text-center">
+          {workerName && (
+            <p className="hidden text-lg font-semibold print:block">
+              {workerName}
+            </p>
+          )}
           <p className="text-lg font-semibold">{fmt.date(first, "LLLL y")}</p>
           <p className="text-muted-foreground text-xs whitespace-nowrap sm:text-sm">
             {t("Calendar records")}{" "}
