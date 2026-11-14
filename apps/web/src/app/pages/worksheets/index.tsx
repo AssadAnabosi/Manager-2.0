@@ -117,12 +117,12 @@ const Logs = () => {
       )}
       <Separator />
       <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between print:hidden">
-        <Tabs value={view} onValueChange={setView}>
-          <TabsList>
-            <TabsTrigger value="list">
+        <Tabs value={view} onValueChange={setView} className="w-full md:w-auto">
+          <TabsList className="w-full group-data-[orientation=horizontal]/tabs:h-11 md:w-auto md:group-data-[orientation=horizontal]/tabs:h-10">
+            <TabsTrigger value="list" className="md:px-5">
               <List /> {t("List")}
             </TabsTrigger>
-            <TabsTrigger value="calendar">
+            <TabsTrigger value="calendar" className="md:px-5">
               <CalendarDays /> {t("Calendar")}
             </TabsTrigger>
           </TabsList>
