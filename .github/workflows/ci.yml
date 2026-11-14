@@ -26,6 +26,9 @@ jobs:
         run: bun run --cwd apps/web build
         env:
           VITE_APP_TITLE: Workbench
+      - name: Web dry-run deploy
+        run: bunx wrangler deploy --dry-run
+        working-directory: apps/web
       - name: Worker dry-run deploy
         run: bunx wrangler deploy --dry-run --outdir "$RUNNER_TEMP/dry"
         working-directory: apps/api

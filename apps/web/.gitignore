@@ -24,3 +24,5 @@ dist-ssr
 
 src/data
 .env
+.wrangler
+wrangler.deploy.jsonc

@@ -28,7 +28,7 @@ jobs:
 
       # Repository variables (Settings > Secrets and variables > Actions > Variables):
       #   API_DOMAIN       the API's domain, e.g. api.mycompany.com
-      #   PAGES_PROJECT    the Cloudflare Pages project name
+      #   WEB_ORIGIN       the web app's origin, e.g. https://dash.mycompany.com
       #   VITE_APP_TITLE   optional app name (defaults to Workbench)
       - name: Build
         run: bun run --cwd apps/web build
@@ -36,10 +36,17 @@ jobs:
           VITE_API_URL: https://${{ vars.API_DOMAIN }}
           VITE_APP_TITLE: ${{ vars.VITE_APP_TITLE || 'Workbench' }}
 
-      - name: Deploy to Cloudflare Pages
+      - name: Render deploy config
+        run: bun scripts/render-wrangler.ts
+        working-directory: apps/web
+        env:
+          WEB_ORIGIN: ${{ vars.WEB_ORIGIN }}
+
+      - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           wranglerVersion: "4.162.0"
-          command: pages deploy apps/web/dist --project-name=${{ vars.PAGES_PROJECT }} --branch=main
+          workingDirectory: apps/web
+          command: deploy --config wrangler.deploy.jsonc
