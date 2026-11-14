@@ -1,3 +1,4 @@
+import { RadixDirection } from "@/components/shell/direction";
 import "./index.css";
 import i18n from "./i18n";
 import React from "react";
@@ -51,7 +52,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               }}
             >
               <React.Suspense fallback={<BootFallback />}>
-                <App />
+                <RadixDirection>
+                  <App />
+                </RadixDirection>
                 <Toaster />
               </React.Suspense>
             </BrowserRouter>
