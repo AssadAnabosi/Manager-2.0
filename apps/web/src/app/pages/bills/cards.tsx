@@ -1,13 +1,10 @@
 import { useTranslation } from "react-i18next";
-import { currencyFormatter } from "@/lib/utils";
+import { useFormatters } from "@/hooks/use-locale";
 import { BillTotals } from "@/lib/types";
 import { Coins } from "lucide-react";
 import { StatCard, StatCardGrid } from "@/components/component/stat-card";
 
 type Totals = { range?: BillTotals; allTime?: BillTotals };
-
-const money = (value: number | undefined) =>
-  typeof value !== "undefined" ? currencyFormatter(value) : undefined;
 
 const Cards = ({
   billsData,
@@ -17,6 +14,9 @@ const Cards = ({
   isLoading: boolean;
 }) => {
   const { t } = useTranslation();
+  const fmt = useFormatters();
+  const money = (value: number | undefined) =>
+    typeof value !== "undefined" ? fmt.currency(value) : undefined;
   const range = billsData?.totals?.range;
   const allTime = billsData?.totals?.allTime;
   return (

@@ -1,4 +1,5 @@
 import type { ChequesList } from "@workbench/shared";
+import { apiErrorText } from "@/lib/api-error";
 import { z } from "zod";
 import { useSearchParams } from "react-router-dom";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
@@ -57,9 +58,7 @@ export const useDeleteChequeMutation = () => {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
       });
     },
   });
@@ -133,9 +132,7 @@ export const useChequeFormMutation = () => {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
       });
     },
   });

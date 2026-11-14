@@ -1,6 +1,4 @@
 import { CalendarIcon } from "@radix-ui/react-icons";
-import { format } from "date-fns";
-import { ar, enGB } from "date-fns/locale";
 import { SelectRangeEventHandler } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
@@ -13,6 +11,8 @@ import {
 } from "@/components/ui/popover";
 
 import { useTranslation } from "react-i18next";
+import { useFormatters } from "@/hooks/use-locale";
+import { useIsDesktop } from "@/hooks/use-breakpoint";
 
 type DatePickerWithRangeProps = {
   className?: string;
@@ -29,45 +29,44 @@ export default function DatePickerWithRange({
   setDate,
 }: DatePickerWithRangeProps) {
   const { t } = useTranslation();
+  const fmt = useFormatters();
+  const isDesktop = useIsDesktop();
   const date = {
     from: data.from ? new Date(data?.from) : undefined,
     to: data.to ? new Date(data?.to) : undefined,
   };
   return (
-    <div className={cn("grid gap-2 w-full", className)}>
+    <div className={cn("grid w-full gap-2", className)}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
             id="date"
             variant={"outline"}
             className={cn(
-              "w-full md:w-[335px] justify-start text-left font-normal",
+              "w-full justify-start text-left font-normal md:w-[335px]",
               !date && "text-muted-foreground"
             )}
           >
-            <CalendarIcon className="ltr:mr-2 rtl:ml-2 h-4 w-4" />
+            <CalendarIcon className="me-2 h-4 w-4" />
             {date?.from ? (
               date.to ? (
                 <>
-                  {format(date.from, "EEE, dd/LL/y", {
-                    locale: document.documentElement.lang === "ar" ? ar : enGB,
-                  })}{" "}
-                  -{" "}
-                  {format(date.to, "EEE, dd/LL/y", {
-                    locale: document.documentElement.lang === "ar" ? ar : enGB,
-                  })}
+                  {fmt.date(date.from, "EEE, dd/LL/y")} -{" "}
+                  {fmt.date(date.to, "EEE, dd/LL/y")}
                 </>
               ) : (
-                format(date.from, "EEE, dd/LL/y,", {
-                  locale: document.documentElement.lang === "ar" ? ar : enGB,
-                })
+                fmt.date(date.from, "EEE, dd/LL/y,")
               )
             ) : (
               <span>{t("Pick a date")}</span>
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="end">
+        <PopoverContent
+          className="w-[calc(100vw-2rem)] p-0 md:w-auto"
+          align={isDesktop ? "end" : "center"}
+          collisionPadding={16}
+        >
           <Calendar
             initialFocus
             mode="range"
@@ -75,7 +74,8 @@ export default function DatePickerWithRange({
             defaultMonth={date?.from}
             selected={date}
             onSelect={setDate}
-            numberOfMonths={2}
+            numberOfMonths={isDesktop ? 2 : 1}
+            fluid
             fromYear={2019}
             toYear={new Date().getFullYear() + 10}
           />

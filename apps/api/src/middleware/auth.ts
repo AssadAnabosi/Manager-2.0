@@ -13,35 +13,29 @@ export const isAuth: MiddlewareHandler<AppEnv> = async (c, next) => {
   const header = c.req.header("authorization");
   const token = header?.startsWith("Bearer") ? header.split(" ")[1] : undefined;
   if (!token) {
-    throw new ResponseError(
-      "Not Authenticated To Access This Route",
-      NOT_AUTHENTICATED
-    );
+    throw new ResponseError("AUTH_NOT_AUTHENTICATED", NOT_AUTHENTICATED);
   }
 
   const result = await verifyAccessToken(c.env, token);
   if (result.status === "expired") {
-    throw new ResponseError(
-      "Token Expired, Please Refresh Token",
-      NOT_AUTHORIZED
-    );
+    throw new ResponseError("AUTH_TOKEN_EXPIRED", NOT_AUTHORIZED);
   }
   if (result.status === "invalid") {
-    throw new ResponseError("Please Login Again", NOT_AUTHENTICATED);
+    throw new ResponseError("AUTH_LOGIN_AGAIN", NOT_AUTHENTICATED);
   }
 
   const db = getDb(c.env.DB);
   const session = await findSessionById(db, result.payload.sessionId);
-  if (!session) throw new ResponseError("Please Login Again", NOT_AUTHENTICATED);
+  if (!session) throw new ResponseError("AUTH_LOGIN_AGAIN", NOT_AUTHENTICATED);
 
   const [user] = await db
     .select()
     .from(users)
     .where(eq(users.id, result.payload.id))
     .limit(1);
-  if (!user) throw new ResponseError("User Can Not Be Found", NOT_FOUND);
+  if (!user) throw new ResponseError("AUTH_USER_NOT_FOUND", NOT_FOUND);
   if (!user.active) {
-    throw new ResponseError("Your account has been deactivated", NOT_AUTHORIZED);
+    throw new ResponseError("AUTH_ACCOUNT_DEACTIVATED", NOT_AUTHORIZED);
   }
 
   c.set("user", user);
@@ -58,7 +52,7 @@ const ensureAuth = async (c: Context<AppEnv>) => {
 };
 
 const forbidden = () =>
-  new ResponseError("Not Authorized To Access This Route", NOT_AUTHORIZED);
+  new ResponseError("FORBIDDEN", NOT_AUTHORIZED);
 
 /** Authenticated, and (when `roles` is given) the role is one of `roles`. */
 export const authorize = (

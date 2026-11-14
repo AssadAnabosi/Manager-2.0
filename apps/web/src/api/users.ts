@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { apiErrorText } from "@/lib/api-error";
 import { passwordSchema } from "@workbench/shared";
 import { useSearchParams, useNavigate, useParams } from "react-router-dom";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
@@ -54,9 +55,7 @@ export const useDeleteUserMutation = () => {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
       });
     },
   });
@@ -123,9 +122,7 @@ export const useUpdatePasswordMutation = () => {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
       });
     },
   });
@@ -156,9 +153,7 @@ export const useUpdateUserStatusMutation = () => {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
       });
     },
   });
@@ -189,9 +184,7 @@ export const useUpdateUserRoleMutation = () => {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
       });
     },
   });
@@ -239,9 +232,7 @@ export const useUserFormMutation = () => {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
       });
     },
   });

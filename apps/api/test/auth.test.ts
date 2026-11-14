@@ -60,6 +60,8 @@ describe.each(["", "/api"])("auth routes with prefix %j", (prefix) => {
       const body = (await res.json()) as any;
       expect(body.success).toBe(false);
       expect(body.message).toContain("Please provide password in your request's body");
+      expect(body.code).toBe("VALIDATION_FAILED");
+      expect(body.errors).toEqual([{ code: "required", path: "password" }]);
     });
 
     it("401s on a wrong password and on an unknown user with the same message", async () => {
@@ -70,6 +72,8 @@ describe.each(["", "/api"])("auth routes with prefix %j", (prefix) => {
       expect(unknown.res.status).toBe(401);
       expect(wrong.body.message).toBe("Invalid Credentials");
       expect(unknown.body.message).toBe("Invalid Credentials");
+      expect(wrong.body.code).toBe("AUTH_INVALID_CREDENTIALS");
+      expect(unknown.body.code).toBe("AUTH_INVALID_CREDENTIALS");
     });
 
     it("runs exactly one password derivation for known and unknown users (timing guard)", async () => {

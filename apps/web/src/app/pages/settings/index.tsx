@@ -1,11 +1,13 @@
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { apiErrorKey, apiErrorText } from "@/lib/api-error";
+import { useLocale } from "@/hooks/use-locale";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { LANGUAGES, THEMES, passwordSchema } from "@workbench/shared";
-import { LanguageType } from "@/lib/types";
 
 import {
   Card,
@@ -44,6 +46,7 @@ import { useAuth } from "@/providers/auth-context";
 
 import useAxios from "@/hooks/use-axios";
 import { PasswordInput } from "@/components/component/password-input";
+import ConfirmDialog from "@/components/component/confirm-dialog";
 const updatePasswordSchema = z
   .object({
     username: z.string(),
@@ -88,7 +91,7 @@ export default function Settings() {
     );
   };
 
-  const lang = document.documentElement.lang.substring(0, 2) as LanguageType;
+  const { lang } = useLocale();
   const { setTheme, theme } = useTheme();
 
   const preferencesForm = useForm<UpdatePreferencesSchemaType>({
@@ -106,7 +109,7 @@ export default function Settings() {
     } catch (error: any) {
       toast({
         title: t("Something went wrong"),
-        description: error.response.data.message,
+        description: apiErrorText(error, t),
         variant: "destructive",
       });
     }
@@ -120,6 +123,8 @@ export default function Settings() {
       new: "",
     },
   });
+  const [pendingPassword, setPendingPassword] =
+    useState<UpdatePasswordSchema | null>(null);
   const updatePassword = async (values: UpdatePasswordSchema) => {
     try {
       await axios.patch("/users/password", values);
@@ -133,14 +138,12 @@ export default function Settings() {
       const { response } = error;
       if (response.status === 400) {
         passwordForm.setError("current", {
-          message: response.data.message,
+          message: apiErrorKey(error),
         });
       }
       toast({
         title: t("Something went wrong"),
-        description: error?.response?.data?.message
-          ? t(error?.response?.data?.message)
-          : t("Something went wrong"),
+        description: apiErrorText(error, t),
         variant: "destructive",
       });
     }
@@ -161,15 +164,17 @@ export default function Settings() {
         <TabsContent value="password">
           <Card>
             <CardHeader>
-              <CardTitle className="rtl:text-right">{t("Password")}</CardTitle>
-              <CardDescription className="rtl:text-right">
+              <CardTitle>{t("Password")}</CardTitle>
+              <CardDescription>
                 {t("Changing your password will log you out from all devices.")}
               </CardDescription>
             </CardHeader>
             <Form {...passwordForm}>
               <form
                 className="flex flex-col gap-6"
-                onSubmit={passwordForm.handleSubmit(updatePassword)}
+                onSubmit={passwordForm.handleSubmit((values) =>
+                  setPendingPassword(values)
+                )}
               >
                 <CardContent className="space-y-2">
                   <FormField
@@ -191,7 +196,7 @@ export default function Settings() {
                     control={passwordForm.control}
                     name="current"
                     render={({ field }) => (
-                      <FormItem className="space-y-1 rtl:text-right">
+                      <FormItem className="space-y-1">
                         <FormLabel>{t("Current password")}</FormLabel>
                         <FormControl>
                           <PasswordInput
@@ -208,7 +213,7 @@ export default function Settings() {
                     control={passwordForm.control}
                     name="new"
                     render={({ field }) => (
-                      <FormItem className="space-y-1 rtl:text-right">
+                      <FormItem className="space-y-1">
                         <FormLabel>{t("New password")}</FormLabel>
                         <FormControl>
                           <PasswordInput
@@ -236,17 +241,25 @@ export default function Settings() {
                 </CardFooter>
               </form>
             </Form>
+            <ConfirmDialog
+              open={pendingPassword !== null}
+              onOpenChange={(open) => !open && setPendingPassword(null)}
+              title={t("Change your password?")}
+              description={t(
+                "You will be logged out from all your devices, including this one, and will need to log in again with your new password."
+              )}
+              confirmLabel={t("Save Changes")}
+              onConfirm={async () => {
+                if (pendingPassword) await updatePassword(pendingPassword);
+              }}
+            />
           </Card>
         </TabsContent>
         <TabsContent value="preferences">
           <Card>
             <CardHeader>
-              <CardTitle className="rtl:text-right">
-                {t("Preferences")}
-              </CardTitle>
-              <CardDescription className="rtl:text-right">
-                {t("Change your preferences.")}
-              </CardDescription>
+              <CardTitle>{t("Preferences")}</CardTitle>
+              <CardDescription>{t("Change your preferences.")}</CardDescription>
             </CardHeader>
             <Form {...preferencesForm}>
               <form
@@ -258,7 +271,7 @@ export default function Settings() {
                     control={preferencesForm.control}
                     name="theme"
                     render={({ field }) => (
-                      <FormItem className="space-y-1 rtl:text-right">
+                      <FormItem className="space-y-1">
                         <FormLabel>{t("Theme")}</FormLabel>
                         <Select
                           disabled={preferencesForm.formState.isSubmitting}
@@ -290,7 +303,7 @@ export default function Settings() {
                     control={preferencesForm.control}
                     name="language"
                     render={({ field }) => (
-                      <FormItem className="space-y-1 rtl:text-right">
+                      <FormItem className="space-y-1">
                         <FormLabel>{t("Language")}</FormLabel>
                         <Select
                           disabled={preferencesForm.formState.isSubmitting}

@@ -24,7 +24,12 @@ export const idSchema = z.string();
 
 export const errorSchema = z.object({
   success: z.literal(false),
+  /** Stable; clients translate this. */
+  code: z.string(),
+  /** English, for logs and API consumers. */
   message: z.union([z.string(), z.array(z.string())]),
+  /** Present on validation failures. */
+  errors: z.array(z.object({ code: z.string(), path: z.string() })).optional(),
 });
 
 export const messageSuccessSchema = z.object({

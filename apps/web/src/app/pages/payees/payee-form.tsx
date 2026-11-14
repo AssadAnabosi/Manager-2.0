@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { apiErrorText } from "@/lib/api-error";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { PayeeType } from "@/lib/types";
@@ -59,7 +60,7 @@ const PayeeForm = ({ payee, onDone }: PayeeFormProps) => {
         variant: "destructive",
         title: t("Error"),
         description:
-          t(error?.response?.data?.message) || t("Something went wrong"),
+          apiErrorText(error, t),
       });
     }
   };

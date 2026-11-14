@@ -15,17 +15,11 @@ import BootFallback from "@/components/component/boot-fallback";
 import { bootstrapSession } from "@/lib/session";
 import { ErrorProvider } from "./providers/error-provider";
 
-i18n.on("languageChanged", (locale) => {
-  let lang = locale.substring(0, 2);
-  let dir = i18n.dir(locale);
-  const allowedLangs = ["en", "ar"];
-  if (!allowedLangs.includes(lang)) {
-    lang = "en";
-    dir = "ltr";
-  }
-
+i18n.on("languageChanged", () => {
+  // resolvedLanguage is already one of the supported languages
+  const lang = i18n.resolvedLanguage ?? "en";
   document.documentElement.lang = lang;
-  document.documentElement.dir = dir;
+  document.documentElement.dir = i18n.dir(lang);
 });
 
 const queryClient = new QueryClient({
@@ -50,7 +44,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <AuthProvider>
         <ErrorProvider>
           <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
+            <BrowserRouter
+              future={{
+                v7_startTransition: true,
+                v7_relativeSplatPath: true,
+              }}
+            >
               <React.Suspense fallback={<BootFallback />}>
                 <App />
                 <Toaster />

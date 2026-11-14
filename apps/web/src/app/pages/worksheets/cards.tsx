@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { currencyFormatter, numberFormatter } from "@/lib/utils";
+import { useFormatters } from "@/hooks/use-locale";
 import { Coins, Clock8, Tally5 } from "lucide-react";
 import { StatCard, StatCardGrid } from "@/components/component/stat-card";
 
@@ -11,6 +11,7 @@ const Cards = ({
   logsData: any;
 }) => {
   const { t } = useTranslation();
+  const fmt = useFormatters();
   return (
     <StatCardGrid count={3} loading={isLoading}>
       <StatCard
@@ -23,7 +24,7 @@ const Cards = ({
         title={t("Received Payments")}
         value={
           typeof logsData?.paymentsSumValue !== "undefined"
-            ? currencyFormatter(logsData.paymentsSumValue)
+            ? fmt.currency(logsData.paymentsSumValue)
             : undefined
         }
         hint={t("Sum of all payments received.")}
@@ -33,7 +34,7 @@ const Cards = ({
         title={t("Workday Variance: Balancing Hours")}
         value={
           typeof logsData?.OTVSum !== "undefined"
-            ? numberFormatter(logsData.OTVSum)
+            ? fmt.number(logsData.OTVSum)
             : undefined
         }
         hint={t(

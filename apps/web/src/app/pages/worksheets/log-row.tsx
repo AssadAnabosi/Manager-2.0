@@ -1,10 +1,8 @@
-import { format } from "date-fns";
-import { enGB, ar } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
+import { useFormatters } from "@/hooks/use-locale";
 import { usePermissions } from "@/hooks/use-permissions";
 
 import { LogType } from "@/lib/types";
-import { DATE_FORMAT } from "@/lib/constants";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -23,20 +21,17 @@ import StatusBadge from "@/components/component/status-badge";
 
 import { CalendarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
-import { currencyFormatter, numberFormatter } from "@/lib/utils";
-
 type Props = {
   log: LogType;
   onDelete: (id: string) => void;
 };
 
 const LogRow = ({ log, onDelete }: Props) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const fmt = useFormatters();
   const { canWrite } = usePermissions();
   const title = log.worker.fullName;
-  const description = format(new Date(log.date), DATE_FORMAT, {
-    locale: i18n.resolvedLanguage === "ar" ? ar : enGB,
-  });
+  const description = fmt.date(new Date(log.date));
   return (
     <TableRow className="h-[73px]">
       <TableCell>
@@ -53,16 +48,16 @@ const LogRow = ({ log, onDelete }: Props) => {
                 <CalendarIcon className="h-5 w-5" />
               </AvatarFallback>
             </Avatar>
-            <div className="space-y-1 ltr:ml-4 rtl:mr-4">
+            <div className="ms-4 space-y-1">
               <p
-                className="text-sm font-medium leading-none"
-                aria-label="Day and Date"
+                className="text-sm leading-none font-medium"
+                aria-label={t("Day and Date")}
               >
                 {title}
               </p>
               <p
-                className="text-sm text-muted-foreground"
-                aria-label="Day and Date"
+                className="text-muted-foreground text-sm"
+                aria-label={t("Day and Date")}
               >
                 {description}
               </p>
@@ -74,11 +69,11 @@ const LogRow = ({ log, onDelete }: Props) => {
         <StatusBadge status={!log.isAbsent} />
       </TableCell>
       <TableCell className="hidden md:table-cell print:table-cell">
-        {log.startingTime} - {log.finishingTime} ({numberFormatter(log.OTV)})
+        {log.startingTime} - {log.finishingTime} ({fmt.number(log.OTV)})
       </TableCell>
       <TableCell className="hidden md:table-cell print:table-cell">
-        <p style={{ direction: "ltr" }} className="rtl:text-right">
-          {currencyFormatter(log.payment)}
+        <p dir="ltr" className="rtl:text-right">
+          {fmt.currency(log.payment)}
         </p>
       </TableCell>
       <TableCell className="hidden lg:table-cell print:table-cell">
@@ -88,7 +83,7 @@ const LogRow = ({ log, onDelete }: Props) => {
         {canWrite && (
           <div className="grid grid-cols-2">
             <LogFormDialog log={log}>
-              <Button size="icon" variant="edit" aria-label="Edit">
+              <Button size="icon" variant="edit" aria-label={t("Edit")}>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -102,7 +97,7 @@ const LogRow = ({ log, onDelete }: Props) => {
               </Button>
             </LogFormDialog>
             <DeleteDialog onAction={() => onDelete(log.id)}>
-              <Button size="icon" variant="delete" aria-label="Delete">
+              <Button size="icon" variant="delete" aria-label={t("Delete")}>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>

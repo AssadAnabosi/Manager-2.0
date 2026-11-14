@@ -1,9 +1,9 @@
 import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useFormatters } from "@/hooks/use-locale";
 import { usePermissions } from "@/hooks/use-permissions";
 
 import { ChequeType } from "@/lib/types";
-import { currencyFormatter } from "@/lib/utils";
 
 import {
   ResponsiveDialog,
@@ -39,6 +39,7 @@ export default function ChequeDetails({
   deleteCheque,
 }: Props) {
   const { t } = useTranslation();
+  const fmt = useFormatters();
   const { canWrite } = usePermissions();
   const [open, setOpen] = useState(false);
 
@@ -58,7 +59,7 @@ export default function ChequeDetails({
             <dt className="text-muted-foreground">{t("Due Date")}</dt>
             <dd>{description}</dd>
             <dt className="text-muted-foreground">{t("Value")}</dt>
-            <dd>{currencyFormatter(cheque.value)}</dd>
+            <dd>{fmt.currency(cheque.value)}</dd>
             <dt className="text-muted-foreground">{t("Remarks")}</dt>
             <dd>{cheque.remarks}</dd>
             <dt className="text-muted-foreground">{t("Status")}</dt>

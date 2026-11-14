@@ -39,8 +39,8 @@ const PayeeRow = ({ payee, onDelete }: Props) => {
                 <User className="h-5 w-5" />
               </AvatarFallback>
             </Avatar>
-            <div className="space-y-1 ltr:ml-4 rtl:mr-4">
-              <p className="text-sm font-medium leading-none">{title}</p>
+            <div className="ms-4 space-y-1">
+              <p className="text-sm leading-none font-medium">{title}</p>
             </div>
           </div>
         </PayeeDetails>
@@ -49,16 +49,16 @@ const PayeeRow = ({ payee, onDelete }: Props) => {
         <div className="flex flex-col space-y-1">
           <p>
             <a
-              aria-label="Email"
+              aria-label={t("Email")}
               className="font-bold text-blue-500 hover:cursor-pointer"
               href={`mailto:${payee.email}`}
             >
               {payee.email}
             </a>
           </p>
-          <p style={{ direction: "ltr" }} className="rtl:text-right">
+          <p dir="ltr" className="rtl:text-right">
             <a
-              aria-label="Email"
+              aria-label={t("Phone Number")}
               className="text-blue-500 hover:cursor-pointer"
               href={`tel:${payee.phoneNumber}`}
             >
@@ -72,7 +72,7 @@ const PayeeRow = ({ payee, onDelete }: Props) => {
         {canWrite && (
           <>
             <PayeeFormDialog payee={payee}>
-              <Button size="icon" variant="edit" aria-label="Edit">
+              <Button size="icon" variant="edit" aria-label={t("Edit")}>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -86,7 +86,7 @@ const PayeeRow = ({ payee, onDelete }: Props) => {
               </Button>
             </PayeeFormDialog>
             <DeleteDialog onAction={() => onDelete(payee.id)}>
-              <Button size="icon" variant="delete" aria-label="Delete">
+              <Button size="icon" variant="delete" aria-label={t("Delete")}>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>

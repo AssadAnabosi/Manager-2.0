@@ -1,7 +1,6 @@
-import { format } from "date-fns";
-import { enGB, ar } from "date-fns/locale";
 import { BillType } from "@/lib/types";
 import { useTranslation } from "react-i18next";
+import { useFormatters } from "@/hooks/use-locale";
 import { usePermissions } from "@/hooks/use-permissions";
 
 import { TableCell, TableRow } from "@/components/ui/table";
@@ -20,7 +19,7 @@ import BillFormDialog from "./bill-form-dialog";
 
 import { CalendarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
-import { cn, signedCurrencyFormatter } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { billKindColor, billKindLabel } from "./kind";
 
@@ -30,14 +29,11 @@ type Props = {
 };
 
 const BillRow = ({ bill, onDelete }: Props) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const fmt = useFormatters();
   const { canWrite } = usePermissions();
-  const title = format(new Date(bill.date), "EEEE", {
-    locale: i18n.resolvedLanguage === "ar" ? ar : enGB,
-  });
-  const description = format(new Date(bill.date), "dd/LL/y", {
-    locale: i18n.resolvedLanguage === "ar" ? ar : enGB,
-  });
+  const title = fmt.date(new Date(bill.date), "EEEE");
+  const description = fmt.date(new Date(bill.date), "dd/LL/y");
   return (
     <TableRow className="h-[73px]">
       <TableCell>
@@ -54,24 +50,30 @@ const BillRow = ({ bill, onDelete }: Props) => {
                 <CalendarIcon className="h-5 w-5" />
               </AvatarFallback>
             </Avatar>
-            <div className="space-y-1 ltr:ml-4 rtl:mr-4">
-              <p className="text-sm font-medium leading-none" aria-label="Day">
+            <div className="ms-4 space-y-1">
+              <p
+                className="text-sm leading-none font-medium"
+                aria-label={t("Day")}
+              >
                 {title}
               </p>
-              <p className="text-sm text-muted-foreground" aria-label="Date">
+              <p
+                className="text-muted-foreground text-sm"
+                aria-label={t("Date")}
+              >
                 {description}
               </p>
             </div>
           </div>
         </BillDetails>
       </TableCell>
-      <TableCell style={{ direction: "ltr" }} className="rtl:text-right">
+      <TableCell dir="ltr" className="rtl:text-right">
         <div className="flex items-center gap-2 rtl:flex-row-reverse rtl:justify-end">
           <span
             className={cn("font-medium", billKindColor(bill.type))}
-            aria-label="Amount"
+            aria-label={t("Amount")}
           >
-            {signedCurrencyFormatter(bill.type, bill.amount)}
+            {fmt.signedCurrency(bill.type, bill.amount)}
           </span>
           <Badge
             variant="outline"
@@ -91,7 +93,7 @@ const BillRow = ({ bill, onDelete }: Props) => {
         {canWrite && (
           <div className="grid grid-cols-2">
             <BillFormDialog bill={bill}>
-              <Button size="icon" variant="edit" aria-label="Edit">
+              <Button size="icon" variant="edit" aria-label={t("Edit")}>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -105,7 +107,7 @@ const BillRow = ({ bill, onDelete }: Props) => {
               </Button>
             </BillFormDialog>
             <DeleteDialog onAction={() => onDelete(bill.id)}>
-              <Button size="icon" variant="delete" aria-label="Delete">
+              <Button size="icon" variant="delete" aria-label={t("Delete")}>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>

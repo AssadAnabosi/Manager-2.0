@@ -53,7 +53,7 @@ const Payees = () => {
         {canWrite && (
           <PayeeFormDialog>
             <Button className="w-full">
-              <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" /> {t("Add New")}
+              <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
             </Button>
           </PayeeFormDialog>
         )}
@@ -61,7 +61,7 @@ const Payees = () => {
       <Separator />
       {/* FILTER */}
       <div className="flex flex-wrap justify-end">
-        <div className=" w-full md:w-[335px]">
+        <div className="w-full md:w-[335px]">
           <Searchbox value={search} setValue={setSearch} />
         </div>
       </div>
@@ -75,13 +75,11 @@ const Payees = () => {
           <TableCaption>{t("A list of payees")}</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[270px] rtl:text-right">
-                {t("Payee Name")}
-              </TableHead>
-              <TableHead className="hidden w-[300px] md:table-cell rtl:text-right">
+              <TableHead className="w-[270px]">{t("Payee Name")}</TableHead>
+              <TableHead className="hidden w-[300px] md:table-cell">
                 {t("Contact Details")}
               </TableHead>
-              <TableHead className="hidden w-max lg:table-cell rtl:text-right">
+              <TableHead className="hidden w-max lg:table-cell">
                 {t("Remarks")}
               </TableHead>
               <TableHead className="hidden w-[120px] lg:table-cell"></TableHead>

@@ -14,7 +14,7 @@ const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
       <div className="focus-within:group group relative">
         <Input
           type={showPassword && !disabled ? "text" : "password"}
-          className={cn("hide-password-toggle ltr:pr-10 rtl:pl-10", className)}
+          className={cn("hide-password-toggle pe-10", className)}
           ref={ref}
           {...props}
         />
@@ -23,7 +23,7 @@ const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
           variant="ghost"
           size="sm"
           className={cn(
-            "absolute top-0 h-full px-3 py-2 hover:bg-transparent group-focus-within:block group-hover:block ltr:right-0 rtl:left-0",
+            "absolute end-0 top-0 h-full px-3 py-2 group-focus-within:block group-hover:block hover:bg-transparent",
             isDesktop ? "hidden" : "block"
           )}
           onClick={() => setShowPassword((prev) => !prev)}

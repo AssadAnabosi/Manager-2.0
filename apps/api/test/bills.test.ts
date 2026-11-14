@@ -49,6 +49,9 @@ describe.each(["", "/api"])("bills with prefix %j", (prefix) => {
       expect((await create({ amount })).status).toBe(400);
     }
     expect((await body(await create({ amount: 0 }))).message).toContain("Amount must be greater than 0");
+    const zero = await body(await create({ amount: 0 }));
+    expect(zero.code).toBe("VALIDATION_FAILED");
+    expect(zero.errors).toEqual([{ code: "amount_positive", path: "amount" }]);
     expect((await create({ date: "x" })).status).toBe(400);
     expect((await create({ description: undefined })).status).toBe(400);
     expect((await create({ description: "" })).status).toBe(400);

@@ -1,9 +1,9 @@
 import { ReactElement, ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useFormatters } from "@/hooks/use-locale";
 import { usePermissions } from "@/hooks/use-permissions";
 
 import { LogType } from "@/lib/types";
-import { numberFormatter, currencyFormatter } from "@/lib/utils";
 
 import {
   ResponsiveDialog,
@@ -39,9 +39,10 @@ export default function LogDetails({
   deleteLog,
 }: Props) {
   const { t } = useTranslation();
+  const fmt = useFormatters();
   const { canWrite } = usePermissions();
   const [open, setOpen] = useState(false);
-  
+
   return (
     <ResponsiveDialog open={open} onOpenChange={setOpen}>
       <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
@@ -59,11 +60,10 @@ export default function LogDetails({
             </dd>
             <dt className="text-muted-foreground">{t("Work Hours")}</dt>
             <dd>
-              {log.startingTime} - {log.finishingTime} (
-              {numberFormatter(log.OTV)})
+              {log.startingTime} - {log.finishingTime} ({fmt.number(log.OTV)})
             </dd>
             <dt className="text-muted-foreground">{t("Payment")}</dt>
-            <dd>{currencyFormatter(log.payment)}</dd>
+            <dd>{fmt.currency(log.payment)}</dd>
             <dt className="text-muted-foreground">{t("Remarks")}</dt>
             <dd>{log.remarks}</dd>
           </dl>

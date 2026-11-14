@@ -11,7 +11,7 @@ export function PageHeader({ title, children }: PageHeaderProps) {
     <div className="flex flex-col justify-between gap-5 space-y-2 md:flex-row">
       <h2 className="text-3xl font-bold tracking-tight">{title}</h2>
       {children && (
-        <div className="flex flex-col items-center gap-2 md:flex-row md:*:w-auto">
+        <div className="flex flex-col items-center gap-2 md:flex-row md:flex-wrap md:justify-end md:*:w-auto">
           {children}
         </div>
       )}

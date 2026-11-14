@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { apiErrorCode, apiValidationIssues } from "@/lib/api-error";
+import { apiErrorText } from "@/lib/api-error";
 import { useTranslation } from "react-i18next";
+import { useFormatters } from "@/hooks/use-locale";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { format } from "date-fns";
-import { enGB, ar } from "date-fns/locale";
 import { ChequeType } from "@/lib/types";
 import {
   cn,
@@ -60,6 +61,7 @@ type ChequeFormProps = {
 
 const ChequeForm = ({ cheque, onDone }: ChequeFormProps) => {
   const { t } = useTranslation();
+  const fmt = useFormatters();
   const { toast } = useToast();
   const chequeForm = useForm<chequeFormSchemaType>({
     resolver: zodResolver(chequeFormSchema),
@@ -93,33 +95,33 @@ const ChequeForm = ({ cheque, onDone }: ChequeFormProps) => {
       }
       onDone();
     } catch (error: any) {
-      const message = error?.response?.data?.message;
-      if (message)
-        switch (message) {
-          case "Serial already exists":
-            chequeForm.setError("serial", {
-              type: "manual",
-              message: "Cheque with this serial already exists.",
-            });
-            return;
-          case "Payee not found":
-            chequeForm.setError("payee", {
-              type: "manual",
-              message: "Payee not found",
-            });
-            return;
-          case "Please select a payee":
-            chequeForm.setError("payee", {
-              type: "manual",
-              message: "Please select a payee",
-            });
-            return;
-        }
+      const code = apiErrorCode(error);
+      if (code === "CHEQUE_SERIAL_EXISTS") {
+        chequeForm.setError("serial", {
+          type: "manual",
+          message: "Cheque with this serial already exists.",
+        });
+        return;
+      }
+      if (code === "PAYEE_NOT_FOUND") {
+        chequeForm.setError("payee", {
+          type: "manual",
+          message: "errors.PAYEE_NOT_FOUND",
+        });
+        return;
+      }
+      if (apiValidationIssues(error).some((i) => i.code === "payee_required")) {
+        chequeForm.setError("payee", {
+          type: "manual",
+          message: "validation.payee_required",
+        });
+        return;
+      }
       toast({
         variant: "destructive",
         title: t("Error"),
         description:
-          t(error?.response?.data?.message) || t("Something went wrong"),
+          apiErrorText(error, t),
       });
     }
   };
@@ -146,16 +148,11 @@ const ChequeForm = ({ cheque, onDone }: ChequeFormProps) => {
                         )}
                       >
                         {field.value ? (
-                          format(stringToDate(field.value), "EEE, dd/LL/y", {
-                            locale:
-                              document.documentElement.lang === "ar"
-                                ? ar
-                                : enGB,
-                          })
+                          fmt.date(stringToDate(field.value), "EEE, dd/LL/y")
                         ) : (
                           <span>{t("Pick a date")}</span>
                         )}
-                        <CalendarIcon className="h-4 w-4 opacity-50 ltr:ml-auto rtl:mr-auto" />
+                        <CalendarIcon className="ms-auto h-4 w-4 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -287,13 +284,13 @@ const ChequeForm = ({ cheque, onDone }: ChequeFormProps) => {
               <FormLabel>{t("Value")}</FormLabel>
               <FormControl>
                 <div className="relative w-full justify-between">
-                  <span className="absolute bottom-0 left-3 top-0 my-auto h-6 w-6 text-muted-foreground">
+                  <span className="text-muted-foreground absolute top-0 bottom-0 left-3 my-auto h-6 w-6">
                     <ShekelIcon />
                   </span>
                   <Input
                     {...field}
                     type="string"
-                    className="input pl-12 pr-4 text-left"
+                    className="input pr-4 pl-12 text-left"
                     disabled={isLoading}
                   />
                 </div>

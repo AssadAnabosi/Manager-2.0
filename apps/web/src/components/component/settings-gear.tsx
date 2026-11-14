@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocale } from "@/hooks/use-locale";
 import {
   PopoverTrigger,
   PopoverContent,
@@ -25,12 +26,12 @@ function SettingsGear() {
     setOpen(false);
   };
   const { setTheme, theme } = useTheme();
-  const lang = document.documentElement.lang.substring(0, 2);
+  const { lang } = useLocale();
   const handleThemeChange = (value: ThemeType) => {
     setTheme(value);
   };
   return (
-    <div className="absolute top-[25%] ltr:right-8 rtl:left-8">
+    <div className="absolute end-8 top-[25%]">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger>
           <GearIcon className="h-7 w-7" />
@@ -38,13 +39,13 @@ function SettingsGear() {
         <PopoverContent className="w-96">
           <div className="grid gap-4">
             <div className="space-y-2">
-              <h4 className="font-medium leading-none">{t("Settings")}</h4>
-              <p className="text-sm text-muted-foreground">
+              <h4 className="leading-none font-medium">{t("Settings")}</h4>
+              <p className="text-muted-foreground text-sm">
                 {t("Adjust your application settings.")}
               </p>
             </div>
             <div className="grid gap-2">
-              <div className="grid grid-cols-3 items-center gap-4 w-full">
+              <div className="grid w-full grid-cols-3 items-center gap-4">
                 <Label htmlFor="theme">{t("Theme")}</Label>
                 <Select onValueChange={handleThemeChange} defaultValue={theme}>
                   <SelectTrigger className="w-full">

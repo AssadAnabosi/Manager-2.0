@@ -106,7 +106,9 @@ describe.each(["", "/api"])("payees and cheques with prefix %j", (prefix) => {
       expect(cancelled.status).toBe(201);
       const unknown = await createCheque({ serial: 3, payee: "11111111-1111-4111-8111-111111111111" });
       expect(unknown.status).toBe(404);
-      expect((await body(unknown)).message).toBe("Payee not found");
+      const unknownBody = await body(unknown);
+      expect(unknownBody.message).toBe("Payee not found");
+      expect(unknownBody.code).toBe("PAYEE_NOT_FOUND");
     });
 
     it("validates required fields, negative values and unique serials", async () => {
@@ -121,7 +123,9 @@ describe.each(["", "/api"])("payees and cheques with prefix %j", (prefix) => {
       expect((await createCheque({ payee })).status).toBe(201);
       const dup = await createCheque({ payee });
       expect(dup.status).toBe(409);
-      expect((await body(dup)).message).toBe("Serial already exists");
+      const dupBody = await body(dup);
+      expect(dupBody.message).toBe("Serial already exists");
+      expect(dupBody.code).toBe("CHEQUE_SERIAL_EXISTS");
     });
 
     it("sorts by due date then serial and excludes cancelled cheques from the total", async () => {

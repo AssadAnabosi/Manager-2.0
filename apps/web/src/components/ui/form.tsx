@@ -1,4 +1,6 @@
 import * as React from "react";
+import type { TFunction } from "i18next";
+import { PASSWORD_MIN_LENGTH, validationCode } from "@workbench/shared";
 import { useTranslation } from "react-i18next";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";
@@ -142,13 +144,21 @@ const FormDescription = React.forwardRef<
 });
 FormDescription.displayName = "FormDescription";
 
+/** Shared-schema messages are translated by their validation code; anything else by its own text. */
+function translateMessage(message: string, t: TFunction): string {
+  const code = validationCode(message);
+  return code
+    ? String(t(`validation.${code}`, { min: PASSWORD_MIN_LENGTH }))
+    : String(t(message));
+}
+
 const FormMessage = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, children, ...props }, ref) => {
   const { t } = useTranslation();
   const { error, formMessageId } = useFormField();
-  const body = error && error.message ? String(t(error.message)) : children;
+  const body = error && error.message ? translateMessage(error.message, t) : children;
 
   if (!body) {
     return null;

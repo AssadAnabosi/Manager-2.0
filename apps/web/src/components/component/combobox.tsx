@@ -62,7 +62,6 @@ const Combobox = ({
           <CommandEmpty>{t("No matching results")}</CommandEmpty>
           <CB_ScrollArea className="h-72">
             <CommandGroup>
-              <h4 className="mb-4 text-sm font-medium leading-none">Tags</h4>
               {list.map((item) => (
                 <CommandItem
                   value={item.label}

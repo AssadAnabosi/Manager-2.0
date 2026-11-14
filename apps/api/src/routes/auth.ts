@@ -138,10 +138,7 @@ export const authRoutes = (prefix: string) => {
       const name = username.toLowerCase();
 
       if (await isLoginBlocked(db, ip, name)) {
-        throw new ResponseError(
-          "Too many requests from this IP, please try again in a while",
-          TOO_MANY_REQUESTS
-        );
+        throw new ResponseError("TOO_MANY_REQUESTS", TOO_MANY_REQUESTS);
       }
 
       const previous = getCookie(c, COOKIE);
@@ -154,14 +151,11 @@ export const authRoutes = (prefix: string) => {
 
       if (!user || !ok) {
         await recordFailedLogin(db, ip, name);
-        throw new ResponseError("Invalid Credentials", NOT_AUTHENTICATED);
+        throw new ResponseError("AUTH_INVALID_CREDENTIALS", NOT_AUTHENTICATED);
       }
       // Checked only after the password matches, so it can't reveal deactivated usernames.
       if (!user.active) {
-        throw new ResponseError(
-          "Your account has been deactivated",
-          NOT_AUTHORIZED
-        );
+        throw new ResponseError("AUTH_ACCOUNT_DEACTIVATED", NOT_AUTHORIZED);
       }
       if (needsRehash) {
         await updatePasswordHash(db, user.id, await hashPassword(password, c.env));
@@ -200,40 +194,34 @@ export const authRoutes = (prefix: string) => {
     })
     .openapi(refresh, async (c) => {
       const token = getCookie(c, COOKIE);
-      if (!token) throw new ResponseError("You are not logged in", BAD_REQUEST);
+      if (!token) throw new ResponseError("AUTH_NOT_LOGGED_IN", BAD_REQUEST);
       const db = getDb(c.env.DB);
 
       const result = await verifyRefreshToken(c.env, token);
       if (result.status === "expired") {
         clearCookie(c);
         await deleteSessionByToken(db, token);
-        throw new ResponseError(
-          "Token Expired, Please Login Again",
-          NOT_AUTHENTICATED
-        );
+        throw new ResponseError("AUTH_REFRESH_EXPIRED", NOT_AUTHENTICATED);
       }
       if (result.status === "invalid") {
         clearCookie(c);
-        throw new ResponseError("Please Login Again", NOT_AUTHENTICATED);
+        throw new ResponseError("AUTH_LOGIN_AGAIN", NOT_AUTHENTICATED);
       }
 
       const user = await findUserById(db, result.payload.id);
       if (!user) {
         clearCookie(c);
-        throw new ResponseError("User account deleted", NOT_FOUND);
+        throw new ResponseError("AUTH_USER_DELETED", NOT_FOUND);
       }
       // Same check as `authorize`, so a refresh can't revive a deactivated account.
       if (!user.active) {
         clearCookie(c);
-        throw new ResponseError(
-          "Your account has been deactivated",
-          NOT_AUTHORIZED
-        );
+        throw new ResponseError("AUTH_ACCOUNT_DEACTIVATED", NOT_AUTHORIZED);
       }
       const session = await findSessionByToken(db, token);
       if (!session) {
         clearCookie(c);
-        throw new ResponseError("Please Login Again", NOT_AUTHENTICATED);
+        throw new ResponseError("AUTH_LOGIN_AGAIN", NOT_AUTHENTICATED);
       }
 
       return c.json(
@@ -253,7 +241,7 @@ export const authRoutes = (prefix: string) => {
     })
     .openapi(logout, async (c) => {
       const token = getCookie(c, COOKIE);
-      if (!token) throw new ResponseError("You are not logged in", BAD_REQUEST);
+      if (!token) throw new ResponseError("AUTH_NOT_LOGGED_IN", BAD_REQUEST);
       await deleteSessionByToken(getDb(c.env.DB), token);
       clearCookie(c);
       return c.json(

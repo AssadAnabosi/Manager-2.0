@@ -1,4 +1,5 @@
 export * from "./constants";
+export * from "./errors";
 export * from "./common";
 export * from "./password";
 export * from "./auth";

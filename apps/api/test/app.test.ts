@@ -29,6 +29,7 @@ describe.each(["", "/api"])("app with prefix %j", (prefix) => {
     expect(res.status).toBe(404);
     expect(await res.json()).toEqual({
       success: false,
+      code: "ROUTE_NOT_FOUND",
       message:
         "Oops, you have reached an undefined route, please check your request and try again",
     });
@@ -40,13 +41,17 @@ describe.each(["", "/api"])("app with prefix %j", (prefix) => {
       body: JSON.stringify({ username: "a", password: "x".repeat(17 * 1024) }),
     });
     expect(res.status).toBe(413);
-    expect(((await res.json()) as any).success).toBe(false);
+    const body = (await res.json()) as any;
+    expect(body.success).toBe(false);
+    expect(body.code).toBe("PAYLOAD_TOO_LARGE");
   });
 
   it("400s on malformed JSON", async () => {
     const res = await api.request("/auth", { method: "POST", body: "{nope" });
     expect(res.status).toBe(400);
-    expect(((await res.json()) as any).success).toBe(false);
+    const body = (await res.json()) as any;
+    expect(body.success).toBe(false);
+    expect(body.code).toBe("REQUEST_INVALID");
   });
 
   it("accepts very long passwords (no maximum) within the body limit", async () => {

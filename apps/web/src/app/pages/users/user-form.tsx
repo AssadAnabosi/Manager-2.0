@@ -1,4 +1,6 @@
 import { useTranslation } from "react-i18next";
+import { apiValidationIssues } from "@/lib/api-error";
+import { apiErrorText } from "@/lib/api-error";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -126,21 +128,18 @@ const UserForm = ({
         await mutateAsync({ data, userId: user.id });
       }
     } catch (error: any) {
-      const message = error?.response?.data?.message;
-      if (message)
-        switch (message) {
-          case "Please provide a valid email":
-            userForm.setError("email", {
-              type: "manual",
-              message: "Please provide a valid email",
-            });
-            return;
-        }
+      if (apiValidationIssues(error).some((i) => i.code === "email_invalid")) {
+        userForm.setError("email", {
+          type: "manual",
+          message: "validation.email_invalid",
+        });
+        return;
+      }
       toast({
         variant: "destructive",
         title: t("Error"),
         description:
-          t(error?.response?.data?.message) || t("Something went wrong"),
+          apiErrorText(error, t),
       });
     }
   };
@@ -156,7 +155,7 @@ const UserForm = ({
             control={userForm.control}
             name="username"
             render={({ field }) => (
-              <FormItem className="flex flex-col rtl:text-right">
+              <FormItem className="flex flex-col">
                 <FormLabel>{t("Username")}</FormLabel>
                 <FormControl>
                   <Input
@@ -174,7 +173,7 @@ const UserForm = ({
             control={userForm.control}
             name="firstName"
             render={({ field }) => (
-              <FormItem className="flex flex-col rtl:text-right">
+              <FormItem className="flex flex-col">
                 <FormLabel>{t("First Name")}</FormLabel>
                 <FormControl>
                   <Input
@@ -192,7 +191,7 @@ const UserForm = ({
             control={userForm.control}
             name="lastName"
             render={({ field }) => (
-              <FormItem className="flex flex-col rtl:text-right">
+              <FormItem className="flex flex-col">
                 <FormLabel>{t("Last Name")}</FormLabel>
                 <FormControl>
                   <Input
@@ -210,7 +209,7 @@ const UserForm = ({
             control={userForm.control}
             name="email"
             render={({ field }) => (
-              <FormItem className="flex flex-col rtl:text-right">
+              <FormItem className="flex flex-col">
                 <FormLabel>{t("Email")}</FormLabel>
                 <FormControl>
                   <Input
@@ -228,7 +227,7 @@ const UserForm = ({
             control={userForm.control}
             name="phoneNumber"
             render={({ field }) => (
-              <FormItem className="flex flex-col rtl:text-right">
+              <FormItem className="flex flex-col">
                 <FormLabel>{t("Phone Number")}</FormLabel>
                 <FormControl>
                   <Input
@@ -248,7 +247,7 @@ const UserForm = ({
                 control={userForm.control}
                 name="password"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col rtl:text-right">
+                  <FormItem className="flex flex-col">
                     <FormLabel>{t("Password")}</FormLabel>
                     <FormControl>
                       <PasswordInput
@@ -266,7 +265,7 @@ const UserForm = ({
                 control={userForm.control}
                 name="confirmPassword"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col rtl:text-right">
+                  <FormItem className="flex flex-col">
                     <FormLabel>{t("Confirm Password")}</FormLabel>
                     <FormControl>
                       <PasswordInput
