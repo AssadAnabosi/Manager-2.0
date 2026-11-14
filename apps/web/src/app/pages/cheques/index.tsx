@@ -30,7 +30,10 @@ import NoResults from "@/components/component/no-results";
 import FetchError from "@/components/component/fetch-error";
 
 import Cards from "./cards";
-import RowSkeleton from "./row-skeleton";
+import {
+  TableSkeleton,
+  type SkeletonColumn,
+} from "@/components/component/table-skeleton";
 import ChequeRow from "./cheque-row";
 import ChequeFormDialog from "./cheque-form-dialog";
 
@@ -44,8 +47,14 @@ import {
   toList,
 } from "@/lib/utils";
 
+const CHEQUES_SKELETON: SkeletonColumn[] = [
+  { kind: "identity" },
+  { kind: "badge" },
+  { kind: "text", className: "hidden md:table-cell" },
+  { kind: "empty", className: "hidden md:table-cell" },
+];
+
 const Cheques = () => {
-  const dummy = [...Array(8)];
   const { canWrite } = usePermissions();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
@@ -198,15 +207,17 @@ const Cheques = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading
-              ? dummy.map((_, index) => RowSkeleton(index))
-              : chequesData.cheques.map((cheque: ChequeType) => (
-                  <ChequeRow
-                    key={cheque.id}
-                    cheque={cheque}
-                    onDelete={deleteCheque}
-                  />
-                ))}
+            {isLoading ? (
+              <TableSkeleton columns={CHEQUES_SKELETON} />
+            ) : (
+              chequesData.cheques.map((cheque: ChequeType) => (
+                <ChequeRow
+                  key={cheque.id}
+                  cheque={cheque}
+                  onDelete={deleteCheque}
+                />
+              ))
+            )}
           </TableBody>
         </Table>
       )}

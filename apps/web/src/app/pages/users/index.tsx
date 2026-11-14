@@ -22,13 +22,23 @@ import NoResults from "@/components/component/no-results";
 import FetchError from "@/components/component/fetch-error";
 import UserFormDialog from "./user-form-dialog";
 
-import RowSkeleton from "./row-skeleton";
+import {
+  TableSkeleton,
+  type SkeletonColumn,
+} from "@/components/component/table-skeleton";
 import UserRow from "./user-row";
 
 import { FilePlus } from "lucide-react";
 
+const USERS_SKELETON: SkeletonColumn[] = [
+  { kind: "identity" },
+  { kind: "text", className: "hidden md:table-cell" },
+  { kind: "badge", className: "hidden md:table-cell" },
+  { kind: "lines", className: "hidden lg:table-cell" },
+  { kind: "empty", className: "hidden lg:table-cell" },
+];
+
 const Users = () => {
-  const dummy = [...Array(8)];
   const { canCreateUsers } = usePermissions();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
@@ -98,11 +108,13 @@ const Users = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading
-              ? dummy.map((_, index) => RowSkeleton(index))
-              : usersData.users.map((user: UserType) => (
-                  <UserRow key={user.id} user={user} />
-                ))}
+            {isLoading ? (
+              <TableSkeleton columns={USERS_SKELETON} />
+            ) : (
+              usersData.users.map((user: UserType) => (
+                <UserRow key={user.id} user={user} />
+              ))
+            )}
           </TableBody>
         </Table>
       )}

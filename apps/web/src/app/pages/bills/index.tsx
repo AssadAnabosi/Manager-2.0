@@ -30,7 +30,10 @@ import FetchError from "@/components/component/fetch-error";
 
 import Cards from "./cards";
 import BillRow from "./bill-row";
-import RowSkeleton from "./row-skeleton";
+import {
+  TableSkeleton,
+  type SkeletonColumn,
+} from "@/components/component/table-skeleton";
 import BillFormDialog from "./bill-form-dialog";
 
 import { Printer, FilePlus } from "lucide-react";
@@ -42,8 +45,15 @@ import {
   stringToDate,
 } from "@/lib/utils";
 
+const BILLS_SKELETON: SkeletonColumn[] = [
+  { kind: "identity" },
+  { kind: "badge" },
+  { kind: "text", className: "hidden md:table-cell" },
+  { kind: "text", className: "hidden lg:table-cell" },
+  { kind: "empty", className: "hidden lg:table-cell" },
+];
+
 const Bills = () => {
-  const dummy = [...Array(8)];
   const { canWrite } = usePermissions();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
@@ -183,11 +193,13 @@ const Bills = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading
-              ? dummy.map((_, index) => RowSkeleton(index))
-              : billsData.bills.map((bill: BillType) => (
-                  <BillRow key={bill.id} bill={bill} onDelete={deleteBill} />
-                ))}
+            {isLoading ? (
+              <TableSkeleton columns={BILLS_SKELETON} />
+            ) : (
+              billsData.bills.map((bill: BillType) => (
+                <BillRow key={bill.id} bill={bill} onDelete={deleteBill} />
+              ))
+            )}
           </TableBody>
         </Table>
       )}

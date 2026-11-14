@@ -29,7 +29,10 @@ import NoResults from "@/components/component/no-results";
 import FetchError from "@/components/component/fetch-error";
 
 import Cards from "./cards";
-import RowSkeleton from "./row-skeleton";
+import {
+  TableSkeleton,
+  type SkeletonColumn,
+} from "@/components/component/table-skeleton";
 import LogRow from "./log-row";
 import LogFormDialog from "./log-form-dialog";
 
@@ -42,8 +45,16 @@ import {
   stringToDate,
 } from "@/lib/utils";
 
+const WORKSHEETS_SKELETON: SkeletonColumn[] = [
+  { kind: "identity" },
+  { kind: "badge" },
+  { kind: "text", className: "hidden md:table-cell" },
+  { kind: "text", className: "hidden md:table-cell" },
+  { kind: "text", className: "hidden lg:table-cell" },
+  { kind: "empty", className: "hidden md:table-cell" },
+];
+
 const Logs = () => {
-  const dummy = [...Array(8)];
   const { user } = useAuth();
   const { canWrite } = usePermissions();
   const { t } = useTranslation();
@@ -187,11 +198,13 @@ const Logs = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading
-              ? dummy.map((_, index) => RowSkeleton(index))
-              : logsData.logs.map((log: LogType) => (
-                  <LogRow key={log.id} log={log} onDelete={deleteLog} />
-                ))}
+            {isLoading ? (
+              <TableSkeleton columns={WORKSHEETS_SKELETON} />
+            ) : (
+              logsData.logs.map((log: LogType) => (
+                <LogRow key={log.id} log={log} onDelete={deleteLog} />
+              ))
+            )}
           </TableBody>
         </Table>
       )}

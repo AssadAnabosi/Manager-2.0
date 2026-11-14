@@ -22,13 +22,22 @@ import NoResults from "@/components/component/no-results";
 import FetchError from "@/components/component/fetch-error";
 import PayeeFormDialog from "./payee-form-dialog";
 
-import RowSkeleton from "./row-skeleton";
+import {
+  TableSkeleton,
+  type SkeletonColumn,
+} from "@/components/component/table-skeleton";
 import PayeeRow from "./payee-row";
 
 import { FilePlus } from "lucide-react";
 
+const PAYEES_SKELETON: SkeletonColumn[] = [
+  { kind: "identity-single" },
+  { kind: "lines", className: "hidden md:table-cell" },
+  { kind: "text", className: "hidden lg:table-cell" },
+  { kind: "empty", className: "hidden lg:table-cell" },
+];
+
 const Payees = () => {
-  const dummy = [...Array(8)];
   const { canWrite } = usePermissions();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams({
@@ -96,15 +105,13 @@ const Payees = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading
-              ? dummy.map((_, index) => RowSkeleton(index))
-              : payeesData.payees.map((payee: PayeeType) => (
-                  <PayeeRow
-                    key={payee.id}
-                    payee={payee}
-                    onDelete={deletePayee}
-                  />
-                ))}
+            {isLoading ? (
+              <TableSkeleton columns={PAYEES_SKELETON} />
+            ) : (
+              payeesData.payees.map((payee: PayeeType) => (
+                <PayeeRow key={payee.id} payee={payee} onDelete={deletePayee} />
+              ))
+            )}
           </TableBody>
         </Table>
       )}
