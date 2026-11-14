@@ -9,7 +9,11 @@
     "typecheck": "tsc --noEmit && tsc --noEmit -p scripts",
     "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0",
     "test": "vitest run",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "wrangler d1 migrations apply workbench-db --local",
+    "db:seed:local": "bun scripts/seed.ts --local",
+    "db:reset:local": "bun scripts/reset-local.ts && bun run db:migrate:local && bun run db:seed:local",
+    "deploy": "wrangler d1 migrations apply workbench-db --remote && wrangler deploy"
   },
   "dependencies": {
     "@hono/swagger-ui": "^0.6.2",

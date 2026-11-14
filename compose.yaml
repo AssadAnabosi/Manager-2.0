@@ -1,0 +1,87 @@
+# Development environment: `bun run dev` (docker compose watch).
+# Requires apps/api/.dev.vars (copy it from apps/api/.dev.vars.example).
+x-app: &app
+  build:
+    context: .
+    dockerfile: docker/dev.Dockerfile
+
+services:
+  # One-shot: apply migrations and seed the admin into the local D1 database.
+  migrate:
+    <<: *app
+    working_dir: /app/apps/api
+    command: sh -c "bun run db:migrate:local && bun run db:seed:local"
+    volumes:
+      - wrangler-state:/app/apps/api/.wrangler
+      - ./apps/api/.dev.vars:/app/apps/api/.dev.vars:ro
+
+  api:
+    <<: *app
+    working_dir: /app/apps/api
+    command: bunx wrangler dev --ip 0.0.0.0 --port 8787 --test-scheduled
+    ports:
+      - "8787:8787"
+    volumes:
+      - wrangler-state:/app/apps/api/.wrangler
+      - ./apps/api/.dev.vars:/app/apps/api/.dev.vars:ro
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        - CMD
+        - bun
+        - -e
+        - "fetch('http://localhost:8787/health').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 3s
+      timeout: 5s
+      retries: 40
+    develop:
+      watch:
+        - action: sync
+          path: ./apps/api/src
+          target: /app/apps/api/src
+        - action: sync
+          path: ./packages/shared/src
+          target: /app/packages/shared/src
+        - action: sync+restart
+          path: ./apps/api/wrangler.jsonc
+          target: /app/apps/api/wrangler.jsonc
+        - action: rebuild
+          path: ./apps/api/package.json
+        - action: rebuild
+          path: ./bun.lock
+
+  web:
+    <<: *app
+    working_dir: /app/apps/web
+    command: bunx --bun vite --host 0.0.0.0 --port 5173
+    environment:
+      VITE_API_URL: http://localhost:8787
+      VITE_APP_TITLE: Workbench
+    ports:
+      - "5173:5173"
+    depends_on:
+      api:
+        condition: service_healthy
+    develop:
+      watch:
+        - action: sync
+          path: ./apps/web/src
+          target: /app/apps/web/src
+        - action: sync
+          path: ./apps/web/public
+          target: /app/apps/web/public
+        - action: sync
+          path: ./packages/shared/src
+          target: /app/packages/shared/src
+        - action: sync+restart
+          path: ./apps/web/vite.config.ts
+          target: /app/apps/web/vite.config.ts
+        - action: rebuild
+          path: ./apps/web/package.json
+        - action: rebuild
+          path: ./bun.lock
+
+volumes:
+  wrangler-state:

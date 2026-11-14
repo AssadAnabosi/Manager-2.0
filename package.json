@@ -1,5 +1,20 @@
 {
   "name": "workbench",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"]
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "docker compose watch",
+    "dev:native": "bun run --parallel --filter @workbench/api --filter @workbench/web dev",
+    "db:generate": "bun run --cwd apps/api db:generate",
+    "db:migrate:local": "bun run --cwd apps/api db:migrate:local",
+    "db:seed:local": "bun run --cwd apps/api db:seed:local",
+    "db:reset:local": "bun run --cwd apps/api db:reset:local",
+    "typecheck": "bun run --workspaces typecheck",
+    "lint": "bun run --workspaces --if-present lint",
+    "test": "bun run --cwd apps/api test",
+    "deploy": "bun run --cwd apps/api deploy"
+  }
 }

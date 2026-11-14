@@ -8,9 +8,11 @@ bun install
 bun run dev
 ```
 
-`bun run dev` runs `docker compose watch`: a one-shot `migrate` service applies migrations and seeds the admin into a local D1 database, then `api` (`localhost:8787`) and `web` (`localhost:5173`) start with hot reload.
+`bun run dev` runs `docker compose watch` (Docker with Compose 2.22+; `apps/api/.dev.vars` is mounted read-only into the containers): a one-shot `migrate` service applies migrations and seeds the admin into a local D1 database, then `api` (`localhost:8787`) and `web` (`localhost:5173`) start with hot reload.
 
 ## Native (no Docker)
+
+Requires Bun and Node.js (Wrangler's local runtime must run on Node; under Bun it can't forward requests to the Worker).
 
 ```bash
 bun install
@@ -33,6 +35,10 @@ bun run dev:native
 | `lint` | ESLint in every workspace |
 | `test` | `vitest run` |
 | `deploy` | Apply remote migrations and `wrangler deploy` |
+
+## Hot reload
+
+With Docker, changes under `apps/api/src`, `apps/web/src` and `packages/shared/src` are synced into the containers (no source bind mounts); changing a `package.json` or `bun.lock` rebuilds the image. The image installs dependencies at build time with `bun install --frozen-lockfile`.
 
 ## Local D1
 
