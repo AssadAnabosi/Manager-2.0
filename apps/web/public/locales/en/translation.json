@@ -324,5 +324,14 @@
   "by": "by",
   "Command menu": "Command menu",
   "Search for a page or a setting": "Search for a page or a setting",
-  "Pages": "Pages"
+  "Pages": "Pages",
+  "Valid": "Valid",
+  "Active": "Active",
+  "Inactive": "Inactive",
+  "Caps Lock is on": "Caps Lock is on",
+  "Show password": "Show password",
+  "Hide password": "Hide password",
+  "Nothing here yet": "Nothing here yet",
+  "Records you add will show up here.": "Records you add will show up here.",
+  "Try changing or clearing the filters.": "Try changing or clearing the filters."
 }

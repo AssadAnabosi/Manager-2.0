@@ -1,15 +1,45 @@
-import { SearchX } from "lucide-react";
-
+import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
+import { Inbox, SearchX } from "lucide-react";
 
-const NoResults = () => {
+import { useFilterState } from "@/hooks/use-url-state";
+import { Button } from "@/components/ui/button";
+
+type Props = {
+  /** The URL parameters that narrow the list; when any is set the list is "filtered". */
+  filterKeys?: string[];
+  /** Shown when nothing matches because there are no records yet, e.g. the "Add New" button. */
+  action?: ReactNode;
+};
+
+/**
+ * An empty list. With filters applied it says nothing matches and offers to clear them;
+ * otherwise it says there is nothing yet and offers the page's primary action.
+ */
+const NoResults = ({ filterKeys = [], action }: Props) => {
   const { t } = useTranslation();
+  const { active, clear } = useFilterState(filterKeys);
+  const Icon = active ? SearchX : Inbox;
   return (
-    <div className="align-center my-auto flex h-[335px] items-center justify-center">
-      <SearchX size={32} absoluteStrokeWidth />
-      <p className="ps-2 text-center text-2xl capitalize">
-        {t("No Matching Results Found")}
-      </p>
+    <div className="flex min-h-[335px] flex-col items-center justify-center gap-3 py-8 text-center">
+      <Icon size={36} absoluteStrokeWidth className="text-muted-foreground" />
+      <div className="space-y-1">
+        <p className="text-xl font-semibold">
+          {active ? t("No Matching Results Found") : t("Nothing here yet")}
+        </p>
+        <p className="text-muted-foreground text-sm">
+          {active
+            ? t("Try changing or clearing the filters.")
+            : t("Records you add will show up here.")}
+        </p>
+      </div>
+      {active ? (
+        <Button variant="outline" onClick={clear} className="print:hidden">
+          {t("Clear filters")}
+        </Button>
+      ) : (
+        action
+      )}
     </div>
   );
 };

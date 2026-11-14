@@ -182,7 +182,7 @@ export default function Edit() {
         value={tab}
         onValueChange={setTab}
         defaultValue="password"
-        className="w-[400px]"
+        className="w-full max-w-[400px]"
       >
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="password">{t("Password")}</TabsTrigger>

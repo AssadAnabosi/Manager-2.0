@@ -24,7 +24,10 @@ import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 import LogFormDialog from "./log-form-dialog";
 
 type Props = {
-  children: ReactNode;
+  /** The element that opens the details; leave it out to control `open` yourself. */
+  children?: ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   title: string;
   description?: string | ReactElement;
   log: LogType;
@@ -33,6 +36,8 @@ type Props = {
 
 export default function LogDetails({
   children,
+  open: openProp,
+  onOpenChange,
   title,
   description,
   log,
@@ -41,11 +46,15 @@ export default function LogDetails({
   const { t } = useTranslation();
   const fmt = useFormatters();
   const { canWrite } = usePermissions();
-  const [open, setOpen] = useState(false);
+  const [inner, setInner] = useState(false);
+  const open = openProp ?? inner;
+  const setOpen = onOpenChange ?? setInner;
 
   return (
     <ResponsiveDialog open={open} onOpenChange={setOpen}>
-      <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+      {children && (
+        <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+      )}
       <ResponsiveDialogContent>
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle>
@@ -56,7 +65,10 @@ export default function LogDetails({
           <dl className="grid grid-cols-[auto_1fr] items-center gap-x-5 gap-y-2 text-start">
             <dt className="text-muted-foreground">{t("Status")}</dt>
             <dd>
-              <StatusBadge status={!log.isAbsent} />
+              <StatusBadge
+                status={!log.isAbsent}
+                labels={[t("Attended"), t("Absent")]}
+              />
             </dd>
             <dt className="text-muted-foreground">{t("Work Hours")}</dt>
             <dd>

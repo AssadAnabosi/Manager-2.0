@@ -61,3 +61,22 @@ export function useDateRangeParams(): [
   );
   return [range, setRange];
 }
+
+/** Whether any of these URL parameters is set, and a way to remove them all. */
+export function useFilterState(keys: string[]) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const active = keys.some((key) => searchParams.get(key));
+  const clear = useCallback(
+    () =>
+      setSearchParams(
+        (prev) => {
+          for (const key of keys) prev.delete(key);
+          return prev;
+        },
+        { replace: true }
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [setSearchParams, keys.join(",")]
+  );
+  return { active, clear };
+}

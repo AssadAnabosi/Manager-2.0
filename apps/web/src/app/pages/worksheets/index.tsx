@@ -155,6 +155,7 @@ const Logs = () => {
               workerName={workers.find((w) => w.value === oneWorker)?.label}
               onMonthChange={(m) => setDate(monthRange(m))}
               onAddDay={canWrite ? setAddDay : undefined}
+              onDelete={deleteLog}
             />
           ) : (
             <p className="text-muted-foreground py-12 text-center">
@@ -187,7 +188,18 @@ const Logs = () => {
           {!isLoading && !logsData ? (
             <FetchError />
           ) : !isLoading && !logsData?.logs?.length ? (
-            <NoResults />
+            <NoResults
+              filterKeys={["filter", "from", "to"]}
+              action={
+                canWrite && (
+                  <LogFormDialog>
+                    <Button className="print:hidden">
+                      <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
+                    </Button>
+                  </LogFormDialog>
+                )
+              }
+            />
           ) : (
             <Table>
               <TableCaption>

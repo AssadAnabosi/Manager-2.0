@@ -324,5 +324,14 @@
   "by": "من قبل",
   "Command menu": "قائمة الأوامر",
   "Search for a page or a setting": "ابحث عن صفحة أو إعداد",
-  "Pages": "الصفحات"
+  "Pages": "الصفحات",
+  "Valid": "ساري",
+  "Active": "نشط",
+  "Inactive": "غير نشط",
+  "Caps Lock is on": "زر الأحرف الكبيرة (Caps Lock) مفعّل",
+  "Show password": "إظهار كلمة المرور",
+  "Hide password": "إخفاء كلمة المرور",
+  "Nothing here yet": "لا يوجد شيء هنا بعد",
+  "Records you add will show up here.": "السجلات التي تضيفها ستظهر هنا.",
+  "Try changing or clearing the filters.": "جرّب تغيير الفلاتر أو مسحها."
 }
