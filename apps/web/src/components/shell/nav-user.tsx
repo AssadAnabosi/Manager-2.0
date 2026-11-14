@@ -58,11 +58,8 @@ export function NavUser() {
               </Avatar>
               <div className="grid flex-1 text-start text-sm leading-tight">
                 <span className="truncate font-medium">{user.fullName}</span>
-                <span
-                  dir="ltr"
-                  className="text-muted-foreground truncate text-start text-xs"
-                >
-                  @{user.username}
+                <span className="text-muted-foreground truncate text-xs">
+                  <bdi dir="ltr">@{user.username}</bdi>
                 </span>
               </div>
               <EllipsisVertical className="ms-auto size-4" />
