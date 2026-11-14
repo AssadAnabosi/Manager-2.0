@@ -1,7 +1,7 @@
 import * as React from "react";
+import { useLocale } from "@/hooks/use-locale";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker } from "react-day-picker";
-import { ar, enGB } from "date-fns/locale";
 import { format } from "date-fns";
 
 import { cn } from "@/lib/utils";
@@ -22,6 +22,7 @@ function Calendar({
   showOutsideDays = false,
   ...props
 }: CalendarProps & { onChange?: React.ChangeEventHandler<HTMLSelectElement> }) {
+  const { dateLocale } = useLocale();
   const handleCalendarChange = (
     _value: string | number,
     _e: React.ChangeEventHandler<HTMLSelectElement>
@@ -36,7 +37,7 @@ function Calendar({
 
   return (
     <DayPicker
-      locale={document.documentElement.lang === "ar" ? ar : enGB}
+      locale={dateLocale}
       formatters={{
         formatCaption: (month, options) =>
           format(month, "LL y", { locale: options?.locale }),
@@ -109,7 +110,7 @@ function Calendar({
             <SelectTrigger
               className={cn(
                 buttonVariants({ variant: "ghost" }),
-                "pl-2 pr-1 py-2 h-7 border-none w-fit font-medium in-[.is-between]:hidden in-[.is-end]:hidden [.is-start.is-end_&]:flex"
+                "h-7 w-fit border-none py-2 pr-1 pl-2 font-medium in-[.is-between]:hidden in-[.is-end]:hidden [.is-start.is-end_&]:flex"
               )}
             >
               <SelectValue placeholder={props?.caption}>

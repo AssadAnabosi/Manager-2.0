@@ -40,17 +40,17 @@ const UserRow = ({ user }: Props) => {
                 <AvatarIcon className="h-7 w-7" />
               </AvatarFallback>
             </Avatar>
-            <div className="space-y-1 ltr:ml-4 rtl:mr-4">
+            <div className="ms-4 space-y-1">
               <p
-                className="text-sm font-medium leading-none"
-                aria-label="Full Name"
+                className="text-sm leading-none font-medium"
+                aria-label={t("Full Name")}
               >
                 {title}
               </p>
               <p
-                style={{ direction: "ltr" }}
-                className="text-sm text-muted-foreground"
-                aria-label="Username"
+                dir="ltr"
+                className="text-muted-foreground text-sm"
+                aria-label={t("Username")}
               >
                 {description}
               </p>
@@ -74,7 +74,7 @@ const UserRow = ({ user }: Props) => {
               {user.email}
             </a>
           </p>
-          <p style={{ direction: "ltr" }} className="rtl:text-right">
+          <p dir="ltr" className="rtl:text-right">
             <a
               className="text-blue-400 hover:cursor-pointer"
               href={`tel:${user.phoneNumber}`}
@@ -89,7 +89,12 @@ const UserRow = ({ user }: Props) => {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button asChild size="icon" variant="edit" aria-label="Edit">
+                <Button
+                  asChild
+                  size="icon"
+                  variant="edit"
+                  aria-label={t("Edit")}
+                >
                   <Link to={`/users/${user.id}`}>
                     <Pencil2Icon />
                   </Link>

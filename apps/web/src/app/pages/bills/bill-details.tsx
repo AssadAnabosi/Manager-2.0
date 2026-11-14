@@ -1,9 +1,9 @@
 import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useFormatters } from "@/hooks/use-locale";
 import { usePermissions } from "@/hooks/use-permissions";
 
 import { BillType } from "@/lib/types";
-import { signedCurrencyFormatter } from "@/lib/utils";
 
 import {
   ResponsiveDialog,
@@ -39,6 +39,7 @@ export default function BillDetails({
   deleteBill,
 }: Props) {
   const { t } = useTranslation();
+  const fmt = useFormatters();
   const { canWrite } = usePermissions();
   const [open, setOpen] = useState(false);
 
@@ -55,7 +56,7 @@ export default function BillDetails({
           <dl className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-2 text-start">
             <dt className="text-muted-foreground">{t("Value")}</dt>
             <dd>
-              {signedCurrencyFormatter(bill.type, bill.amount)} ·{" "}
+              {fmt.signedCurrency(bill.type, bill.amount)} ·{" "}
               {t(billKindLabel(bill.type))}
             </dd>
             <dt className="text-muted-foreground">{t("Description")}</dt>

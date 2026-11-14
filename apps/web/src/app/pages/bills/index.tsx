@@ -1,12 +1,10 @@
 import { useDateRangeParams, useSearchParam } from "@/hooks/use-url-state";
 import { useTranslation } from "react-i18next";
-import { format } from "date-fns";
-import { enGB, ar } from "date-fns/locale";
+import { useFormatters } from "@/hooks/use-locale";
 
 import { usePermissions } from "@/hooks/use-permissions";
 
 import { BillKind, BillType } from "@/lib/types";
-import { DATE_FORMAT } from "@/lib/constants";
 
 import { useGetBillsQuery, useDeleteBillMutation } from "@/api/bills";
 
@@ -52,6 +50,7 @@ const BILLS_SKELETON: SkeletonColumn[] = [
 const Bills = () => {
   const { canWrite } = usePermissions();
   const { t } = useTranslation();
+  const fmt = useFormatters();
   const [search, setSearch] = useSearchParam("search");
   const [typeParam, setType] = useSearchParam("type");
   const type: BillKind | "" =
@@ -69,7 +68,7 @@ const Bills = () => {
         {canWrite && (
           <BillFormDialog>
             <Button className="w-full print:hidden">
-              <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" /> {t("Add New")}
+              <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
             </Button>
           </BillFormDialog>
         )}
@@ -94,40 +93,27 @@ const Bills = () => {
       ) : (
         <Table>
           <TableCaption>
-            {billsData?.from ? (
-              billsData.to ? (
-                <>
-                  {t("A list of bills")} {t("from")}{" "}
-                  {format(stringToDate(billsData.from), DATE_FORMAT, {
-                    locale: document.documentElement.lang === "ar" ? ar : enGB,
-                  })}{" "}
-                  {t("to")}{" "}
-                  {format(stringToDate(billsData.to), DATE_FORMAT, {
-                    locale: document.documentElement.lang === "ar" ? ar : enGB,
-                  })}
-                </>
-              ) : (
-                <>
-                  {t("A list of bills")} {t("from")}{" "}
-                  {format(stringToDate(billsData.from), DATE_FORMAT, {
-                    locale: document.documentElement.lang === "ar" ? ar : enGB,
-                  })}
-                </>
-              )
-            ) : (
-              <>{t("A list of bills")}</>
-            )}
+            {billsData?.from
+              ? billsData.to
+                ? t("A list of bills from {{from}} to {{to}}", {
+                    from: fmt.date(stringToDate(billsData.from)),
+                    to: fmt.date(stringToDate(billsData.to)),
+                  })
+                : t("A list of bills from {{from}}", {
+                    from: fmt.date(stringToDate(billsData.from)),
+                  })
+              : t("A list of bills")}
           </TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[210px]"></TableHead>
-              <TableHead className="table-cell w-[120px] rtl:text-right">
+              <TableHead className="table-cell w-[120px]">
                 {t("Amount")}
               </TableHead>
-              <TableHead className="hidden md:table-cell rtl:text-right print:table-cell">
+              <TableHead className="hidden md:table-cell print:table-cell">
                 {t("Description")}
               </TableHead>
-              <TableHead className="hidden w-max lg:table-cell rtl:text-right print:table-cell">
+              <TableHead className="hidden w-max lg:table-cell print:table-cell">
                 {t("Remarks")}
               </TableHead>
               <TableHead className="hidden w-[120px] lg:table-cell print:hidden lg:print:hidden"></TableHead>

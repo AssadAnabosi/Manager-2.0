@@ -17,13 +17,13 @@ export default function FooterHoverCard() {
   return (
     <HoverCard>
       <HoverCardTrigger asChild className="px-0">
-        <Button variant="link" asChild style={{ direction: "ltr" }}>
+        <Button variant="link" asChild dir="ltr">
           <a href="https://anabosi.dev" target="_blank">
             @assadanabosi
           </a>
         </Button>
       </HoverCardTrigger>
-      <HoverCardContent style={{ direction: "ltr" }}>
+      <HoverCardContent dir="ltr">
         <div className="flex space-x-4">
           <Avatar className="aspect-square">
             <AvatarImage src="/avatar.jpeg" />
@@ -31,9 +31,7 @@ export default function FooterHoverCard() {
           </Avatar>
           <div className="space-y">
             <h4 className="text-sm font-semibold">Assad Anabosi</h4>
-            <p className="text-xs text-muted-foreground">
-              Software Engineer
-            </p>
+            <p className="text-muted-foreground text-xs">Software Engineer</p>
             <div className="flex items-center gap-3">
               <Button asChild variant="link" className="p-0">
                 <a href="https://linkedin.com/in/assadanabosi" target="_blank">

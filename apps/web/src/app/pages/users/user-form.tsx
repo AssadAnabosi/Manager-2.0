@@ -156,7 +156,7 @@ const UserForm = ({
             control={userForm.control}
             name="username"
             render={({ field }) => (
-              <FormItem className="flex flex-col rtl:text-right">
+              <FormItem className="flex flex-col">
                 <FormLabel>{t("Username")}</FormLabel>
                 <FormControl>
                   <Input
@@ -174,7 +174,7 @@ const UserForm = ({
             control={userForm.control}
             name="firstName"
             render={({ field }) => (
-              <FormItem className="flex flex-col rtl:text-right">
+              <FormItem className="flex flex-col">
                 <FormLabel>{t("First Name")}</FormLabel>
                 <FormControl>
                   <Input
@@ -192,7 +192,7 @@ const UserForm = ({
             control={userForm.control}
             name="lastName"
             render={({ field }) => (
-              <FormItem className="flex flex-col rtl:text-right">
+              <FormItem className="flex flex-col">
                 <FormLabel>{t("Last Name")}</FormLabel>
                 <FormControl>
                   <Input
@@ -210,7 +210,7 @@ const UserForm = ({
             control={userForm.control}
             name="email"
             render={({ field }) => (
-              <FormItem className="flex flex-col rtl:text-right">
+              <FormItem className="flex flex-col">
                 <FormLabel>{t("Email")}</FormLabel>
                 <FormControl>
                   <Input
@@ -228,7 +228,7 @@ const UserForm = ({
             control={userForm.control}
             name="phoneNumber"
             render={({ field }) => (
-              <FormItem className="flex flex-col rtl:text-right">
+              <FormItem className="flex flex-col">
                 <FormLabel>{t("Phone Number")}</FormLabel>
                 <FormControl>
                   <Input
@@ -248,7 +248,7 @@ const UserForm = ({
                 control={userForm.control}
                 name="password"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col rtl:text-right">
+                  <FormItem className="flex flex-col">
                     <FormLabel>{t("Password")}</FormLabel>
                     <FormControl>
                       <PasswordInput
@@ -266,7 +266,7 @@ const UserForm = ({
                 control={userForm.control}
                 name="confirmPassword"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col rtl:text-right">
+                  <FormItem className="flex flex-col">
                     <FormLabel>{t("Confirm Password")}</FormLabel>
                     <FormControl>
                       <PasswordInput

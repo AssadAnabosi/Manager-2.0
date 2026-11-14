@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useFormatters } from "@/hooks/use-locale";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { format } from "date-fns";
-import { enGB, ar } from "date-fns/locale";
 import { LogType } from "@/lib/types";
 import { cn, getToday, stringToDate, toList } from "@/lib/utils";
 import {
@@ -56,6 +55,7 @@ type LogFormProps = {
 
 const LogForm = ({ log, onDone }: LogFormProps) => {
   const { t } = useTranslation();
+  const fmt = useFormatters();
   const { toast } = useToast();
   const logForm = useForm<logFormSchemaType>({
     resolver: zodResolver(logFormSchema),
@@ -127,14 +127,11 @@ const LogForm = ({ log, onDone }: LogFormProps) => {
                       )}
                     >
                       {field.value ? (
-                        format(stringToDate(field.value), "EEE, dd/LL/y", {
-                          locale:
-                            document.documentElement.lang === "ar" ? ar : enGB,
-                        })
+                        fmt.date(stringToDate(field.value), "EEE, dd/LL/y")
                       ) : (
                         <span>{t("Pick a date")}</span>
                       )}
-                      <CalendarIcon className="h-4 w-4 opacity-50 ltr:ml-auto rtl:mr-auto" />
+                      <CalendarIcon className="ms-auto h-4 w-4 opacity-50" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
@@ -286,13 +283,13 @@ const LogForm = ({ log, onDone }: LogFormProps) => {
               <FormLabel>{t("Payment")}</FormLabel>
               <FormControl>
                 <div className="relative w-full justify-between">
-                  <span className="absolute bottom-0 left-3 top-0 my-auto h-6 w-6 text-muted-foreground">
+                  <span className="text-muted-foreground absolute top-0 bottom-0 left-3 my-auto h-6 w-6">
                     <ShekelIcon />
                   </span>
                   <Input
                     {...field}
                     type="string"
-                    className="input pl-12 pr-4 text-left"
+                    className="input pr-4 pl-12 text-left"
                     disabled={isLoading}
                   />
                 </div>

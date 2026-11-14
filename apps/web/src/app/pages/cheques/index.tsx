@@ -1,12 +1,10 @@
 import { useDateRangeParams, useSearchParam } from "@/hooks/use-url-state";
 import { useTranslation } from "react-i18next";
-import { format } from "date-fns";
-import { ar, enGB } from "date-fns/locale";
+import { useFormatters } from "@/hooks/use-locale";
 
 import { usePermissions } from "@/hooks/use-permissions";
 
 import { ChequeType } from "@/lib/types";
-import { DATE_FORMAT } from "@/lib/constants";
 
 import { useGetPayeesQuery } from "@/api/payees";
 import { useGetChequesQuery, useDeleteChequeMutation } from "@/api/cheques";
@@ -52,6 +50,7 @@ const CHEQUES_SKELETON: SkeletonColumn[] = [
 const Cheques = () => {
   const { canWrite } = usePermissions();
   const { t } = useTranslation();
+  const fmt = useFormatters();
   const [filter, setFilter] = useSearchParam("filter");
   const [serial, setSerial] = useSearchParam("serial");
   const [date, setDate] = useDateRangeParams();
@@ -71,7 +70,7 @@ const Cheques = () => {
         {canWrite && (
           <ChequeFormDialog>
             <Button className="w-full print:hidden">
-              <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" /> {t("Add New")}
+              <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
             </Button>
           </ChequeFormDialog>
         )}
@@ -86,7 +85,7 @@ const Cheques = () => {
           <Searchbox
             value={serial}
             setValue={setSerial}
-            placeholder={"Serial No."}
+            placeholder={t("Serial No.")}
           />
         </div>
         <MultiSelectFormField
@@ -107,39 +106,24 @@ const Cheques = () => {
       ) : (
         <Table>
           <TableCaption>
-            {date?.from ? (
-              date.to ? (
-                <>
-                  {t("A list of cheques")} {t("from")}{" "}
-                  {format(stringToDate(date.from), DATE_FORMAT, {
-                    locale: document.documentElement.lang === "ar" ? ar : enGB,
-                  })}{" "}
-                  {t("to")}{" "}
-                  {format(stringToDate(date.to), DATE_FORMAT, {
-                    locale: document.documentElement.lang === "ar" ? ar : enGB,
-                  })}
-                </>
-              ) : (
-                <>
-                  {t("A list of cheques")} {t("from")}{" "}
-                  {format(stringToDate(date.from), DATE_FORMAT, {
-                    locale: document.documentElement.lang === "ar" ? ar : enGB,
-                  })}
-                </>
-              )
-            ) : (
-              <>{t("A list of cheques")}</>
-            )}
+            {chequesData?.from
+              ? chequesData.to
+                ? t("A list of cheques from {{from}} to {{to}}", {
+                    from: fmt.date(stringToDate(chequesData.from)),
+                    to: fmt.date(stringToDate(chequesData.to)),
+                  })
+                : t("A list of cheques from {{from}}", {
+                    from: fmt.date(stringToDate(chequesData.from)),
+                  })
+              : t("A list of cheques")}
           </TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[270px] rtl:text-right">
-                {t("Serial No.")}
-              </TableHead>
-              <TableHead className="table-cell w-[120px] rtl:text-right">
+              <TableHead className="w-[270px]">{t("Serial No.")}</TableHead>
+              <TableHead className="table-cell w-[120px]">
                 {t("Value")}
               </TableHead>
-              <TableHead className="hidden md:table-cell rtl:text-right print:table-cell md:print:table-cell">
+              <TableHead className="hidden md:table-cell print:table-cell md:print:table-cell">
                 {t("Description")}
               </TableHead>
               <TableHead className="hidden w-[120px] lg:table-cell print:hidden lg:print:hidden"></TableHead>

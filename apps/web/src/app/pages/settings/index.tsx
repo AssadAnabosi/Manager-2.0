@@ -1,11 +1,11 @@
 import { useSearchParams } from "react-router-dom";
+import { useLocale } from "@/hooks/use-locale";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { LANGUAGES, THEMES, passwordSchema } from "@workbench/shared";
-import { LanguageType } from "@/lib/types";
 
 import {
   Card,
@@ -88,7 +88,7 @@ export default function Settings() {
     );
   };
 
-  const lang = document.documentElement.lang.substring(0, 2) as LanguageType;
+  const { lang } = useLocale();
   const { setTheme, theme } = useTheme();
 
   const preferencesForm = useForm<UpdatePreferencesSchemaType>({
@@ -161,8 +161,8 @@ export default function Settings() {
         <TabsContent value="password">
           <Card>
             <CardHeader>
-              <CardTitle className="rtl:text-right">{t("Password")}</CardTitle>
-              <CardDescription className="rtl:text-right">
+              <CardTitle>{t("Password")}</CardTitle>
+              <CardDescription>
                 {t("Changing your password will log you out from all devices.")}
               </CardDescription>
             </CardHeader>
@@ -191,7 +191,7 @@ export default function Settings() {
                     control={passwordForm.control}
                     name="current"
                     render={({ field }) => (
-                      <FormItem className="space-y-1 rtl:text-right">
+                      <FormItem className="space-y-1">
                         <FormLabel>{t("Current password")}</FormLabel>
                         <FormControl>
                           <PasswordInput
@@ -208,7 +208,7 @@ export default function Settings() {
                     control={passwordForm.control}
                     name="new"
                     render={({ field }) => (
-                      <FormItem className="space-y-1 rtl:text-right">
+                      <FormItem className="space-y-1">
                         <FormLabel>{t("New password")}</FormLabel>
                         <FormControl>
                           <PasswordInput
@@ -241,12 +241,8 @@ export default function Settings() {
         <TabsContent value="preferences">
           <Card>
             <CardHeader>
-              <CardTitle className="rtl:text-right">
-                {t("Preferences")}
-              </CardTitle>
-              <CardDescription className="rtl:text-right">
-                {t("Change your preferences.")}
-              </CardDescription>
+              <CardTitle>{t("Preferences")}</CardTitle>
+              <CardDescription>{t("Change your preferences.")}</CardDescription>
             </CardHeader>
             <Form {...preferencesForm}>
               <form
@@ -258,7 +254,7 @@ export default function Settings() {
                     control={preferencesForm.control}
                     name="theme"
                     render={({ field }) => (
-                      <FormItem className="space-y-1 rtl:text-right">
+                      <FormItem className="space-y-1">
                         <FormLabel>{t("Theme")}</FormLabel>
                         <Select
                           disabled={preferencesForm.formState.isSubmitting}
@@ -290,7 +286,7 @@ export default function Settings() {
                     control={preferencesForm.control}
                     name="language"
                     render={({ field }) => (
-                      <FormItem className="space-y-1 rtl:text-right">
+                      <FormItem className="space-y-1">
                         <FormLabel>{t("Language")}</FormLabel>
                         <Select
                           disabled={preferencesForm.formState.isSubmitting}

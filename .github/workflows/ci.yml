@@ -21,6 +21,8 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bun run typecheck
       - run: bun run lint
+      - name: Translation keys
+        run: bun run --cwd apps/web i18n:check
       - run: bun run test
       - name: Web build
         run: bun run --cwd apps/web build

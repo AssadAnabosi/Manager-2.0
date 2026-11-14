@@ -9,6 +9,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
+    "i18n:check": "bun scripts/check-i18n.ts",
     "deploy": "bun scripts/render-wrangler.ts && bun run build && wrangler deploy --config wrangler.deploy.jsonc"
   },
   "dependencies": {

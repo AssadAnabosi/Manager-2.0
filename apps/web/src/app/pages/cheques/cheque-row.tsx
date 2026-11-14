@@ -1,11 +1,8 @@
-import { format } from "date-fns";
-import { enGB, ar } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
+import { useFormatters } from "@/hooks/use-locale";
 import { usePermissions } from "@/hooks/use-permissions";
 
 import { ChequeType } from "@/lib/types";
-import { currencyFormatter } from "@/lib/utils";
-import { DATE_FORMAT } from "@/lib/constants";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -29,12 +26,11 @@ type Props = {
 };
 
 const ChequeRow = ({ cheque, onDelete }: Props) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const fmt = useFormatters();
   const { canWrite } = usePermissions();
   const title = cheque.payee.name;
-  const description = format(new Date(cheque.dueDate), DATE_FORMAT, {
-    locale: i18n.resolvedLanguage === "ar" ? ar : enGB,
-  });
+  const description = fmt.date(new Date(cheque.dueDate));
   return (
     <TableRow className="h-[73px]">
       <TableCell>
@@ -53,16 +49,16 @@ const ChequeRow = ({ cheque, onDelete }: Props) => {
                 {cheque.serial}
               </AvatarFallback>
             </Avatar>
-            <div className="space-y-1 ltr:ml-4 rtl:mr-4">
+            <div className="ms-4 space-y-1">
               <p
-                className="text-sm font-medium leading-none"
-                aria-label="Payee Name"
+                className="text-sm leading-none font-medium"
+                aria-label={t("Payee Name")}
               >
                 {title}
               </p>
               <p
-                className="text-sm text-muted-foreground"
-                aria-label="Day and Date"
+                className="text-muted-foreground text-sm"
+                aria-label={t("Day and Date")}
               >
                 {description}
               </p>
@@ -71,10 +67,10 @@ const ChequeRow = ({ cheque, onDelete }: Props) => {
         </ChequeDetails>
       </TableCell>
       <TableCell
-        style={{ direction: "ltr" }}
+        dir="ltr"
         className={`rtl:text-right ${cheque.isCancelled ? "line-through" : ""}`}
       >
-        {currencyFormatter(cheque.value)}
+        {fmt.currency(cheque.value)}
       </TableCell>
       <TableCell
         className={`hidden md:table-cell ${
@@ -87,7 +83,7 @@ const ChequeRow = ({ cheque, onDelete }: Props) => {
         {canWrite && (
           <div className="grid grid-cols-2">
             <ChequeFormDialog cheque={cheque}>
-              <Button size="icon" variant="edit" aria-label="Edit">
+              <Button size="icon" variant="edit" aria-label={t("Edit")}>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -101,7 +97,7 @@ const ChequeRow = ({ cheque, onDelete }: Props) => {
               </Button>
             </ChequeFormDialog>
             <DeleteDialog onAction={() => onDelete(cheque.id)}>
-              <Button size="icon" variant="delete" aria-label="Delete">
+              <Button size="icon" variant="delete" aria-label={t("Delete")}>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>

@@ -184,8 +184,8 @@ export default function Edit() {
         <TabsContent value="password" className="h-[500px]">
           <Card>
             <CardHeader>
-              <CardTitle className="rtl:text-right">{t("Password")}</CardTitle>
-              <CardDescription className="rtl:text-right">
+              <CardTitle>{t("Password")}</CardTitle>
+              <CardDescription>
                 {t(
                   "Resetting user password will log them out from all devices."
                 )}
@@ -217,7 +217,7 @@ export default function Edit() {
                     control={passwordForm.control}
                     name="password"
                     render={({ field }) => (
-                      <FormItem className="space-y-1 rtl:text-right">
+                      <FormItem className="space-y-1">
                         <FormLabel>{t("New password")}</FormLabel>
                         <FormControl>
                           <Input
@@ -235,7 +235,7 @@ export default function Edit() {
                     control={passwordForm.control}
                     name="confirmPassword"
                     render={({ field }) => (
-                      <FormItem className="space-y-1 rtl:text-right">
+                      <FormItem className="space-y-1">
                         <FormLabel>{t("Confirm password")}</FormLabel>
                         <FormControl>
                           <Input
@@ -269,10 +269,8 @@ export default function Edit() {
         <TabsContent value="profile" className="h-[500px]">
           <Card>
             <CardHeader>
-              <CardTitle className="rtl:text-right">{t("Profile")}</CardTitle>
-              <CardDescription className="rtl:text-right">
-                {t("Update user details.")}
-              </CardDescription>
+              <CardTitle>{t("Profile")}</CardTitle>
+              <CardDescription>{t("Update user details.")}</CardDescription>
             </CardHeader>
             <UserForm user={user} />
           </Card>
@@ -280,8 +278,8 @@ export default function Edit() {
         <TabsContent value="settings" className="h-[500px]">
           <Card>
             <CardHeader>
-              <CardTitle className="rtl:text-right">{t("Settings")}</CardTitle>
-              <CardDescription className="rtl:text-right">
+              <CardTitle>{t("Settings")}</CardTitle>
+              <CardDescription>
                 {t(
                   "Update Role, Active status, or delete user from the system."
                 )}
@@ -303,7 +301,7 @@ export default function Edit() {
                 <Label>{t("User Role")}</Label>
                 <Select value={role} onValueChange={updateRole}>
                   <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Theme" />
+                    <SelectValue placeholder={t("Theme")} />
                   </SelectTrigger>
                   <SelectContent>
                     {ROLES.map((role) => (
@@ -322,7 +320,7 @@ export default function Edit() {
                   variant={"delete"}
                   className="border-border w-[50%] border hover:border-none"
                 >
-                  <Trash2Icon className="mr-3 h-4 w-4 rtl:ml-3" />
+                  <Trash2Icon className="me-3 h-4 w-4" />
                   {t("Delete User")}
                 </Button>
               </DeleteDialog>

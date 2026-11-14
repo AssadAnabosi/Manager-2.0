@@ -1,13 +1,12 @@
 import { useDateRangeParams, useSearchParam } from "@/hooks/use-url-state";
 import { useTranslation } from "react-i18next";
-import { format } from "date-fns";
-import { enGB, ar } from "date-fns/locale";
+import { useFormatters } from "@/hooks/use-locale";
 
 import { useAuth } from "@/providers/auth-context";
 import { usePermissions } from "@/hooks/use-permissions";
 
 import { LogType } from "@/lib/types";
-import { DATE_FORMAT, USER } from "@/lib/constants";
+import { USER } from "@/lib/constants";
 
 import { useGetUsersQuery } from "@/api/users";
 import { useGetLogsQuery, useDeleteLogMutation } from "@/api/logs";
@@ -53,6 +52,7 @@ const Logs = () => {
   const { user } = useAuth();
   const { canWrite } = usePermissions();
   const { t } = useTranslation();
+  const fmt = useFormatters();
   const [filter, setFilter] = useSearchParam(
     "filter",
     user?.role === USER ? user.id : ""
@@ -73,7 +73,7 @@ const Logs = () => {
         {canWrite && (
           <LogFormDialog>
             <Button className="w-full print:hidden">
-              <FilePlus className="h-7 w-7 ltr:mr-2 rtl:ml-2" /> {t("Add New")}
+              <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
             </Button>
           </LogFormDialog>
         )}
@@ -107,29 +107,16 @@ const Logs = () => {
       ) : (
         <Table>
           <TableCaption>
-            {logsData?.from ? (
-              logsData.to ? (
-                <>
-                  {t("A list of worksheets")} {t("from")}{" "}
-                  {format(stringToDate(logsData.from), DATE_FORMAT, {
-                    locale: document.documentElement.lang === "ar" ? ar : enGB,
-                  })}{" "}
-                  {t("to")}{" "}
-                  {format(stringToDate(logsData.to), DATE_FORMAT, {
-                    locale: document.documentElement.lang === "ar" ? ar : enGB,
-                  })}
-                </>
-              ) : (
-                <>
-                  {t("A list of worksheets")} {t("from")}{" "}
-                  {format(stringToDate(logsData.from), DATE_FORMAT, {
-                    locale: document.documentElement.lang === "ar" ? ar : enGB,
-                  })}
-                </>
-              )
-            ) : (
-              <>{t("A list of worksheets")}</>
-            )}
+            {logsData?.from
+              ? logsData.to
+                ? t("A list of worksheets from {{from}} to {{to}}", {
+                    from: fmt.date(stringToDate(logsData.from)),
+                    to: fmt.date(stringToDate(logsData.to)),
+                  })
+                : t("A list of worksheets from {{from}}", {
+                    from: fmt.date(stringToDate(logsData.from)),
+                  })
+              : t("A list of worksheets")}
           </TableCaption>
           <TableHeader>
             <TableRow>
@@ -137,13 +124,13 @@ const Logs = () => {
               <TableHead className="w-[80px] text-center">
                 {t("Attended")}
               </TableHead>
-              <TableHead className="hidden w-[150px] md:table-cell md:w-[280px] rtl:text-right print:table-cell md:print:w-[150px]">
+              <TableHead className="hidden w-[150px] md:table-cell md:w-[280px] print:table-cell md:print:w-[150px]">
                 {t("Workday Variance: Balancing Hours")}
               </TableHead>
-              <TableHead className="hidden w-[120px] md:table-cell rtl:text-right print:table-cell">
+              <TableHead className="hidden w-[120px] md:table-cell print:table-cell">
                 {t("Payment")}
               </TableHead>
-              <TableHead className="hidden w-max lg:table-cell rtl:text-right print:table-cell">
+              <TableHead className="hidden w-max lg:table-cell print:table-cell">
                 {t("Remarks")}
               </TableHead>
               <TableHead className="hidden w-[120px] 2xl:table-cell print:hidden 2xl:print:hidden"></TableHead>
