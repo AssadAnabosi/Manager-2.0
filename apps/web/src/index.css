@@ -253,3 +253,42 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 }
+
+/* Frosted pill used for the credits badge; it lifts on hover. */
+.glass-pill {
+  background: linear-gradient(
+    145deg,
+    hsl(var(--foreground) / 0.04) 0%,
+    hsl(var(--foreground) / 0.01) 100%
+  );
+  border: 1px solid hsl(var(--foreground) / 0.1);
+  box-shadow:
+    0 10px 30px -10px rgb(0 0 0 / 0.25),
+    inset 0 1px 1px hsl(var(--foreground) / 0.1),
+    inset 0 -1px 2px hsl(var(--background) / 0.8);
+  backdrop-filter: blur(16px);
+  transition:
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-pill:hover {
+  background: linear-gradient(
+    145deg,
+    hsl(var(--foreground) / 0.08) 0%,
+    hsl(var(--foreground) / 0.02) 100%
+  );
+  border-color: hsl(var(--foreground) / 0.2);
+  box-shadow:
+    0 20px 40px -10px rgb(0 0 0 / 0.35),
+    inset 0 1px 1px hsl(var(--foreground) / 0.2);
+  transform: translateY(-3px) scale(1.03);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-pill:hover {
+    transform: none;
+  }
+}
