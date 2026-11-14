@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
-import FooterHoverCard from "@/components/component/footer-hover-card";
 import SettingsGear from "@/components/component/settings-gear";
 import { Brand } from "./brand";
+import { CreditsBadge } from "./credits-badge";
 
 /** Chrome for pages outside the app shell: login, logout, not-found, offline. */
 const BareLayout = ({
@@ -26,8 +26,8 @@ const BareLayout = ({
       <div className="flex flex-grow flex-col space-y-2 px-4 pt-2 pb-4 print:px-2">
         {children}
       </div>
-      <footer className="mx-auto text-sm">
-        {t("Made with ❤️ by")} <FooterHoverCard />
+      <footer className="flex justify-center pb-3">
+        <CreditsBadge />
       </footer>
     </div>
   );

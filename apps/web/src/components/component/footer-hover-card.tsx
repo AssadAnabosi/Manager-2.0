@@ -1,3 +1,4 @@
+import type { ReactElement } from "react";
 import {
   EnvelopeClosedIcon,
   GitHubLogoIcon,
@@ -13,17 +14,15 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 
-export default function FooterHoverCard() {
+export default function FooterHoverCard({
+  children,
+}: {
+  children: ReactElement;
+}) {
   return (
-    <HoverCard>
-      <HoverCardTrigger asChild className="px-0">
-        <Button variant="link" asChild style={{ direction: "ltr" }}>
-          <a href="https://anabosi.dev" target="_blank">
-            @assadanabosi
-          </a>
-        </Button>
-      </HoverCardTrigger>
-      <HoverCardContent style={{ direction: "ltr" }}>
+    <HoverCard openDelay={100} closeDelay={150}>
+      <HoverCardTrigger asChild>{children}</HoverCardTrigger>
+      <HoverCardContent dir="ltr">
         <div className="flex space-x-4">
           <Avatar className="aspect-square">
             <AvatarImage src="/avatar.jpeg" />
@@ -31,9 +30,7 @@ export default function FooterHoverCard() {
           </Avatar>
           <div className="space-y">
             <h4 className="text-sm font-semibold">Assad Anabosi</h4>
-            <p className="text-xs text-muted-foreground">
-              Software Engineer
-            </p>
+            <p className="text-muted-foreground text-xs">Software Engineer</p>
             <div className="flex items-center gap-3">
               <Button asChild variant="link" className="p-0">
                 <a href="https://linkedin.com/in/assadanabosi" target="_blank">

@@ -226,7 +226,6 @@
   "Go back home": "Go back home",
   "Retry": "Retry",
 
-  "Made with ❤️ by": "Made with ❤️ by",
   "Password must be at least 12 characters long": "Password must be at least 12 characters long",
   "Current password is required": "Current password is required",
   "Password is required": "Password is required",
@@ -246,5 +245,7 @@
   "Manage": "Manage",
   "Sidebar": "Sidebar",
   "Toggle Sidebar": "Toggle Sidebar",
-  "Displays the mobile sidebar.": "Displays the mobile sidebar."
+  "Displays the mobile sidebar.": "Displays the mobile sidebar.",
+  "Made with": "Made with",
+  "by": "by"
 }
