@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { BillKind } from "@/lib/types";
-import { BILL_KINDS, billKindLabel } from "./type-toggle";
+import { BILL_KINDS, billKindLabel } from "./kind";
 
 /** All / Spent / Received filter chips; `value` is `""` for all. */
 const TypeFilter = ({

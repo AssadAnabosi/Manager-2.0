@@ -21,7 +21,7 @@ import { CalendarIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
 import { cn, signedCurrencyFormatter } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { billKindColor, billKindLabel } from "./type-toggle";
+import { billKindColor, billKindLabel } from "./kind";
 import { SPECTATOR } from "@/lib/constants";
 
 const Row = (bill: BillType, deleteBill: any, userRole: string | undefined) => {

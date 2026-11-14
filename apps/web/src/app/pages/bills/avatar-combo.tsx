@@ -30,7 +30,7 @@ import FormDialogDrawer from "./form-dialog-drawer";
 import DeleteDialog from "@/components/component/delete-dialog";
 
 import { cn, signedCurrencyFormatter } from "@/lib/utils";
-import { billKindLabel } from "./type-toggle";
+import { billKindLabel } from "./kind";
 import { SPECTATOR } from "@/lib/constants";
 
 const AvatarCombo = ({
