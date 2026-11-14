@@ -137,7 +137,7 @@ const Bills = () => {
             {isLoading ? (
               <TableSkeleton columns={BILLS_SKELETON} />
             ) : (
-              billsData.bills.map((bill: BillType) => (
+              billsData?.bills.map((bill: BillType) => (
                 <BillRow key={bill.id} bill={bill} onDelete={deleteBill} />
               ))
             )}

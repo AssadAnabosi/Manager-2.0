@@ -1,3 +1,4 @@
+import type { LogsList } from "@workbench/shared";
 import { z } from "zod";
 import type { AxiosResponse } from "axios";
 import { useSearchParams } from "react-router-dom";
@@ -21,7 +22,7 @@ export const useGetLogsQuery = () => {
 
   return useQuery({
     queryKey: ["logs", { filter, from, to }],
-    queryFn: async () => {
+    queryFn: async (): Promise<LogsList> => {
       const { data: response } = await axios.get(`${BASE_URL}`, {
         params: {
           filter,

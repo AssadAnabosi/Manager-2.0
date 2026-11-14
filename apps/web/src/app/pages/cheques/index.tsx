@@ -149,7 +149,7 @@ const Cheques = () => {
             {isLoading ? (
               <TableSkeleton columns={CHEQUES_SKELETON} />
             ) : (
-              chequesData.cheques.map((cheque: ChequeType) => (
+              chequesData?.cheques.map((cheque: ChequeType) => (
                 <ChequeRow
                   key={cheque.id}
                   cheque={cheque}

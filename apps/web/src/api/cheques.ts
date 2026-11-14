@@ -1,3 +1,4 @@
+import type { ChequesList } from "@workbench/shared";
 import { z } from "zod";
 import { useSearchParams } from "react-router-dom";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
@@ -21,7 +22,7 @@ export const useGetChequesQuery = () => {
 
   return useQuery({
     queryKey: ["cheques", { filter, from, to, serial }],
-    queryFn: async () => {
+    queryFn: async (): Promise<ChequesList> => {
       const { data: response } = await axios.get(`${BASE_URL}`, {
         params: {
           filter,

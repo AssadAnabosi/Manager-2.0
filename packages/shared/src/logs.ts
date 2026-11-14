@@ -93,3 +93,6 @@ export const logGetSchema = z.object({
   success: z.literal(true),
   data: z.object({ log: logSchema }),
 });
+
+/** The `data` of a list response. */
+export type LogsList = z.infer<typeof logsListSchema>["data"];

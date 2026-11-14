@@ -1,3 +1,4 @@
+import type { BillsList } from "@workbench/shared";
 import { z } from "zod";
 import { BILL_TYPES } from "@workbench/shared";
 import { useSearchParams } from "react-router-dom";
@@ -22,7 +23,7 @@ export const useGetBillsQuery = () => {
 
   return useQuery({
     queryKey: ["bills", { search, from: from, to: to, type }],
-    queryFn: async () => {
+    queryFn: async (): Promise<BillsList> => {
       const { data: response } = await axios.get(`${BASE_URL}`, {
         params: {
           search,

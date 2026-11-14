@@ -91,7 +91,7 @@ const Payees = () => {
             {isLoading ? (
               <TableSkeleton columns={PAYEES_SKELETON} />
             ) : (
-              payeesData.payees.map((payee: PayeeType) => (
+              payeesData?.payees.map((payee: PayeeType) => (
                 <PayeeRow key={payee.id} payee={payee} onDelete={deletePayee} />
               ))
             )}

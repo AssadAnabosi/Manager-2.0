@@ -153,7 +153,7 @@ const Logs = () => {
             {isLoading ? (
               <TableSkeleton columns={WORKSHEETS_SKELETON} />
             ) : (
-              logsData.logs.map((log: LogType) => (
+              logsData?.logs.map((log: LogType) => (
                 <LogRow key={log.id} log={log} onDelete={deleteLog} />
               ))
             )}

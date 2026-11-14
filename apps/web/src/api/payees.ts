@@ -1,3 +1,4 @@
+import type { PayeesList } from "@workbench/shared";
 import { z } from "zod";
 import { useSearchParams } from "react-router-dom";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
@@ -21,7 +22,7 @@ export const useGetPayeesQuery = () => {
         search,
       },
     ],
-    queryFn: async () => {
+    queryFn: async (): Promise<PayeesList> => {
       const { data: response } = await axios.get(`${BASE_URL}`, {
         params: { search },
       });
