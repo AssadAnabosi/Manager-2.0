@@ -67,7 +67,7 @@ export function CommandPalette() {
     fn();
   };
   // "add cheque 1234", or just "1234": offer to add a cheque with that serial
-  const serial = query.match(/d+/)?.[0];
+  const serial = canWrite ? query.match(/\d+/)?.[0] : undefined;
   const creates = [
     {
       show: canWrite,
@@ -119,22 +119,25 @@ export function CommandPalette() {
           onValueChange={setQuery}
         />
         <CommandList>
-          <CommandEmpty>{t("No matching results")}</CommandEmpty>
+          {!serial && <CommandEmpty>{t("No matching results")}</CommandEmpty>}
+          {serial && (
+            // forceMount on the group too: cmdk hides a group with no matching items
+            <CommandGroup forceMount>
+              <CommandItem
+                forceMount
+                value={`add cheque serial ${serial}`}
+                onSelect={() =>
+                  run(() => navigate(`/cheques?add=1&addSerial=${serial}`))
+                }
+              >
+                <Plus />
+                {t("Add cheque with serial {{serial}}", { serial })}
+              </CommandItem>
+            </CommandGroup>
+          )}
           {creates.length > 0 && (
             <>
               <CommandGroup heading={t("Create")}>
-                {canWrite && serial && (
-                  <CommandItem
-                    forceMount
-                    value={`add cheque serial ${serial}`}
-                    onSelect={() =>
-                      run(() => navigate(`/cheques?add=1&addSerial=${serial}`))
-                    }
-                  >
-                    <Plus />
-                    {t("Add cheque with serial {{serial}}", { serial })}
-                  </CommandItem>
-                )}
                 {creates.map((item) => (
                   <CommandItem
                     key={item.path}
