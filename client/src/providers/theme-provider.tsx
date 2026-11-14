@@ -1,6 +1,12 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { ThemeType } from "@/lib/types";
-import { useAuth } from "./auth-provider";
+import { useAuth } from "./auth-context";
 
 export type { ThemeType } from "@/lib/types";
 
@@ -55,12 +61,18 @@ export function ThemeProvider({
     root.classList.add(theme);
   }, [theme]);
 
-  const value = {
-    theme,
-    setTheme: (theme: ThemeType) => {
+  // Stable, so consumers can list it as an effect dependency
+  const saveTheme = useCallback(
+    (theme: ThemeType) => {
       localStorage.setItem(storageKey, theme);
       setTheme(theme);
     },
+    [storageKey]
+  );
+
+  const value = {
+    theme,
+    setTheme: saveTheme,
   };
 
   return (

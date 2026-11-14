@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { SIDENAV_ITEMS, SideNavItem } from "./nav-items";
-import { useAuth } from "@/providers/auth-provider";
+import { useAuth } from "@/providers/auth-context";
 
 import { ChevronDownIcon, DashboardIcon } from "@radix-ui/react-icons";
 

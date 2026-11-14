@@ -36,10 +36,10 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import Spinner from "@/components/component/spinner";
 
-import { useLogout } from "@/providers/auth-provider";
+import { useLogout } from "@/providers/auth-context";
 import { useTheme } from "@/providers/theme-provider";
 import { useError } from "@/providers/error-provider";
-import { useAuth } from "@/providers/auth-provider";
+import { useAuth } from "@/providers/auth-context";
 
 import useAxios from "@/hooks/use-axios";
 import { PasswordInput } from "@/components/component/password-input";

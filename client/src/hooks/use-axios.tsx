@@ -13,7 +13,7 @@ export const axios = AXIOS.create({
 
 import { useToast } from "@/components/ui/use-toast";
 
-import { useAuth, useLogout, useRefreshToken } from "@/providers/auth-provider";
+import { useAuth, useLogout, useRefreshToken } from "@/providers/auth-context";
 import { useError } from "@/providers/error-provider";
 
 const useAxios = () => {

@@ -1,4 +1,4 @@
-import { useAuth } from "@/providers/auth-provider";
+import { useAuth } from "@/providers/auth-context";
 
 import { DashboardIcon } from "@radix-ui/react-icons";
 

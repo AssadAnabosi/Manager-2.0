@@ -11,7 +11,8 @@ import { AuthProvider } from "@/providers/auth-provider";
 import App from "@/app";
 
 import { Toaster } from "@/components/ui/toaster";
-import Loading from "@/components/component/loading";
+import BootFallback from "@/components/component/boot-fallback";
+import { bootstrapSession } from "@/lib/session";
 import { ErrorProvider } from "./providers/error-provider";
 
 i18n.on("languageChanged", (locale) => {
@@ -39,6 +40,10 @@ const queryClient = new QueryClient({
   },
 });
 
+// Start restoring the session now, in parallel with loading translations and
+// rendering, instead of waiting for the router to mount.
+void bootstrapSession();
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider defaultTheme="system">
@@ -46,7 +51,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <ErrorProvider>
           <QueryClientProvider client={queryClient}>
             <BrowserRouter>
-              <React.Suspense fallback={<Loading />}>
+              <React.Suspense fallback={<BootFallback />}>
                 <App />
                 <Toaster />
               </React.Suspense>

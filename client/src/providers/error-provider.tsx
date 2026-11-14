@@ -22,15 +22,11 @@ export const ErrorProvider = ({ children }: { children: React.ReactNode }) => {
     return undefined;
   });
 
+  // Passing the state setter through keeps setError stable across renders,
+  // so consumers can list it as an effect dependency
   const value = {
     error,
-    setError: (error: Error | undefined) => {
-      if (!error) {
-        setError(undefined);
-        return;
-      }
-      setError(error);
-    },
+    setError,
   };
 
   return (

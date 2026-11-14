@@ -7,7 +7,7 @@ import { motion, useCycle } from "framer-motion";
 
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { t } from "i18next";
-import { useAuth } from "@/providers/auth-provider";
+import { useAuth } from "@/providers/auth-context";
 
 type MenuItemWithSubMenuProps = {
   item: SideNavItem;

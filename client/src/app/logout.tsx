@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { useLogout } from "@/providers/auth-provider";
+import { useLogout } from "@/providers/auth-context";
 
 import Layout from "./layout";
 import { LogOut } from "lucide-react";
