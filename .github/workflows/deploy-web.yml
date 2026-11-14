@@ -1,0 +1,60 @@
+name: Deploy web
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - apps/web/**
+      - packages/shared/**
+      - bun.lock
+      - .github/workflows/deploy-web.yml
+
+concurrency:
+  group: deploy-web
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: bun install --frozen-lockfile
+
+      # Repository variables (Settings > Secrets and variables > Actions > Variables):
+      #   API_DOMAIN       the API's domain, e.g. api.mycompany.com
+      #   WEB_ORIGIN       the web app's origin, e.g. https://dash.mycompany.com
+      #   VITE_APP_TITLE   optional app name (defaults to Workbench)
+      - name: Check variables
+        run: |
+          test -n "$API_DOMAIN" || { echo "Repository variable API_DOMAIN is not set"; exit 1; }
+          test -n "$WEB_ORIGIN" || { echo "Repository variable WEB_ORIGIN is not set"; exit 1; }
+        env:
+          API_DOMAIN: ${{ vars.API_DOMAIN }}
+          WEB_ORIGIN: ${{ vars.WEB_ORIGIN }}
+
+      - name: Build
+        run: bun run --cwd apps/web build
+        env:
+          VITE_API_URL: https://${{ vars.API_DOMAIN }}
+          VITE_APP_TITLE: ${{ vars.VITE_APP_TITLE || 'Workbench' }}
+
+      - name: Render deploy config
+        run: bun scripts/render-wrangler.ts
+        working-directory: apps/web
+        env:
+          WEB_ORIGIN: ${{ vars.WEB_ORIGIN }}
+
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4.162.0"
+          workingDirectory: apps/web
+          command: deploy --config wrangler.deploy.jsonc
