@@ -56,7 +56,7 @@ const Combobox = ({
           <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50 ltr:ml-2 rtl:mr-2" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full min-w-[var(--radix-popper-anchor-width)] p-0 md:w-[335px]">
+      <PopoverContent className="w-full min-w-(--radix-popper-anchor-width) p-0 md:w-[335px]">
         <Command>
           <CommandInput className="text-md" placeholder={t("Search...")} />
           <CommandEmpty>{t("No matching results")}</CommandEmpty>
@@ -71,7 +71,7 @@ const Combobox = ({
                     setFilter(item.value === filter ? "" : item.value);
                     setOpen(false);
                   }}
-                  className="min-w-[var(--radix-popper-anchor-width)]"
+                  className="min-w-(--radix-popper-anchor-width)"
                 >
                   <Check
                     className={cn(

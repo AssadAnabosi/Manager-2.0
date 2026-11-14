@@ -131,7 +131,7 @@ const MultiSelectFormField = React.forwardRef<
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="scrolling-auto max-h-[var(--radix-popper-available-height);] w-[200px] min-w-[var(--radix-popper-anchor-width)] overflow-y-auto p-0 drop-shadow-xl md:w-[335px]"
+          className="scrolling-auto max-h-[var(--radix-popper-available-height);] w-[200px] min-w-(--radix-popper-anchor-width) overflow-y-auto p-0 drop-shadow-xl md:w-[335px]"
           align="start"
         >
           <Command>

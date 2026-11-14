@@ -53,12 +53,12 @@ function Calendar({
         caption_end: "is-end",
         caption: "flex justify-center pt-1 relative items-center gap-1",
         caption_label:
-          "flex h-7 text-sm font-medium justify-center items-center grow [.is-multiple_&]:flex",
+          "flex h-7 text-sm font-medium justify-center items-center grow in-[.is-multiple]:flex",
         caption_dropdowns: "flex justify-center gap-3 grow dropdowns pl-8 pr-9",
         multiple_months: "is-multiple",
         vhidden:
-          "hidden [.is-between_&]:flex [.is-end_&]:flex [.is-start.is-end_&]:hidden",
-        nav: "flex items-center [&:has([name='previous-month'])]:order-first [&:has([name='next-month'])]:order-last gap-1",
+          "hidden in-[.is-between]:flex in-[.is-end]:flex [.is-start.is-end_&]:hidden",
+        nav: "flex items-center has-[[name='previous-month']]:order-first has-[[name='next-month']]:order-last gap-1",
         nav_button: cn(
           buttonVariants({ variant: "outline" }),
           "h-7 w-7 bg-transparent p-0 text-muted-foreground"
@@ -71,10 +71,10 @@ function Calendar({
           "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
         row: "flex w-full mt-2",
         cell: cn(
-          "h-9 w-9 relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent",
+          "h-9 w-9 relative p-0 text-center text-sm focus-within:relative focus-within:z-20 has-aria-[selected]:bg-accent",
           props.mode === "range"
-            ? "ltr:[&:has(>.day-range-end)]:rounded-r-md rtl:[&:has(>.day-range-end)]:rounded-l-md ltr:[&:has(>.day-range-start)]:rounded-l-md rtl:[&:has(>.day-range-start)]:rounded-r-md ltr:first:[&:has([aria-selected])]:rounded-l-md rtl:first:[&:has([aria-selected])]:rounded-r-md ltr:last:[&:has([aria-selected])]:rounded-r-md rtl:last:[&:has([aria-selected])]:rounded-l-md"
-            : "[&:has([aria-selected])]:rounded-md"
+            ? "[&:has(>.day-range-end)]:ltr:rounded-r-md [&:has(>.day-range-end)]:rtl:rounded-l-md [&:has(>.day-range-start)]:ltr:rounded-l-md [&:has(>.day-range-start)]:rtl:rounded-r-md has-aria-[selected]:first:ltr:rounded-l-md has-aria-[selected]:first:rtl:rounded-r-md has-aria-[selected]:last:ltr:rounded-r-md has-aria-[selected]:last:rtl:rounded-l-md"
+            : "has-aria-[selected]:rounded-md"
         ),
         day: cn(
           buttonVariants({ variant: "ghost" }),
@@ -109,7 +109,7 @@ function Calendar({
             <SelectTrigger
               className={cn(
                 buttonVariants({ variant: "ghost" }),
-                "pl-2 pr-1 py-2 h-7 border-none w-fit font-medium [.is-between_&]:hidden [.is-end_&]:hidden [.is-start.is-end_&]:flex"
+                "pl-2 pr-1 py-2 h-7 border-none w-fit font-medium in-[.is-between]:hidden in-[.is-end]:hidden [.is-start.is-end_&]:flex"
               )}
             >
               <SelectValue placeholder={props?.caption}>
@@ -121,7 +121,7 @@ function Calendar({
                 React.Children.map(props.children, (child) => (
                   <SelectItem
                     value={(child as React.ReactElement<any>)?.props?.value}
-                    className="min-w-[var(--radix-popper-anchor-width)]"
+                    className="min-w-(--radix-popper-anchor-width)"
                   >
                     {(child as React.ReactElement<any>)?.props?.children}
                   </SelectItem>
