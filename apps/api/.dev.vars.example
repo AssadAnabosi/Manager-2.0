@@ -10,6 +10,7 @@ JWT_REFRESH_SECRET=dev-refresh-secret-change-me-0123456789
 # 32 random bytes, base64:  openssl rand -base64 32
 PASSWORD_PEPPER=ZGV2LXBlcHBlci0wMTIzNDU2Nzg5MDEyMzQ1Njc4OTA=
 PASSWORD_PEPPER_VERSION=1
+PBKDF2_ITERATIONS=30000
 
 # Seed (bun run db:seed:local)
 ADMIN_USERNAME=admin

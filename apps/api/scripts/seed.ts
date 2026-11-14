@@ -53,11 +53,21 @@ const wrangler = (args: string[]) =>
     shell: process.platform === "win32",
   });
 
-const check = wrangler([
-  "--json",
-  "--command",
-  "SELECT COUNT(*) AS n FROM users WHERE role = 'Administrator'",
-]);
+// SQL goes through files: passing it with --command breaks on Windows shells.
+const runSql = (sql: string, extra: string[] = []) => {
+  const file = join(tmpdir(), `workbench-seed-${crypto.randomUUID()}.sql`);
+  writeFileSync(file, sql);
+  try {
+    return wrangler([...extra, "--file", file]);
+  } finally {
+    rmSync(file, { force: true });
+  }
+};
+
+const check = runSql(
+  "SELECT COUNT(*) AS n FROM users WHERE role = 'Administrator';",
+  ["--json"]
+);
 if (check.status !== 0) {
   console.error(check.stderr || check.stdout);
   process.exit(1);
@@ -92,15 +102,9 @@ const sql = `INSERT INTO users (id, first_name, last_name, username, email, phon
   vars.ADMIN_EMAIL?.toLowerCase()
 )}, ${q(vars.ADMIN_PHONE_NUMBER)}, ${q(passwordHash)}, 'Administrator', 1, 'system', 'ar', ${now}, ${now});\n`;
 
-const tmp = join(tmpdir(), `workbench-seed-${crypto.randomUUID()}.sql`);
-writeFileSync(tmp, sql);
-try {
-  const run = wrangler(["--file", tmp]);
-  if (run.status !== 0) {
-    console.error(run.stderr || run.stdout);
-    process.exit(1);
-  }
-  console.log(`admin "${username}" created`);
-} finally {
-  rmSync(tmp, { force: true });
+const run = runSql(sql);
+if (run.status !== 0) {
+  console.error(run.stderr || run.stdout);
+  process.exit(1);
 }
+console.log(`admin "${username}" created`);
