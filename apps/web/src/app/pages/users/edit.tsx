@@ -208,7 +208,7 @@ export default function Edit() {
                   setPendingPassword(data)
                 )}
               >
-                <CardContent className="space-y-2">
+                <CardContent className="space-y-4">
                   <FormField
                     control={passwordForm.control}
                     name="username"
@@ -229,7 +229,7 @@ export default function Edit() {
                     control={passwordForm.control}
                     name="password"
                     render={({ field }) => (
-                      <FormItem className="space-y-1">
+                      <FormItem className="space-y-2">
                         <FormLabel>{t("New password")}</FormLabel>
                         <FormControl>
                           <Input
@@ -247,7 +247,7 @@ export default function Edit() {
                     control={passwordForm.control}
                     name="confirmPassword"
                     render={({ field }) => (
-                      <FormItem className="space-y-1">
+                      <FormItem className="space-y-2">
                         <FormLabel>{t("Confirm password")}</FormLabel>
                         <FormControl>
                           <Input

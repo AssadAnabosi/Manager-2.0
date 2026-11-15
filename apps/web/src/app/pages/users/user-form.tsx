@@ -306,7 +306,7 @@ const CardWrapper = ({
   user?: UserType;
 }) => {
   return user ? (
-    <CardContent className="space-y-2">{children}</CardContent>
+    <CardContent className="space-y-4">{children}</CardContent>
   ) : (
     <>{children}</>
   );

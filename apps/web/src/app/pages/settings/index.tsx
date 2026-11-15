@@ -176,7 +176,7 @@ export default function Settings() {
                   setPendingPassword(values)
                 )}
               >
-                <CardContent className="space-y-2">
+                <CardContent className="space-y-4">
                   <FormField
                     control={passwordForm.control}
                     name="username"
@@ -196,7 +196,7 @@ export default function Settings() {
                     control={passwordForm.control}
                     name="current"
                     render={({ field }) => (
-                      <FormItem className="space-y-1">
+                      <FormItem className="space-y-2">
                         <FormLabel>{t("Current password")}</FormLabel>
                         <FormControl>
                           <PasswordInput
@@ -213,7 +213,7 @@ export default function Settings() {
                     control={passwordForm.control}
                     name="new"
                     render={({ field }) => (
-                      <FormItem className="space-y-1">
+                      <FormItem className="space-y-2">
                         <FormLabel>{t("New password")}</FormLabel>
                         <FormControl>
                           <PasswordInput
@@ -266,12 +266,12 @@ export default function Settings() {
                 className="flex flex-col gap-6"
                 onSubmit={preferencesForm.handleSubmit(updatePreferences)}
               >
-                <CardContent className="space-y-2">
+                <CardContent className="space-y-4">
                   <FormField
                     control={preferencesForm.control}
                     name="theme"
                     render={({ field }) => (
-                      <FormItem className="space-y-1">
+                      <FormItem className="space-y-2">
                         <FormLabel>{t("Theme")}</FormLabel>
                         <Select
                           disabled={preferencesForm.formState.isSubmitting}
@@ -303,7 +303,7 @@ export default function Settings() {
                     control={preferencesForm.control}
                     name="language"
                     render={({ field }) => (
-                      <FormItem className="space-y-1">
+                      <FormItem className="space-y-2">
                         <FormLabel>{t("Language")}</FormLabel>
                         <Select
                           disabled={preferencesForm.formState.isSubmitting}
