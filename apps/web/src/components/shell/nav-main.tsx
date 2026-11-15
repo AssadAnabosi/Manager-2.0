@@ -47,7 +47,8 @@ export function NavMain() {
                         // are on keeps its filters and view
                         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
                         e.preventDefault();
-                        if (current?.path !== item.path) goTo(item.path);
+                        // (a sub page, like a user being managed, is not "the page you are on")
+                        if (pathname !== item.path) goTo(item.path);
                         if (isMobile) setOpenMobile(false);
                       }}
                     >

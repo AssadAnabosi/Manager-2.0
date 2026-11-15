@@ -177,6 +177,7 @@
   "Update user details.": "تحديث تفاصيل المستخدم.",
   "Update Role, Active status, Loggable, or delete user from the system.": "تعديل الدور وحالة النشاط وقابلية التسجيل أو حذف المستخدم من النظام.",
   "Loggable": "قابل للتسجيل",
+  "Back to users": "العودة إلى المستخدمين",
   "User's Loggable setting was updated successfully": "تم تحديث إعداد قابلية التسجيل للمستخدم بنجاح",
   "Offered as the worker of a new worksheet and in the worker lists. Still found when searched, except when adding a worksheet.": "يظهر كعامل عند إضافة سجل عمل جديد وفي قوائم العمال. ما زال يظهر عند البحث عنه، إلا عند إضافة سجل عمل.",
   "Active Status": "الحالة النشطة",

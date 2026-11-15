@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { apiErrorText } from "@/lib/api-error";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useGoTo } from "@/hooks/use-remembered-filters";
 import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -54,7 +55,7 @@ import UserForm from "./user-form";
 
 import { ROLES } from "@/lib/constants";
 
-import { Trash2Icon } from "lucide-react";
+import { ArrowLeft, Trash2Icon } from "lucide-react";
 import { UserType } from "@/lib/types";
 import { useAuth, useLogout } from "@/providers/auth-context";
 import { useError } from "@/providers/error-provider";
@@ -70,6 +71,7 @@ export default function Edit() {
   const { user: authUser } = useAuth();
   const logout = useLogout();
   const navigate = useNavigate();
+  const goTo = useGoTo();
   const { setError } = useError();
   const [pendingPassword, setPendingPassword] =
     useState<updatePasswordSchemaType | null>(null);
@@ -204,6 +206,19 @@ export default function Edit() {
         defaultValue="password"
         className="w-full max-w-[400px]"
       >
+        <Button variant="ghost" size="sm" className="-ms-2 mb-2" asChild>
+          <Link
+            to="/users"
+            onClick={(e) => {
+              if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+              e.preventDefault();
+              goTo("/users");
+            }}
+          >
+            <ArrowLeft className="rtl:rotate-180" />
+            {t("Back to users")}
+          </Link>
+        </Button>
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="password">{t("Password")}</TabsTrigger>
           <TabsTrigger value="profile">{t("Profile")}</TabsTrigger>
