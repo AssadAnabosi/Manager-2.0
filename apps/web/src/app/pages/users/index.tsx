@@ -35,6 +35,7 @@ const USERS_SKELETON: SkeletonColumn[] = [
   { kind: "identity" },
   { kind: "text", className: "hidden md:table-cell" },
   { kind: "badge", className: "hidden md:table-cell" },
+  { kind: "badge", className: "hidden md:table-cell" },
   { kind: "lines", className: "hidden lg:table-cell" },
   { kind: "empty", className: "hidden lg:table-cell" },
 ];
@@ -97,8 +98,11 @@ const Users = () => {
               <TableHead className="hidden w-[130px] text-center md:table-cell">
                 {t("Role")}
               </TableHead>
-              <TableHead className="hidden w-[80px] text-center md:table-cell">
-                {t("Status")}
+              <TableHead className="hidden w-[110px] text-center md:table-cell">
+                {t("Active")}
+              </TableHead>
+              <TableHead className="hidden w-[110px] text-center md:table-cell">
+                {t("Loggable")}
               </TableHead>
               <TableHead className="hidden w-max lg:table-cell">
                 {t("Contact Details")}

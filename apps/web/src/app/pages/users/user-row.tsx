@@ -14,7 +14,7 @@ import {
   TooltipContent,
 } from "@/components/ui/tooltip";
 
-import StatusBadge from "@/components/component/status-badge";
+import StateBadge from "@/components/component/state-badge";
 import UserDetails from "./user-details";
 import RoleBadge from "./role-badge";
 
@@ -62,9 +62,16 @@ const UserRow = ({ user }: Props) => {
         <RoleBadge role={user.role} />
       </TableCell>
       <TableCell className="hidden md:table-cell">
-        <StatusBadge
-          status={user.active}
-          labels={[t("Active"), t("Inactive")]}
+        <StateBadge
+          on={user.active}
+          labels={[t("Active"), t("Deactivated")]}
+        />
+      </TableCell>
+      <TableCell className="hidden md:table-cell">
+        <StateBadge
+          on={user.loggable}
+          labels={[t("Loggable"), t("Not loggable")]}
+          offTone="muted"
         />
       </TableCell>
       <TableCell className="hidden lg:table-cell">

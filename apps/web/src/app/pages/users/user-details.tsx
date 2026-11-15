@@ -16,7 +16,7 @@ import {
   ResponsiveDialogTrigger,
 } from "@/components/ui/responsive-dialog";
 import { Button } from "@/components/ui/button";
-import StatusBadge from "@/components/component/status-badge";
+import StateBadge from "@/components/component/state-badge";
 
 import { Pencil2Icon } from "@radix-ui/react-icons";
 
@@ -47,11 +47,19 @@ export default function UserDetails({ children, title, user }: Props) {
             <dd>
               <RoleBadge role={user.role} />
             </dd>
-            <dt className="text-muted-foreground">{t("Status")}</dt>
+            <dt className="text-muted-foreground">{t("Active")}</dt>
             <dd>
-              <StatusBadge
-                status={user.active}
-                labels={[t("Active"), t("Inactive")]}
+              <StateBadge
+                on={user.active}
+                labels={[t("Active"), t("Deactivated")]}
+              />
+            </dd>
+            <dt className="text-muted-foreground">{t("Loggable")}</dt>
+            <dd>
+              <StateBadge
+                on={user.loggable}
+                labels={[t("Loggable"), t("Not loggable")]}
+                offTone="muted"
               />
             </dd>
             <dt className="text-muted-foreground">{t("Email")}</dt>
