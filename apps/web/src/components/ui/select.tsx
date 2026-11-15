@@ -52,7 +52,8 @@ function SelectContent({
   children,
   position = "popper",
   side = "bottom",
-  avoidCollisions = false,
+  avoidCollisions = true,
+  collisionPadding = 8,
   align = "center",
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Content>) {
@@ -69,6 +70,7 @@ function SelectContent({
         position={position}
         side={side}
         avoidCollisions={avoidCollisions}
+        collisionPadding={collisionPadding}
         align={align}
         {...props}
       >
