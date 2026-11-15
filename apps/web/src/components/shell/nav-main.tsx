@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
+import { ShortcutNumber } from "@/components/shell/shortcut-number";
 import { useAuth } from "@/providers/auth-context";
 import { navGroupsFor, navItemFor } from "@/components/shell/nav-items";
 import {
@@ -43,6 +44,7 @@ export function NavMain() {
                     >
                       <item.icon />
                       <span>{t(item.title)}</span>
+                      <ShortcutNumber path={item.path} />
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

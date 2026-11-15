@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { LucideIcon } from "lucide-react";
 
+import { ShortcutNumber } from "@/components/shell/shortcut-number";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -43,6 +44,7 @@ export function NavSecondary({
                 >
                   <item.icon />
                   <span>{t(item.title)}</span>
+                  <ShortcutNumber path={item.url} />
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
