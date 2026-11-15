@@ -12,6 +12,7 @@
     "db:generate": "bun run --cwd apps/api db:generate",
     "db:migrate:local": "bun run --cwd apps/api db:migrate:local",
     "db:seed:local": "bun run --cwd apps/api db:seed:local",
+    "db:seed:dev": "bun run --cwd apps/api db:seed:dev",
     "db:seed:remote": "bun run --cwd apps/api db:seed:remote",
     "db:reset:local": "bun run --cwd apps/api db:reset:local",
     "typecheck": "bun run --workspaces typecheck",

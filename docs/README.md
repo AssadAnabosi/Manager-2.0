@@ -9,6 +9,7 @@
 | [auth.md](auth.md) | Tokens, cookie, sessions, password hashing, rate limits |
 | [api.md](api.md) | API conventions (the routes themselves live in the generated OpenAPI docs) |
 | [shortcuts.md](shortcuts.md) | Keyboard shortcuts and what the command palette understands |
+| [dev-data.md](dev-data.md) | The demo data every local database starts with, and the logins for each role |
 | [development.md](development.md) | Running locally with Docker or natively, scripts, tests |
 | [configuration.md](configuration.md) | Variables and secrets |
 | [deployment.md](deployment.md) | One-time Cloudflare setup and CI deploys |

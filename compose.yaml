@@ -6,11 +6,11 @@ x-app: &app
     dockerfile: docker/dev.Dockerfile
 
 services:
-  # One-shot: apply migrations and seed the admin into the local D1 database.
+  # One-shot: apply migrations, seed the admin and the demo data (docs/dev-data.md) into the local D1 database.
   migrate:
     <<: *app
     working_dir: /app/apps/api
-    command: sh -c "bun run db:migrate:local && bun run db:seed:local"
+    command: sh -c "bun run db:migrate:local && bun run db:seed:local && bun run db:seed:dev"
     volumes:
       - wrangler-state:/app/apps/api/.wrangler
       - ./apps/api/.dev.vars:/app/apps/api/.dev.vars:ro
