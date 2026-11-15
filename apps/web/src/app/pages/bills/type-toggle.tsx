@@ -31,7 +31,7 @@ const TypeToggle = ({
             disabled={disabled}
             onClick={() => onChange(kind)}
             className={cn(
-              "flex-1 rounded-sm px-3 py-1.5 text-sm font-medium transition-colors disabled:opacity-50",
+              "flex-1 rounded-sm px-3 py-2.5 text-sm md:py-1.5 font-medium transition-colors disabled:opacity-50",
               selected
                 ? "bg-primary text-primary-foreground"
                 : "text-muted-foreground hover:bg-muted"

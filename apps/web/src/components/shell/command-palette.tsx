@@ -36,6 +36,13 @@ import {
 } from "@/components/ui/dialog";
 import { SETTINGS_ITEM, navGroupsFor } from "@/components/shell/nav-items";
 import { LANGUAGES, THEMES } from "@/components/shell/nav-user";
+import {
+  isHelpKey,
+  isLetter,
+  letterOf,
+  normalizeQuery,
+  punctuationOf,
+} from "@/lib/shortcuts";
 
 const isMac = () =>
   typeof navigator !== "undefined" &&
@@ -86,6 +93,8 @@ const SHORTCUT_GROUPS: { title: string; wide?: boolean; items: Shortcut[] }[] =
           keys: ["alt", "1-9"],
           label: "Go to the sidebar item with that number",
         },
+        { keys: ["alt", "L"], label: "Worksheets: show the list" },
+        { keys: ["alt", "C"], label: "Worksheets: show the calendar" },
         { keys: ["["], label: "Go to the previous sidebar item" },
         { keys: ["]"], label: "Go to the next sidebar item" },
       ],
@@ -149,11 +158,11 @@ export function CommandPalette() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey)) {
+      if (isLetter(e, "k") && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setOpen((o) => !o);
       } else if (
-        e.key === "?" &&
+        isHelpKey(e) &&
         !e.metaKey &&
         !e.ctrlKey &&
         !e.altKey &&
@@ -167,8 +176,8 @@ export function CommandPalette() {
         // g then a letter (within 1.5s): jump to that page
         const waiting = goPending.current;
         goPending.current = 0;
-        if (!e.altKey && !e.shiftKey && e.key.length === 1) {
-          const key = e.key.toLowerCase();
+        if (!e.altKey && !e.shiftKey && letterOf(e).length === 1) {
+          const key = letterOf(e);
           if (waiting && Date.now() - waiting < 1500) {
             const to = GO_TO[key];
             if (to && (to === "/" || paths.includes(to))) target = to;
@@ -180,19 +189,21 @@ export function CommandPalette() {
         const digit = e.altKey && e.code.match(/^Digit([1-9])$/)?.[1];
         if (!target && digit) target = paths[Number(digit) - 1];
         // [ and ]: the previous / next sidebar item, wrapping around
-        if (!target && !e.altKey && (e.key === "[" || e.key === "]")) {
+        const bracket = punctuationOf(e);
+        if (!target && !e.altKey && (bracket === "[" || bracket === "]")) {
           const at = paths.findIndex(
             (path) => current === path || current.startsWith(path + "/")
           );
           if (at !== -1)
             target =
               paths[
-                (at + (e.key === "]" ? 1 : -1) + paths.length) % paths.length
+                (at + (bracket === "]" ? 1 : -1) + paths.length) % paths.length
               ];
         }
         if (target) {
           e.preventDefault();
-          navigate(target);
+          // already there: going again would wipe the page's filters and view
+          if (target !== current) navigate(target);
         }
       }
     };
@@ -208,9 +219,11 @@ export function CommandPalette() {
     fn();
   };
   // "c1234": add a cheque with that serial (always first), or look for one
-  const serial = query.trim().match(/^c\s*(\d+)$/i)?.[1];
+  // (typed on an Arabic keyboard it is ؤ250, which reads the same)
+  const typedQuery = normalizeQuery(query).trim();
+  const serial = typedQuery.match(/^c\s*(\d+)$/i)?.[1];
   // "b250" is a spent bill, "b-250" a received one
-  const billMatch = query.trim().match(/^b\s*(-?)(\d+(?:\.\d+)?)$/i);
+  const billMatch = typedQuery.match(/^b\s*(-?)(\d+(?:\.\d+)?)$/i);
   const bill = billMatch
     ? { amount: billMatch[2], received: billMatch[1] === "-" }
     : undefined;

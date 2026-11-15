@@ -4,13 +4,15 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { SHELL_STYLE, readSidebarOpen } from "@/components/shell/sidebar-state";
 import { AppSidebar } from "@/components/shell/app-sidebar";
 import { SiteHeader } from "@/components/shell/site-header";
+import { PullToRefresh } from "@/components/shell/pull-to-refresh";
 import { FiltersRestoredBanner } from "@/components/shell/filters-restored-banner";
 import { useRememberedFilters } from "@/hooks/use-remembered-filters";
 
 const AppLayout = () => {
   useRememberedFilters();
   return (
-    <SidebarProvider defaultOpen={readSidebarOpen()} style={SHELL_STYLE}>
+    <PullToRefresh>
+      <SidebarProvider defaultOpen={readSidebarOpen()} style={SHELL_STYLE}>
       <AppSidebar variant="inset" />
       <SidebarInset className="min-w-0">
         <SiteHeader />
@@ -19,7 +21,8 @@ const AppLayout = () => {
           <Outlet />
         </main>
       </SidebarInset>
-    </SidebarProvider>
+      </SidebarProvider>
+    </PullToRefresh>
   );
 };
 

@@ -27,6 +27,7 @@ const TypeFilter = ({
           key={option.value || "all"}
           type="button"
           size="sm"
+          className="h-11 md:h-8"
           variant={value === option.value ? "default" : "outline"}
           aria-pressed={value === option.value}
           onClick={() => onChange(option.value)}

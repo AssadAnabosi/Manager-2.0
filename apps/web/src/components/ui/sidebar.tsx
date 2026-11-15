@@ -3,6 +3,7 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
+import { letterOf, punctuationOf } from "@/lib/shortcuts"
 import { PanelLeftIcon } from "lucide-react"
 import { Slot } from "radix-ui"
 
@@ -98,7 +99,8 @@ function SidebarProvider({
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (
-        SIDEBAR_KEYBOARD_SHORTCUTS.includes(event.key) &&
+        (SIDEBAR_KEYBOARD_SHORTCUTS.includes(letterOf(event)) ||
+          SIDEBAR_KEYBOARD_SHORTCUTS.includes(punctuationOf(event))) &&
         (event.metaKey || event.ctrlKey)
       ) {
         event.preventDefault()
@@ -189,7 +191,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
+          className="h-dvh w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -201,7 +203,9 @@ function Sidebar({
             <SheetTitle>{t("Sidebar")}</SheetTitle>
             <SheetDescription>{t("Displays the mobile sidebar.")}</SheetDescription>
           </SheetHeader>
-          <div className="flex h-full w-full flex-col">{children}</div>
+          <div className="flex h-full w-full flex-col pb-[max(env(safe-area-inset-bottom),0.75rem)]">
+            {children}
+          </div>
         </SheetContent>
       </Sheet>
     )

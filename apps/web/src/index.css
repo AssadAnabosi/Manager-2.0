@@ -170,10 +170,9 @@
       hue-rotate(352deg) brightness(94%) contrast(83%);
     scale: 1.8;
   }
-  /* pull to refresh */
-  div[class^="ptr--"],
-  div[class*=" ptr--"] {
-    @apply text-primary;
+  /* pull to refresh is ours (shell/pull-to-refresh.tsx): keep the browser's own out of the way */
+  body {
+    overscroll-behavior-y: contain;
   }
   /* printing light theme */
   @media print {

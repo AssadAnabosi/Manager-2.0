@@ -4,6 +4,8 @@ import {
   useSearchParam,
 } from "@/hooks/use-url-state";
 import { useEffect, useState } from "react";
+import { useAltHeld } from "@/hooks/use-alt-held";
+import { isLetter } from "@/lib/shortcuts";
 import { useTranslation } from "react-i18next";
 import { endOfMonth, parse, startOfMonth } from "date-fns";
 import { useFormatters } from "@/hooks/use-locale";
@@ -70,6 +72,19 @@ const Logs = () => {
   // "list" is the table; "calendar" is one worker's month at a glance
   const [viewParam, setView] = useSearchParam("view", "list");
   const view = viewParam === "calendar" ? "calendar" : "list";
+  const altHeld = useAltHeld();
+  // Alt+L is the list, Alt+C the calendar; only the view changes, the filters stay
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      const next = isLetter(e, "l") ? "list" : isLetter(e, "c") ? "calendar" : "";
+      if (!next) return;
+      e.preventDefault();
+      if (next !== view) setView(next);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [view, setView]);
   const month = startOfMonth(
     parse(date.from ?? "", "yyyy-MM-dd", new Date()).getTime()
       ? parse(date.from ?? "", "yyyy-MM-dd", new Date())
@@ -141,12 +156,14 @@ const Logs = () => {
       <Separator />
       <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between print:hidden">
         <Tabs value={view} onValueChange={setView} className="w-full md:w-auto">
-          <TabsList className="w-full group-data-[orientation=horizontal]/tabs:h-11 md:w-auto md:group-data-[orientation=horizontal]/tabs:h-10">
+          <TabsList className="w-full md:w-auto">
             <TabsTrigger value="list" className="md:px-5">
               <List /> {t("List")}
+              {altHeld && <kbd className="bg-muted rounded border px-1 font-mono text-xs">L</kbd>}
             </TabsTrigger>
             <TabsTrigger value="calendar" className="md:px-5">
               <CalendarDays /> {t("Calendar")}
+              {altHeld && <kbd className="bg-muted rounded border px-1 font-mono text-xs">C</kbd>}
             </TabsTrigger>
           </TabsList>
         </Tabs>

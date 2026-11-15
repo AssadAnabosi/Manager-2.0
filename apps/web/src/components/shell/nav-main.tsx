@@ -40,7 +40,11 @@ export function NavMain() {
                   >
                     <Link
                       to={item.path}
-                      onClick={() => isMobile && setOpenMobile(false)}
+                      onClick={(e) => {
+                        // the page you are on keeps its filters and view
+                        if (current?.path === item.path) e.preventDefault();
+                        if (isMobile) setOpenMobile(false);
+                      }}
                     >
                       <item.icon />
                       <span>{t(item.title)}</span>

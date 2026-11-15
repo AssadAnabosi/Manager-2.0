@@ -2,10 +2,73 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 import { Drawer as DrawerPrimitive } from "vaul"
 
+// vaul's own input repositioning misplaces the drawer on iOS (notably in an installed PWA), so
+// DrawerContent follows the visual viewport itself instead.
 function Drawer({
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root>) {
-  return <DrawerPrimitive.Root data-slot="drawer" {...props} />
+  return (
+    <DrawerPrimitive.Root
+      data-slot="drawer"
+      repositionInputs={false}
+      {...props}
+    />
+  )
+}
+
+/** A drawer opened from inside another drawer. */
+function DrawerNested({
+  ...props
+}: React.ComponentProps<typeof DrawerPrimitive.NestedRoot>) {
+  return (
+    <DrawerPrimitive.NestedRoot
+      data-slot="drawer"
+      repositionInputs={false}
+      {...props}
+    />
+  )
+}
+
+/**
+ * Keeps a bottom drawer above the on-screen keyboard: --kb is how far the keyboard covers the
+ * layout viewport, --vvh the height that is left. A focused field is scrolled into view.
+ */
+function useKeyboardAvoidance(ref: React.RefObject<HTMLElement | null>) {
+  React.useEffect(() => {
+    const el = ref.current
+    const vv = window.visualViewport
+    if (!el || !vv) return
+    let timer: ReturnType<typeof setTimeout> | undefined
+    const update = () => {
+      const covered = Math.max(0, window.innerHeight - vv.height - vv.offsetTop)
+      el.style.setProperty("--kb", `${covered}px`)
+      el.style.setProperty("--vvh", `${vv.height}px`)
+    }
+    const reveal = (e: FocusEvent) => {
+      const target = e.target
+      if (
+        !(target instanceof HTMLElement) ||
+        !/^(input|textarea|select)$/i.test(target.tagName)
+      )
+        return
+      clearTimeout(timer)
+      // wait for the keyboard to finish sliding in
+      timer = setTimeout(() => {
+        update()
+        target.scrollIntoView({ block: "center", behavior: "smooth" })
+      }, 350)
+    }
+    update()
+    vv.addEventListener("resize", update)
+    vv.addEventListener("scroll", update)
+    el.addEventListener("focusin", reveal)
+    return () => {
+      clearTimeout(timer)
+      vv.removeEventListener("resize", update)
+      vv.removeEventListener("scroll", update)
+      el.removeEventListener("focusin", reveal)
+    }
+  }, [ref])
 }
 
 function DrawerTrigger({
@@ -47,15 +110,18 @@ function DrawerContent({
   children,
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Content>) {
+  const ref = React.useRef<HTMLDivElement>(null)
+  useKeyboardAvoidance(ref)
   return (
     <DrawerPortal data-slot="drawer-portal">
       <DrawerOverlay />
       <DrawerPrimitive.Content
+        ref={ref}
         data-slot="drawer-content"
         className={cn(
           "group/drawer-content fixed z-50 flex h-auto flex-col bg-background",
           "data-[vaul-drawer-direction=top]:inset-x-0 data-[vaul-drawer-direction=top]:top-0 data-[vaul-drawer-direction=top]:mb-24 data-[vaul-drawer-direction=top]:max-h-[80vh] data-[vaul-drawer-direction=top]:rounded-b-lg data-[vaul-drawer-direction=top]:border-b",
-          "data-[vaul-drawer-direction=bottom]:inset-x-0 data-[vaul-drawer-direction=bottom]:bottom-0 data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[80vh] data-[vaul-drawer-direction=bottom]:pb-[env(safe-area-inset-bottom)] data-[vaul-drawer-direction=bottom]:rounded-t-lg data-[vaul-drawer-direction=bottom]:border-t",
+          "data-[vaul-drawer-direction=bottom]:inset-x-0 data-[vaul-drawer-direction=bottom]:bottom-[var(--kb,0px)] data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[min(80vh,calc(var(--vvh,100vh)-1rem))] data-[vaul-drawer-direction=bottom]:pb-[env(safe-area-inset-bottom)] data-[vaul-drawer-direction=bottom]:rounded-t-lg data-[vaul-drawer-direction=bottom]:border-t",
           "data-[vaul-drawer-direction=right]:inset-y-0 data-[vaul-drawer-direction=right]:right-0 data-[vaul-drawer-direction=right]:w-3/4 data-[vaul-drawer-direction=right]:border-l data-[vaul-drawer-direction=right]:sm:max-w-sm",
           "data-[vaul-drawer-direction=left]:inset-y-0 data-[vaul-drawer-direction=left]:left-0 data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:border-r data-[vaul-drawer-direction=left]:sm:max-w-sm",
           className
@@ -120,6 +186,7 @@ function DrawerDescription({
 
 export {
   Drawer,
+  DrawerNested,
   DrawerPortal,
   DrawerOverlay,
   DrawerTrigger,

@@ -40,7 +40,7 @@ const Combobox = ({
   const [open, setOpen] = React.useState(false);
 
   return isLoading ? (
-    <Skeleton className="h-10 w-full  md:w-[335px]" />
+    <Skeleton className="h-11 w-full md:h-9 md:w-[335px]" />
   ) : (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>

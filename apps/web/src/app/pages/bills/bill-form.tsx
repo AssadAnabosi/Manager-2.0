@@ -101,7 +101,7 @@ const BillForm = ({ bill, defaults, onDone }: BillFormProps) => {
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>{t("Date")}</FormLabel>
-              <Popover open={calendarOpen} onOpenChange={setCalenderOpen}>
+              <Popover open={calendarOpen} onOpenChange={setCalenderOpen} modal>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button

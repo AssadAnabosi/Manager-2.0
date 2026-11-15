@@ -68,14 +68,14 @@ const MultiSelectFormField = React.forwardRef<
     );
 
     return isLoading ? (
-      <Skeleton className="h-10 w-full  md:w-[33%] md:min-w-[335px]" />
+      <Skeleton className="h-11 w-full md:h-9 md:w-[33%] md:min-w-[335px]" />
     ) : (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             ref={ref}
             {...props}
-            className="flex h-auto min-h-10 w-full items-center justify-between rounded-md border bg-inherit hover:bg-card md:w-[33%] md:min-w-[335px] print:hidden"
+            className="flex h-auto min-h-11 w-full items-center md:min-h-9 justify-between rounded-md border bg-inherit hover:bg-card md:w-[33%] md:min-w-[335px] print:hidden"
           >
             {Array.from(selectedValues).length > 0 ? (
               <div className="flex w-full items-center justify-between">
