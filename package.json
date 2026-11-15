@@ -7,6 +7,7 @@
   ],
   "scripts": {
     "dev": "docker compose watch",
+    "dev:landing": "bun run --cwd apps/landing dev",
     "dev:native": "bun run --parallel --filter @workbench/api --filter @workbench/web dev",
     "db:generate": "bun run --cwd apps/api db:generate",
     "db:migrate:local": "bun run --cwd apps/api db:migrate:local",

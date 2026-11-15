@@ -1,0 +1,44 @@
+name: Deploy landing
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - apps/landing/**
+      - bun.lock
+      - .github/workflows/deploy-landing.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.4
+      - run: bun install --frozen-lockfile
+      - run: bun run --cwd apps/landing build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/landing/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    # The custom domain is set in Settings > Pages, so it stays out of the repo.
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
