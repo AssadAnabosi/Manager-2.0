@@ -99,6 +99,8 @@ export default function Edit() {
   };
   const { data } = useGetUserQuery();
   const user = data?.user as UserType;
+  // an administrator can manage their own loggable switch, but not their role, status or account
+  const isSelf = user?.id === authUser?.id;
   const passwordForm = useForm<updatePasswordSchemaType>({
     resolver: zodResolver(updatePasswordSchema),
     defaultValues: {
@@ -227,9 +229,7 @@ export default function Edit() {
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="password">{t("Password")}</TabsTrigger>
           <TabsTrigger value="profile">{t("Profile")}</TabsTrigger>
-          <TabsTrigger value="settings" disabled={user.id === authUser?.id}>
-            {t("Settings")}
-          </TabsTrigger>
+          <TabsTrigger value="settings">{t("Settings")}</TabsTrigger>
         </TabsList>
         <TabsContent value="password" className="h-[500px]">
           <Card>
@@ -357,17 +357,21 @@ export default function Edit() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 items-center">
-                <Label htmlFor="active-status">{t("Active Status")}</Label>
-                <div className="ms-auto">
-                  <Switch
-                    id="active-status"
-                    checked={active}
-                    onCheckedChange={updateStatus}
-                  />
-                </div>
-              </div>
-              <Separator />
+              {!isSelf && (
+                <>
+                  <div className="grid grid-cols-2 items-center">
+                    <Label htmlFor="active-status">{t("Active Status")}</Label>
+                    <div className="ms-auto">
+                      <Switch
+                        id="active-status"
+                        checked={active}
+                        onCheckedChange={updateStatus}
+                      />
+                    </div>
+                  </div>
+                  <Separator />
+                </>
+              )}
               <div className="grid grid-cols-2 items-center gap-x-4">
                 <div className="flex items-center gap-1.5">
                   <Label htmlFor="loggable">{t("Loggable")}</Label>
@@ -400,35 +404,41 @@ export default function Edit() {
                   />
                 </div>
               </div>
-              <Separator />
-              <div className="grid grid-cols-2 items-center">
-                <Label>{t("User Role")}</Label>
-                <Select value={role} onValueChange={updateRole}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder={t("Theme")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {ROLES.map((role) => (
-                      <SelectItem key={role} value={role}>
-                        {t(role)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <Separator />
+              {!isSelf && <Separator />}
+              {!isSelf && (
+                <>
+                  <div className="grid grid-cols-2 items-center">
+                    <Label>{t("User Role")}</Label>
+                    <Select value={role} onValueChange={updateRole}>
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder={t("Theme")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ROLES.map((role) => (
+                          <SelectItem key={role} value={role}>
+                            {t(role)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Separator />
+                </>
+              )}
             </CardContent>
-            <CardFooter>
-              <DeleteDialog onAction={async () => await deleteUser(user.id)}>
-                <Button
-                  variant={"delete"}
-                  className="border-border w-[50%] border hover:border-none"
-                >
-                  <Trash2Icon className="me-3 h-4 w-4" />
-                  {t("Delete User")}
-                </Button>
-              </DeleteDialog>
-            </CardFooter>
+            {!isSelf && (
+              <CardFooter>
+                <DeleteDialog onAction={async () => await deleteUser(user.id)}>
+                  <Button
+                    variant={"delete"}
+                    className="border-border w-[50%] border hover:border-none"
+                  >
+                    <Trash2Icon className="me-3 h-4 w-4" />
+                    {t("Delete User")}
+                  </Button>
+                </DeleteDialog>
+              </CardFooter>
+            )}
           </Card>
         </TabsContent>
       </Tabs>
