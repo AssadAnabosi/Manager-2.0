@@ -339,7 +339,7 @@ export default function Edit() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 items-center">
                 <Label htmlFor="active-status">{t("Active Status")}</Label>
-                <div className="ml-auto">
+                <div className="ms-auto">
                   <Switch
                     id="active-status"
                     checked={active}
@@ -357,7 +357,7 @@ export default function Edit() {
                     )}
                   </p>
                 </div>
-                <div className="ml-auto">
+                <div className="ms-auto">
                   <Switch
                     id="loggable"
                     checked={loggable}
