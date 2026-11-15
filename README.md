@@ -2,7 +2,8 @@
 
 PWA that helps digitalize a family workshop's data: bills, workers' logs, payees, cheques and more.
 
-![cover](https://github.com/user-attachments/assets/229a59ca-342f-4190-a32b-95bb1abd16b7)
+<img width="1920" height="945" alt="image" src="https://github.com/user-attachments/assets/8452f32c-7dae-4e7f-b58f-0ffb156c8c09" />
+
 
 ## Quickstart
 
