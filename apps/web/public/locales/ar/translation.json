@@ -357,5 +357,7 @@
   "Go to the sidebar item with that number": "الانتقال إلى عنصر الشريط الجانبي بهذا الرقم",
   "Go to the previous sidebar item": "الانتقال إلى العنصر السابق في الشريط الجانبي",
   "Go to the next sidebar item": "الانتقال إلى العنصر التالي في الشريط الجانبي",
-  "Go to a page by its first letter": "الانتقال إلى صفحة بحرفها الأول"
+  "Go to a page by its first letter": "الانتقال إلى صفحة بحرفها الأول",
+  "Showing the filters from your last visit": "عرض الفلاتر من زيارتك الأخيرة",
+  "Reset": "إعادة تعيين"
 }

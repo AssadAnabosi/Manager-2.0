@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { useLogout } from "@/providers/auth-context";
+import { clearRememberedFilters } from "@/hooks/use-remembered-filters";
 
 import Layout from "@/components/shell/bare-layout";
 import { LogOut } from "lucide-react";
@@ -15,6 +16,7 @@ const Logout = () => {
   useEffect(() => {
     const logoutUser = async () => {
       await logout();
+      clearRememberedFilters();
       navigate("/", { replace: true });
     };
     logoutUser();
