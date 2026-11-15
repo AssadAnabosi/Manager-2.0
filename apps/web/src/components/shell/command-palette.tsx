@@ -231,6 +231,23 @@ export function CommandPalette() {
     ...navGroupsFor(user.role).flatMap((g) => g.items),
     SETTINGS_ITEM,
   ];
+  // Typing the start of "logout" brings it to the top; otherwise it stays at the bottom.
+  const typed = text.toLowerCase();
+  const logoutFirst =
+    typed.length >= 2 &&
+    [t("Logout"), "logout", "sign out"].some((word) =>
+      word.toLowerCase().startsWith(typed)
+    );
+  const logoutItem = (
+    <CommandItem
+      forceMount={logoutFirst}
+      value={`${t("Logout")} Logout sign out`}
+      onSelect={() => run(() => navigate("/logout"))}
+    >
+      <LogOut />
+      {t("Logout")}
+    </CommandItem>
+  );
   const hasPage = (path: string) => pages.some((page) => page.path === path);
   const allowed = {
     cheques: hasPage("/cheques"),
@@ -279,6 +296,7 @@ export function CommandPalette() {
           onValueChange={setQuery}
         />
         <CommandList>
+          {logoutFirst && <CommandGroup forceMount>{logoutItem}</CommandGroup>}
           {/* forceMount on the group too: cmdk hides a group with no matching items */}
           {serial && allowed.cheques && (
             <CommandGroup forceMount>
@@ -398,13 +416,7 @@ export function CommandPalette() {
                 ?
               </kbd>
             </CommandItem>
-            <CommandItem
-              value={`${t("Logout")} Logout sign out`}
-              onSelect={() => run(() => navigate("/logout"))}
-            >
-              <LogOut />
-              {t("Logout")}
-            </CommandItem>
+            {!logoutFirst && logoutItem}
           </CommandGroup>
           {text && hasPage("/bills") && (
             <SearchBillsFallback
