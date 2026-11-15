@@ -207,7 +207,7 @@ export default function AttendanceCalendar({
                   <span>{fmt.date(d, "d")}</span>
                   {Icon && !future && (
                     <Icon
-                      className="absolute bottom-1 size-4 stroke-3 print:size-4 print:opacity-100"
+                      className="absolute bottom-1 size-3 opacity-90 print:size-4 print:opacity-100"
                       aria-hidden
                     />
                   )}
