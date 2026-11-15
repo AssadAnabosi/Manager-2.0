@@ -83,6 +83,10 @@ const Bills = () => {
         <BillFormDialog
           open={addDialog.open}
           onOpenChange={addDialog.setOpen}
+          defaults={{
+            amount: addDialog.get("addAmount"),
+            type: addDialog.get("addType") === "income" ? "income" : undefined,
+          }}
         />
       )}
       <Separator />

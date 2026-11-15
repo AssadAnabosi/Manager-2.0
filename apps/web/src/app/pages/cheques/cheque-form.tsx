@@ -290,6 +290,7 @@ const ChequeForm = ({ cheque, defaults, onDone }: ChequeFormProps) => {
                   <Input
                     {...field}
                     type="string"
+                    autoFocus={!cheque && !!defaults?.serial}
                     className="input ps-12 pe-4 text-start"
                     disabled={isLoading}
                   />

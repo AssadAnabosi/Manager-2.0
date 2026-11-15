@@ -45,13 +45,17 @@ const positiveNumber = (value: string) => {
   return rest.length ? `${whole}.${rest.join("")}` : whole;
 };
 
+export type BillDefaults = { amount?: string; type?: "expense" | "income" };
+
 type BillFormProps = {
   bill?: BillType;
+  /** Prefilled values for a new bill. With an amount, the description gets the focus. */
+  defaults?: BillDefaults;
   /** Called after a successful save. */
   onDone: () => void;
 };
 
-const BillForm = ({ bill, onDone }: BillFormProps) => {
+const BillForm = ({ bill, defaults, onDone }: BillFormProps) => {
   const { t } = useTranslation();
   const fmt = useFormatters();
   const { toast } = useToast();
@@ -60,8 +64,8 @@ const BillForm = ({ bill, onDone }: BillFormProps) => {
     resolver: zodResolver(billFormSchema),
     defaultValues: {
       date: bill ? new Date(bill.date) : getToday(),
-      type: bill?.type || "expense",
-      amount: bill?.amount?.toString() || "",
+      type: bill?.type || defaults?.type || "expense",
+      amount: bill?.amount?.toString() || defaults?.amount || "",
       description: bill?.description || "",
       remarks: bill?.remarks || "",
     },
@@ -170,7 +174,7 @@ const BillForm = ({ bill, onDone }: BillFormProps) => {
                     {...field}
                     type="text"
                     inputMode="decimal"
-                    autoFocus={!bill}
+                    autoFocus={!bill && !defaults?.amount}
                     className="input pe-4 ps-12 text-start"
                     disabled={isLoading}
                     onChange={(e) =>
@@ -193,6 +197,7 @@ const BillForm = ({ bill, onDone }: BillFormProps) => {
                 <Input
                   {...field}
                   type="string"
+                  autoFocus={!bill && !!defaults?.amount}
                   className="input"
                   disabled={isLoading}
                 />

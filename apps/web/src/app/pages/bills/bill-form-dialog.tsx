@@ -12,7 +12,7 @@ import {
   ResponsiveDialogTrigger,
 } from "@/components/ui/responsive-dialog";
 
-import BillForm from "./bill-form";
+import BillForm, { type BillDefaults } from "./bill-form";
 
 type Props = {
   /** The button that opens the dialog; leave it out to control `open` yourself. */
@@ -20,12 +20,15 @@ type Props = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   bill?: BillType;
+  /** Prefilled values for a new bill. */
+  defaults?: BillDefaults;
   onDone?: () => void;
 };
 
 export default function BillFormDialog({
   children,
   bill,
+  defaults,
   onDone,
   open: openProp,
   onOpenChange,
@@ -53,6 +56,7 @@ export default function BillFormDialog({
         <ResponsiveDialogBody>
           <BillForm
             bill={bill}
+            defaults={defaults}
             onDone={() => {
               setOpen(false);
               onDone?.();

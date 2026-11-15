@@ -4,7 +4,6 @@ import { Check, CircleUser, EllipsisVertical, LogOut } from "lucide-react";
 
 import { useAuth } from "@/providers/auth-context";
 import { ThemeType, useTheme } from "@/providers/theme-provider";
-import RoleBadge from "@/app/pages/users/role-badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -71,11 +70,6 @@ export function NavUser() {
             align="end"
             sideOffset={4}
           >
-            <DropdownMenuLabel className="flex items-center justify-between gap-2 font-normal">
-              <span className="truncate">{user.fullName}</span>
-              <RoleBadge role={user.role} />
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuLabel className="text-muted-foreground text-xs">
                 {t("Theme")}

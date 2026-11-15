@@ -94,6 +94,8 @@ export function useAddDialog() {
         (prev) => {
           prev.delete("add");
           prev.delete("addSerial");
+          prev.delete("addAmount");
+          prev.delete("addType");
           if (next) prev.set("add", "1");
           return prev;
         },

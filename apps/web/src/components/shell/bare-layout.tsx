@@ -11,7 +11,7 @@ const BareLayout = ({
   withSettings = false,
 }: {
   children: ReactNode;
-  /** Show the theme and language gear (login only). */
+  /** Login only: the theme and language gear, and the credits badge. */
   withSettings?: boolean;
 }) => {
   const { t } = useTranslation();
@@ -26,9 +26,11 @@ const BareLayout = ({
       <div className="flex flex-grow flex-col space-y-2 px-4 pt-2 pb-4 print:px-2">
         {children}
       </div>
-      <footer className="flex justify-center pb-3">
-        <CreditsBadge />
-      </footer>
+      {withSettings && (
+        <footer className="flex justify-center pb-3">
+          <CreditsBadge />
+        </footer>
+      )}
     </div>
   );
 };

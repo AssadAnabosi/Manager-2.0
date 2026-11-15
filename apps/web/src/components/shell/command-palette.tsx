@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   Archive,
   Check,
+  Keyboard,
   Landmark,
   LogOut,
   Plus,
@@ -13,26 +14,116 @@ import {
   Users,
 } from "lucide-react";
 
+import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth-context";
 import { usePermissions } from "@/hooks/use-permissions";
 import { useTheme } from "@/providers/theme-provider";
 import { Button } from "@/components/ui/button";
 import {
   CommandDialog,
-  CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
-import { DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { SETTINGS_ITEM, navGroupsFor } from "@/components/shell/nav-items";
 import { LANGUAGES, THEMES } from "@/components/shell/nav-user";
 
 const isMac = () =>
   typeof navigator !== "undefined" &&
   /mac|iphone|ipad/i.test(navigator.platform);
+
+/** Always the last row once something is typed: search the bills for it. Its value never matches the filter, so it is only there because of forceMount. */
+function SearchBillsFallback({
+  query,
+  onSelect,
+}: {
+  query: string;
+  onSelect: () => void;
+}) {
+  const { t } = useTranslation();
+  return (
+    <CommandGroup forceMount>
+      <CommandItem forceMount value={"\u0000"} onSelect={onSelect}>
+        <Search />
+        {t('Search bills for "{{query}}"', { query })}
+      </CommandItem>
+    </CommandGroup>
+  );
+}
+
+type Shortcut = {
+  keys: string[];
+  label: string;
+  /** Hidden for roles without this access. */
+  needs?: "cheques" | "billWrite";
+};
+
+const SHORTCUT_GROUPS: { title: string; wide?: boolean; items: Shortcut[] }[] =
+  [
+    {
+      title: "General",
+      items: [
+        { keys: ["mod", "K"], label: "Open the command menu" },
+        { keys: ["mod", "\\"], label: "Show or hide the sidebar" },
+        { keys: ["mod", "B"], label: "Show or hide the sidebar" },
+        { keys: ["?"], label: "Show this list" },
+      ],
+    },
+    {
+      title: "Navigation",
+      items: [
+        { keys: ["g", "w"], label: "Go to a page by its first letter" },
+        {
+          keys: ["alt", "1-9"],
+          label: "Go to the sidebar item with that number",
+        },
+        { keys: ["["], label: "Go to the previous sidebar item" },
+        { keys: ["]"], label: "Go to the next sidebar item" },
+      ],
+    },
+    {
+      title: "Type these in the command menu",
+      wide: true,
+      items: [
+        {
+          keys: ["c", "123"],
+          label: "Add or search a cheque by serial",
+          needs: "cheques",
+        },
+        { keys: ["b", "250"], label: "Add a spent bill", needs: "billWrite" },
+        {
+          keys: ["b", "-250"],
+          label: "Add a received bill",
+          needs: "billWrite",
+        },
+      ],
+    },
+  ];
+
+/** The letter after `g` for each page; a page the role can't open is skipped. */
+const GO_TO: Record<string, string> = {
+  d: "/",
+  w: "/worksheets",
+  b: "/bills",
+  c: "/cheques",
+  p: "/payees",
+  u: "/users",
+  s: "/settings",
+};
+
+const isTyping = (target: EventTarget | null) =>
+  target instanceof HTMLElement &&
+  (target.isContentEditable ||
+    /^(input|textarea|select)$/i.test(target.tagName));
 
 /**
  * Ctrl/⌘+K opens a search box for jumping to a page or changing the theme and language. The
@@ -41,11 +132,19 @@ const isMac = () =>
 export function CommandPalette() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const { user } = useAuth();
   const { theme, setTheme } = useTheme();
   const { canWrite, canCreateUsers } = usePermissions();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [helpOpen, setHelpOpen] = useState(false);
+  // what the key handler needs to move through the sidebar, kept fresh on every render
+  const goPending = useRef(0);
+  const sidebar = useRef<{ paths: string[]; current: string }>({
+    paths: [],
+    current: "",
+  });
   const lang = (i18n.resolvedLanguage ?? "en").substring(0, 2);
 
   useEffect(() => {
@@ -53,11 +152,53 @@ export function CommandPalette() {
       if (e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setOpen((o) => !o);
+      } else if (
+        e.key === "?" &&
+        !e.metaKey &&
+        !e.ctrlKey &&
+        !e.altKey &&
+        !isTyping(e.target)
+      ) {
+        e.preventDefault();
+        setHelpOpen((o) => !o);
+      } else if (!e.metaKey && !e.ctrlKey && !isTyping(e.target)) {
+        const { paths, current } = sidebar.current;
+        let target: string | undefined;
+        // g then a letter (within 1.5s): jump to that page
+        const waiting = goPending.current;
+        goPending.current = 0;
+        if (!e.altKey && !e.shiftKey && e.key.length === 1) {
+          const key = e.key.toLowerCase();
+          if (waiting && Date.now() - waiting < 1500) {
+            const to = GO_TO[key];
+            if (to && (to === "/" || paths.includes(to))) target = to;
+          } else if (key === "g") {
+            goPending.current = Date.now();
+          }
+        }
+        // Alt+1..9: the nth sidebar item (by position, so it follows the user's role)
+        const digit = e.altKey && e.code.match(/^Digit([1-9])$/)?.[1];
+        if (!target && digit) target = paths[Number(digit) - 1];
+        // [ and ]: the previous / next sidebar item, wrapping around
+        if (!target && !e.altKey && (e.key === "[" || e.key === "]")) {
+          const at = paths.findIndex(
+            (path) => current === path || current.startsWith(path + "/")
+          );
+          if (at !== -1)
+            target =
+              paths[
+                (at + (e.key === "]" ? 1 : -1) + paths.length) % paths.length
+              ];
+        }
+        if (target) {
+          e.preventDefault();
+          navigate(target);
+        }
       }
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, []);
+  }, [navigate]);
 
   if (!user) return null;
 
@@ -66,8 +207,14 @@ export function CommandPalette() {
     setQuery("");
     fn();
   };
-  // "add cheque 1234", or just "1234": offer to add a cheque with that serial
-  const serial = canWrite ? query.match(/\d+/)?.[0] : undefined;
+  // "c1234": add a cheque with that serial (always first), or look for one
+  const serial = query.trim().match(/^c\s*(\d+)$/i)?.[1];
+  // "b250" is a spent bill, "b-250" a received one
+  const billMatch = query.trim().match(/^b\s*(-?)(\d+(?:\.\d+)?)$/i);
+  const bill = billMatch
+    ? { amount: billMatch[2], received: billMatch[1] === "-" }
+    : undefined;
+  const text = query.trim();
   const creates = [
     {
       show: canWrite,
@@ -84,6 +231,19 @@ export function CommandPalette() {
     ...navGroupsFor(user.role).flatMap((g) => g.items),
     SETTINGS_ITEM,
   ];
+  const hasPage = (path: string) => pages.some((page) => page.path === path);
+  const allowed = {
+    cheques: hasPage("/cheques"),
+    billWrite: canWrite && hasPage("/bills"),
+  };
+  const shortcutGroups = SHORTCUT_GROUPS.map((group) => ({
+    ...group,
+    items: group.items.filter((item) => !item.needs || allowed[item.needs]),
+  })).filter((group) => group.items.length > 0);
+  sidebar.current = {
+    paths: pages.map((page) => page.path),
+    current: pathname,
+  };
 
   return (
     <>
@@ -119,19 +279,55 @@ export function CommandPalette() {
           onValueChange={setQuery}
         />
         <CommandList>
-          {!serial && <CommandEmpty>{t("No matching results")}</CommandEmpty>}
-          {serial && (
-            // forceMount on the group too: cmdk hides a group with no matching items
+          {/* forceMount on the group too: cmdk hides a group with no matching items */}
+          {serial && allowed.cheques && (
+            <CommandGroup forceMount>
+              {canWrite && (
+                <CommandItem
+                  forceMount
+                  value={`add cheque serial ${serial}`}
+                  onSelect={() =>
+                    run(() => navigate(`/cheques?add=1&addSerial=${serial}`))
+                  }
+                >
+                  <Plus />
+                  {t("Add cheque with serial {{serial}}", { serial })}
+                </CommandItem>
+              )}
+              <CommandItem
+                forceMount
+                value={`search cheque serial ${serial}`}
+                onSelect={() =>
+                  run(() => navigate(`/cheques?serial=${serial}`))
+                }
+              >
+                <Search />
+                {t("Search cheques with serial {{serial}}", { serial })}
+              </CommandItem>
+            </CommandGroup>
+          )}
+          {bill && allowed.billWrite && (
             <CommandGroup forceMount>
               <CommandItem
                 forceMount
-                value={`add cheque serial ${serial}`}
+                value={`add bill ${bill.amount}`}
                 onSelect={() =>
-                  run(() => navigate(`/cheques?add=1&addSerial=${serial}`))
+                  run(() =>
+                    navigate(
+                      `/bills?add=1&addAmount=${bill.amount}&addType=${
+                        bill.received ? "income" : "expense"
+                      }`
+                    )
+                  )
                 }
               >
                 <Plus />
-                {t("Add cheque with serial {{serial}}", { serial })}
+                {t(
+                  bill.received
+                    ? "Add received bill of {{amount}}"
+                    : "Add spent bill of {{amount}}",
+                  { amount: bill.amount }
+                )}
               </CommandItem>
             </CommandGroup>
           )}
@@ -193,6 +389,16 @@ export function CommandPalette() {
           <CommandSeparator />
           <CommandGroup>
             <CommandItem
+              value={`${t("Keyboard shortcuts")} Keyboard shortcuts help`}
+              onSelect={() => run(() => setHelpOpen(true))}
+            >
+              <Keyboard />
+              <span className="flex-1">{t("Keyboard shortcuts")}</span>
+              <kbd className="bg-muted rounded border px-1.5 text-[10px] font-medium">
+                ?
+              </kbd>
+            </CommandItem>
+            <CommandItem
               value={`${t("Logout")} Logout sign out`}
               onSelect={() => run(() => navigate("/logout"))}
             >
@@ -200,8 +406,73 @@ export function CommandPalette() {
               {t("Logout")}
             </CommandItem>
           </CommandGroup>
+          {text && hasPage("/bills") && (
+            <SearchBillsFallback
+              query={text}
+              onSelect={() =>
+                run(() => navigate(`/bills?search=${encodeURIComponent(text)}`))
+              }
+            />
+          )}
         </CommandList>
       </CommandDialog>
+      <Dialog open={helpOpen} onOpenChange={setHelpOpen}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader className="pe-10 text-start">
+            <DialogTitle>{t("Keyboard shortcuts")}</DialogTitle>
+            <DialogDescription className="sr-only">
+              {t("Type these in the command menu")}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-3 md:grid-cols-2">
+            {shortcutGroups.map((group) => (
+              <section
+                key={group.title}
+                className={cn(
+                  "bg-muted/30 space-y-3 rounded-lg border p-4",
+                  group.wide && "md:col-span-2"
+                )}
+              >
+                <h3 className="text-muted-foreground text-xs font-medium">
+                  {t(group.title)}
+                </h3>
+                <ul className="space-y-3 text-sm">
+                  {group.items.map((item) => (
+                    <li
+                      key={item.keys.join("+")}
+                      className="flex items-center gap-2"
+                    >
+                      <span className="font-medium">{t(item.label)}</span>
+                      <span className="border-muted-foreground/30 min-w-4 flex-1 translate-y-1 border-b border-dotted" />
+                      <bdi
+                        dir="ltr"
+                        className="flex shrink-0 gap-1 whitespace-nowrap"
+                      >
+                        {item.keys.map((key) => (
+                          <kbd
+                            key={key}
+                            className="bg-muted min-w-6 shrink-0 rounded border border-b-2 px-1.5 py-0.5 text-center font-mono text-xs whitespace-nowrap"
+                          >
+                            {key === "mod"
+                              ? isMac()
+                                ? "⌘"
+                                : "Ctrl"
+                              : key === "alt"
+                                ? isMac()
+                                  ? "⌥"
+                                  : "Alt"
+                                : key}
+                          </kbd>
+                        ))}
+                      </bdi>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

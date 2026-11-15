@@ -8,6 +8,7 @@
 | [roles-and-rules.md](roles-and-rules.md) | The four roles and the business restrictions |
 | [auth.md](auth.md) | Tokens, cookie, sessions, password hashing, rate limits |
 | [api.md](api.md) | API conventions (the routes themselves live in the generated OpenAPI docs) |
+| [shortcuts.md](shortcuts.md) | Keyboard shortcuts and what the command palette understands |
 | [development.md](development.md) | Running locally with Docker or natively, scripts, tests |
 | [configuration.md](configuration.md) | Variables and secrets |
 | [deployment.md](deployment.md) | One-time Cloudflare setup and CI deploys |
