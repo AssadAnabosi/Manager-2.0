@@ -18,11 +18,9 @@ export function ShortcutNumber({ path }: { path: string }) {
   const number = sidebarPaths(role).indexOf(path) + 1;
   if (number < 1 || number > 9) return null;
   return (
-    <kbd
-      dir="ltr"
-      className="bg-muted text-muted-foreground ms-auto min-w-5 rounded border border-b-2 px-1 text-center font-mono text-xs"
-    >
-      {number}
+    // no dir="ltr" on the <kbd> itself: that would make ms-auto resolve to margin-left and glue it to the label in Arabic
+    <kbd className="bg-muted text-muted-foreground ms-auto min-w-5 rounded border border-b-2 px-1 text-center font-mono text-xs">
+      <bdi dir="ltr">{number}</bdi>
     </kbd>
   );
 }
