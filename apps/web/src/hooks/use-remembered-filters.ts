@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { useCallback, useLayoutEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 /** The list pages whose search, filters and date range are remembered between visits. */
@@ -46,6 +46,27 @@ const filtersOf = (search: string) => {
   for (const key of TRANSIENT_PARAMS) params.delete(key);
   return params;
 };
+
+/**
+ * Navigate to a page the way the sidebar and the shortcuts do: a list page opens straight onto
+ * its remembered filters. Landing on it bare and redirecting a moment later shows the wrong
+ * view (and fetches the wrong data) for a frame, which reads as a hiccup.
+ */
+export function useGoTo() {
+  const navigate = useNavigate();
+  return useCallback(
+    (path: string) => {
+      const saved = LIST_PATHS.includes(path) ? remembered.get(path) : "";
+      if (saved)
+        navigate(
+          { pathname: path, search: `?${saved}` },
+          { state: { filtersRestored: true } }
+        );
+      else navigate(path);
+    },
+    [navigate]
+  );
+}
 
 /**
  * Remembers each list page's filters. Coming back to a list page without any (through the

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { useGoTo } from "@/hooks/use-remembered-filters";
 import { useAuth } from "@/providers/auth-context";
 import { usePermissions } from "@/hooks/use-permissions";
 import { useTheme } from "@/providers/theme-provider";
@@ -141,6 +142,7 @@ const isTyping = (target: EventTarget | null) =>
 export function CommandPalette() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const goTo = useGoTo();
   const { pathname } = useLocation();
   const { user } = useAuth();
   const { theme, setTheme } = useTheme();
@@ -203,13 +205,13 @@ export function CommandPalette() {
         if (target) {
           e.preventDefault();
           // already there: going again would wipe the page's filters and view
-          if (target !== current) navigate(target);
+          if (target !== current) goTo(target);
         }
       }
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [navigate]);
+  }, [goTo]);
 
   if (!user) return null;
 
@@ -384,7 +386,7 @@ export function CommandPalette() {
               <CommandItem
                 key={page.path}
                 value={`${t(page.title)} ${page.title}`}
-                onSelect={() => run(() => navigate(page.path))}
+                onSelect={() => run(() => goTo(page.path))}
               >
                 <page.icon />
                 {t(page.title)}

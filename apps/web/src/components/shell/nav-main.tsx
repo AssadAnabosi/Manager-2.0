@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { useGoTo } from "@/hooks/use-remembered-filters";
 import { useTranslation } from "react-i18next";
 
 import { ShortcutNumber } from "@/components/shell/shortcut-number";
@@ -18,6 +19,7 @@ export function NavMain() {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const { isMobile, setOpenMobile } = useSidebar();
+  const goTo = useGoTo();
   const groups = navGroupsFor(useAuth().user?.role);
   const current = navItemFor(pathname);
 
@@ -41,8 +43,11 @@ export function NavMain() {
                     <Link
                       to={item.path}
                       onClick={(e) => {
-                        // the page you are on keeps its filters and view
-                        if (current?.path === item.path) e.preventDefault();
+                        // plain clicks go through goTo (remembered filters); the page you
+                        // are on keeps its filters and view
+                        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+                        e.preventDefault();
+                        if (current?.path !== item.path) goTo(item.path);
                         if (isMobile) setOpenMobile(false);
                       }}
                     >
