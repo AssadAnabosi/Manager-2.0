@@ -61,6 +61,7 @@ export function toList(
       value: item.id,
       label: item[value],
       active: active ? item["active"] : true,
+      loggable: item["loggable"] !== false,
     };
   });
 }

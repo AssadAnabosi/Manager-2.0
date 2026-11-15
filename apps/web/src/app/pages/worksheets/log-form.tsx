@@ -75,7 +75,13 @@ const LogForm = ({ log, defaults, onDone }: LogFormProps) => {
   const isLoading = logForm.formState.isSubmitting;
 
   const { data: usersData, isLoading: filterLoading } = useGetUsersQuery();
-  const workers = toList(usersData?.users || [], "fullName", true);
+  // Only workers marked loggable are offered, however they are searched. The one already
+  // chosen (editing a log, or a day added from a worker's calendar) stays so it has a name.
+  const workers = toList(usersData?.users || [], "fullName", true).filter(
+    (worker) =>
+      worker.loggable !== false ||
+      worker.value === (log?.worker?.id ?? defaults?.worker)
+  );
 
   const { mutateAsync } = useLogFormMutation();
   const [popoverOpen, setPopoverOpen] = useState(false);

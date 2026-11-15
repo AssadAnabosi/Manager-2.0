@@ -159,6 +159,39 @@ export const useUpdateUserStatusMutation = () => {
   });
 };
 
+export const useUpdateUserLoggableMutation = () => {
+  const axios = useAxios();
+  const queryClient = useQueryClient();
+  const { t } = useTranslation();
+  const { toast } = useToast();
+  return useMutation({
+    mutationFn: ({
+      userId,
+      loggable,
+    }: {
+      userId: string;
+      loggable: boolean;
+    }) => axios.patch(`${BASE_URL}/${userId}/loggable`, { loggable }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["users"],
+      });
+      toast({
+        variant: "success",
+        title: t("Success"),
+        description: t("User's Loggable setting was updated successfully"),
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        variant: "destructive",
+        title: t("Error"),
+        description: apiErrorText(error, t),
+      });
+    },
+  });
+};
+
 export const useUpdateUserRoleMutation = () => {
   const axios = useAxios();
   const queryClient = useQueryClient();

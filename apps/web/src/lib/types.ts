@@ -18,6 +18,7 @@ export type UserType = {
   phoneNumber: string;
   role: string;
   active: boolean;
+  loggable: boolean;
   theme: string;
   language: string;
 };
@@ -41,6 +42,8 @@ export type ListType = {
   value: string;
   label: string;
   active?: boolean;
+  /** false: only offered once something is typed in the search box. */
+  loggable?: boolean;
 };
 
 // Records as the API returns them, derived from the shared response schemas.

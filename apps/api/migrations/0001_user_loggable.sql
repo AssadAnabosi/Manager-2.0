@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD `loggable` integer DEFAULT true NOT NULL;

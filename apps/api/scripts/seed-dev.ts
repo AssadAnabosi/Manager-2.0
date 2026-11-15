@@ -87,6 +87,8 @@ const users: {
   username: string;
   role: Role;
   active?: boolean;
+  /** Offered when picking a worker for a new log (default true). */
+  loggable?: boolean;
   language: "ar" | "en";
 }[] = [
   { first: "Mona", last: "Khalil", username: "moderator", role: "Moderator", language: "en" },
@@ -95,9 +97,10 @@ const users: {
   { first: "ليلى", last: "حداد", username: "layla", role: "User", language: "ar" },
   { first: "Yusuf", last: "Mansour", username: "yusuf", role: "User", language: "ar" },
   { first: "Nour", last: "Salem", username: "nour", role: "User", language: "en" },
+  { first: "Karim", last: "Retired", username: "karim", role: "User", loggable: false, language: "en" },
   { first: "Ines", last: "Inactive", username: "inactive", role: "User", active: false, language: "en" },
 ];
-// the workers whose days are filled in (the inactive one only has older history)
+// the workers whose days are filled in (the inactive and the not loggable one only have older history)
 users.forEach((u, i) => (u.id = demoId("user", i + 1)));
 const workers = users.filter((u) => u.role === "User");
 
@@ -120,7 +123,7 @@ const sql: string[] = [
 for (const u of users) {
   const hash = await hashPassword(DEV_PASSWORD, passwordEnv);
   sql.push(
-    `INSERT INTO users (id, first_name, last_name, username, email, phone_number, password_hash, role, active, theme, language, created_at, updated_at) VALUES (${q(u.id!)}, ${q(u.first)}, ${q(u.last)}, ${q(u.username)}, ${q(`${u.username}@example.com`)}, ${q("05" + String(between(10000000, 99999999)))}, ${q(hash)}, ${q(u.role)}, ${u.active === false ? 0 : 1}, 'system', ${q(u.language)}, ${now}, ${now});`
+    `INSERT INTO users (id, first_name, last_name, username, email, phone_number, password_hash, role, active, loggable, theme, language, created_at, updated_at) VALUES (${q(u.id!)}, ${q(u.first)}, ${q(u.last)}, ${q(u.username)}, ${q(`${u.username}@example.com`)}, ${q("05" + String(between(10000000, 99999999)))}, ${q(hash)}, ${q(u.role)}, ${u.active === false ? 0 : 1}, ${u.loggable === false ? 0 : 1}, 'system', ${q(u.language)}, ${now}, ${now});`
   );
 }
 
@@ -140,7 +143,7 @@ const hhmm = (minutes: number) =>
 let logCount = 0;
 
 for (const worker of workers) {
-  const inactive = worker.active === false;
+  const inactive = worker.active === false || worker.loggable === false;
   for (let day = monthStart(2); day <= today; day += DAY) {
     const date = new Date(day);
     if (date.getUTCDay() === 5) continue; // Friday is the day off

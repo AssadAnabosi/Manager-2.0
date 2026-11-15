@@ -37,6 +37,7 @@ export const createUser = async (
     password: string;
     role: Role;
     active: boolean;
+    loggable: boolean;
     firstName: string;
     lastName: string;
     email: string | null;
@@ -51,6 +52,7 @@ export const createUser = async (
     passwordHash: await hashPassword(over.password ?? TEST_PASSWORD, e),
     role: over.role ?? ("User" as Role),
     active: over.active ?? true,
+    loggable: over.loggable ?? true,
   };
   const [created] = await getDb(env.DB).insert(users).values(row).returning();
   return created;

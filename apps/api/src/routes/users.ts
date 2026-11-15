@@ -12,6 +12,7 @@ import {
   resetPasswordSchema,
   updatePasswordSchema,
   updateRoleSchema,
+  updateLoggableSchema,
   updateStatusSchema,
   updateUserSchema,
   userDetailSchema,
@@ -44,6 +45,7 @@ import {
 const serializeUserDetail = (u: UserRow) => ({
   ...serializeUser(u),
   active: u.active,
+  loggable: u.loggable,
 });
 
 const usersListSchema = z.object({
@@ -91,6 +93,7 @@ export const usersRoutes = (prefix: string) => {
       query: z.object({
         search: z.string().optional(),
         active: z.enum(["true", "false"]).optional(),
+        loggable: z.enum(["true", "false"]).optional(),
       }),
     },
     responses: {
@@ -241,9 +244,24 @@ export const usersRoutes = (prefix: string) => {
     },
   });
 
+  const setLoggable = createRoute({
+    method: "patch",
+    path: "/users/{userID}/loggable",
+    tags: ["Users"],
+    summary: "Allow or stop offering a user as the worker of a new log",
+    security: bearer,
+    middleware: [mount, admin, load],
+    request: { params, body: body(updateLoggableSchema) },
+    responses: {
+      204: { description: "Loggable updated" },
+      ...badId,
+      ...protectedErrors,
+    },
+  });
+
   return createRouter()
     .openapi(list, async (c) => {
-      const { search = "", active } = c.req.valid("query");
+      const { search = "", active, loggable } = c.req.valid("query");
       const conditions: SQL[] = [
         or(
           containsLike(users.firstName, search),
@@ -251,6 +269,7 @@ export const usersRoutes = (prefix: string) => {
         )!,
       ];
       if (active) conditions.push(eq(users.active, active === "true"));
+      if (loggable) conditions.push(eq(users.loggable, loggable === "true"));
       const rows = await getDb(c.env.DB)
         .select()
         .from(users)
@@ -398,6 +417,13 @@ export const usersRoutes = (prefix: string) => {
         .update(users)
         .set({ active: c.req.valid("json").active })
         .where(eq(users.id, target.id));
+      return c.body(null, NO_CONTENT);
+    })
+    .openapi(setLoggable, async (c) => {
+      await getDb(c.env.DB)
+        .update(users)
+        .set({ loggable: c.req.valid("json").loggable })
+        .where(eq(users.id, c.get("record").id));
       return c.body(null, NO_CONTENT);
     });
 };

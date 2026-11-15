@@ -32,7 +32,12 @@ export const registerUserSchema = z.object({
 });
 export type RegisterUserInput = z.infer<typeof registerUserSchema>;
 
-const FORBIDDEN_USER_UPDATE = ["password", "role", "active"] as const;
+const FORBIDDEN_USER_UPDATE = [
+  "password",
+  "role",
+  "active",
+  "loggable",
+] as const;
 
 export const updateUserSchema = z
   .looseObject({
@@ -101,10 +106,23 @@ export const updateStatusSchema = z.object({
   }),
 });
 
-/** A user as listed or fetched by id (includes `active`). */
-export const userDetailSchema = userSchema.extend({ active: z.boolean() });
+export const updateLoggableSchema = z.object({
+  loggable: z.boolean({
+    error: (issue) =>
+      issue.input === undefined
+        ? requiredMsg("loggable")
+        : "Invalid loggable value",
+  }),
+});
+
+/** A user as listed or fetched by id (includes `active` and `loggable`). */
+export const userDetailSchema = userSchema.extend({
+  active: z.boolean(),
+  loggable: z.boolean(),
+});
 
 export const usersQuerySchema = z.object({
   search: z.string().optional(),
   active: z.string().optional(),
+  loggable: z.string().optional(),
 });

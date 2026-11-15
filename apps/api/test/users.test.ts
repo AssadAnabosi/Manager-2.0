@@ -90,6 +90,20 @@ describe.each(["", "/api"])("users with prefix %j", (prefix) => {
       expect(search.data.search).toBe("ADMIN");
     });
 
+    it("lists `loggable` and filters by it", async () => {
+      const { token } = await as(api, "Spectator");
+      const admin = await as(api, "Administrator");
+      const bob = await as(api, "User", "bob");
+      expect(
+        (await body(await api.request("/users", { token }))).data.users.every((u: any) => u.loggable === true)
+      ).toBe(true);
+      await api.json("PATCH", `/users/${bob.user.id}/loggable`, { loggable: false }, { token: admin.token });
+      const off = await body(await api.request("/users?loggable=false", { token }));
+      expect(off.data.users.map((u: any) => u.username)).toEqual(["bob"]);
+      const on = await body(await api.request("/users?loggable=true", { token }));
+      expect(on.data.users.map((u: any) => u.username)).not.toContain("bob");
+    });
+
     it("treats % and _ in search literally", async () => {
       const { token } = await as(api, "Administrator");
       const res = await body(await api.request("/users?search=%25", { token }));
@@ -114,7 +128,7 @@ describe.each(["", "/api"])("users with prefix %j", (prefix) => {
   });
 
   describe("admin operations", () => {
-    it("PUT updates details but rejects password, role and active", async () => {
+    it("PUT updates details but rejects password, role, active and loggable", async () => {
       const admin = await as(api, "Administrator");
       const target = (await as(api, "User", "carol")).user;
       const ok = await api.json(
@@ -127,7 +141,7 @@ describe.each(["", "/api"])("users with prefix %j", (prefix) => {
       const row = (await env.DB.prepare("SELECT * FROM users WHERE id = ?").bind(target.id).first()) as any;
       expect(row).toMatchObject({ first_name: "Karen", username: "karen", email: "k@x.io", phone_number: null });
 
-      for (const field of ["password", "role", "active"]) {
+      for (const field of ["password", "role", "active", "loggable"]) {
         const res = await api.json("PUT", `/users/${target.id}`, { [field]: "x" }, { token: admin.token });
         expect(res.status).toBe(400);
         expect((await body(res)).message).toContain(`You are not authorized to update the ${field} field`);

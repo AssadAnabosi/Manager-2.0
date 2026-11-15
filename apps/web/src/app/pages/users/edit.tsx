@@ -10,6 +10,7 @@ import {
   updatePasswordSchema,
   updatePasswordSchemaType,
   useUpdatePasswordMutation,
+  useUpdateUserLoggableMutation,
   useUpdateUserStatusMutation,
   useDeleteUserMutation,
   useUpdateUserRoleMutation,
@@ -63,6 +64,7 @@ export default function Edit() {
   // const isDesktop = useMediaQuery("(min-width: 1024px)");
   const [isLoading, setIsLoading] = useState(true);
   const [active, setActive] = useState(false);
+  const [loggable, setLoggable] = useState(true);
   const [role, setRole] = useState("user");
   const { t } = useTranslation();
   const { user: authUser } = useAuth();
@@ -103,6 +105,7 @@ export default function Edit() {
     if (user) {
       passwordForm.setValue("username", user.username);
       setActive(user.active);
+      setLoggable(user.loggable);
       setRole(user.role);
       setIsLoading(false);
     }
@@ -132,6 +135,7 @@ export default function Edit() {
   };
 
   const { mutateAsync: updateStatusMut } = useUpdateUserStatusMutation();
+  const { mutateAsync: updateLoggableMut } = useUpdateUserLoggableMutation();
   const { mutateAsync: updateRoleMut } = useUpdateUserRoleMutation();
 
   const { mutateAsync: deleteUser } = useDeleteUserMutation();
@@ -147,6 +151,22 @@ export default function Edit() {
       });
     } catch (error: any) {
       setActive(prev);
+      toast({
+        variant: "destructive",
+        title: t("Error"),
+        description: apiErrorText(error, t),
+      });
+    }
+  };
+
+  const updateLoggable = async (value: boolean) => {
+    const prev = loggable;
+    try {
+      // optimistic update
+      setLoggable(value);
+      await updateLoggableMut({ userId: user.id, loggable: value });
+    } catch (error: any) {
+      setLoggable(prev);
       toast({
         variant: "destructive",
         title: t("Error"),
@@ -312,7 +332,7 @@ export default function Edit() {
               <CardTitle>{t("Settings")}</CardTitle>
               <CardDescription>
                 {t(
-                  "Update Role, Active status, or delete user from the system."
+                  "Update Role, Active status, Loggable, or delete user from the system."
                 )}
               </CardDescription>
             </CardHeader>
@@ -324,6 +344,24 @@ export default function Edit() {
                     id="active-status"
                     checked={active}
                     onCheckedChange={updateStatus}
+                  />
+                </div>
+              </div>
+              <Separator />
+              <div className="grid grid-cols-2 items-center gap-x-4">
+                <div className="space-y-1">
+                  <Label htmlFor="loggable">{t("Loggable")}</Label>
+                  <p className="text-muted-foreground text-xs">
+                    {t(
+                      "Offered as the worker of a new worksheet and in the worker lists. Still found when searched, except when adding a worksheet."
+                    )}
+                  </p>
+                </div>
+                <div className="ml-auto">
+                  <Switch
+                    id="loggable"
+                    checked={loggable}
+                    onCheckedChange={updateLoggable}
                   />
                 </div>
               </div>

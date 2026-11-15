@@ -28,6 +28,8 @@ interface MultiSelectFormFieldProps {
     label: string;
     value: string;
     icon?: React.ComponentType<{ className?: string }>;
+    /** false: only listed once something is typed in the search box. */
+    loggable?: boolean;
   }[];
   defaultValue?: string[];
   onValueChange: (value: string[]) => void;
@@ -48,6 +50,10 @@ const MultiSelectFormField = React.forwardRef<
       new Set(defaultValue || [])
     );
     const [open, setOpen] = React.useState(false);
+    const [query, setQuery] = useState("");
+    const shown = list.filter(
+      (option) => option.loggable !== false || query.trim()
+    );
 
     useEffect(() => {
       setSelectedValues(new Set(defaultValue));
@@ -70,7 +76,13 @@ const MultiSelectFormField = React.forwardRef<
     return isLoading ? (
       <Skeleton className="h-11 w-full md:h-9 md:w-[33%] md:min-w-[335px]" />
     ) : (
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover
+        open={open}
+        onOpenChange={(next) => {
+          setOpen(next);
+          if (!next) setQuery("");
+        }}
+      >
         <PopoverTrigger asChild>
           <Button
             ref={ref}
@@ -135,12 +147,17 @@ const MultiSelectFormField = React.forwardRef<
           align="start"
         >
           <Command>
-            <CommandInput className="text-md" placeholder={t("Search...")} />
+            <CommandInput
+              className="text-md"
+              placeholder={t("Search...")}
+              value={query}
+              onValueChange={setQuery}
+            />
             <CommandList>
               <CommandEmpty>{t("No matching results")}</CommandEmpty>
               <CB_ScrollArea>
                 <CommandGroup>
-                  {list.map((option) => {
+                  {shown.map((option) => {
                     const isSelected = selectedValues.has(option.value);
                     return (
                       <CommandItem

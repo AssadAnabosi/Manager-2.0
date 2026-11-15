@@ -26,6 +26,7 @@ const cases: Case[] = [
   ["PATCH", `/users/${ID}/password`, {}, A],
   ["PATCH", `/users/${ID}/role`, {}, A],
   ["PATCH", `/users/${ID}/status`, {}, A],
+  ["PATCH", `/users/${ID}/loggable`, {}, A],
   ["GET", "/logs", undefined, ALL],
   ["POST", "/logs", {}, MA],
   ["GET", `/logs/${ID}`, undefined, ALL],

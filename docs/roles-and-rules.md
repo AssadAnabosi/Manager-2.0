@@ -18,7 +18,7 @@
 | Bills, payees, cheques (create, update, delete) | no | no | yes | yes |
 | Users (list, read) | no | yes | yes | yes |
 | Users (create, check username) | no | no | yes | yes |
-| Users (update, delete, reset password, change role/status) | no | no | no | yes |
+| Users (update, delete, reset password, change role/status/loggable) | no | no | no | yes |
 
 ## Restrictions
 

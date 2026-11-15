@@ -41,6 +41,8 @@ export const users = sqliteTable(
       .notNull()
       .default("User"),
     active: integer("active", { mode: "boolean" }).notNull().default(true),
+    /** Whether the user is offered when picking a worker for a new log. */
+    loggable: integer("loggable", { mode: "boolean" }).notNull().default(true),
     theme: text("theme").notNull().default("system"),
     language: text("language").notNull().default("ar"),
     ...timestamps,

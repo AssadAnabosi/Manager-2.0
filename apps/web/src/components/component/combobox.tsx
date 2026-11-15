@@ -38,11 +38,20 @@ const Combobox = ({
 }: ComboboxProps) => {
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
+  // not loggable: only found by typing
+  const shown = list.filter((item) => item.loggable !== false || query.trim());
 
   return isLoading ? (
     <Skeleton className="h-11 w-full md:h-9 md:w-[335px]" />
   ) : (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover
+      open={open}
+      onOpenChange={(next) => {
+        setOpen(next);
+        if (!next) setQuery("");
+      }}
+    >
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -58,11 +67,16 @@ const Combobox = ({
       </PopoverTrigger>
       <PopoverContent className="w-full min-w-(--radix-popper-anchor-width) p-0 md:w-[335px]">
         <Command>
-          <CommandInput className="text-md" placeholder={t("Search...")} />
+          <CommandInput
+            className="text-md"
+            placeholder={t("Search...")}
+            value={query}
+            onValueChange={setQuery}
+          />
           <CommandEmpty>{t("No matching results")}</CommandEmpty>
           <CB_ScrollArea>
             <CommandGroup>
-              {list.map((item) => (
+              {shown.map((item) => (
                 <CommandItem
                   value={item.label}
                   key={item.value}
