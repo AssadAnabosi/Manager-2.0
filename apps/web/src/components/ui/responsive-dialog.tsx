@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/dialog";
 import {
   Drawer,
-  DrawerNested,
   DrawerClose,
   DrawerContent,
   DrawerDescription,
@@ -27,15 +26,12 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const DesktopContext = React.createContext(true);
-/** Set inside a dialog's content, so a dialog opened from there nests instead of replacing it. */
-const InsideContext = React.createContext(false);
 
 type RootProps = React.ComponentProps<typeof Dialog>;
 
 const ResponsiveDialog = (props: RootProps) => {
   const isDesktop = useIsDesktop();
-  const nested = React.useContext(InsideContext);
-  const Root = isDesktop ? Dialog : nested ? DrawerNested : Drawer;
+  const Root = isDesktop ? Dialog : Drawer;
   return (
     <DesktopContext.Provider value={isDesktop}>
       <Root {...props} />
@@ -67,13 +63,13 @@ const ResponsiveDialogContent = ({
   if (useDesktop()) {
     return (
       <DialogContent className={cn("sm:max-w-[425px]", className)} {...props}>
-        <InsideContext.Provider value>{children}</InsideContext.Provider>
+        {children}
       </DialogContent>
     );
   }
   return (
     <DrawerContent className={className} {...props}>
-      <InsideContext.Provider value>{children}</InsideContext.Provider>
+      {children}
     </DrawerContent>
   );
 };

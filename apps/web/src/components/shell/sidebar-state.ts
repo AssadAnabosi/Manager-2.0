@@ -3,7 +3,10 @@ import type { CSSProperties } from "react";
 /** The sidebar persists its open state in this cookie (see ui/sidebar.tsx). */
 export function readSidebarOpen(): boolean {
   try {
-    return !/(?:^|;\s*)sidebar_state=false/.test(document.cookie);
+    const saved = /(?:^|;\s*)sidebar_state=(true|false)/.exec(document.cookie);
+    if (saved) return saved[1] === "true";
+    // never chosen: open on a computer, closed on a tablet
+    return window.matchMedia("(min-width: 1024px)").matches;
   } catch {
     return true;
   }

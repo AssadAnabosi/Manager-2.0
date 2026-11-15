@@ -1,4 +1,5 @@
 import { ReactElement, ReactNode, useState } from "react";
+import { useEditFromDetails } from "@/hooks/use-edit-from-details";
 import { useTranslation } from "react-i18next";
 import { useFormatters } from "@/hooks/use-locale";
 import { usePermissions } from "@/hooks/use-permissions";
@@ -50,7 +51,12 @@ export default function LogDetails({
   const open = openProp ?? inner;
   const setOpen = onOpenChange ?? setInner;
 
+  const { editing, setEditing, startEditing } = useEditFromDetails(() =>
+    setOpen(false)
+  );
+
   return (
+    <>
     <ResponsiveDialog open={open} onOpenChange={setOpen}>
       {children && (
         <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
@@ -83,12 +89,10 @@ export default function LogDetails({
         <ResponsiveDialogFooter>
           {canWrite && (
             <div className="flex flex-col gap-3 md:flex-row">
-              <LogFormDialog log={log} onDone={() => setOpen(false)}>
-                <Button>
+              <Button onClick={startEditing}>
                   <Pencil2Icon className="me-2 h-4 w-4" />
                   <span>{t("Edit")}</span>
                 </Button>
-              </LogFormDialog>
               <DeleteDialog
                 onAction={() => {
                   deleteLog(log.id);
@@ -108,5 +112,9 @@ export default function LogDetails({
         </ResponsiveDialogFooter>
       </ResponsiveDialogContent>
     </ResponsiveDialog>
+    {canWrite && (
+      <LogFormDialog log={log} open={editing} onOpenChange={setEditing} />
+    )}
+    </>
   );
 }

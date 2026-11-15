@@ -83,7 +83,7 @@ export function NavUser() {
                   }}
                 >
                   <span className="flex-1">{t(item.label)}</span>
-                  {theme === item.value && <Check />}
+                  {theme === item.value && <Check className="size-5! stroke-3" />}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuGroup>
@@ -101,7 +101,7 @@ export function NavUser() {
                   }}
                 >
                   <span className="flex-1">{item.label}</span>
-                  {lang === item.value && <Check />}
+                  {lang === item.value && <Check className="size-5! stroke-3" />}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuGroup>

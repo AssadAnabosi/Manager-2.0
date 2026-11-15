@@ -1,4 +1,5 @@
 import { ReactNode, useState } from "react";
+import { useEditFromDetails } from "@/hooks/use-edit-from-details";
 import { useTranslation } from "react-i18next";
 import { useFormatters } from "@/hooks/use-locale";
 import { usePermissions } from "@/hooks/use-permissions";
@@ -43,7 +44,12 @@ export default function ChequeDetails({
   const { canWrite } = usePermissions();
   const [open, setOpen] = useState(false);
 
+  const { editing, setEditing, startEditing } = useEditFromDetails(() =>
+    setOpen(false)
+  );
+
   return (
+    <>
     <ResponsiveDialog open={open} onOpenChange={setOpen}>
       <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
       <ResponsiveDialogContent>
@@ -74,12 +80,10 @@ export default function ChequeDetails({
         <ResponsiveDialogFooter>
           {canWrite && (
             <div className="flex flex-col gap-3 md:flex-row">
-              <ChequeFormDialog cheque={cheque} onDone={() => setOpen(false)}>
-                <Button>
+              <Button onClick={startEditing}>
                   <Pencil2Icon className="me-2 h-4 w-4" />
                   <span>{t("Edit")}</span>
                 </Button>
-              </ChequeFormDialog>
               <DeleteDialog
                 onAction={() => {
                   deleteCheque(cheque.id);
@@ -99,5 +103,9 @@ export default function ChequeDetails({
         </ResponsiveDialogFooter>
       </ResponsiveDialogContent>
     </ResponsiveDialog>
+    {canWrite && (
+      <ChequeFormDialog cheque={cheque} open={editing} onOpenChange={setEditing} />
+    )}
+    </>
   );
 }

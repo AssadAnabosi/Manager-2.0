@@ -400,7 +400,7 @@ export function CommandPalette() {
                 onSelect={() => run(() => setTheme(item.value))}
               >
                 <span className="flex-1">{t(item.label)}</span>
-                {theme === item.value && <Check />}
+                {theme === item.value && <Check className="size-5! stroke-3" />}
               </CommandItem>
             ))}
           </CommandGroup>
@@ -413,7 +413,7 @@ export function CommandPalette() {
                 onSelect={() => run(() => i18n.changeLanguage(item.value))}
               >
                 <span className="flex-1">{item.label}</span>
-                {lang === item.value && <Check />}
+                {lang === item.value && <Check className="size-5! stroke-3" />}
               </CommandItem>
             ))}
           </CommandGroup>

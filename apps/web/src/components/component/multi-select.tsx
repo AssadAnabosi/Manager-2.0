@@ -161,7 +161,7 @@ const MultiSelectFormField = React.forwardRef<
                               : "opacity-50 [&_svg]:invisible"
                           )}
                         >
-                          <CheckIcon className={cn("h-4 w-4")} />
+                          <CheckIcon className={cn("h-4 w-4")} strokeWidth={3} />
                         </div>
                         {option.icon && (
                           <option.icon className="h-4 w-4 text-muted-foreground ltr:mr-2 rtl:ml-2" />

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   addMonths,
@@ -98,6 +98,10 @@ export default function AttendanceCalendar({
   // pad the first week so the 1st lands on its weekday (the week starts on Saturday)
   const lead = (getDay(first) + 1) % 7;
   const selectedLog = selected ? byDay.get(dayKey(selected)) : undefined;
+  // The details stay mounted after they close, so the edit form they open outlives them.
+  const shownLog = useRef<LogType | undefined>(undefined);
+  if (selectedLog) shownLog.current = selectedLog;
+  const detailsLog = selectedLog ?? shownLog.current;
 
   return (
     <section className="mx-auto w-full max-w-2xl space-y-4">
@@ -203,7 +207,7 @@ export default function AttendanceCalendar({
                   <span>{fmt.date(d, "d")}</span>
                   {Icon && !future && (
                     <Icon
-                      className="absolute bottom-1 size-3 opacity-90 print:size-4 print:opacity-100"
+                      className="absolute bottom-1 size-4 stroke-3 print:size-4 print:opacity-100"
                       aria-hidden
                     />
                   )}
@@ -234,13 +238,13 @@ export default function AttendanceCalendar({
       </ul>
 
       {/* the tapped day: the same details as the table */}
-      {selectedLog && (
+      {detailsLog && (
         <LogDetails
-          open
+          open={!!selectedLog}
           onOpenChange={(open) => !open && setSelected(null)}
-          title={selectedLog.worker.fullName}
-          description={fmt.date(new Date(selectedLog.date))}
-          log={selectedLog}
+          title={detailsLog.worker.fullName}
+          description={fmt.date(new Date(detailsLog.date))}
+          log={detailsLog}
           deleteLog={(id) => onDelete?.(id)}
         />
       )}

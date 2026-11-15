@@ -16,19 +16,6 @@ function Drawer({
   )
 }
 
-/** A drawer opened from inside another drawer. */
-function DrawerNested({
-  ...props
-}: React.ComponentProps<typeof DrawerPrimitive.NestedRoot>) {
-  return (
-    <DrawerPrimitive.NestedRoot
-      data-slot="drawer"
-      repositionInputs={false}
-      {...props}
-    />
-  )
-}
-
 /**
  * Keeps a bottom drawer above the on-screen keyboard: --kb is how far the keyboard covers the
  * layout viewport, --vvh the height that is left. A focused field is scrolled into view.
@@ -186,7 +173,6 @@ function DrawerDescription({
 
 export {
   Drawer,
-  DrawerNested,
   DrawerPortal,
   DrawerOverlay,
   DrawerTrigger,
