@@ -36,7 +36,7 @@ There is no `description` field on a log.
 
 ### Loggable workers
 
-To keep the worker lists short, a user with `loggable = false` is left out of them: the **Filter by worker** multi-select and the **Select a worker** box on Worksheets list only loggable users. Typing in those boxes still finds the others, so old logs of someone who stopped working are one search away. The **Worker** select of the new-worksheet form never offers them (a worker that is already chosen, such as the one of the log you are editing, stays). The flag does not touch the logs, the users page or what the API accepts: it only shapes the pickers.
+To keep the worker lists short, a user with `loggable = false` is left out of them: the **Filter by worker** multi-select and the **Select a worker** box on Worksheets list only loggable users. Typing in those boxes still finds the others, so old logs of someone who stopped working are one search away. The **Worker** select of the new-worksheet form never offers them (a worker that is already chosen, such as the one of the log you are editing, stays). The flag is independent of `active`: a deactivated user who is loggable can still be picked for a new log, and an active one who is not loggable cannot. It does not touch the logs, the users page or what the API accepts: it only shapes the pickers.
 
 ## Payee
 

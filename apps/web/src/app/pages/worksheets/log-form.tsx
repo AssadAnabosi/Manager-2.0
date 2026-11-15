@@ -77,7 +77,7 @@ const LogForm = ({ log, defaults, onDone }: LogFormProps) => {
   const { data: usersData, isLoading: filterLoading } = useGetUsersQuery();
   // Only workers marked loggable are offered, however they are searched. The one already
   // chosen (editing a log, or a day added from a worker's calendar) stays so it has a name.
-  const workers = toList(usersData?.users || [], "fullName", true).filter(
+  const workers = toList(usersData?.users || [], "fullName").filter(
     (worker) =>
       worker.loggable !== false ||
       worker.value === (log?.worker?.id ?? defaults?.worker)
@@ -240,21 +240,13 @@ const LogForm = ({ log, defaults, onDone }: LogFormProps) => {
                         <CommandGroup>
                           {workers.map((worker) => (
                             <CommandItem
-                              className={cn(
-                                "w-[98%]",
-                                !worker.active
-                                  ? "text-muted-foregroundF opacity-50"
-                                  : ""
-                              )}
-                              disabled={!worker.active}
+                              className="w-[98%]"
                               value={worker.label}
                               key={worker.value}
                               onSelect={() => {
-                                if (worker.active) {
-                                  logForm.getValues("worker") === worker.value
-                                    ? logForm.setValue("worker", "")
-                                    : logForm.setValue("worker", worker.value);
-                                }
+                                logForm.getValues("worker") === worker.value
+                                  ? logForm.setValue("worker", "")
+                                  : logForm.setValue("worker", worker.value);
                                 setPopoverOpen(false);
                               }}
                             >
