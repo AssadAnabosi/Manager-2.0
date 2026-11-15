@@ -55,7 +55,12 @@ import UserForm from "./user-form";
 
 import { ROLES } from "@/lib/constants";
 
-import { ArrowLeft, Trash2Icon } from "lucide-react";
+import { ArrowLeft, Info, Trash2Icon } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { UserType } from "@/lib/types";
 import { useAuth, useLogout } from "@/providers/auth-context";
 import { useError } from "@/providers/error-provider";
@@ -364,13 +369,28 @@ export default function Edit() {
               </div>
               <Separator />
               <div className="grid grid-cols-2 items-center gap-x-4">
-                <div className="space-y-1">
+                <div className="flex items-center gap-1.5">
                   <Label htmlFor="loggable">{t("Loggable")}</Label>
-                  <p className="text-muted-foreground text-xs">
-                    {t(
-                      "Offered as the worker of a new worksheet and in the worker lists. Still found when searched, except when adding a worksheet."
-                    )}
-                  </p>
+                  {/* a popover rather than a tooltip: it opens on touch too */}
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button
+                        type="button"
+                        aria-label={t("What does Loggable mean?")}
+                        className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 rounded-full outline-none focus-visible:ring-[3px]"
+                      >
+                        <Info className="size-4" />
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      align="start"
+                      className="w-64 p-3 text-start text-sm"
+                    >
+                      {t(
+                        "Offered as the worker of a new worksheet and in the worker lists. Still found when searched, except when adding a worksheet."
+                      )}
+                    </PopoverContent>
+                  </Popover>
                 </div>
                 <div className="ms-auto">
                   <Switch

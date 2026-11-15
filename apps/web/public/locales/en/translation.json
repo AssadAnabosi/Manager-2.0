@@ -177,6 +177,7 @@
   "Update user details.": "Update user details.",
   "Update Role, Active status, Loggable, or delete user from the system.": "Update Role, Active status, Loggable, or delete user from the system.",
   "Loggable": "Loggable",
+  "What does Loggable mean?": "What does Loggable mean?",
   "Back to users": "Back to users",
   "User's Loggable setting was updated successfully": "User's Loggable setting was updated successfully",
   "Offered as the worker of a new worksheet and in the worker lists. Still found when searched, except when adding a worksheet.": "Offered as the worker of a new worksheet and in the worker lists. Still found when searched, except when adding a worksheet.",
