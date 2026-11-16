@@ -181,6 +181,7 @@
   "Clear": "مسح",
   "Remove serial {{serial}}": "إزالة الرقم التسلسلي {{serial}}",
   "Serial numbers use the digits 0-9 only": "الأرقام التسلسلية تقبل الأرقام الإنجليزية 0-9 فقط",
+  "Open Add New on the current page": "فتح نافذة الإضافة في الصفحة الحالية",
   "Back to users": "العودة إلى المستخدمين",
   "User's Loggable setting was updated successfully": "تم تحديث إعداد قابلية التسجيل للمستخدم بنجاح",
   "Offered as the worker of a new worksheet and in the worker lists. Still found when searched, except when adding a worksheet.": "يظهر كعامل عند إضافة سجل عمل جديد وفي قوائم العمال. ما زال يظهر عند البحث عنه، إلا عند إضافة سجل عمل.",

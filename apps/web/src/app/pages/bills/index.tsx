@@ -12,6 +12,7 @@ import { BillKind, BillType } from "@/lib/types";
 
 import { useGetBillsQuery, useDeleteBillMutation } from "@/api/bills";
 
+import { ShortcutKey } from "@/components/component/shortcut-key";
 import { Separator } from "@/components/ui/separator";
 import { PageHeader } from "@/components/component/page-header";
 import { PrintButton } from "@/components/component/print-button";
@@ -53,7 +54,7 @@ const BILLS_SKELETON: SkeletonColumn[] = [
 
 const Bills = () => {
   const { canWrite } = usePermissions();
-  const addDialog = useAddDialog();
+  const addDialog = useAddDialog(canWrite);
   const { t } = useTranslation();
   const fmt = useFormatters();
   const [search, setSearch] = useSearchParam("search");
@@ -74,6 +75,7 @@ const Bills = () => {
           <BillFormDialog>
             <Button className="w-full print:hidden">
               <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
+<ShortcutKey>N</ShortcutKey>
             </Button>
           </BillFormDialog>
         )}
@@ -111,6 +113,7 @@ const Bills = () => {
               <BillFormDialog>
                 <Button className="print:hidden">
                   <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
+<ShortcutKey>N</ShortcutKey>
                 </Button>
               </BillFormDialog>
             )

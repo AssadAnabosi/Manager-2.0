@@ -1,6 +1,8 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import type { DateRange } from "react-day-picker";
+
+import { isLetter } from "@/lib/shortcuts";
 
 import {
   dateToString,
@@ -85,7 +87,7 @@ export function useFilterState(keys: string[]) {
  * The "add new" dialog of a list page, driven by `?add=1` so the command palette (or a link)
  * can open it. Extra values such as `addSerial` prefill the form.
  */
-export function useAddDialog() {
+export function useAddDialog(enabled = true) {
   const [searchParams, setSearchParams] = useSearchParams();
   const open = searchParams.get("add") === "1";
   const setOpen = useCallback(
@@ -116,6 +118,19 @@ export function useAddDialog() {
       ),
     [setSearchParams]
   );
+  // Alt (Option on a Mac) + N opens it, for the roles that can add
+  useEffect(() => {
+    if (!enabled) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (!e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      if (!isLetter(e, "n")) return;
+      e.preventDefault();
+      // not on top of another dialog
+      if (!document.querySelector("[role=dialog]")) setOpen(true);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [enabled, setOpen]);
   return {
     open,
     setOpen,

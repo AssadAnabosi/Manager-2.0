@@ -7,6 +7,7 @@ import { UserType } from "@/lib/types";
 import { useGetUsersQuery } from "@/api/users";
 
 import { Button } from "@/components/ui/button";
+import { ShortcutKey } from "@/components/component/shortcut-key";
 import { Separator } from "@/components/ui/separator";
 import { PageHeader } from "@/components/component/page-header";
 import {
@@ -42,7 +43,7 @@ const USERS_SKELETON: SkeletonColumn[] = [
 
 const Users = () => {
   const { canCreateUsers } = usePermissions();
-  const addDialog = useAddDialog();
+  const addDialog = useAddDialog(canCreateUsers);
   const { t } = useTranslation();
   const [search, setSearch] = useSearchParam("search");
 
@@ -56,6 +57,7 @@ const Users = () => {
           <UserFormDialog>
             <Button className="w-full">
               <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
+<ShortcutKey>N</ShortcutKey>
             </Button>
           </UserFormDialog>
         )}
@@ -84,6 +86,7 @@ const Users = () => {
               <UserFormDialog>
                 <Button className="print:hidden">
                   <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
+<ShortcutKey>N</ShortcutKey>
                 </Button>
               </UserFormDialog>
             )

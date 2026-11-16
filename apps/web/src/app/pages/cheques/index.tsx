@@ -13,6 +13,7 @@ import { ChequeType } from "@/lib/types";
 import { useGetPayeesQuery } from "@/api/payees";
 import { useGetChequesQuery, useDeleteChequeMutation } from "@/api/cheques";
 
+import { ShortcutKey } from "@/components/component/shortcut-key";
 import { Separator } from "@/components/ui/separator";
 import { PageHeader } from "@/components/component/page-header";
 import { PrintButton } from "@/components/component/print-button";
@@ -53,7 +54,7 @@ const CHEQUES_SKELETON: SkeletonColumn[] = [
 
 const Cheques = () => {
   const { canWrite } = usePermissions();
-  const addDialog = useAddDialog();
+  const addDialog = useAddDialog(canWrite);
   const { t } = useTranslation();
   const fmt = useFormatters();
   const [filter, setFilter] = useSearchParam("filter");
@@ -76,6 +77,7 @@ const Cheques = () => {
           <ChequeFormDialog>
             <Button className="w-full print:hidden">
               <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
+<ShortcutKey>N</ShortcutKey>
             </Button>
           </ChequeFormDialog>
         )}
@@ -131,6 +133,7 @@ const Cheques = () => {
               <ChequeFormDialog>
                 <Button className="print:hidden">
                   <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
+<ShortcutKey>N</ShortcutKey>
                 </Button>
               </ChequeFormDialog>
             )

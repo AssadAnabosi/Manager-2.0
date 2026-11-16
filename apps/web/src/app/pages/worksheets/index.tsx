@@ -19,6 +19,7 @@ import { USER } from "@/lib/constants";
 import { useGetUsersQuery } from "@/api/users";
 import { useGetLogsQuery, useDeleteLogMutation } from "@/api/logs";
 
+import { ShortcutKey } from "@/components/component/shortcut-key";
 import { Separator } from "@/components/ui/separator";
 import { PageHeader } from "@/components/component/page-header";
 import { PrintButton } from "@/components/component/print-button";
@@ -121,7 +122,7 @@ const Logs = () => {
   }, [view, filter]);
   // a day tapped in the calendar that has no record yet
   const [addDay, setAddDay] = useState<Date | null>(null);
-  const addDialog = useAddDialog();
+  const addDialog = useAddDialog(canWrite);
   const { data: logsData, isLoading } = useGetLogsQuery();
 
   const { data: usersData, isLoading: filterLoading } = useGetUsersQuery();
@@ -137,6 +138,7 @@ const Logs = () => {
           <LogFormDialog>
             <Button className="w-full print:hidden">
               <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
+<ShortcutKey>N</ShortcutKey>
             </Button>
           </LogFormDialog>
         )}
@@ -238,6 +240,7 @@ const Logs = () => {
                   <LogFormDialog>
                     <Button className="print:hidden">
                       <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
+<ShortcutKey>N</ShortcutKey>
                     </Button>
                   </LogFormDialog>
                 )

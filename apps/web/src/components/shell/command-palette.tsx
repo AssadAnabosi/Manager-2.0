@@ -72,7 +72,7 @@ type Shortcut = {
   keys: string[];
   label: string;
   /** Hidden for roles without this access. */
-  needs?: "cheques" | "billWrite";
+  needs?: "cheques" | "billWrite" | "write";
 };
 
 const SHORTCUT_GROUPS: { title: string; wide?: boolean; items: Shortcut[] }[] =
@@ -94,6 +94,7 @@ const SHORTCUT_GROUPS: { title: string; wide?: boolean; items: Shortcut[] }[] =
           keys: ["alt", "1-9"],
           label: "Go to the sidebar item with that number",
         },
+        { keys: ["alt", "N"], label: "Open Add New on the current page", needs: "write" },
         { keys: ["alt", "L"], label: "Worksheets: show the list" },
         { keys: ["alt", "C"], label: "Worksheets: show the calendar" },
         { keys: ["["], label: "Go to the previous sidebar item" },
@@ -267,6 +268,7 @@ export function CommandPalette() {
   const allowed = {
     cheques: hasPage("/cheques"),
     billWrite: canWrite && hasPage("/bills"),
+    write: canWrite,
   };
   const shortcutGroups = SHORTCUT_GROUPS.map((group) => ({
     ...group,

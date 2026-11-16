@@ -7,6 +7,7 @@ import { usePermissions } from "@/hooks/use-permissions";
 import { useGetPayeesQuery, useDeletePayeeMutation } from "@/api/payees";
 
 import { Button } from "@/components/ui/button";
+import { ShortcutKey } from "@/components/component/shortcut-key";
 import { Separator } from "@/components/ui/separator";
 import { PageHeader } from "@/components/component/page-header";
 import {
@@ -40,7 +41,7 @@ const PAYEES_SKELETON: SkeletonColumn[] = [
 
 const Payees = () => {
   const { canWrite } = usePermissions();
-  const addDialog = useAddDialog();
+  const addDialog = useAddDialog(canWrite);
   const { t } = useTranslation();
   const [search, setSearch] = useSearchParam("search");
 
@@ -55,6 +56,7 @@ const Payees = () => {
           <PayeeFormDialog>
             <Button className="w-full">
               <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
+<ShortcutKey>N</ShortcutKey>
             </Button>
           </PayeeFormDialog>
         )}
@@ -83,6 +85,7 @@ const Payees = () => {
               <PayeeFormDialog>
                 <Button className="print:hidden">
                   <FilePlus className="me-2 h-7 w-7" /> {t("Add New")}
+<ShortcutKey>N</ShortcutKey>
                 </Button>
               </PayeeFormDialog>
             )
