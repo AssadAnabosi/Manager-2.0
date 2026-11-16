@@ -28,7 +28,7 @@ import {
 
 import DateRangePicker from "@/components/component/date-picker-range";
 import MultiSelectFormField from "@/components/component/multi-select";
-import Searchbox from "@/components/component/searchbox";
+import SerialChips from "@/components/component/serial-chips";
 import NoResults from "@/components/component/no-results";
 import FetchError from "@/components/component/fetch-error";
 
@@ -94,10 +94,10 @@ const Cheques = () => {
       <Separator />
       <div className="flex flex-col justify-end gap-3 md:flex-row">
         <div className="w-full md:w-[335px]">
-          <Searchbox
+          <SerialChips
             value={serial}
             setValue={setSerial}
-            placeholder={t("Serial No.")}
+            placeholder="Serial No."
           />
         </div>
         <MultiSelectFormField
@@ -118,7 +118,8 @@ const Cheques = () => {
           filterKeys={["filter", "serial", "from", "to"]}
           filteredAction={
             canWrite &&
-            serial && (
+            serial &&
+            !serial.includes(",") && (
               <Button onClick={() => addDialog.openWith({ addSerial: serial })}>
                 <FilePlus className="me-2 h-7 w-7" />{" "}
                 {t("Add cheque with serial {{serial}}", { serial })}
