@@ -1,3 +1,4 @@
+import { ShortcutKey } from "@/components/component/shortcut-key";
 import { useState } from "react";
 import { apiErrorCode, apiValidationIssues } from "@/lib/api-error";
 import { apiErrorText } from "@/lib/api-error";
@@ -136,7 +137,11 @@ const ChequeForm = ({ cheque, defaults, onDone }: ChequeFormProps) => {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>{t("Due Date")}</FormLabel>
-                <Popover open={calendarOpen} onOpenChange={setCalenderOpen} modal>
+                <Popover
+                  open={calendarOpen}
+                  onOpenChange={setCalenderOpen}
+                  modal
+                >
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
@@ -337,7 +342,12 @@ const ChequeForm = ({ cheque, defaults, onDone }: ChequeFormProps) => {
           )}
         />
         <ResponsiveDialogFooter>
-          <Button type="submit" disabled={isLoading} className="md:w-[45%]">
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="md:w-[45%]"
+            data-shortcut="s"
+          >
             {isLoading ? (
               <Spinner className="h-4 w-4" />
             ) : cheque ? (
@@ -345,6 +355,7 @@ const ChequeForm = ({ cheque, defaults, onDone }: ChequeFormProps) => {
             ) : (
               t("Create")
             )}
+            <ShortcutKey>S</ShortcutKey>
           </Button>
         </ResponsiveDialogFooter>
       </form>

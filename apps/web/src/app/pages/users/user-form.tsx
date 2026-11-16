@@ -1,3 +1,4 @@
+import { ShortcutKey } from "@/components/component/shortcut-key";
 import { useTranslation } from "react-i18next";
 import { apiValidationIssues } from "@/lib/api-error";
 import { apiErrorText } from "@/lib/api-error";
@@ -138,8 +139,7 @@ const UserForm = ({
       toast({
         variant: "destructive",
         title: t("Error"),
-        description:
-          apiErrorText(error, t),
+        description: apiErrorText(error, t),
       });
     }
   };
@@ -283,7 +283,12 @@ const UserForm = ({
           )}
         </CardWrapper>
         <ButtonWrapper user={user}>
-          <Button type="submit" disabled={isLoading} className="w-[50%]">
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="w-[50%]"
+            data-shortcut={onDone ? "s" : undefined}
+          >
             {isLoading ? (
               <Spinner className="h-4 w-4" />
             ) : !user ? (
@@ -291,6 +296,7 @@ const UserForm = ({
             ) : (
               t("Update")
             )}
+            {onDone && <ShortcutKey>S</ShortcutKey>}
           </Button>
         </ButtonWrapper>
       </form>

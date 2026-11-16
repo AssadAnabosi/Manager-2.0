@@ -1,3 +1,4 @@
+import { ShortcutKey } from "@/components/component/shortcut-key";
 import { useState } from "react";
 import { apiErrorCode, apiErrorText } from "@/lib/api-error";
 import { useTranslation } from "react-i18next";
@@ -287,7 +288,7 @@ const LogForm = ({ log, defaults, onDone }: LogFormProps) => {
                   <Input
                     {...field}
                     type="string"
-                    className="input pe-4 ps-12 text-start"
+                    className="input ps-12 pe-4 text-start"
                     disabled={isLoading}
                   />
                 </div>
@@ -333,7 +334,12 @@ const LogForm = ({ log, defaults, onDone }: LogFormProps) => {
           )}
         />
         <ResponsiveDialogFooter>
-          <Button type="submit" disabled={isLoading} className="md:w-[45%]">
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="md:w-[45%]"
+            data-shortcut="s"
+          >
             {isLoading ? (
               <Spinner className="h-4 w-4" />
             ) : log ? (
@@ -341,6 +347,7 @@ const LogForm = ({ log, defaults, onDone }: LogFormProps) => {
             ) : (
               t("Create")
             )}
+            <ShortcutKey>S</ShortcutKey>
           </Button>
         </ResponsiveDialogFooter>
       </form>

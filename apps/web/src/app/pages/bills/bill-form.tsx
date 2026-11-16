@@ -1,3 +1,4 @@
+import { ShortcutKey } from "@/components/component/shortcut-key";
 import { useState } from "react";
 import { apiErrorText } from "@/lib/api-error";
 import { useTranslation } from "react-i18next";
@@ -86,8 +87,7 @@ const BillForm = ({ bill, defaults, onDone }: BillFormProps) => {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description:
-          apiErrorText(error, t),
+        description: apiErrorText(error, t),
       });
     }
   };
@@ -175,7 +175,7 @@ const BillForm = ({ bill, defaults, onDone }: BillFormProps) => {
                     type="text"
                     inputMode="decimal"
                     autoFocus={!bill && !defaults?.amount}
-                    className="input pe-4 ps-12 text-start"
+                    className="input ps-12 pe-4 text-start"
                     disabled={isLoading}
                     onChange={(e) =>
                       field.onChange(positiveNumber(e.target.value))
@@ -224,7 +224,12 @@ const BillForm = ({ bill, defaults, onDone }: BillFormProps) => {
           )}
         />
         <ResponsiveDialogFooter>
-          <Button type="submit" disabled={isLoading} className="md:w-[45%]">
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="md:w-[45%]"
+            data-shortcut="s"
+          >
             {isLoading ? (
               <Spinner className="h-4 w-4" />
             ) : bill ? (
@@ -232,6 +237,7 @@ const BillForm = ({ bill, defaults, onDone }: BillFormProps) => {
             ) : (
               t("Create")
             )}
+            <ShortcutKey>S</ShortcutKey>
           </Button>
         </ResponsiveDialogFooter>
       </form>

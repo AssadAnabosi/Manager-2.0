@@ -95,6 +95,7 @@ const SHORTCUT_GROUPS: { title: string; wide?: boolean; items: Shortcut[] }[] =
           label: "Go to the sidebar item with that number",
         },
         { keys: ["alt", "N"], label: "Open Add New on the current page", needs: "write" },
+        { keys: ["alt", "S"], label: "In a form dialog: save", needs: "write" },
         { keys: ["alt", "E"], label: "In a details dialog: edit", needs: "write" },
         { keys: ["alt", "D"], label: "In a details dialog: delete", needs: "write" },
         { keys: ["alt", "L"], label: "Worksheets: show the list" },

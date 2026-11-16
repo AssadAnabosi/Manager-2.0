@@ -184,6 +184,7 @@
   "Open Add New on the current page": "فتح نافذة الإضافة في الصفحة الحالية",
   "In a details dialog: edit": "في نافذة التفاصيل: تعديل",
   "In a details dialog: delete": "في نافذة التفاصيل: حذف",
+  "In a form dialog: save": "في نافذة النموذج: حفظ",
   "Back to users": "العودة إلى المستخدمين",
   "User's Loggable setting was updated successfully": "تم تحديث إعداد قابلية التسجيل للمستخدم بنجاح",
   "Offered as the worker of a new worksheet and in the worker lists. Still found when searched, except when adding a worksheet.": "يظهر كعامل عند إضافة سجل عمل جديد وفي قوائم العمال. ما زال يظهر عند البحث عنه، إلا عند إضافة سجل عمل.",

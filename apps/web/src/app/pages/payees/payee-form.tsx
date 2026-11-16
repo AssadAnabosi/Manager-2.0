@@ -1,3 +1,4 @@
+import { ShortcutKey } from "@/components/component/shortcut-key";
 import { useTranslation } from "react-i18next";
 import { apiErrorText } from "@/lib/api-error";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -59,8 +60,7 @@ const PayeeForm = ({ payee, onDone }: PayeeFormProps) => {
       toast({
         variant: "destructive",
         title: t("Error"),
-        description:
-          apiErrorText(error, t),
+        description: apiErrorText(error, t),
       });
     }
   };
@@ -140,7 +140,12 @@ const PayeeForm = ({ payee, onDone }: PayeeFormProps) => {
           )}
         />
         <ResponsiveDialogFooter>
-          <Button type="submit" disabled={isLoading} className="md:w-[45%]">
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="md:w-[45%]"
+            data-shortcut="s"
+          >
             {isLoading ? (
               <Spinner className="h-4 w-4" />
             ) : payee ? (
@@ -148,6 +153,7 @@ const PayeeForm = ({ payee, onDone }: PayeeFormProps) => {
             ) : (
               t("Create")
             )}
+            <ShortcutKey>S</ShortcutKey>
           </Button>
         </ResponsiveDialogFooter>
       </form>

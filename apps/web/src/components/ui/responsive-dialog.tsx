@@ -29,15 +29,15 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 const DesktopContext = React.createContext(true);
 
 /**
- * Alt (Option on a Mac) + E / D press the button marked `data-shortcut="e"` / `"d"` of the
- * dialog that is on top, so a details dialog can be edited or deleted from the keyboard.
+ * Alt (Option on a Mac) + E / D / S press the button marked `data-shortcut="e"` / `"d"` /
+ * `"s"` of the dialog that is on top: edit or delete from a details dialog, save from a form.
  */
 const DialogShortcuts = () => {
   const marker = React.useRef<HTMLSpanElement>(null);
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
-      const letter = isLetter(e, "e") ? "e" : isLetter(e, "d") ? "d" : "";
+      const letter = ["e", "d", "s"].find((l) => isLetter(e, l)) ?? "";
       const root = marker.current?.closest("[role=dialog]");
       if (!letter || !root) return;
       // only the dialog on top answers (an open confirmation covers this one)
