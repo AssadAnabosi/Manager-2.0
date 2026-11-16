@@ -75,11 +75,10 @@ export default function UserDetails({ children, title, user }: Props) {
             <dt className="text-muted-foreground">{t("Phone Number")}</dt>
             <dd>
               <a
-                dir="ltr"
                 className="font-semibold text-blue-400"
                 href={`tel:${user.phoneNumber}`}
               >
-                {user.phoneNumber}
+                <bdi dir="ltr">{user.phoneNumber}</bdi>
               </a>
             </dd>
           </dl>

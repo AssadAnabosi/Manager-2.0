@@ -148,7 +148,7 @@ const ChequeForm = ({ cheque, defaults, onDone }: ChequeFormProps) => {
                         disabled={isLoading}
                         variant={"outline"}
                         className={cn(
-                          "w-[245px] pl-3 text-left font-normal",
+                          "w-[245px] ps-3 text-start font-normal",
                           !field.value && "text-muted-foreground"
                         )}
                       >
@@ -224,7 +224,7 @@ const ChequeForm = ({ cheque, defaults, onDone }: ChequeFormProps) => {
                           ? payees.find((payee) => payee.value === field.value)
                               ?.label
                           : t("Select a payee")}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        <ChevronsUpDown className="ms-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -260,7 +260,7 @@ const ChequeForm = ({ cheque, defaults, onDone }: ChequeFormProps) => {
                             >
                               <Check
                                 className={cn(
-                                  "mr-2 h-4 w-4",
+                                  "me-2 h-4 w-4",
                                   payee.value === field.value
                                     ? "opacity-100"
                                     : "opacity-0"
@@ -326,7 +326,7 @@ const ChequeForm = ({ cheque, defaults, onDone }: ChequeFormProps) => {
           control={chequeForm.control}
           name="isCancelled"
           render={({ field }) => (
-            <FormItem className="flex flex-col" dir="ltr">
+            <FormItem className="flex flex-col">
               <FormControl>
                 <label className="flex items-center">
                   <Switch
@@ -334,7 +334,7 @@ const ChequeForm = ({ cheque, defaults, onDone }: ChequeFormProps) => {
                     checked={field.value}
                     onCheckedChange={field.onChange}
                   />
-                  <span className="ml-2">{t("Cancelled")}</span>
+                  <span className="ms-2">{t("Cancelled")}</span>
                 </label>
               </FormControl>
               <FormMessage />

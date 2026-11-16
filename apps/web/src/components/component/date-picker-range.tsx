@@ -43,7 +43,7 @@ export default function DatePickerWithRange({
             id="date"
             variant={"outline"}
             className={cn(
-              "w-full justify-start text-left font-normal md:w-[335px]",
+              "w-full justify-start text-start font-normal md:w-[335px]",
               !date && "text-muted-foreground"
             )}
           >

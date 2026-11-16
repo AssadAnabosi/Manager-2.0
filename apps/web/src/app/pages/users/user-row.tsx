@@ -48,11 +48,10 @@ const UserRow = ({ user }: Props) => {
                 {title}
               </p>
               <p
-                dir="ltr"
                 className="text-muted-foreground text-sm"
                 aria-label={t("Username")}
               >
-                {description}
+                <bdi dir="ltr">{description}</bdi>
               </p>
             </div>
           </div>
@@ -62,10 +61,7 @@ const UserRow = ({ user }: Props) => {
         <RoleBadge role={user.role} />
       </TableCell>
       <TableCell className="hidden md:table-cell">
-        <StateBadge
-          on={user.active}
-          labels={[t("Active"), t("Deactivated")]}
-        />
+        <StateBadge on={user.active} labels={[t("Active"), t("Deactivated")]} />
       </TableCell>
       <TableCell className="hidden md:table-cell">
         <StateBadge
@@ -84,17 +80,17 @@ const UserRow = ({ user }: Props) => {
               {user.email}
             </a>
           </p>
-          <p dir="ltr" className="rtl:text-right">
+          <p>
             <a
               className="text-blue-400 hover:cursor-pointer"
               href={`tel:${user.phoneNumber}`}
             >
-              {user.phoneNumber}
+              <bdi dir="ltr">{user.phoneNumber}</bdi>
             </a>
           </p>
         </div>
       </TableCell>
-      <TableCell className="hidden w-max text-right lg:table-cell">
+      <TableCell className="hidden w-max text-end lg:table-cell">
         {canManageUsers && (
           <TooltipProvider>
             <Tooltip>

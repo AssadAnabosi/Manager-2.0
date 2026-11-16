@@ -10,7 +10,7 @@ export function PrintButton({ disabled }: { disabled?: boolean }) {
       className="w-full print:hidden"
       onClick={() => window.print()}
     >
-      <Printer className="h-6 w-6 ltr:mr-2 rtl:ml-2" /> {t("Print")}
+      <Printer className="me-2 h-6 w-6" /> {t("Print")}
     </Button>
   );
 }

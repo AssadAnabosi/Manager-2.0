@@ -129,7 +129,7 @@ const LogForm = ({ log, defaults, onDone }: LogFormProps) => {
                       disabled={log || isLoading ? true : false}
                       variant={"outline"}
                       className={cn(
-                        "w-[280px] pl-3 text-left font-normal",
+                        "w-[280px] ps-3 text-start font-normal",
                         !field.value && "text-muted-foreground"
                       )}
                     >
@@ -225,7 +225,7 @@ const LogForm = ({ log, defaults, onDone }: LogFormProps) => {
                               (worker) => worker.value === field.value
                             )?.label
                           : t("Select a worker")}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        <ChevronsUpDown className="ms-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -253,7 +253,7 @@ const LogForm = ({ log, defaults, onDone }: LogFormProps) => {
                             >
                               <Check
                                 className={cn(
-                                  "mr-2 h-4 w-4",
+                                  "me-2 h-4 w-4",
                                   worker.value === field.value
                                     ? "opacity-100"
                                     : "opacity-0"
@@ -318,7 +318,7 @@ const LogForm = ({ log, defaults, onDone }: LogFormProps) => {
           control={logForm.control}
           name="isAbsent"
           render={({ field }) => (
-            <FormItem className="flex flex-col" dir="ltr">
+            <FormItem className="flex flex-col">
               <FormControl>
                 <label className="flex items-center">
                   <Switch
@@ -326,7 +326,7 @@ const LogForm = ({ log, defaults, onDone }: LogFormProps) => {
                     onCheckedChange={field.onChange}
                     disabled={isLoading}
                   />
-                  <span className="ml-2">{t("Absent")}</span>
+                  <span className="ms-2">{t("Absent")}</span>
                 </label>
               </FormControl>
               <FormMessage />

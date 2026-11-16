@@ -34,11 +34,8 @@ export function StatCard({
         <Icon />
       </CardHeader>
       <CardContent>
-        <div
-          dir="ltr"
-          className={cn("text-2xl font-bold rtl:text-right", TONES[tone])}
-        >
-          {typeof value !== "undefined" ? value : "---"}
+        <div className={cn("text-2xl font-bold", TONES[tone])}>
+          <bdi dir="ltr">{typeof value !== "undefined" ? value : "---"}</bdi>
         </div>
         <p className="text-muted-foreground text-xs">{hint}</p>
       </CardContent>

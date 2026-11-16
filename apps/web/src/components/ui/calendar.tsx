@@ -61,7 +61,7 @@ function Calendar({
         caption: "flex justify-center pt-1 relative items-center gap-1",
         caption_label:
           "flex h-7 text-sm font-medium justify-center items-center grow in-[.is-multiple]:flex",
-        caption_dropdowns: "flex justify-center gap-3 grow dropdowns pl-8 pr-9",
+        caption_dropdowns: "flex justify-center gap-3 grow dropdowns ps-8 pe-9",
         multiple_months: "is-multiple",
         vhidden:
           "hidden in-[.is-between]:flex in-[.is-end]:flex [.is-start.is-end_&]:hidden",
@@ -70,8 +70,8 @@ function Calendar({
           buttonVariants({ variant: "outline" }),
           "h-7 w-7 bg-transparent p-0 text-muted-foreground"
         ),
-        nav_button_previous: "absolute ltr:left-1 rtl:right-1",
-        nav_button_next: "absolute ltr:right-1 rtl:left-1",
+        nav_button_previous: "absolute start-1",
+        nav_button_next: "absolute end-1",
         table: "w-full border-collapse space-y-1",
         head_row: "flex",
         head_cell: cn(
@@ -83,7 +83,7 @@ function Calendar({
           fluid ? "h-10 flex-1 sm:h-9 sm:w-9 sm:flex-none" : "h-9 w-9",
           "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 has-aria-[selected]:bg-accent",
           props.mode === "range"
-            ? "[&:has(>.day-range-end)]:ltr:rounded-r-md [&:has(>.day-range-end)]:rtl:rounded-l-md [&:has(>.day-range-start)]:ltr:rounded-l-md [&:has(>.day-range-start)]:rtl:rounded-r-md has-aria-[selected]:first:ltr:rounded-l-md has-aria-[selected]:first:rtl:rounded-r-md has-aria-[selected]:last:ltr:rounded-r-md has-aria-[selected]:last:rtl:rounded-l-md"
+            ? "[&:has(>.day-range-end)]:rounded-e-md [&:has(>.day-range-start)]:rounded-s-md has-aria-[selected]:first:rounded-s-md has-aria-[selected]:last:rounded-e-md"
             : "has-aria-[selected]:rounded-md"
         ),
         day: cn(
@@ -105,8 +105,8 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: () => <ChevronLeft className="h-4 w-4 rtl:rotate-180" />,
-        IconRight: () => <ChevronRight className="h-4 w-4 rtl:rotate-180" />,
+        IconLeft: () => <ChevronLeft className="rtl-flip h-4 w-4" />,
+        IconRight: () => <ChevronRight className="rtl-flip h-4 w-4" />,
         Dropdown: ({ ...props }) => (
           <Select
             {...props}
@@ -120,7 +120,7 @@ function Calendar({
             <SelectTrigger
               className={cn(
                 buttonVariants({ variant: "ghost" }),
-                "h-7 w-fit border-none py-2 pr-1 pl-2 font-medium in-[.is-between]:hidden in-[.is-end]:hidden [.is-start.is-end_&]:flex"
+                "h-7 w-fit border-none py-2 ps-2 pe-1 font-medium in-[.is-between]:hidden in-[.is-end]:hidden [.is-start.is-end_&]:flex"
               )}
             >
               <SelectValue placeholder={props?.caption}>

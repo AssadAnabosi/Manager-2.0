@@ -9,6 +9,7 @@ import { Slot } from "radix-ui"
 
 import { useTranslation } from "react-i18next"
 import { useIsDesktop } from "@/hooks/use-breakpoint"
+import { useLocale } from "@/hooks/use-locale"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
@@ -155,7 +156,7 @@ function SidebarProvider({
 }
 
 function Sidebar({
-  side = "left",
+  side: sideProp,
   variant = "sidebar",
   collapsible = "offcanvas",
   className,
@@ -168,6 +169,9 @@ function Sidebar({
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
   const { t } = useTranslation(undefined, { useSuspense: false })
+  // the sidebar sits at the start of the page: left in English, right in Arabic
+  const { dir } = useLocale()
+  const side = sideProp ?? (dir === "rtl" ? "right" : "left")
 
   if (collapsible === "none") {
     return (
@@ -280,7 +284,7 @@ function SidebarTrigger({
       }}
       {...props}
     >
-      <PanelLeftIcon className="rtl:-scale-x-100" />
+      <PanelLeftIcon className="rtl-flip" />
       <span className="sr-only">{t("Toggle Sidebar")}</span>
     </Button>
   )
@@ -318,7 +322,7 @@ function SidebarInset({ className, ...props }: React.ComponentProps<"main">) {
       data-slot="sidebar-inset"
       className={cn(
         "relative flex w-full flex-1 flex-col bg-background",
-        "md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ms-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2",
+        "md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ms-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ms-2",
         className
       )}
       {...props}
@@ -518,6 +522,7 @@ function SidebarMenuButton({
 } & VariantProps<typeof sidebarMenuButtonVariants>) {
   const Comp = asChild ? Slot.Root : "button"
   const { isMobile, state } = useSidebar()
+  const { dir } = useLocale()
 
   const button = (
     <Comp
@@ -544,7 +549,7 @@ function SidebarMenuButton({
     <Tooltip>
       <TooltipTrigger asChild>{button}</TooltipTrigger>
       <TooltipContent
-        side="right"
+        side={dir === "rtl" ? "left" : "right"}
         align="center"
         hidden={state !== "collapsed" || isMobile}
         {...tooltip}

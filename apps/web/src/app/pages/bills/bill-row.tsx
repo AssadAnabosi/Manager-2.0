@@ -61,13 +61,13 @@ const BillRow = ({ bill, onDelete }: Props) => {
           </div>
         </BillDetails>
       </TableCell>
-      <TableCell dir="ltr" className="rtl:text-right">
-        <div className="flex items-center gap-2 rtl:flex-row-reverse rtl:justify-end">
+      <TableCell>
+        <div className="flex items-center gap-2">
           <span
             className={cn("font-medium", billKindColor(bill.type))}
             aria-label={t("Amount")}
           >
-            {fmt.signedCurrency(bill.type, bill.amount)}
+            <bdi dir="ltr">{fmt.signedCurrency(bill.type, bill.amount)}</bdi>
           </span>
           <Badge
             variant="outline"
@@ -83,7 +83,7 @@ const BillRow = ({ bill, onDelete }: Props) => {
       <TableCell className="hidden lg:table-cell print:table-cell">
         {bill.remarks}
       </TableCell>
-      <TableCell className="hidden text-right lg:table-cell print:hidden lg:print:hidden">
+      <TableCell className="hidden text-end lg:table-cell print:hidden lg:print:hidden">
         {canWrite && (
           <div className="grid grid-cols-2">
             <BillFormDialog bill={bill}>

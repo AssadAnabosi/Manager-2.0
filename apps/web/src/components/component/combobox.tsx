@@ -57,12 +57,12 @@ const Combobox = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between font-semibold text-muted-foreground md:w-[335px] print:hidden"
+          className="text-muted-foreground w-full justify-between font-semibold md:w-[335px] print:hidden"
         >
           {filter
             ? list.find((list) => list.value === filter)?.label
             : placeholder}
-          <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50 ltr:ml-2 rtl:mr-2" />
+          <ChevronsUpDown className="ms-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full min-w-(--radix-popper-anchor-width) p-0 md:w-[335px]">
@@ -88,7 +88,7 @@ const Combobox = ({
                 >
                   <Check
                     className={cn(
-                      "h-4 w-4 ltr:mr-2 rtl:ml-2",
+                      "me-2 h-4 w-4",
                       filter === item.value ? "opacity-100" : "opacity-0"
                     )}
                   />

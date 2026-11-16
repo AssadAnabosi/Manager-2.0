@@ -50,19 +50,19 @@ const PayeeRow = ({ payee, onDelete }: Props) => {
               {payee.email}
             </a>
           </p>
-          <p dir="ltr" className="rtl:text-right">
+          <p>
             <a
               aria-label={t("Phone Number")}
               className="text-blue-500 hover:cursor-pointer"
               href={`tel:${payee.phoneNumber}`}
             >
-              {payee.phoneNumber}
+              <bdi dir="ltr">{payee.phoneNumber}</bdi>
             </a>
           </p>
         </div>
       </TableCell>
       <TableCell className="hidden lg:table-cell">{payee.remarks}</TableCell>
-      <TableCell className="hidden w-max text-right lg:table-cell">
+      <TableCell className="hidden w-max text-end lg:table-cell">
         {canWrite && (
           <>
             <PayeeFormDialog payee={payee}>

@@ -102,11 +102,11 @@ const MultiSelectFormField = React.forwardRef<
                         className="m-1 bg-inverse text-inverse-foreground"
                       >
                         {IconComponent && (
-                          <IconComponent className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
+                          <IconComponent className="h-4 w-4 me-2" />
                         )}
                         {option?.label}
                         <XCircle
-                          className="pointer-events-auto! h-4 w-4 cursor-pointer ltr:ml-2 rtl:mr-2"
+                          className="pointer-events-auto! h-4 w-4 cursor-pointer ms-2"
                           onClick={(event) => {
                             toggleOption(value);
                             event.stopPropagation();
@@ -172,7 +172,7 @@ const MultiSelectFormField = React.forwardRef<
                       >
                         <div
                           className={cn(
-                            "flex h-4 w-4 items-center justify-center rounded-sm border border-primary ltr:mr-2 rtl:ml-2",
+                            "flex h-4 w-4 items-center justify-center rounded-sm border border-primary me-2",
                             isSelected
                               ? "bg-primary text-primary-foreground"
                               : "opacity-50 [&_svg]:invisible"
@@ -181,7 +181,7 @@ const MultiSelectFormField = React.forwardRef<
                           <CheckIcon className={cn("h-4 w-4")} strokeWidth={3} />
                         </div>
                         {option.icon && (
-                          <option.icon className="h-4 w-4 text-muted-foreground ltr:mr-2 rtl:ml-2" />
+                          <option.icon className="h-4 w-4 text-muted-foreground me-2" />
                         )}
                         <span>{option.label}</span>
                       </CommandItem>

@@ -60,11 +60,8 @@ const ChequeRow = ({ cheque, onDelete }: Props) => {
           </div>
         </ChequeDetails>
       </TableCell>
-      <TableCell
-        dir="ltr"
-        className={`rtl:text-right ${cheque.isCancelled ? "line-through" : ""}`}
-      >
-        {fmt.currency(cheque.value)}
+      <TableCell className={cheque.isCancelled ? "line-through" : ""}>
+        <bdi dir="ltr">{fmt.currency(cheque.value)}</bdi>
       </TableCell>
       <TableCell
         className={`hidden md:table-cell ${
@@ -73,7 +70,7 @@ const ChequeRow = ({ cheque, onDelete }: Props) => {
       >
         {cheque.remarks}
       </TableCell>
-      <TableCell className="hidden text-right lg:table-cell print:hidden lg:print:hidden">
+      <TableCell className="hidden text-end lg:table-cell print:hidden lg:print:hidden">
         {canWrite && (
           <div className="grid grid-cols-2">
             <ChequeFormDialog cheque={cheque}>

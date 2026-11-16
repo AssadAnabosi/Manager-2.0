@@ -222,7 +222,7 @@ export default function Edit() {
               goTo("/users");
             }}
           >
-            <ArrowLeft className="rtl:rotate-180" />
+            <ArrowLeft className="rtl-flip" />
             {t("Back to users")}
           </Link>
         </Button>

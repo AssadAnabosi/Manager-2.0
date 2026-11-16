@@ -108,7 +108,7 @@ const BillForm = ({ bill, defaults, onDone }: BillFormProps) => {
                       disabled={isLoading}
                       variant={"outline"}
                       className={cn(
-                        "w-[240px] pl-3 text-left font-normal",
+                        "w-[240px] ps-3 text-start font-normal",
                         !field.value && "text-muted-foreground"
                       )}
                     >

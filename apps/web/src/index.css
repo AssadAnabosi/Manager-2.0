@@ -4,6 +4,20 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Tailwind's own rtl:/ltr: also match anything inside an ancestor with dir="rtl" / "ltr", so under
+ * the Arabic page an element wrapped in dir="ltr" matched both. Match the element's own direction.
+ */
+@custom-variant rtl (&:where(:dir(rtl)));
+@custom-variant ltr (&:where(:dir(ltr)));
+
+/* Mirror an icon that points somewhere (chevrons, arrows) in right-to-left languages. */
+@utility rtl-flip {
+  &:where(:dir(rtl)) {
+    scale: -1 1;
+  }
+}
+
 @utility container {
   margin-inline: auto;
   padding-inline: 2rem;

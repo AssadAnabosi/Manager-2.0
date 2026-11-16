@@ -34,22 +34,22 @@ export default function FooterHoverCard({
             <div className="flex items-center gap-3">
               <Button asChild variant="link" className="p-0">
                 <a href="https://linkedin.com/in/assadanabosi" target="_blank">
-                  <LinkedInLogoIcon className="mr-2 h-4 w-4 opacity-70" />
+                  <LinkedInLogoIcon className="me-2 h-4 w-4 opacity-70" />
                 </a>
               </Button>
               <Button asChild variant="link" className="p-0">
                 <a href="https://github.com/assadanabosi" target="_blank">
-                  <GitHubLogoIcon className="mr-2 h-4 w-4 opacity-70" />
+                  <GitHubLogoIcon className="me-2 h-4 w-4 opacity-70" />
                 </a>
               </Button>
               <Button asChild variant="link" className="p-0">
                 <a href="mailto:assad@anabosi.com">
-                  <EnvelopeClosedIcon className="mr-2 h-4 w-4 opacity-70" />
+                  <EnvelopeClosedIcon className="me-2 h-4 w-4 opacity-70" />
                 </a>
               </Button>
             </div>
             {/* <div className="flex items-center">
-              <SewingPinFilledIcon className="mr-2 h-4 w-4 opacity-70" />{" "}
+              <SewingPinFilledIcon className="me-2 h-4 w-4 opacity-70" />{" "}
               <span className="text-xs text-muted-foreground">
                 Palestine, Jenin
               </span>

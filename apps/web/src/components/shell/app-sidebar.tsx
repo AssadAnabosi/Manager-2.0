@@ -18,14 +18,9 @@ import {
 } from "@/components/ui/sidebar";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   return (
-    <Sidebar
-      side={i18n.dir() === "rtl" ? "right" : "left"}
-      collapsible="offcanvas"
-      className="print:hidden"
-      {...props}
-    >
+    <Sidebar collapsible="offcanvas" className="print:hidden" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>

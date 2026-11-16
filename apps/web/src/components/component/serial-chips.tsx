@@ -101,7 +101,7 @@ const SerialChips = ({
           aria-label={t(placeholder)}
           placeholder={serials.length ? "" : t(placeholder)}
           value={draft}
-          className="placeholder:text-muted-foreground min-w-24 flex-1 bg-transparent px-1 text-base outline-none md:text-sm rtl:text-right"
+          className="placeholder:text-muted-foreground min-w-24 flex-1 bg-transparent px-1 [text-align:match-parent] text-base outline-none md:text-sm"
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {

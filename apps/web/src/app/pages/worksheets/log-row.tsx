@@ -69,8 +69,8 @@ const LogRow = ({ log, onDelete }: Props) => {
         {log.startingTime} - {log.finishingTime} ({fmt.number(log.OTV)})
       </TableCell>
       <TableCell className="hidden md:table-cell print:table-cell">
-        <p dir="ltr" className="rtl:text-right">
-          {fmt.currency(log.payment)}
+        <p>
+          <bdi dir="ltr">{fmt.currency(log.payment)}</bdi>
         </p>
       </TableCell>
       <TableCell className="hidden lg:table-cell print:table-cell">

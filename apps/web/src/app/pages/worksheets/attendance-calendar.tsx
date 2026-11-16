@@ -113,7 +113,7 @@ export default function AttendanceCalendar({
           aria-label={t("Previous month")}
           onClick={() => onMonthChange(addMonths(first, -1))}
         >
-          <ChevronLeft className="rtl:rotate-180" />
+          <ChevronLeft className="rtl-flip" />
         </Button>
         <div className="text-center">
           {workerName && (
@@ -135,7 +135,7 @@ export default function AttendanceCalendar({
           aria-label={t("Next month")}
           onClick={() => onMonthChange(addMonths(first, 1))}
         >
-          <ChevronRight className="rtl:rotate-180" />
+          <ChevronRight className="rtl-flip" />
         </Button>
       </div>
 

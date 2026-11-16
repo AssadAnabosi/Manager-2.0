@@ -33,7 +33,6 @@ const AppShellSkeleton = () => {
       <SidebarProvider defaultOpen={readSidebarOpen()} style={SHELL_STYLE}>
         <Sidebar
           variant="inset"
-          side={document.documentElement.dir === "rtl" ? "right" : "left"}
           collapsible="offcanvas"
           className="print:hidden"
         >
@@ -68,7 +67,7 @@ const AppShellSkeleton = () => {
           </SidebarFooter>
         </Sidebar>
         <SidebarInset className="min-w-0">
-          <header className="flex h-[calc(3.5rem+max(env(safe-area-inset-top),0.75rem))] md:h-(--header-height) shrink-0 items-center gap-2 border-b pt-[max(env(safe-area-inset-top),0.75rem)] md:pt-0 px-4 lg:px-6 print:hidden">
+          <header className="flex h-[calc(3.5rem+max(env(safe-area-inset-top),0.75rem))] shrink-0 items-center gap-2 border-b px-4 pt-[max(env(safe-area-inset-top),0.75rem)] md:h-(--header-height) md:pt-0 lg:px-6 print:hidden">
             <Skeleton className="h-9 w-9 md:h-7 md:w-7" />
             <Skeleton className="mx-2 h-4 w-px" />
             <Skeleton className="h-4 w-24" />

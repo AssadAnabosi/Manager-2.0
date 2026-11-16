@@ -66,11 +66,10 @@ export default function PayeeDetails({
               <dt className="text-muted-foreground">{t("Phone Number")}</dt>
               <dd>
                 <a
-                  dir="ltr"
                   className="font-semibold text-blue-500"
                   href={`tel:${payee.phoneNumber}`}
                 >
-                  {payee.phoneNumber}
+                  <bdi dir="ltr">{payee.phoneNumber}</bdi>
                 </a>
               </dd>
               <dt className="text-muted-foreground">{t("Remarks")}</dt>
