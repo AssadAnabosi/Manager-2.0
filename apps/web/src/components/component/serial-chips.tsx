@@ -43,8 +43,8 @@ const SerialChips = ({
     const bad = tokens.filter((token) => !DIGITS.test(token));
     const next = [...serials];
     for (const token of good) {
-      // 007 and 7 are the same cheque
-      const serial = String(Number(token.slice(0, MAX_LENGTH)));
+      // every digit counts: 007 is not 7
+      const serial = token.slice(0, MAX_LENGTH);
       if (!next.includes(serial)) next.push(serial);
     }
     if (next.length !== serials.length) commit(next);
