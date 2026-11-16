@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { ShortcutKey } from "@/components/component/shortcut-key";
 import { useTranslation } from "react-i18next";
 import { apiValidationIssues } from "@/lib/api-error";
 import { apiErrorText } from "@/lib/api-error";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { clearDraft, draftOf, useFormDraft } from "@/hooks/use-form-draft";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { PASSWORD_MIN_LENGTH } from "@workbench/shared";
@@ -103,18 +105,23 @@ const UserForm = ({
 
   type userFormSchemaType = z.infer<typeof userFormSchema>;
 
+  // a new record starts from the last draft; saving it forgets the draft
+  const fresh = !user;
+  const base = {
+    username: user?.username || "",
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    email: user?.email || "",
+    phoneNumber: user?.phoneNumber || "",
+    password: "",
+    confirmPassword: "",
+  };
+  const [draft] = useState(() => draftOf<userFormSchemaType>("user", fresh));
   const userForm = useForm<userFormSchemaType>({
     resolver: zodResolver(userFormSchema),
-    defaultValues: {
-      username: user?.username || "",
-      firstName: user?.firstName || "",
-      lastName: user?.lastName || "",
-      email: user?.email || "",
-      phoneNumber: user?.phoneNumber || "",
-      password: "",
-      confirmPassword: "",
-    },
+    defaultValues: { ...base, ...draft },
   });
+  useFormDraft(userForm, "user", fresh, ["password", "confirmPassword"]);
   const isLoading = userForm.formState.isSubmitting;
 
   const { mutateAsync } = useUserFormMutation();
@@ -123,7 +130,8 @@ const UserForm = ({
     try {
       if (!user) {
         await mutateAsync({ data });
-        userForm.reset();
+        userForm.reset(base);
+        clearDraft("user");
         onDone?.();
       } else {
         await mutateAsync({ data, userId: user.id });

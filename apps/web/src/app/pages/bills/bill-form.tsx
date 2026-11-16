@@ -4,6 +4,7 @@ import { apiErrorText } from "@/lib/api-error";
 import { useTranslation } from "react-i18next";
 import { useFormatters } from "@/hooks/use-locale";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { clearDraft, draftOf, useFormDraft } from "@/hooks/use-form-draft";
 import { useForm } from "react-hook-form";
 import { BillType } from "@/lib/types";
 
@@ -61,16 +62,21 @@ const BillForm = ({ bill, defaults, onDone }: BillFormProps) => {
   const fmt = useFormatters();
   const { toast } = useToast();
   const [calendarOpen, setCalenderOpen] = useState(false);
+  // a new record starts from the last draft; saving it forgets the draft
+  const fresh = !bill && !defaults?.type && !defaults?.amount;
+  const base = {
+    date: bill ? new Date(bill.date) : getToday(),
+    type: bill?.type || defaults?.type || "expense",
+    amount: bill?.amount?.toString() || defaults?.amount || "",
+    description: bill?.description || "",
+    remarks: bill?.remarks || "",
+  };
+  const [draft] = useState(() => draftOf<billFormSchemaType>("bill", fresh));
   const billForm = useForm<billFormSchemaType>({
     resolver: zodResolver(billFormSchema),
-    defaultValues: {
-      date: bill ? new Date(bill.date) : getToday(),
-      type: bill?.type || defaults?.type || "expense",
-      amount: bill?.amount?.toString() || defaults?.amount || "",
-      description: bill?.description || "",
-      remarks: bill?.remarks || "",
-    },
+    defaultValues: { ...base, ...draft },
   });
+  useFormDraft(billForm, "bill", fresh, []);
   const isLoading = billForm.formState.isSubmitting;
   const { mutateAsync } = useBillFormMutation();
 
@@ -80,7 +86,8 @@ const BillForm = ({ bill, defaults, onDone }: BillFormProps) => {
         await mutateAsync({ data, billId: bill.id });
       } else {
         await mutateAsync({ data });
-        billForm.reset();
+        billForm.reset(base);
+        clearDraft("bill");
       }
       onDone();
     } catch (error: any) {

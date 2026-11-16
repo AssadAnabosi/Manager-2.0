@@ -5,6 +5,7 @@ import { apiErrorText } from "@/lib/api-error";
 import { useTranslation } from "react-i18next";
 import { useFormatters } from "@/hooks/use-locale";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { clearDraft, draftOf, useFormDraft } from "@/hooks/use-form-draft";
 import { useForm } from "react-hook-form";
 import { ChequeType } from "@/lib/types";
 import {
@@ -65,19 +66,24 @@ const ChequeForm = ({ cheque, defaults, onDone }: ChequeFormProps) => {
   const { t } = useTranslation();
   const fmt = useFormatters();
   const { toast } = useToast();
+  // a new record starts from the last draft; saving it forgets the draft
+  const fresh = !cheque && !defaults?.serial;
+  const base = {
+    dueDate: cheque ? new Date(cheque.dueDate) : getLastDayOfCurrentMonthDate(),
+    payee: cheque?.payee?.id || undefined,
+    serial: cheque?.serial.toString() || defaults?.serial || "",
+    value: cheque?.value.toString() || "",
+    isCancelled: cheque?.isCancelled || false,
+    remarks: cheque?.remarks || "",
+  };
+  const [draft] = useState(() =>
+    draftOf<chequeFormSchemaType>("cheque", fresh)
+  );
   const chequeForm = useForm<chequeFormSchemaType>({
     resolver: zodResolver(chequeFormSchema),
-    defaultValues: {
-      dueDate: cheque
-        ? new Date(cheque.dueDate)
-        : getLastDayOfCurrentMonthDate(),
-      payee: cheque?.payee?.id || undefined,
-      serial: cheque?.serial.toString() || defaults?.serial || "",
-      value: cheque?.value.toString() || "",
-      isCancelled: cheque?.isCancelled || false,
-      remarks: cheque?.remarks || "",
-    },
+    defaultValues: { ...base, ...draft },
   });
+  useFormDraft(chequeForm, "cheque", fresh, []);
   const isLoading = chequeForm.formState.isSubmitting;
 
   const { data: payeesData, isLoading: filterLoading } = useGetPayeesQuery();
@@ -93,7 +99,8 @@ const ChequeForm = ({ cheque, defaults, onDone }: ChequeFormProps) => {
         await mutateAsync({ data, chequeId: cheque.id });
       } else {
         await mutateAsync({ data });
-        chequeForm.reset();
+        chequeForm.reset(base);
+        clearDraft("cheque");
       }
       onDone();
     } catch (error: any) {

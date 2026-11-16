@@ -4,6 +4,7 @@ import { apiErrorCode, apiErrorText } from "@/lib/api-error";
 import { useTranslation } from "react-i18next";
 import { useFormatters } from "@/hooks/use-locale";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { clearDraft, draftOf, useFormDraft } from "@/hooks/use-form-draft";
 import { useForm } from "react-hook-form";
 import { LogType } from "@/lib/types";
 import { cn, getToday, stringToDate, toList } from "@/lib/utils";
@@ -61,18 +62,23 @@ const LogForm = ({ log, defaults, onDone }: LogFormProps) => {
   const { t } = useTranslation();
   const fmt = useFormatters();
   const { toast } = useToast();
+  // a new record starts from the last draft; saving it forgets the draft
+  const fresh = !log && !defaults?.worker && !defaults?.date;
+  const base = {
+    date: log ? new Date(log.date) : (defaults?.date ?? getToday()),
+    worker: log?.worker?.id || defaults?.worker || undefined,
+    startingTime: log?.startingTime || "08:30",
+    finishingTime: log?.finishingTime || "16:30",
+    isAbsent: log?.isAbsent || false,
+    payment: log?.payment.toString() || "0",
+    remarks: log?.remarks || "",
+  };
+  const [draft] = useState(() => draftOf<logFormSchemaType>("log", fresh));
   const logForm = useForm<logFormSchemaType>({
     resolver: zodResolver(logFormSchema),
-    defaultValues: {
-      date: log ? new Date(log.date) : (defaults?.date ?? getToday()),
-      worker: log?.worker?.id || defaults?.worker || undefined,
-      startingTime: log?.startingTime || "08:30",
-      finishingTime: log?.finishingTime || "16:30",
-      isAbsent: log?.isAbsent || false,
-      payment: log?.payment.toString() || "0",
-      remarks: log?.remarks || "",
-    },
+    defaultValues: { ...base, ...draft },
   });
+  useFormDraft(logForm, "log", fresh, []);
   const isLoading = logForm.formState.isSubmitting;
 
   const { data: usersData, isLoading: filterLoading } = useGetUsersQuery();
@@ -94,7 +100,8 @@ const LogForm = ({ log, defaults, onDone }: LogFormProps) => {
         await mutateAsync({ data, logId: log.id });
       } else {
         await mutateAsync({ data });
-        logForm.reset();
+        logForm.reset(base);
+        clearDraft("log");
       }
       onDone();
     } catch (error: any) {

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { useLogout } from "@/providers/auth-context";
 import { clearRememberedFilters } from "@/hooks/use-remembered-filters";
+import { clearAllDrafts } from "@/hooks/use-form-draft";
 
 import Layout from "@/components/shell/bare-layout";
 import { LogOut } from "lucide-react";
@@ -17,6 +18,7 @@ const Logout = () => {
     const logoutUser = async () => {
       await logout();
       clearRememberedFilters();
+      clearAllDrafts();
       navigate("/", { replace: true });
     };
     logoutUser();

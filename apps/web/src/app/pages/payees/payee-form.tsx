@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { ShortcutKey } from "@/components/component/shortcut-key";
 import { useTranslation } from "react-i18next";
 import { apiErrorText } from "@/lib/api-error";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { clearDraft, draftOf, useFormDraft } from "@/hooks/use-form-draft";
 import { useForm } from "react-hook-form";
 import { PayeeType } from "@/lib/types";
 import {
@@ -35,15 +37,20 @@ type PayeeFormProps = {
 const PayeeForm = ({ payee, onDone }: PayeeFormProps) => {
   const { t } = useTranslation();
   const { toast } = useToast();
+  // a new record starts from the last draft; saving it forgets the draft
+  const fresh = !payee;
+  const base = {
+    name: payee?.name || "",
+    email: payee?.email || "",
+    phoneNumber: payee?.phoneNumber || "",
+    remarks: payee?.remarks || "",
+  };
+  const [draft] = useState(() => draftOf<payeeFormSchemaType>("payee", fresh));
   const payeeForm = useForm<payeeFormSchemaType>({
     resolver: zodResolver(payeeFormSchema),
-    defaultValues: {
-      name: payee?.name || "",
-      email: payee?.email || "",
-      phoneNumber: payee?.phoneNumber || "",
-      remarks: payee?.remarks || "",
-    },
+    defaultValues: { ...base, ...draft },
   });
+  useFormDraft(payeeForm, "payee", fresh, []);
   const isLoading = payeeForm.formState.isSubmitting;
   const { mutateAsync } = usePayeeFormMutation();
 
@@ -53,7 +60,8 @@ const PayeeForm = ({ payee, onDone }: PayeeFormProps) => {
         await mutateAsync({ data, payeeId: payee.id });
       } else {
         await mutateAsync({ data });
-        payeeForm.reset();
+        payeeForm.reset(base);
+        clearDraft("payee");
       }
       onDone();
     } catch (error: any) {
