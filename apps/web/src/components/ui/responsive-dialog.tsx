@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { useIsDesktop } from "@/hooks/use-breakpoint";
+import { isLetter } from "@/lib/shortcuts";
 
 import {
   Dialog,
@@ -26,6 +27,36 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const DesktopContext = React.createContext(true);
+
+/**
+ * Alt (Option on a Mac) + E / D press the button marked `data-shortcut="e"` / `"d"` of the
+ * dialog that is on top, so a details dialog can be edited or deleted from the keyboard.
+ */
+const DialogShortcuts = () => {
+  const marker = React.useRef<HTMLSpanElement>(null);
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      const letter = isLetter(e, "e") ? "e" : isLetter(e, "d") ? "d" : "";
+      const root = marker.current?.closest("[role=dialog]");
+      if (!letter || !root) return;
+      // only the dialog on top answers (an open confirmation covers this one)
+      const open = document.querySelectorAll(
+        "[role=dialog],[role=alertdialog]"
+      );
+      if (open[open.length - 1] !== root) return;
+      const button = root.querySelector<HTMLElement>(
+        `[data-shortcut="${letter}"]:not(:disabled)`
+      );
+      if (!button) return;
+      e.preventDefault();
+      button.click();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
+  return <span ref={marker} hidden />;
+};
 
 type RootProps = React.ComponentProps<typeof Dialog>;
 
@@ -63,12 +94,14 @@ const ResponsiveDialogContent = ({
   if (useDesktop()) {
     return (
       <DialogContent className={cn("sm:max-w-[425px]", className)} {...props}>
+        <DialogShortcuts />
         {children}
       </DialogContent>
     );
   }
   return (
     <DrawerContent className={className} {...props}>
+      <DialogShortcuts />
       {children}
     </DrawerContent>
   );
@@ -116,7 +149,9 @@ const ResponsiveDialogFooter = ({
   if (useDesktop()) {
     return <DialogFooter className={className} {...props} />;
   }
-  return <DrawerFooter className={cn("px-4 pt-2 pb-6", className)} {...props} />;
+  return (
+    <DrawerFooter className={cn("px-4 pt-2 pb-6", className)} {...props} />
+  );
 };
 
 export {

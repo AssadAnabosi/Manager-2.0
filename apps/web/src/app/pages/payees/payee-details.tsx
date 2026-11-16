@@ -1,3 +1,4 @@
+import { ShortcutKey } from "@/components/component/shortcut-key";
 import { ReactNode, useState } from "react";
 import { useEditFromDetails } from "@/hooks/use-edit-from-details";
 import { useTranslation } from "react-i18next";
@@ -45,66 +46,72 @@ export default function PayeeDetails({
 
   return (
     <>
-    <ResponsiveDialog open={open} onOpenChange={setOpen}>
-      <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
-      <ResponsiveDialogContent>
-        <ResponsiveDialogHeader>
-          <ResponsiveDialogTitle>{title}</ResponsiveDialogTitle>
-        </ResponsiveDialogHeader>
-        <ResponsiveDialogBody>
-          <dl className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-2 text-start">
-            <dt className="text-muted-foreground">{t("Email")}</dt>
-            <dd>
-              <a
-                className="font-semibold text-blue-500"
-                href={`mailto:${payee.email}`}
-              >
-                {payee.email}
-              </a>
-            </dd>
-            <dt className="text-muted-foreground">{t("Phone Number")}</dt>
-            <dd>
-              <a
-                dir="ltr"
-                className="font-semibold text-blue-500"
-                href={`tel:${payee.phoneNumber}`}
-              >
-                {payee.phoneNumber}
-              </a>
-            </dd>
-            <dt className="text-muted-foreground">{t("Remarks")}</dt>
-            <dd>{payee.remarks}</dd>
-          </dl>
-        </ResponsiveDialogBody>
-        <ResponsiveDialogFooter>
-          {canWrite && (
-            <div className="flex flex-col gap-3 md:flex-row">
-              <Button onClick={startEditing}>
+      <ResponsiveDialog open={open} onOpenChange={setOpen}>
+        <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+        <ResponsiveDialogContent>
+          <ResponsiveDialogHeader>
+            <ResponsiveDialogTitle>{title}</ResponsiveDialogTitle>
+          </ResponsiveDialogHeader>
+          <ResponsiveDialogBody>
+            <dl className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-2 text-start">
+              <dt className="text-muted-foreground">{t("Email")}</dt>
+              <dd>
+                <a
+                  className="font-semibold text-blue-500"
+                  href={`mailto:${payee.email}`}
+                >
+                  {payee.email}
+                </a>
+              </dd>
+              <dt className="text-muted-foreground">{t("Phone Number")}</dt>
+              <dd>
+                <a
+                  dir="ltr"
+                  className="font-semibold text-blue-500"
+                  href={`tel:${payee.phoneNumber}`}
+                >
+                  {payee.phoneNumber}
+                </a>
+              </dd>
+              <dt className="text-muted-foreground">{t("Remarks")}</dt>
+              <dd>{payee.remarks}</dd>
+            </dl>
+          </ResponsiveDialogBody>
+          <ResponsiveDialogFooter>
+            {canWrite && (
+              <div className="flex flex-col gap-3 md:flex-row">
+                <Button data-shortcut="e" onClick={startEditing}>
                   <Pencil2Icon className="me-2 h-4 w-4" />
                   <span>{t("Edit")}</span>
+                  <ShortcutKey>E</ShortcutKey>
                 </Button>
-              <DeleteDialog
-                onAction={() => {
-                  deletePayee(payee.id);
-                  setOpen(false);
-                }}
-              >
-                <Button variant="secondary">
-                  <TrashIcon className="me-2 h-4 w-4" />
-                  <span>{t("Delete")}</span>
-                </Button>
-              </DeleteDialog>
-            </div>
-          )}
-          <ResponsiveDialogClose asChild>
-            <Button variant="outline">{t("Close")}</Button>
-          </ResponsiveDialogClose>
-        </ResponsiveDialogFooter>
-      </ResponsiveDialogContent>
-    </ResponsiveDialog>
-    {canWrite && (
-      <PayeeFormDialog payee={payee} open={editing} onOpenChange={setEditing} />
-    )}
+                <DeleteDialog
+                  onAction={() => {
+                    deletePayee(payee.id);
+                    setOpen(false);
+                  }}
+                >
+                  <Button variant="secondary" data-shortcut="d">
+                    <TrashIcon className="me-2 h-4 w-4" />
+                    <span>{t("Delete")}</span>
+                    <ShortcutKey>D</ShortcutKey>
+                  </Button>
+                </DeleteDialog>
+              </div>
+            )}
+            <ResponsiveDialogClose asChild>
+              <Button variant="outline">{t("Close")}</Button>
+            </ResponsiveDialogClose>
+          </ResponsiveDialogFooter>
+        </ResponsiveDialogContent>
+      </ResponsiveDialog>
+      {canWrite && (
+        <PayeeFormDialog
+          payee={payee}
+          open={editing}
+          onOpenChange={setEditing}
+        />
+      )}
     </>
   );
 }

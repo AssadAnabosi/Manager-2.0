@@ -1,3 +1,4 @@
+import { ShortcutKey } from "@/components/component/shortcut-key";
 import { ReactElement, ReactNode, useState } from "react";
 import { useEditFromDetails } from "@/hooks/use-edit-from-details";
 import { useTranslation } from "react-i18next";
@@ -57,64 +58,66 @@ export default function LogDetails({
 
   return (
     <>
-    <ResponsiveDialog open={open} onOpenChange={setOpen}>
-      {children && (
-        <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
-      )}
-      <ResponsiveDialogContent>
-        <ResponsiveDialogHeader>
-          <ResponsiveDialogTitle>
-            {title} - {description}
-          </ResponsiveDialogTitle>
-        </ResponsiveDialogHeader>
-        <ResponsiveDialogBody>
-          <dl className="grid grid-cols-[auto_1fr] items-center gap-x-5 gap-y-2 text-start">
-            <dt className="text-muted-foreground">{t("Status")}</dt>
-            <dd>
-              <StatusBadge
-                status={!log.isAbsent}
-                labels={[t("Attended"), t("Absent")]}
-              />
-            </dd>
-            <dt className="text-muted-foreground">{t("Work Hours")}</dt>
-            <dd>
-              {log.startingTime} - {log.finishingTime} ({fmt.number(log.OTV)})
-            </dd>
-            <dt className="text-muted-foreground">{t("Payment")}</dt>
-            <dd>{fmt.currency(log.payment)}</dd>
-            <dt className="text-muted-foreground">{t("Remarks")}</dt>
-            <dd>{log.remarks}</dd>
-          </dl>
-        </ResponsiveDialogBody>
-        <ResponsiveDialogFooter>
-          {canWrite && (
-            <div className="flex flex-col gap-3 md:flex-row">
-              <Button onClick={startEditing}>
+      <ResponsiveDialog open={open} onOpenChange={setOpen}>
+        {children && (
+          <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+        )}
+        <ResponsiveDialogContent>
+          <ResponsiveDialogHeader>
+            <ResponsiveDialogTitle>
+              {title} - {description}
+            </ResponsiveDialogTitle>
+          </ResponsiveDialogHeader>
+          <ResponsiveDialogBody>
+            <dl className="grid grid-cols-[auto_1fr] items-center gap-x-5 gap-y-2 text-start">
+              <dt className="text-muted-foreground">{t("Status")}</dt>
+              <dd>
+                <StatusBadge
+                  status={!log.isAbsent}
+                  labels={[t("Attended"), t("Absent")]}
+                />
+              </dd>
+              <dt className="text-muted-foreground">{t("Work Hours")}</dt>
+              <dd>
+                {log.startingTime} - {log.finishingTime} ({fmt.number(log.OTV)})
+              </dd>
+              <dt className="text-muted-foreground">{t("Payment")}</dt>
+              <dd>{fmt.currency(log.payment)}</dd>
+              <dt className="text-muted-foreground">{t("Remarks")}</dt>
+              <dd>{log.remarks}</dd>
+            </dl>
+          </ResponsiveDialogBody>
+          <ResponsiveDialogFooter>
+            {canWrite && (
+              <div className="flex flex-col gap-3 md:flex-row">
+                <Button data-shortcut="e" onClick={startEditing}>
                   <Pencil2Icon className="me-2 h-4 w-4" />
                   <span>{t("Edit")}</span>
+                  <ShortcutKey>E</ShortcutKey>
                 </Button>
-              <DeleteDialog
-                onAction={() => {
-                  deleteLog(log.id);
-                  setOpen(false);
-                }}
-              >
-                <Button variant="secondary">
-                  <TrashIcon className="me-2 h-4 w-4" />
-                  <span>{t("Delete")}</span>
-                </Button>
-              </DeleteDialog>
-            </div>
-          )}
-          <ResponsiveDialogClose asChild>
-            <Button variant="outline">{t("Close")}</Button>
-          </ResponsiveDialogClose>
-        </ResponsiveDialogFooter>
-      </ResponsiveDialogContent>
-    </ResponsiveDialog>
-    {canWrite && (
-      <LogFormDialog log={log} open={editing} onOpenChange={setEditing} />
-    )}
+                <DeleteDialog
+                  onAction={() => {
+                    deleteLog(log.id);
+                    setOpen(false);
+                  }}
+                >
+                  <Button variant="secondary" data-shortcut="d">
+                    <TrashIcon className="me-2 h-4 w-4" />
+                    <span>{t("Delete")}</span>
+                    <ShortcutKey>D</ShortcutKey>
+                  </Button>
+                </DeleteDialog>
+              </div>
+            )}
+            <ResponsiveDialogClose asChild>
+              <Button variant="outline">{t("Close")}</Button>
+            </ResponsiveDialogClose>
+          </ResponsiveDialogFooter>
+        </ResponsiveDialogContent>
+      </ResponsiveDialog>
+      {canWrite && (
+        <LogFormDialog log={log} open={editing} onOpenChange={setEditing} />
+      )}
     </>
   );
 }

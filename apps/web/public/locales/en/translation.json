@@ -182,6 +182,8 @@
   "Remove serial {{serial}}": "Remove serial {{serial}}",
   "Serial numbers use the digits 0-9 only": "Serial numbers use the digits 0-9 only",
   "Open Add New on the current page": "Open Add New on the current page",
+  "In a details dialog: edit": "In a details dialog: edit",
+  "In a details dialog: delete": "In a details dialog: delete",
   "Back to users": "Back to users",
   "User's Loggable setting was updated successfully": "User's Loggable setting was updated successfully",
   "Offered as the worker of a new worksheet and in the worker lists. Still found when searched, except when adding a worksheet.": "Offered as the worker of a new worksheet and in the worker lists. Still found when searched, except when adding a worksheet.",

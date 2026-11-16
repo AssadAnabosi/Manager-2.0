@@ -1,3 +1,4 @@
+import { ShortcutKey } from "@/components/component/shortcut-key";
 import { ReactNode, useState } from "react";
 import { useEditFromDetails } from "@/hooks/use-edit-from-details";
 import { useTranslation } from "react-i18next";
@@ -50,62 +51,68 @@ export default function ChequeDetails({
 
   return (
     <>
-    <ResponsiveDialog open={open} onOpenChange={setOpen}>
-      <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
-      <ResponsiveDialogContent>
-        <ResponsiveDialogHeader>
-          <ResponsiveDialogTitle>
-            {t("Cheque #{{serial}}", { serial: cheque.serial })}
-          </ResponsiveDialogTitle>
-        </ResponsiveDialogHeader>
-        <ResponsiveDialogBody>
-          <dl className="grid grid-cols-[auto_1fr] items-center gap-x-5 gap-y-2 text-start">
-            <dt className="text-muted-foreground">{t("Payee")}</dt>
-            <dd>{title}</dd>
-            <dt className="text-muted-foreground">{t("Due Date")}</dt>
-            <dd>{description}</dd>
-            <dt className="text-muted-foreground">{t("Value")}</dt>
-            <dd>{fmt.currency(cheque.value)}</dd>
-            <dt className="text-muted-foreground">{t("Remarks")}</dt>
-            <dd>{cheque.remarks}</dd>
-            <dt className="text-muted-foreground">{t("Status")}</dt>
-            <dd>
-              <StatusBadge
-                status={!cheque.isCancelled}
-                labels={[t("Valid"), t("Cancelled")]}
-              />
-            </dd>
-          </dl>
-        </ResponsiveDialogBody>
-        <ResponsiveDialogFooter>
-          {canWrite && (
-            <div className="flex flex-col gap-3 md:flex-row">
-              <Button onClick={startEditing}>
+      <ResponsiveDialog open={open} onOpenChange={setOpen}>
+        <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+        <ResponsiveDialogContent>
+          <ResponsiveDialogHeader>
+            <ResponsiveDialogTitle>
+              {t("Cheque #{{serial}}", { serial: cheque.serial })}
+            </ResponsiveDialogTitle>
+          </ResponsiveDialogHeader>
+          <ResponsiveDialogBody>
+            <dl className="grid grid-cols-[auto_1fr] items-center gap-x-5 gap-y-2 text-start">
+              <dt className="text-muted-foreground">{t("Payee")}</dt>
+              <dd>{title}</dd>
+              <dt className="text-muted-foreground">{t("Due Date")}</dt>
+              <dd>{description}</dd>
+              <dt className="text-muted-foreground">{t("Value")}</dt>
+              <dd>{fmt.currency(cheque.value)}</dd>
+              <dt className="text-muted-foreground">{t("Remarks")}</dt>
+              <dd>{cheque.remarks}</dd>
+              <dt className="text-muted-foreground">{t("Status")}</dt>
+              <dd>
+                <StatusBadge
+                  status={!cheque.isCancelled}
+                  labels={[t("Valid"), t("Cancelled")]}
+                />
+              </dd>
+            </dl>
+          </ResponsiveDialogBody>
+          <ResponsiveDialogFooter>
+            {canWrite && (
+              <div className="flex flex-col gap-3 md:flex-row">
+                <Button data-shortcut="e" onClick={startEditing}>
                   <Pencil2Icon className="me-2 h-4 w-4" />
                   <span>{t("Edit")}</span>
+                  <ShortcutKey>E</ShortcutKey>
                 </Button>
-              <DeleteDialog
-                onAction={() => {
-                  deleteCheque(cheque.id);
-                  setOpen(false);
-                }}
-              >
-                <Button variant="secondary">
-                  <TrashIcon className="me-2 h-4 w-4" />
-                  <span>{t("Delete")}</span>
-                </Button>
-              </DeleteDialog>
-            </div>
-          )}
-          <ResponsiveDialogClose asChild>
-            <Button variant="outline">{t("Close")}</Button>
-          </ResponsiveDialogClose>
-        </ResponsiveDialogFooter>
-      </ResponsiveDialogContent>
-    </ResponsiveDialog>
-    {canWrite && (
-      <ChequeFormDialog cheque={cheque} open={editing} onOpenChange={setEditing} />
-    )}
+                <DeleteDialog
+                  onAction={() => {
+                    deleteCheque(cheque.id);
+                    setOpen(false);
+                  }}
+                >
+                  <Button variant="secondary" data-shortcut="d">
+                    <TrashIcon className="me-2 h-4 w-4" />
+                    <span>{t("Delete")}</span>
+                    <ShortcutKey>D</ShortcutKey>
+                  </Button>
+                </DeleteDialog>
+              </div>
+            )}
+            <ResponsiveDialogClose asChild>
+              <Button variant="outline">{t("Close")}</Button>
+            </ResponsiveDialogClose>
+          </ResponsiveDialogFooter>
+        </ResponsiveDialogContent>
+      </ResponsiveDialog>
+      {canWrite && (
+        <ChequeFormDialog
+          cheque={cheque}
+          open={editing}
+          onOpenChange={setEditing}
+        />
+      )}
     </>
   );
 }

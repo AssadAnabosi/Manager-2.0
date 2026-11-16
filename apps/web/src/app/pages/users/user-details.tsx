@@ -1,3 +1,4 @@
+import { ShortcutKey } from "@/components/component/shortcut-key";
 import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { usePermissions } from "@/hooks/use-permissions";
@@ -85,9 +86,13 @@ export default function UserDetails({ children, title, user }: Props) {
         </ResponsiveDialogBody>
         <ResponsiveDialogFooter>
           {canManageUsers && (
-            <Button onClick={() => navigate(`/users/${user.id}`)}>
+            <Button
+              data-shortcut="e"
+              onClick={() => navigate(`/users/${user.id}`)}
+            >
               <Pencil2Icon className="me-2 h-4 w-4" />
               <span>{t("Edit")}</span>
+              <ShortcutKey>E</ShortcutKey>
             </Button>
           )}
           <ResponsiveDialogClose asChild>

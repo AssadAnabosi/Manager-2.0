@@ -11,6 +11,7 @@ On macOS use `⌘` where this page says `Ctrl`.
 | `?` (or `؟`) | Show the list of shortcuts (also in the palette as **Keyboard shortcuts**) |
 | `Alt` + `1` to `9` | Go to the nth item of your sidebar (Worksheets, Bills, Cheques, Users, Payees, Settings, minus whatever your role cannot see, so the numbers follow what you have) |
 | `Alt` + `N` | Open the **Add New** dialog of the page you are on (Worksheets, Bills, Cheques, Payees, Users), for roles that can add. Holding `Alt` shows the `N` on the Add New button |
+| `Alt` + `E` / `Alt` + `D` | In a details dialog (the one that opens when you press a row): **Edit** or **Delete** it. Holding `Alt` shows the letters on the buttons. Delete only opens its confirmation |
 | `Alt` + `L` / `Alt` + `C` | On Worksheets: show the list / the calendar, keeping the filters |
 | `[` / `]` | Go to the previous / next sidebar item, wrapping around |
 | `g` then a letter | Go to a page: `d` dashboard, `w` worksheets, `b` bills, `c` cheques, `p` payees, `u` users, `s` settings (pages your role cannot open are ignored) |
